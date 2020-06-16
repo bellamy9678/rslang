@@ -160,7 +160,7 @@ const config = {
 			// {from: './src/static', to: './'},
 			// {from: './src/img', to: './img/'},
 		]),
-		new FaviconsWebpackPlugin("./src/img/icon.jpg"),
+		new FaviconsWebpackPlugin("./src/img/times.svg"),
 	],
 
 	devServer: {

@@ -10,7 +10,8 @@
 		"dev": "webpack-dev-server --history-api-fallback --inline --open",
 		"prod": "npm run clear -s && webpack --progress",
 		"lint": "eslint ./**/*.js --fix",
-		"clear": "del-cli dist"
+		"clear": "del-cli dist",
+		"build": "webpack"
 	},
 	"contributors": [
 		{
