@@ -103,6 +103,28 @@ header {
   align-items: center;
 }
 
+.answers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.answers p {
+  width: 15vw;
+  height: 40px;
+  margin-left: 10px;
+  border-width: 3px;
+  border-color: white;
+  border-style: solid;
+}
+
+.main-word {
+  position: absolute;
+  width: 25vw;
+  background-color: white;
+  height: 50px;
+}
+
 footer {
   flex-shrink: 0;
 }
