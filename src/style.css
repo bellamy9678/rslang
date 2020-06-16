@@ -23,15 +23,43 @@ main {
 
 header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 .closing-icon,
-.keyboard-icon {
+.keyboard-icon,
+.heart-icon {
   margin-top: 10px;
   width: 30px;
   height: 30px;
   filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%);
+}
+
+.volume-up-icon,
+.volume-mute-icon {
+  margin-left: 2vw;
+  margin-top: 10px;
+  width: 30px;
+  height: 30px;
+  filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%);
+}
+
+.volume-settings {
+  visibility: hidden;
+}
+
+.volume-mute-icon {
+  display: none;
+}
+
+.heart-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.health-point-scale {
+  display: flex;
+  visibility: hidden;
 }
 
 .info {
