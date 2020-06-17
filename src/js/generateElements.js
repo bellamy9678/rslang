@@ -1,12 +1,21 @@
 import moveWord from './moveWord'
-import showDetails from './showDetails'
 import fetchWords from './fetchWords'
+import checkAnswer from './checkAnswer'
 
 export default function generateElements() {
   const stone = document.querySelector('.stone-icon');
   const healthPoints = document.querySelector('.health-point-scale');
   const main = document.querySelector('MAIN');
   const volumeContainer = document.querySelector('.volume-settings');
+  const hint = document.querySelector('.hint');
+  const loader = document.querySelector('.loader');
+  const showDetails = new Promise ((resolve) => {
+    setTimeout(() => {
+      loader.remove();
+      hint.style.visibility = 'hidden';
+      resolve();
+    }, 4000);
+  })
   showDetails.then(() => {
     const arrayWithWords = [];
     function arrayRandElement(fullArray) {
@@ -35,6 +44,7 @@ export default function generateElements() {
         main.append(answersContainer);
         main.prepend(mainWord);
         moveWord();
+        checkAnswer(arrayWithWords[randomIndex].translation);
       }
     )
     healthPoints.style.visibility = 'visible';
