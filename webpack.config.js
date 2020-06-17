@@ -27,7 +27,7 @@ function setDMode() {
 
 const config = {
 	target: "web",
-	entry: { index: "./src/js/index.js" },
+	entry: { index: "./src/app.js" },
 	output: {
 		path: path.resolve(__dirname, "dist"),
 		filename: "[name].js",
@@ -160,7 +160,7 @@ const config = {
 			// {from: './src/static', to: './'},
 			// {from: './src/img', to: './img/'},
 		]),
-		new FaviconsWebpackPlugin("./src/img/icon.jpg"),
+		new FaviconsWebpackPlugin("./english_puzzle/img/icon.jpg"),
 	],
 
 	devServer: {

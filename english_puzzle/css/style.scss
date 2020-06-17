@@ -1,0 +1,118 @@
+
+$btn-color: #EC615B;
+$bg-color: #e4e4e4;
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.app-wrapper {
+  padding: 20px 40px 40px 40px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.game__board {
+  display: flex;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 20px;
+}
+
+.board {
+  width: 100%;
+  height: 100%;
+  background-color: $bg-color;
+}
+
+.board__column-numbers {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 40px;
+}
+
+.number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+}
+
+.game__puzzles {
+  height: 40px;
+  width: calc(100% - 40px);
+  margin-left: 40px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,.7);
+}
+
+.tooltips {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.game__controls {
+  display: flex;
+  justify-content: center;
+}
+
+.game__puzzles {
+  display: flex;
+}
+
+.game__jigsaw {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+  background-color: #ccc;
+  margin-right: 5px;
+  &:not(:last-child):after {
+    position: absolute;
+    right: -10px;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    content: "";
+    border-radius: 50%;
+    background-color: #ccc;
+  }
+  &:not(:first-child):before {
+    position: absolute;
+    left: -10px;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    content: "";
+    border-radius: 50%;
+    background-color: #fff;
+}
+}
+
+.board__line {
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+  height: 40px;
+  background-color: rgb(168, 130, 130);
+}
+
+.puzzle-container {
+  height: calc(100% - 2px);
+  width: 100%;
+  background-color: tomato;
+  margin: 1px;
+}
