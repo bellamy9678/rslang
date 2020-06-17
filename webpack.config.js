@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+// const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const ENV = process.env.npm_lifecycle_event;
@@ -27,7 +27,7 @@ function setDMode() {
 
 const config = {
 	target: "web",
-	entry: { index: "./src/js/index.js" },
+	entry: { index: "./src/app.js" },
 	output: {
 		path: path.resolve(__dirname, "dist"),
 		filename: "[name].js",
@@ -160,7 +160,7 @@ const config = {
 			// {from: './src/static', to: './'},
 			// {from: './src/img', to: './img/'},
 		]),
-		new FaviconsWebpackPlugin("./src/img/icon.jpg"),
+		// new FaviconsWebpackPlugin("./src/img/icon.jpg"),
 	],
 
 	devServer: {
