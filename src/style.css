@@ -57,6 +57,27 @@ header {
   height: 25px;
 }
 
+.stone-icon {
+  visibility: hidden;
+}
+
+.stone-icon {
+  position: absolute;
+  top: -10px;
+  left: 48vw;
+  animation-name: change_fill;
+  animation-duration: 5s;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+}
+
+@keyframes change_fill {
+    0% { filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%); }
+    75% { filter: invert(100%) sepia(59%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%); }
+    100% { filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%); }
+}
+
 .health-point-scale {
   display: flex;
   visibility: hidden;
@@ -126,6 +147,7 @@ header {
 }
 
 footer {
+  position: relative;
   flex-shrink: 0;
 }
 
