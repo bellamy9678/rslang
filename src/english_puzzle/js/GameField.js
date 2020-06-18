@@ -1,3 +1,5 @@
+import { elementCreatorWithParentAndChildren } from './components';
+
 export default class GameField {
   init() {
     this.gameContainer = document.querySelector('.game__main');
@@ -7,10 +9,10 @@ export default class GameField {
     this.gamePuzzlesContainer.classList.add('game__puzzles');
     this.gameControlsContainer = document.createElement('div');
     this.gameControlsContainer.classList.add('game__controls');
-
     this.boardNumbers = document.createElement('div');
     this.boardNumbers.classList.add('board__column-numbers');
-    this.boardNumbers.innerHTML = this.generateNumbers();
+    this.generateNumbers(this.boardNumbers);
+
 
     this.board = document.createElement('div');
     this.board.classList.add('board');
@@ -19,8 +21,7 @@ export default class GameField {
 
     this.gameBoardContainer.append(this.boardNumbers, this.board)
 
-    this.gameControlsContainer.innerHTML = `<button class="controls__button">I don't know</button>`;
-
+    elementCreatorWithParentAndChildren('button', 'controls__button', 'I don\'t know', this.gameControlsContainer, '');
     this.gameContainer.append(
       this.gameBoardContainer,
       this.gamePuzzlesContainer,
@@ -28,12 +29,10 @@ export default class GameField {
     )
   }
 
-  generateNumbers() {
-    this.numbers = [];
+  generateNumbers(parent) {
     for (let i = 1; i <= 10; i += 1) {
-      this.number = `<div class="number">${i}</div>`;
-      this.numbers.push(this.number);
+      elementCreatorWithParentAndChildren('div', 'number', i, parent, '');
     }
-    return this.numbers.join('\n');
+    this.nothing = false;
   }
 }

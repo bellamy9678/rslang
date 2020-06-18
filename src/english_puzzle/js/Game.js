@@ -1,4 +1,5 @@
 import { wrapper } from './constants';
+import { elementCreator } from './components';
 
 export default class Game {
   constructor() {
@@ -62,9 +63,9 @@ export default class Game {
   showTranslationBtnHandler() {
     this.showTranslationBtnState = !this.showTranslationBtnState;
     if (this.showTranslationBtnState) {
-      this.translationContainer.innerHTML = this.sentenceTranslate;
+      this.translationContainer.innerText = this.sentenceTranslate;
     } else {
-      this.translationContainer.innerHTML = '';
+      this.translationContainer.innerText = '';
     }
   }
 
@@ -75,7 +76,11 @@ export default class Game {
   }
 
   populatePuzzle(sentenceArr) {
-    this.puzzles = sentenceArr.map((word) => `<div draggable="true" class="game__jigsaw" data-word="${word}"> ${word} </div>`).join('\n');
+    this.puzzles = sentenceArr.map(word => {
+      this.newElement = elementCreator('div', 'game__jigsaw', word, '', 'data-word', word);
+      this.newElement.setAttribute('draggable', true);
+      return this.newElement;
+    });
     return this.puzzles;
   }
 
@@ -83,10 +88,10 @@ export default class Game {
     const puzzlesContainer = document.querySelector('.game__puzzles');
     const wordsArray = sentence.split(' ');
     this.sentenceArr = wordsArray;
-    console.log(wordsArray);
 
     const shuffledArr = this.shuffleArray(wordsArray);
-    puzzlesContainer.innerHTML = this.populatePuzzle(shuffledArr);
+
+    puzzlesContainer.append(...this.populatePuzzle(shuffledArr));
     this.addPuzzleContainersToLine(wordsArray.length);
     this.dragAndDrop();
     this.addEventListenersToControls();
@@ -136,15 +141,17 @@ export default class Game {
 
   addLine() {
     this.board = document.querySelector('.board');
-    this.boardLine = document.createElement('div');
-    this.boardLine.classList.add('board__line');
+    this.boardLine = elementCreator('div', 'board__line');
     this.board.append(this.boardLine);
   }
 
   addPuzzleContainersToLine(numberOfPuzzles) {
-    this.puzzleContainersArr = new Array(numberOfPuzzles);
-    this.puzzleContainersArr.fill(`<div class="puzzle-container"></div>`);
-    this.boardLine.innerHTML = this.puzzleContainersArr.join('\n');
+    this.arrOfPuzzleContainer = [];
+    for (let i = 0; i < numberOfPuzzles; i += 1) {
+      this.arrOfPuzzleContainer.push(elementCreator('div', 'puzzle-container'));
+    }
+
+    this.boardLine.append(...this.arrOfPuzzleContainer);
   }
 
   start() {
