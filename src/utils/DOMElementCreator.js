@@ -1,4 +1,5 @@
 export default class DOMElementCreator {
+
 	static addAttributes(element, attributesArray) {
 		attributesArray.forEach((attributeObject) => {
 			const attribute = Object.entries(attributeObject);
@@ -14,7 +15,7 @@ export default class DOMElementCreator {
 		});
 	}
 
-	createElement(settingsObj) {
+	create(settingsObj) {
 		const element = document.createElement(settingsObj.elem);
 
 		if (settingsObj.id) {
