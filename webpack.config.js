@@ -160,7 +160,7 @@ const config = {
 			// {from: './src/static', to: './'},
 			// {from: './src/img', to: './img/'},
 		]),
-		new FaviconsWebpackPlugin("./english_puzzle/img/icon.jpg"),
+		new FaviconsWebpackPlugin("./src/english_puzzle/img/icon.jpg"),
 	],
 
 	devServer: {

@@ -57,7 +57,9 @@ body {
 
 .tooltips {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -102,6 +104,14 @@ body {
 }
 }
 
+.game__jigsaw--correct {
+  background-color: rgb(19, 168, 94);
+}
+
+.game__jigsaw--wrong {
+  background-color: rgb(185, 58, 26);
+}
+
 .board__line {
   display: flex;
   flex-grow: 1;
@@ -115,4 +125,12 @@ body {
   width: 100%;
   background-color: tomato;
   margin: 1px;
+}
+
+.hovered {
+  background-color: #d1d8e2;
+}
+
+.hide {
+  display: none;
 }
