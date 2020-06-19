@@ -15,6 +15,12 @@ export default class DOMElementCreator {
 		});
 	}
 
+	static addChildren(element, childrenArray) {
+		childrenArray.forEach((child) => {
+			element.append(child);
+		});
+	}
+
 	create(settingsObj) {
 		const element = document.createElement(settingsObj.elem);
 
@@ -37,7 +43,10 @@ export default class DOMElementCreator {
 		}
 
 		if (settingsObj.child) {
-			element.append(settingsObj.child);
+			const params = Array.isArray(settingsObj.child)
+				? settingsObj.child
+				: [settingsObj.child];
+			DOMElementCreator.addChildren(element, params);
 		}
 
 		this.elem = element;
