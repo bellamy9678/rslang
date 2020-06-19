@@ -28,7 +28,7 @@ function setDMode() {
 const config = {
 	target: "web",
 	entry: {
-		index: "./src/app.js"
+		index: "./src/app.js",
 	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
@@ -37,14 +37,17 @@ const config = {
 	mode: setDMode(),
 	devtool: setDevTool(),
 	module: {
-		rules: [{
+		rules: [
+			{
 				test: /\.html$/,
-				use: [{
-					loader: "html-loader",
-					options: {
-						minimize: false,
+				use: [
+					{
+						loader: "html-loader",
+						options: {
+							minimize: false,
+						},
 					},
-				}, ],
+				],
 			},
 			{
 				test: /\.js$/,
@@ -52,7 +55,7 @@ const config = {
 				exclude: [/node_modules/],
 			},
 			{
-				test: /\.css$/,
+				test: /\.s?css$/,
 				use: [
 					"style-loader",
 					MiniCssExtractPlugin.loader,
@@ -67,29 +70,7 @@ const config = {
 						options: {
 							sourceMap: true,
 							config: {
-								path: "./postcss.config.js"
-							},
-						},
-					},
-				],
-			},
-			{
-				test: /\.scss$/,
-				use: [
-					"style-loader",
-					MiniCssExtractPlugin.loader,
-					{
-						loader: "css-loader",
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: "postcss-loader",
-						options: {
-							sourceMap: true,
-							config: {
-								path: "./postcss.config.js"
+								path: "./postcss.config.js",
 							},
 						},
 					},
@@ -103,7 +84,8 @@ const config = {
 			},
 			{
 				test: /\.(jpe?g|png|svg|gif)$/,
-				use: [{
+				use: [
+					{
 						loader: "file-loader",
 						options: {
 							outputPath: "img",
@@ -138,12 +120,14 @@ const config = {
 			},
 			{
 				test: /\.(woff|woff2|ttf|otf|eot)$/,
-				use: [{
-					loader: "file-loader",
-					options: {
-						outputPath: "fonts",
+				use: [
+					{
+						loader: "file-loader",
+						options: {
+							outputPath: "fonts",
+						},
 					},
-				}, ],
+				],
 			},
 		],
 	},
@@ -156,12 +140,12 @@ const config = {
 			template: "./src/index.html",
 			filename: "./index.html",
 		}),
-		new CopyWebpackPlugin(
-			[{
-				from: './src/assets/',
-				to: './assets/'
-			}, ],
-		),
+		new CopyWebpackPlugin([
+			{
+				from: "./src/assets/",
+				to: "./assets/",
+			},
+		]),
 		// new FaviconsWebpackPlugin("./src/img/icon.jpg"),
 	],
 
