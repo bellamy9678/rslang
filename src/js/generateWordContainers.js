@@ -3,6 +3,9 @@ import {arrayRandElement, defineNewWord, createElements}  from './showDetails'
 import moveWord from './moveWord'
 
 export default function generateWordContainers(array) {
+    if (document.querySelector('.main-word')) {
+      document.querySelector('.main-word').remove();
+    }
     arrayWithWords.length = 0;
     const main = document.querySelector('MAIN');
     if (main.lastChild) main.removeChild(main.lastChild);
