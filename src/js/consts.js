@@ -5,7 +5,7 @@ const words = [
   },
   {
     word: 'Dog',
-    translation: 'Кот'
+    translation: 'Собака'
   },
   {
     word: 'Pig',
@@ -31,5 +31,7 @@ const words = [
     word: 'Khife',
     translation: 'Нож'
   },
-]
-export default words;
+];
+const arrayWithWords = [];
+const arrForUniqness = [];
+export {words, arrayWithWords, arrForUniqness};
