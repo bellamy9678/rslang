@@ -1,0 +1,15 @@
+.dictionary {
+    display: flex;
+    flex-wrap: wrap;
+
+    div {
+        border: solid 1px black;
+        flex-basis: 33%;
+    }
+}
+
+.word {
+    &_difficult {
+        display: inline-block;
+    }
+}

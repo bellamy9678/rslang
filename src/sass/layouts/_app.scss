@@ -1,0 +1,8 @@
+.app {
+    height: calc(100% - 72px);
+    overflow: hidden;
+
+    &__wrapper {
+        height: 100%;
+    }
+}
