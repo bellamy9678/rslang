@@ -1,6 +1,7 @@
 import {
     API,
-    SIGN_IN_METHOD
+    SIGN_IN_METHOD,
+    EMAIL_PART
 } from './Constants';
 
 import showWelcomePage from './WelcomePage';
@@ -12,7 +13,7 @@ let userPassword;
 let authorizeButton;
 
 function Authorization() {
-    this.email = `${userName.value}@rslang.com`;
+    this.email = `${userName.value}${EMAIL_PART}`;
     this.password = userPassword.value;
 }
 

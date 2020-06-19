@@ -1,22 +1,24 @@
 import {
     API,
-    USER_METHOD
+    USER_METHOD,
+    EMAIL_PART,
+    PASSWORD_REG_EXP
 } from './Constants';
 import authorizeUser from './Authorization';
+import DOMElementCreator from '../utils/DOMElementCreator';
 
 const signUpButton = document.getElementById('sign-up');
 let emailInput;
 let passwordInput;
 let createAccountButton;
-const passwordRegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/;
 
 function User() {
-    this.email = `${emailInput.value}@rslang.com`;
+    this.email = `${emailInput.value}${EMAIL_PART}`;
     this.password = passwordInput.value;
 }
 
 function checkPassword(password) {
-    return passwordRegExp.test(password);
+    return PASSWORD_REG_EXP.test(password);
 }
 
 async function createUser(event) {
@@ -42,25 +44,94 @@ async function createUser(event) {
 
 function showCreateAccountPage() {
     const app = document.querySelector('.app');
-    const createAccountPage = document.createElement('div');
+    const newElem = new DOMElementCreator();
 
-    createAccountPage.className = 'account-creation';
-    createAccountPage.innerHTML = `<div class="account-creation__overlay">
-    <form class="account-creation__form">
-        <h2 class="account-creation__title">Create your free account</h2>
-        <p class="account-creation__text">Do you already have an account? <a class="account-creation__link"
-                href="#">Sing in</a>
-        </p>
-        <label for="new-user__name">Username</label>
-        <input class="account-creation__username" id="new-user__name" type="text" required>
-        <label for="new-user__password">Password</label>
-        <input class="account-creation__password" id="new-user__password" type="text" required>
-        <button class="button button_colored account-creation__button">Sign Up</button>
-    </form>
-    </div>`;
+    const title = newElem.create({
+        elem: 'h2',
+        classes: 'account-creation__title',
+        child: ['Create your free account'],
+    });
+
+    const signInLink = newElem.create({
+        elem: 'a',
+        classes: 'account-creation__link',
+        attr: [{
+            href: '#'
+        }],
+        child: ['Sing in'],
+    });
+
+    const text = newElem.create({
+        elem: 'p',
+        classes: 'account-creation__text',
+        child: ['Do you already have an account? ', signInLink],
+    });
+
+    const userNameLabel = newElem.create({
+        elem: 'label',
+        attr: [{
+            for: 'new-user__name'
+        }],
+        child: ['Username'],
+    });
+
+    const userNameInput = newElem.create({
+        elem: 'input',
+        classes: 'account-creation__username',
+        id: 'new-user__name',
+        attr: [{
+            type: 'text'
+        }, {
+            required: 'required'
+        }],
+    });
+
+    const userPasswordLabel = newElem.create({
+        elem: 'label',
+        attr: [{
+            for: 'new-user__password'
+        }],
+        child: ['Password'],
+    });
+
+    const userPasswordInput = newElem.create({
+        elem: 'input',
+        classes: 'account-creation__password',
+        id: 'new-user__password',
+        attr: [{
+            // for testing
+            type: 'text'
+        }, {
+            required: 'required'
+        }],
+    });
+
+    const button = newElem.create({
+        elem: 'button',
+        classes: ['button', 'button_colored', 'account-creation__button'],
+        child: ['Sign Up'],
+    });
+
+    const form = newElem.create({
+        elem: 'form',
+        classes: 'account-creation__form',
+        child: [title, text, userNameLabel, userNameInput, userPasswordLabel, userPasswordInput, button],
+    });
+
+    const background = newElem.create({
+        elem: 'div',
+        classes: 'account-creation__background',
+        child: [form],
+    });
+
+    const page = newElem.create({
+        elem: 'div',
+        classes: 'account-creation',
+        child: [background],
+    });
 
     app.innerHTML = '';
-    app.append(createAccountPage);
+    app.append(page);
     emailInput = document.getElementById('new-user__name');
     passwordInput = document.getElementById('new-user__password');
     createAccountButton = document.querySelector('.account-creation__button');
