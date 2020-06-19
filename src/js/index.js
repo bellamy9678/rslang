@@ -9,14 +9,16 @@ window.onload = () => {
   const volumeOn = document.querySelector('.volume-up-icon');
   const volumeOff = document.querySelector('.volume-mute-icon');
 
-  startingButton.addEventListener('click', () => {
+  async function game() {
     const loader = document.createElement('DIV');
     loader.classList.add('loader');
     infoContainer.remove();
     hint.style.visibility = 'visible';
     main.prepend(loader);
     generateElements();
-  });
+  }
+
+  startingButton.addEventListener('click', game);
 
   volumeContainer.addEventListener('click', () => {
     if (volumeOn.style.display === 'none') {

@@ -6,7 +6,7 @@
 body {
   margin: 0;
   color: white;
-  background-color: rgba(64, 164, 162, 0.7);
+  background-color: rgba(82, 34, 208, 0.7);
   letter-spacing: 2px;
   font-family: Montserrat;
   height: 100vh;
@@ -105,7 +105,7 @@ header {
   margin-top: 5vh;
   justify-content: center;
   align-items: center;
-  background-color: #40a4a2;
+  background-color: #5222D0;
   border-radius: 5px;
 }
 

@@ -1,6 +1,4 @@
 import showNewWord from './showNewWord'
-import {arrayWithWords} from './consts'
-import checkAnswer from './checkAnswer'
 
 export default function generateElements() {
   const stone = document.querySelector('.stone-icon');
@@ -19,10 +17,6 @@ export default function generateElements() {
     healthPoints.style.visibility = 'visible';
     volumeContainer.style.visibility = 'visible';
     stone.style.visibility = 'visible';
-    showNewWord().then(() => { // выводит новое слово и варианты ответов
-      const mainWordContainer = document.querySelector('.main-word');
-      const mainWord = arrayWithWords.filter((elem) => elem.word === mainWordContainer.textContent)[0];
-      checkAnswer(mainWord.translation);
-    });
+    showNewWord();
   })
 }
