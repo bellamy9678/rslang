@@ -21,10 +21,24 @@ export default async function showNewWord() {
     item.addEventListener('click', (event) => {
       mainWordContainer.style.display = 'none';
       const choosenAnswer = event.target;
+      function handleWrongAnswer() {
+        const lifeIcon = document.querySelector('.health-point-scale IMG');
+        choosenAnswer.classList.add('wrong-answer__active');
+        allAnswers.forEach(answer => {
+          if (answer.textContent === mainWord.translation) {
+            answer.classList.add('right-answer__active');
+          }
+        });
+        if (lifeIcon !== null) {
+          lifeIcon.remove();
+        } else {
+          console.log('endgame');
+        }
+      }
       if (choosenAnswer.textContent === mainWord.translation) {
-        choosenAnswer.style.backgroundColor = 'blue';
+        choosenAnswer.classList.add('right-answer__active');
       } else {
-        choosenAnswer.style.backgroundColor = 'red';
+        handleWrongAnswer();
       }
       setTimeout(() => {
         showNewWord()

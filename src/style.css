@@ -136,11 +136,25 @@ header {
 }
 
 .answers p {
-  width: 15vw;
+  min-width: 15vw;
+  max-width: 25vw;
+  margin-left: 20px;
+  margin-right: 20px;
   height: 40px;
   margin-left: 10px;
   text-align: center;
   font-size: 20px;
+  width: fit-content;
+}
+
+.right-answer__active {
+  background-color: rgba(82, 34, 208, 0.5);
+  box-shadow: 0 -10px 15px 15px rgba(82, 34, 208, 0.5);
+}
+
+.wrong-answer__active {
+  background-color: rgba(117, 43, 78, 0.5);
+  box-shadow: 0 -10px 15px 15px rgba(117, 43, 78, 0.5);
 }
 
 .answers p:hover {
