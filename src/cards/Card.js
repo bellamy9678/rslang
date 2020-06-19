@@ -4,8 +4,8 @@ import {
 	TEXT_EXAMPLE_CLOSE_TAG,
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
-	BUTTONS_WORDS,
-} from "./constants";
+} from "./cardConstants";
+import { BUTTONS_WORDS } from "../shared/constants";
 import WORDS_EVENTS from "../observer/WordsEvents";
 
 const fab = new DOMElementCreator();
@@ -13,7 +13,6 @@ const fab = new DOMElementCreator();
 export default class Card {
 	constructor(word) {
 		this.card = word;
-		this.elem = document.createDocumentFragment();
 	}
 
 	static getObjectOfTextExample(text) {
@@ -101,6 +100,8 @@ export default class Card {
 	}
 
 	create() {
+		this.elem = document.createDocumentFragment();
+		
 		const img = fab.create({
 			elem: "img",
 			id: "image-card-example",
@@ -152,10 +153,9 @@ export default class Card {
 		});
 
 		const currentWord = this.card;
-		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN, {
-			bubbles: true,
-			detail: currentWord,
-		});
+		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN,
+			{ detail: currentWord }
+		);
 		againButton.addEventListener("click", () =>
 			againButton.dispatchEvent(againButtonEvent)
 		);
@@ -166,10 +166,9 @@ export default class Card {
 			child: BUTTONS_WORDS.hard,
 		});
 
-		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD, {
-			bubbles: true,
-			detail: currentWord,
-		});
+		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD,
+			{ detail: currentWord }
+		);
 		hardButton.addEventListener("click", () =>
 			hardButton.dispatchEvent(hardButtonEvent)
 		);
@@ -180,10 +179,9 @@ export default class Card {
 			child: BUTTONS_WORDS.good,
 		});
 
-		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD, {
-			bubbles: true,
-			detail: currentWord,
-		});
+		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD,
+			{ detail: currentWord }
+			);
 		goodButton.addEventListener("click", () =>
 			goodButton.dispatchEvent(goodButtonEvent)
 		);
@@ -194,10 +192,9 @@ export default class Card {
 			child: BUTTONS_WORDS.easy,
 		});
 
-		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY, {
-			bubbles: true,
-			detail: currentWord,
-		});
+		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY,
+			{ detail: currentWord }
+		);
 		easyButton.addEventListener("click", () =>
 			easyButton.dispatchEvent(easyButtonEvent)
 		);
@@ -216,7 +213,7 @@ export default class Card {
 
 		const addToEasyButtonEvent = new CustomEvent(
 			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT,
-			{ bubbles: true, detail: currentWord }
+			{ detail: currentWord }
 		);
 		addToDifficultButton.addEventListener("click", () =>
 			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
@@ -230,8 +227,9 @@ export default class Card {
 
 		const deleteFromDictionaryEvent = new CustomEvent(
 			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY,
-			{ bubbles: true, detail: currentWord }
+			{ detail: currentWord }
 		);
+
 		deleteFromDictionaryButton.addEventListener("click", () =>
 			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent)
 		);
@@ -250,7 +248,7 @@ export default class Card {
 
 		const showAnswerButtonEvent = new CustomEvent(
 			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
-			{ bubbles: true, detail: currentWord }
+			{ detail: currentWord }
 		);
 		showAnswerButton.addEventListener("click", () =>
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent)
