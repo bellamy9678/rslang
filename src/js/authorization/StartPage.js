@@ -43,7 +43,6 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 		classes: 'welcome',
 		child: [wrapper],
 	});
-
-	app.innerHTML = '';
+	app.removeChild(app.firstChild);
 	app.append(page);
 })();

@@ -130,7 +130,7 @@ function showCreateAccountPage() {
         child: [background],
     });
 
-    app.innerHTML = '';
+    app.removeChild(app.firstChild);
     app.append(page);
     emailInput = document.getElementById('new-user__name');
     passwordInput = document.getElementById('new-user__password');
