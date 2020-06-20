@@ -63,6 +63,7 @@ export default function showWelcomePage(username) {
         classes: 'welcome',
         child: [wrapper],
     });
-	app.removeChild(app.firstChild);
+	app.firstChild.remove();
+    // app.innerHTML = '';
     app.append(page);
 }
