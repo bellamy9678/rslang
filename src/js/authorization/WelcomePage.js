@@ -1,23 +1,23 @@
 import DOMElementCreator from "../utils/DOMElementCreator";
-import Tags from '../shared/Tags.json';
+import TAGS from '../shared/Tags.json';
 
 export default function showWelcomePage(username) {
 	const app = document.querySelector(".app");
 	const newElem = new DOMElementCreator();
 
 	const settingsIcon = newElem.create({
-		elem: Tags.span,
+		elem: TAGS.SPAN,
 		classes: ["icon", "icon_settings"],
 	});
 
 	const settingsLinkText = newElem.create({
-		elem: Tags.span,
+		elem: TAGS.SPAN,
 		classes: "link-button__text",
 		child: ["Go to settings"],
 	});
 
 	const settingsLink = newElem.create({
-		elem: Tags.a,
+		elem: TAGS.A,
 		classes: "link-button",
 		attr: [
 			{
@@ -28,25 +28,25 @@ export default function showWelcomePage(username) {
 	});
 
 	const title = newElem.create({
-		elem: Tags.h1,
+		elem: TAGS.h1,
 		classes: "welcome__title",
 		child: [`Hello, ${username}! Let's start?`],
 	});
 
 	const buttons = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: "welcome__buttons",
 		child: [settingsLink],
 	});
 
 	const content = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: "welcome__content",
 		child: [title, buttons],
 	});
 
 	const image = newElem.create({
-		elem: Tags.img,
+		elem: TAGS.IMG,
 		classes: "welcome__image",
 		attr: [
 			{
@@ -59,13 +59,13 @@ export default function showWelcomePage(username) {
 	});
 
 	const wrapper = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: ["wrapper", "welcome__wrapper"],
 		child: [content, image],
 	});
 
 	const page = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: "welcome",
 		child: [wrapper],
 	});

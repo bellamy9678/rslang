@@ -1,6 +1,6 @@
 import { EMAIL_PART, PASSWORD_REG_EXP } from './Constants';
 import { API, URL_PARAM_USER } from '../shared/Constants';
-import Tags from '../shared/Tags.json';
+import TAGS from '../shared/Tags.json';
 import authorizeUser from './Authorization';
 import DOMElementCreator from '../utils/DOMElementCreator';
 
@@ -44,13 +44,13 @@ function showCreateAccountPage() {
 	const newElem = new DOMElementCreator();
 
 	const title = newElem.create({
-		elem: Tags.h2,
+		elem: TAGS.H2,
 		classes: 'account-creation__title',
 		child: ['Create your free account'],
 	});
 
 	const signInLink = newElem.create({
-		elem: Tags.a,
+		elem: TAGS.A,
 		classes: 'account-creation__link',
 		attr: [
 			{
@@ -61,13 +61,13 @@ function showCreateAccountPage() {
 	});
 
 	const text = newElem.create({
-		elem: Tags.p,
+		elem: TAGS.P,
 		classes: 'account-creation__text',
 		child: ['Do you already have an account? ', signInLink],
 	});
 
 	const userNameLabel = newElem.create({
-		elem: Tags.label,
+		elem: TAGS.LABEL,
 		attr: [
 			{
 				for: 'new-user__name',
@@ -77,7 +77,7 @@ function showCreateAccountPage() {
 	});
 
 	const userNameInput = newElem.create({
-		elem: Tags.input,
+		elem: TAGS.INPUT,
 		classes: 'account-creation__username',
 		id: 'new-user__name',
 		attr: [
@@ -91,7 +91,7 @@ function showCreateAccountPage() {
 	});
 
 	const userPasswordLabel = newElem.create({
-		elem: Tags.label,
+		elem: TAGS.LABEL,
 		attr: [
 			{
 				for: 'new-user__password',
@@ -101,7 +101,7 @@ function showCreateAccountPage() {
 	});
 
 	const userPasswordInput = newElem.create({
-		elem: Tags.input,
+		elem: TAGS.INPUT,
 		classes: 'account-creation__password',
 		id: 'new-user__password',
 		attr: [
@@ -116,13 +116,13 @@ function showCreateAccountPage() {
 	});
 
 	const button = newElem.create({
-		elem: Tags.button,
+		elem: TAGS.BUTTON,
 		classes: ['button', 'button_colored', 'account-creation__button'],
 		child: ['Sign Up'],
 	});
 
 	const form = newElem.create({
-		elem: Tags.form,
+		elem: TAGS.FORM,
 		classes: 'account-creation__form',
 		child: [
 			title,
@@ -136,13 +136,13 @@ function showCreateAccountPage() {
 	});
 
 	const background = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: 'account-creation__background',
 		child: [form],
 	});
 
 	const page = newElem.create({
-		elem: Tags.div,
+		elem: TAGS.DIV,
 		classes: 'account-creation',
 		child: [background],
 	});
