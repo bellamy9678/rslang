@@ -6,6 +6,6 @@ export const BUTTONS_WORDS = {
 	addToDifficult: 'добавить в сложные',
 	deleteFromDictionary: 'удалить из изучаемых',
 	showAnswer: 'показать ответ'
-}
+};
 
 export default BUTTONS_WORDS;

@@ -4,8 +4,8 @@ import {
 	URL_PARAM_GROUP,
 	URL_ET,
 	URL_PARAM_PAGE,
-} from "../shared/Constants";
-import Word from "./Word";
+} from '../shared/Constants';
+import Word from './Word';
 
 function getUrlFromGroupAndPage(group, page) {
 	return `${API}${URL_PARAM_WORDS}${URL_PARAM_GROUP}${group}${URL_ET}${URL_PARAM_PAGE}${page}`;

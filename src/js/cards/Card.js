@@ -1,12 +1,13 @@
-import DOMElementCreator from "../utils/DOMElementCreator";
+import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT_EXAMPLE_OPEN_TAG,
 	TEXT_EXAMPLE_CLOSE_TAG,
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
-} from "./CardConstants";
-import { BUTTONS_WORDS } from "../shared/Text";
-import WORDS_EVENTS from "../observer/WordsEvents";
+} from './CardConstants';
+import { BUTTONS_WORDS } from '../shared/Text';
+import Tags from '../shared/Tags.json';
+import WORDS_EVENTS from '../observer/WordsEvents';
 
 const fab = new DOMElementCreator();
 
@@ -33,35 +34,35 @@ export default class Card {
 		const textExampleObject = Card.getObjectOfTextExample(text);
 
 		const textPartLeft = fab.create({
-			elem: "span",
-			classes: "card__text_part",
+			elem: Tags.span,
+			classes: 'card__text_part',
 			child: textExampleObject.first,
 		});
 
 		const textPartRight = fab.create({
-			elem: "span",
-			classes: "card__text_part",
+			elem: Tags.span,
+			classes: 'card__text_part',
 			child: textExampleObject.last,
 		});
 
 		const textWord = fab.create({
-			elem: "span",
-			classes: "card__text_word",
+			elem: Tags.span,
+			classes: 'card__text_word',
 			child: textExampleObject.word,
 		});
 
 		const textInput = fab.create({
-			elem: "input",
-			classes: "card__text_input",
-			attr: [{ type: "text" }, { name: "input" }],
-			name: "word",
-			id: "word",
+			elem: Tags.input,
+			classes: 'card__text_input',
+			attr: [{ type: 'text' }, { name: 'input' }],
+			name: 'word',
+			id: 'word',
 		});
 
 		const textExample = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "text-example",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'text-example',
 			child: [textPartLeft, textInput, textWord, textPartRight],
 		});
 
@@ -72,27 +73,27 @@ export default class Card {
 		const textExampleObject = Card.getObjectOfTextMeaning(text);
 
 		const textPartLeft = fab.create({
-			elem: "span",
-			classes: "card__meaning_part",
+			elem: Tags.span,
+			classes: 'card__meaning_part',
 			child: textExampleObject.first,
 		});
 
 		const textPartRight = fab.create({
-			elem: "span",
-			classes: "card__meaning_part",
+			elem: Tags.span,
+			classes: 'card__meaning_part',
 			child: textExampleObject.last,
 		});
 
 		const textWord = fab.create({
-			elem: "span",
-			classes: "card__meaning_word",
+			elem: Tags.span,
+			classes: 'card__meaning_word',
 			child: textExampleObject.word,
 		});
 
 		const textMeaning = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "text-meaning",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'text-meaning',
 			child: [textPartLeft, textWord, textPartRight],
 		});
 
@@ -103,52 +104,52 @@ export default class Card {
 		this.elem = document.createDocumentFragment();
 
 		const img = fab.create({
-			elem: "img",
-			id: "image-card-example",
+			elem: Tags.img,
+			id: 'image-card-example',
 			attr: [{ src: this.card.image }, { alt: this.card.word }],
 		});
 
 		const imgContainer = fab.create({
-			elem: "div",
-			classes: "card__image",
+			elem: Tags.div,
+			classes: 'card__image',
 			child: img,
 		});
 
 		const transcription = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "transcription",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'transcription',
 			child: this.card.transcription,
 		});
 
 		const wordTranslate = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "word-translate",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'word-translate',
 			child: this.card.wordTranslate,
 		});
 
 		const textExampleTranslate = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "text-example-translate",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'text-example-translate',
 			child: this.card.textExampleTranslate,
 		});
 
 		const textMeaning = Card.getTextMeaning(this.card.textMeaning);
 
 		const textMeaningTranslate = fab.create({
-			elem: "div",
-			classes: "card__text",
-			id: "text-meaning-translate",
+			elem: Tags.div,
+			classes: 'card__text',
+			id: 'text-meaning-translate',
 			child: this.card.textMeaningTranslate,
 		});
 
 		const textExample = Card.getTextExample(this.card.example);
 
 		const againButton = fab.create({
-			elem: "button",
-			id: "again-word-button",
+			elem: Tags.button,
+			id: 'again-word-button',
 			child: BUTTONS_WORDS.again,
 		});
 
@@ -156,58 +157,58 @@ export default class Card {
 		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN, {
 			detail: currentWord,
 		});
-		againButton.addEventListener("click", () =>
+		againButton.addEventListener('click', () =>
 			againButton.dispatchEvent(againButtonEvent)
 		);
 
 		const hardButton = fab.create({
-			elem: "button",
-			id: "hard-word-button",
+			elem: Tags.button,
+			id: 'hard-word-button',
 			child: BUTTONS_WORDS.hard,
 		});
 
 		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD, {
 			detail: currentWord,
 		});
-		hardButton.addEventListener("click", () =>
+		hardButton.addEventListener('click', () =>
 			hardButton.dispatchEvent(hardButtonEvent)
 		);
 
 		const goodButton = fab.create({
-			elem: "button",
-			id: "good-word-button",
+			elem: Tags.button,
+			id: 'good-word-button',
 			child: BUTTONS_WORDS.good,
 		});
 
 		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD, {
 			detail: currentWord,
 		});
-		goodButton.addEventListener("click", () =>
+		goodButton.addEventListener('click', () =>
 			goodButton.dispatchEvent(goodButtonEvent)
 		);
 
 		const easyButton = fab.create({
-			elem: "button",
-			id: "easy-word-button",
+			elem: Tags.button,
+			id: 'easy-word-button',
 			child: BUTTONS_WORDS.easy,
 		});
 
 		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY, {
 			detail: currentWord,
 		});
-		easyButton.addEventListener("click", () =>
+		easyButton.addEventListener('click', () =>
 			easyButton.dispatchEvent(easyButtonEvent)
 		);
 
 		const buttonGroupComplexity = fab.create({
-			elem: "div",
-			class: "button-group",
+			elem: Tags.div,
+			class: 'button-group',
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
 		const addToDifficultButton = fab.create({
-			elem: "button",
-			id: "add-to-difficult-button",
+			elem: Tags.button,
+			id: 'add-to-difficult-button',
 			child: BUTTONS_WORDS.addToDifficult,
 		});
 
@@ -215,13 +216,13 @@ export default class Card {
 			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT,
 			{ detail: currentWord }
 		);
-		addToDifficultButton.addEventListener("click", () =>
+		addToDifficultButton.addEventListener('click', () =>
 			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
 		);
 
 		const deleteFromDictionaryButton = fab.create({
-			elem: "button",
-			id: "delete-from-dictionary-button",
+			elem: Tags.button,
+			id: 'delete-from-dictionary-button',
 			child: BUTTONS_WORDS.deleteFromDictionary,
 		});
 
@@ -230,19 +231,19 @@ export default class Card {
 			{ detail: currentWord }
 		);
 
-		deleteFromDictionaryButton.addEventListener("click", () =>
+		deleteFromDictionaryButton.addEventListener('click', () =>
 			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent)
 		);
 
 		const buttonGroupDictionary = fab.create({
-			elem: "div",
-			class: "button-group",
+			elem: Tags.div,
+			class: 'button-group',
 			child: [addToDifficultButton, deleteFromDictionaryButton],
 		});
 
 		const showAnswerButton = fab.create({
-			elem: "button",
-			id: "show-answer-button",
+			elem: Tags.button,
+			id: 'show-answer-button',
 			child: BUTTONS_WORDS.showAnswer,
 		});
 
@@ -250,37 +251,37 @@ export default class Card {
 			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
 			{ detail: currentWord }
 		);
-		showAnswerButton.addEventListener("click", () =>
+		showAnswerButton.addEventListener('click', () =>
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent)
 		);
 
 		const buttonGroupShowAnswer = fab.create({
-			elem: "div",
-			class: "button-group",
+			elem: Tags.div,
+			class: 'button-group',
 			child: showAnswerButton,
 		});
 
 		const audioWord = fab.create({
-			elem: "audio",
-			id: "audio-word",
+			elem: Tags.audio,
+			id: 'audio-word',
 			attr: [{ controls: true }, { src: this.card.audio }],
 		});
 
 		const audioMeaning = fab.create({
-			elem: "audio",
-			id: "audio-meaning",
+			elem: Tags.audio,
+			id: 'audio-meaning',
 			attr: [{ controls: true }, { src: this.card.meaningAudio }],
 		});
 
 		const audioExample = fab.create({
-			elem: "audio",
-			id: "audio-example",
+			elem: Tags.audio,
+			id: 'audio-example',
 			attr: [{ controls: true }, { src: this.card.exampleAudio }],
 		});
 
 		const wrapper = fab.create({
-			elem: "div",
-			class: "card",
+			elem: Tags.div,
+			class: 'card',
 			child: [
 				imgContainer,
 				transcription,

@@ -1,4 +1,4 @@
-import { ASSETS_STORAGE } from "../shared/Constants";
+import { ASSETS_STORAGE } from '../shared/Constants';
 
 export default class Word {
 	constructor(word) {

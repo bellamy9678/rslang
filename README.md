@@ -25,6 +25,8 @@ src/
               utils/ ...          // утилиты для всех
               shared/
                      constants.js // общие переменные на проект
+                     Tags.json    // json доступных тегов. импортим себе и используем, чтобы не было magic string
+                     Text.js      // текст для элементов, типа кнопок
               taskFolder/ ...     // ваш js таск
     app.js                        // основной js
     index.html                    // основной html

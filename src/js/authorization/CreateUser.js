@@ -1,9 +1,10 @@
-import { EMAIL_PART, PASSWORD_REG_EXP } from "./Constants";
-import { API, URL_PARAM_USER } from "../shared/Constants";
-import authorizeUser from "./Authorization";
-import DOMElementCreator from "../utils/DOMElementCreator";
+import { EMAIL_PART, PASSWORD_REG_EXP } from './Constants';
+import { API, URL_PARAM_USER } from '../shared/Constants';
+import Tags from '../shared/Tags.json';
+import authorizeUser from './Authorization';
+import DOMElementCreator from '../utils/DOMElementCreator';
 
-const signUpButton = document.getElementById("sign-up");
+const signUpButton = document.getElementById('sign-up');
 let emailInput;
 let passwordInput;
 let createAccountButton;
@@ -21,12 +22,12 @@ async function createUser(event) {
 	if (checkPassword(passwordInput.value)) {
 		event.preventDefault();
 		const user = new User();
-		console.log("createUser -> user", user);
+		console.log('createUser -> user', user);
 		const rawResponse = await fetch(`${API}${URL_PARAM_USER}`, {
-			method: "POST",
+			method: 'POST',
 			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(user),
 		});
@@ -34,95 +35,95 @@ async function createUser(event) {
 		console.log(content);
 		authorizeUser(user);
 	} else {
-		console.log("Password is not valid");
+		console.log('Password is not valid');
 	}
 }
 
 function showCreateAccountPage() {
-	const app = document.querySelector(".app");
+	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();
 
 	const title = newElem.create({
-		elem: "h2",
-		classes: "account-creation__title",
-		child: ["Create your free account"],
+		elem: Tags.h2,
+		classes: 'account-creation__title',
+		child: ['Create your free account'],
 	});
 
 	const signInLink = newElem.create({
-		elem: "a",
-		classes: "account-creation__link",
+		elem: Tags.a,
+		classes: 'account-creation__link',
 		attr: [
 			{
-				href: "#",
+				href: '#',
 			},
 		],
-		child: ["Sing in"],
+		child: ['Sing in'],
 	});
 
 	const text = newElem.create({
-		elem: "p",
-		classes: "account-creation__text",
-		child: ["Do you already have an account? ", signInLink],
+		elem: Tags.p,
+		classes: 'account-creation__text',
+		child: ['Do you already have an account? ', signInLink],
 	});
 
 	const userNameLabel = newElem.create({
-		elem: "label",
+		elem: Tags.label,
 		attr: [
 			{
-				for: "new-user__name",
+				for: 'new-user__name',
 			},
 		],
-		child: ["Username"],
+		child: ['Username'],
 	});
 
 	const userNameInput = newElem.create({
-		elem: "input",
-		classes: "account-creation__username",
-		id: "new-user__name",
+		elem: Tags.input,
+		classes: 'account-creation__username',
+		id: 'new-user__name',
 		attr: [
 			{
-				type: "text",
+				type: 'text',
 			},
 			{
-				required: "required",
+				required: 'required',
 			},
 		],
 	});
 
 	const userPasswordLabel = newElem.create({
-		elem: "label",
+		elem: Tags.label,
 		attr: [
 			{
-				for: "new-user__password",
+				for: 'new-user__password',
 			},
 		],
-		child: ["Password"],
+		child: ['Password'],
 	});
 
 	const userPasswordInput = newElem.create({
-		elem: "input",
-		classes: "account-creation__password",
-		id: "new-user__password",
+		elem: Tags.input,
+		classes: 'account-creation__password',
+		id: 'new-user__password',
 		attr: [
 			{
 				// for testing
-				type: "text",
+				type: 'text',
 			},
 			{
-				required: "required",
+				required: 'required',
 			},
 		],
 	});
 
 	const button = newElem.create({
-		elem: "button",
-		classes: ["button", "button_colored", "account-creation__button"],
-		child: ["Sign Up"],
+		elem: Tags.button,
+		classes: ['button', 'button_colored', 'account-creation__button'],
+		child: ['Sign Up'],
 	});
 
 	const form = newElem.create({
-		elem: "form",
-		classes: "account-creation__form",
+		elem: Tags.form,
+		classes: 'account-creation__form',
 		child: [
 			title,
 			text,
@@ -135,23 +136,23 @@ function showCreateAccountPage() {
 	});
 
 	const background = newElem.create({
-		elem: "div",
-		classes: "account-creation__background",
+		elem: Tags.div,
+		classes: 'account-creation__background',
 		child: [form],
 	});
 
 	const page = newElem.create({
-		elem: "div",
-		classes: "account-creation",
+		elem: Tags.div,
+		classes: 'account-creation',
 		child: [background],
 	});
 
-	app.innerHTML = "";
+	app.innerHTML = '';
 	app.append(page);
-	emailInput = document.getElementById("new-user__name");
-	passwordInput = document.getElementById("new-user__password");
-	createAccountButton = document.querySelector(".account-creation__button");
-	createAccountButton.addEventListener("click", createUser);
+	emailInput = document.getElementById('new-user__name');
+	passwordInput = document.getElementById('new-user__password');
+	createAccountButton = document.querySelector('.account-creation__button');
+	createAccountButton.addEventListener('click', createUser);
 }
 
-signUpButton.addEventListener("click", showCreateAccountPage);
+signUpButton.addEventListener('click', showCreateAccountPage);
