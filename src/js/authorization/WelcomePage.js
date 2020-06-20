@@ -64,12 +64,12 @@ export default function showWelcomePage(username) {
 		child: [content, image],
 	});
 
-	const page = newElem.create({
-		elem: TAGS.DIV,
-		classes: "welcome",
-		child: [wrapper],
-	});
-
-	app.innerHTML = "";
-	app.append(page);
+  const page = newElem.create({
+    elem:  TAGS.DIV,
+    classes: 'welcome',
+    child: [wrapper],
+  });
+	
+  app.removeChild(app.firstChild);
+  app.append(page);
 }
