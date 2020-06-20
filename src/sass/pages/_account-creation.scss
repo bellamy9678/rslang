@@ -1,7 +1,7 @@
 .account-creation {
     height: 100%;
 
-    &__overlay {
+    &__background {
         @include bg-cover("../../src/assets/images/statue-of-liberty-welcome-to-new-york 1.png");
         height: 100%;
         display: flex;

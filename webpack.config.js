@@ -27,7 +27,9 @@ function setDMode() {
 
 const config = {
 	target: "web",
-	entry: { index: "./src/app.js" },
+	entry: {
+		index: "./src/app.js",
+	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
 		filename: "[name].js",
@@ -67,7 +69,9 @@ const config = {
 						loader: "postcss-loader",
 						options: {
 							sourceMap: true,
-							config: { path: "./postcss.config.js" },
+							config: {
+								path: "./postcss.config.js",
+							},
 						},
 					},
 					{
@@ -137,8 +141,10 @@ const config = {
 			filename: "./index.html",
 		}),
 		new CopyWebpackPlugin([
-			// {from: './src/static', to: './'},
-			// {from: './src/img', to: './img/'},
+			{
+				from: "./src/assets/",
+				to: "./assets/",
+			},
 		]),
 		// new FaviconsWebpackPlugin("./src/img/icon.jpg"),
 	],

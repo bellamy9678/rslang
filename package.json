@@ -12,27 +12,17 @@
 		"lint": "eslint ./**/*.js --fix",
 		"clear": "del-cli dist"
 	},
-	"contributors": [
-		{
-			"name": "chaba-chaba"
-		},
-		{
-			"name": "bellamy9678"
-		},
-		{
-			"name": "leqsar"
-		},
-		{
-			"name": "garza0"
-		},
-		{
-			"name": "ttttanna"
-		}
-	],
 	"license": "MIT",
+	"contributors": [
+		"chaba-chaba",
+		"bellamy9678",
+		"leqsar",
+		"garza0",
+		"ttttanna",
+	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bellamy9678/rslang"
+		"url": "git+https://github.com/bellamy9678/rslang.git"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.9.6",
