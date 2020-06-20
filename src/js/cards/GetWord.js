@@ -1,15 +1,20 @@
 import {
 	API,
-	URL_PARAMS_WORDS,
-	URL_PARAMS_GROUP,
+	URL_PARAM_WORDS,
+	URL_PARAM_GROUP,
 	URL_ET,
-	URL_PARAMS_PAGE,
-} from "../shared/constants";
+	URL_PARAM_PAGE,
+} from "../shared/Constants";
 import Word from "./Word";
-import getNewWordsFromApi from "./getNewWordsFromApi";
 
 function getUrlFromGroupAndPage(group, page) {
-	return `${API}${URL_PARAMS_WORDS}${URL_PARAMS_GROUP}${group}${URL_ET}${URL_PARAMS_PAGE}${page}`;
+	return `${API}${URL_PARAM_WORDS}${URL_PARAM_GROUP}${group}${URL_ET}${URL_PARAM_PAGE}${page}`;
+}
+
+async function getNewWordsFromApi(url) {
+	const response = await fetch(url);
+	const data = await response.json();
+	return data;
 }
 
 export default async function getNewWordsArray(group, page) {

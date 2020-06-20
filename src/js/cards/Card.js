@@ -4,8 +4,8 @@ import {
 	TEXT_EXAMPLE_CLOSE_TAG,
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
-} from "./cardConstants";
-import { BUTTONS_WORDS } from "../shared/constants";
+} from "./CardConstants";
+import { BUTTONS_WORDS } from "../shared/Text";
 import WORDS_EVENTS from "../observer/WordsEvents";
 
 const fab = new DOMElementCreator();
@@ -101,7 +101,7 @@ export default class Card {
 
 	create() {
 		this.elem = document.createDocumentFragment();
-		
+
 		const img = fab.create({
 			elem: "img",
 			id: "image-card-example",
@@ -153,9 +153,9 @@ export default class Card {
 		});
 
 		const currentWord = this.card;
-		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN,
-			{ detail: currentWord }
-		);
+		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN, {
+			detail: currentWord,
+		});
 		againButton.addEventListener("click", () =>
 			againButton.dispatchEvent(againButtonEvent)
 		);
@@ -166,9 +166,9 @@ export default class Card {
 			child: BUTTONS_WORDS.hard,
 		});
 
-		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD,
-			{ detail: currentWord }
-		);
+		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD, {
+			detail: currentWord,
+		});
 		hardButton.addEventListener("click", () =>
 			hardButton.dispatchEvent(hardButtonEvent)
 		);
@@ -179,9 +179,9 @@ export default class Card {
 			child: BUTTONS_WORDS.good,
 		});
 
-		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD,
-			{ detail: currentWord }
-			);
+		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD, {
+			detail: currentWord,
+		});
 		goodButton.addEventListener("click", () =>
 			goodButton.dispatchEvent(goodButtonEvent)
 		);
@@ -192,9 +192,9 @@ export default class Card {
 			child: BUTTONS_WORDS.easy,
 		});
 
-		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY,
-			{ detail: currentWord }
-		);
+		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY, {
+			detail: currentWord,
+		});
 		easyButton.addEventListener("click", () =>
 			easyButton.dispatchEvent(easyButtonEvent)
 		);
