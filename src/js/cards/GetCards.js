@@ -1,4 +1,4 @@
-import getNewWordsArray from "./Word";
+import getNewWordsArray from "./GetWord";
 import Card from "./Card";
 
 export default async function getCards(group, page) {

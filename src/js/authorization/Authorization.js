@@ -33,7 +33,7 @@ async function authorizeUser(obj) {
 	console.log(content);
 	document.cookie = `userToken=${content.token}`;
 	autorizeForm.classList.add("none");
-	const name = user.email.replace(EMAIL_PART, "");
+	const name = user.email.replace(`${EMAIL_PART}`, "");
 
 	showWelcomePage(name);
 }
