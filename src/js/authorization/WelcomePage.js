@@ -64,6 +64,5 @@ export default function showWelcomePage(username) {
         child: [wrapper],
     });
 	app.firstChild.remove();
-    // app.innerHTML = '';
     app.append(page);
 }
