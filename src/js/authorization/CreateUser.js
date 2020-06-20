@@ -130,9 +130,6 @@ function showCreateAccountPage() {
         child: [background],
     });
     app.firstChild.remove();
-    // app.removeChild(app.firstChild);
-    // console.log("showCreateAccountPage -> app.firstChild", app.firstChild)
-    // app.innerHTML = '';
     app.append(page);
     emailInput = document.getElementById('new-user__name');
     passwordInput = document.getElementById('new-user__password');
