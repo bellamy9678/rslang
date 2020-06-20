@@ -1,0 +1,26 @@
+.start-page {
+    padding-top: 100px;
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__content {
+        padding-right: 60px;
+        text-align: center;
+    }
+
+    &__title {
+        @include font($size: 3.6rem, $weight: 600, $height: 1.3);
+    }
+
+    &__text {
+        @include font($size: 1.6rem);
+    }
+
+    &__image {
+        width: 70%;
+    }
+}
