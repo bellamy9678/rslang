@@ -21,7 +21,9 @@ export default class GameField {
 
     this.gameBoardContainer.append(this.boardNumbers, this.board)
 
-    elementCreatorWithParentAndChildren('button', 'controls__button', 'I don\'t know', this.gameControlsContainer, '');
+    elementCreatorWithParentAndChildren('button', 'controls__btn-i-dont-know', 'I don\'t know', this.gameControlsContainer, '');
+    elementCreatorWithParentAndChildren('button', 'controls__btn-check', 'Check', this.gameControlsContainer, '');
+    elementCreatorWithParentAndChildren('button', 'controls__btn-continue', 'Continue', this.gameControlsContainer, '');
     this.gameContainer.append(
       this.gameBoardContainer,
       this.gamePuzzlesContainer,

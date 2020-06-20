@@ -10,48 +10,124 @@ export default class Game {
     this.showTranslationBtnState = false;
     this.showListenBtnState = false;
     this.showBgImageBtnState = false;
-  }
-
-  init() {
-    this.gameContainer = document.createElement('div');
-    this.gameContainer.classList.add('game-container');
-
-    this.controlsContainer = document.createElement('div');
-    this.controlsContainer.classList.add('controls');
-    this.tooltips = document.createElement('div');
-    this.tooltips.classList.add('tooltips');
-    this.gameBoard = document.createElement('div');
-    this.gameBoard.classList.add('game__main');
-
-    this.gameContainer.append(this.controlsContainer, this.tooltips, this.gameBoard);
-    wrapper.append(this.gameContainer);
+    this.currentLine = 0;
+    this.currentRound = 0;
+    this.currentLevel = 0;
+    this.sentencesJSON = {};
+    this.eventListenersAddedState = false;
   }
 
   addEventListenersToControls() {
+    this.eventListenersAddedState = true;
     this.autoListeningBtn = document.querySelector('.controls__auto-listening');
     this.showTranslationBtn = document.querySelector('.controls__translation');
     this.showListenBtn = document.querySelector('.controls__listening');
     this.showBgImageBtn = document.querySelector('.controls__background');
     this.playAudioBtn = document.querySelector('.tooltips__play');
     this.translationContainer = document.querySelector('.tooltips__translate');
-    this.iDontKnowBtn = document.querySelector('.controls__button');
+    this.iDontKnowBtn = document.querySelector('.controls__btn-i-dont-know');
+    this.checkBtn = document.querySelector('.controls__btn-check');
+    this.continueBtn = document.querySelector('.controls__btn-continue');
+    this.levelSeletBtn = document.querySelector('.controls__dropdown-level');
+    this.roundSelectBtn = document.querySelector('.controls__dropdown-round');
 
     this.autoListeningBtn.addEventListener('click', () => { this.autoListeningBtnHandler() });
     this.showTranslationBtn.addEventListener('click', () => { this.showTranslationBtnHandler() });
     this.showListenBtn.addEventListener('click', () => { this.showListeningBtnHandler() });
-    this.playAudioBtn.addEventListener('click', () => { this.playAudioBtnHandler() })
-    this.iDontKnowBtn.addEventListener('click', () => { this.checkBtnHandler() })
+    this.playAudioBtn.addEventListener('click', () => { this.playAudioBtnHandler(this.sentenceAudioLink) })
+    this.checkBtn.addEventListener('click', () => { this.checkBtnHandler() })
+    this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler() })
+    this.continueBtn.addEventListener('click', () => { this.continueBtnHandler() })
+    this.levelSeletBtn.addEventListener('change', (event) => { this.levelSeletBtnHandler(+event.target.value) });
+    this.roundSelectBtn.addEventListener('change', (event) => { this.roundSeletBtnHandler(+event.target.value) });
+
   }
 
-  playAudioBtnHandler() {
-    new Audio(`https://raw.githubusercontent.com/garza0/rslang-data/master/${this.sentenceAudioLink}`).play();
-    console.log(this);
 
+  levelSeletBtnHandler(level) {
+    this.loadCustomLevelAndRound(level, this.currentRound)
+  }
+
+  roundSeletBtnHandler(round) {
+    this.loadCustomLevelAndRound(this.currentLevel, round)
+  }
+
+  continueBtnHandler() {
+    this.currentLine += 1;
+    this.currentActiveLine = document.querySelector('.board__line--active');
+    this.currentActiveLine.classList.remove('board__line--active');
+    this.currentActiveElements = document.querySelectorAll('.game__jigsaw--active');
+    this.currentActiveElements.forEach(element => element.classList.remove('game__jigsaw--active'));
+    if (this.currentLine < 10) {
+      this.addLine();
+      this.getSentences(this.sentencesJSON, this.currentLine);
+      this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
+      this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
+    } else {
+      this.clearField();
+      this.addLine();
+      this.currentLine = 0;
+      this.currentRound += 1;
+      this.getData();
+    }
+  }
+
+  loadCustomLevelAndRound(level, round) {
+    this.currentLevel = level;
+    this.currentRound = round;
+    this.clearField();
+    this.clearPuzzlesContainer();
+    this.addLine();
+    this.currentLine = 0;
+    this.getData(level, round);
+  }
+
+  clearPuzzlesContainer() {
+    this.puzzlesBottomContainer = document.querySelector('.game__puzzles');
+    while (this.puzzlesBottomContainer.firstChild) {
+      this.puzzlesBottomContainer.removeChild(this.puzzlesBottomContainer.firstChild);
+    }
+  }
+
+  clearField() {
+    this.board = document.querySelector('.board');
+    while (this.board.firstChild) {
+      this.board.removeChild(this.board.firstChild);
+    }
+  }
+
+
+  iDontKnowBtnHandler() {
+    this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
+    this.activePuzzles.forEach(puzzle => puzzle.remove());
+    this.appendPuzzlesToFieldLine(this.sentenceArr)
+  }
+
+  checkBtnHandler() {
+    this.currentLineElements = [...this.boardLine.children].map(i => i.children[0]);
+    this.currentLineWords = [];
+    for (let i = 0; i < this.sentenceArr.length; i += 1) {
+      this.currentLineWords.push(this.boardLine.children[i].children[0].dataset.word)
+    }
+    this.checkedArr = this.compareTwoSameLengthArraysAndReturnArrayOfBoolean(this.currentLineWords, this.sentenceArr);
+    this.showWrongAndRightAnswers(this.currentLineElements, this.checkedArr);
+  }
+
+  appendPuzzlesToFieldLine(puzzles) {
+    this.activeFieldLineContainers = document.querySelector('.board__line--active').children;
+    for (let i = 0; i < puzzles.length; i += 1) {
+      this.puzzles = [...this.populatePuzzle(puzzles)];
+      this.activeFieldLineContainers[i].append(this.puzzles[i]);
+    }
+  }
+
+  playAudioBtnHandler(audioLink) {
+    this.audio = new Audio(`https://raw.githubusercontent.com/garza0/rslang-data/master/${audioLink}`);
+    this.audio.play();
   }
 
   showListeningBtnHandler() {
     this.showListenBtnState = !this.showListenBtnState;
-    console.log(this.showListenBtnState);
 
     if (this.showListenBtnState) {
       this.playAudioBtn.removeAttribute('disabled');
@@ -75,33 +151,46 @@ export default class Game {
 
   }
 
-  populatePuzzle(sentenceArr) {
-    this.puzzles = sentenceArr.map(word => {
-      this.newElement = elementCreator('div', 'game__jigsaw', word, '', 'data-word', word);
-      this.newElement.setAttribute('draggable', true);
-      return this.newElement;
-    });
-    return this.puzzles;
+  getData(level = this.currentLevel, round = this.currentRound) {
+    const url = `https://afternoon-falls-25894.herokuapp.com/words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`
+    fetch(url)
+      .then(response => {
+        return response.json();
+      }).then(myJson => {
+        console.log(myJson);
+
+        this.handleJson(myJson);
+      })
+  }
+
+  handleJson(myJson) {
+    console.log(myJson);
+    this.sentencesJSON = myJson;
+    this.getSentences(myJson, this.currentLine);
+    this.sentenceTranslate = myJson[0].textExampleTranslate;
+    this.sentenceAudioLink = myJson[0].audioExample;
+  }
+
+  getSentences(arr, line) {
+    const sentencesArr = [];
+    console.log(arr, line);
+
+    arr.forEach(word => sentencesArr.push(word.textExample.replace(/<[^>]*>/g, '')));
+    this.generatePuzzle(sentencesArr[line]);
+  }
+
+  addLine() {
+    this.board = document.querySelector('.board');
+    this.boardLine = elementCreator('div', ['board__line', 'board__line--active']);
+    this.board.append(this.boardLine);
   }
 
   generatePuzzle(sentence) {
-    const puzzlesContainer = document.querySelector('.game__puzzles');
     const wordsArray = sentence.split(' ');
     this.sentenceArr = wordsArray;
 
     const shuffledArr = this.shuffleArray(wordsArray);
-
-    puzzlesContainer.append(...this.populatePuzzle(shuffledArr));
-    this.addPuzzleContainersToLine(wordsArray.length);
-    this.dragAndDrop();
-    this.addEventListenersToControls();
-
-  }
-
-  getSentences(arr) {
-    const sentencesArr = [];
-    arr.forEach(word => sentencesArr.push(word.textExample.replace(/<[^>]*>/g, '')));
-    this.generatePuzzle(sentencesArr[0]);
+    this.appendPuzzlesToContainer(shuffledArr);
   }
 
   shuffleArray(arr) {
@@ -118,46 +207,23 @@ export default class Game {
     return this.arr;
   }
 
-  // getSentencesTranslation(arr) {
-  //   const sentencesTranslation = []
-  // }
-
-  getData() {
-    const url = `https://afternoon-falls-25894.herokuapp.com/words?group=1&page=0&wordsPerExampleSentenceLTE=10&wordsPerPage=10`
-    fetch(url)
-      .then(response => {
-        return response.json();
-      }).then(myJson => {
-        this.handleJson(myJson);
-      })
+  populatePuzzle(sentenceArr) {
+    this.puzzles = sentenceArr.map(word => {
+      this.newElement = elementCreator('div', ['game__jigsaw', 'game__jigsaw--active'], word, '', 'data-word', word);
+      this.newElement.setAttribute('draggable', true);
+      return this.newElement;
+    });
+    return this.puzzles;
   }
 
-  handleJson(myJson) {
-    console.log(myJson);
-    this.getSentences(myJson);
-    this.sentenceTranslate = myJson[0].textExampleTranslate;
-    this.sentenceAudioLink = myJson[0].audioExample;
-  }
-
-  addLine() {
-    this.board = document.querySelector('.board');
-    this.boardLine = elementCreator('div', 'board__line');
-    this.board.append(this.boardLine);
-  }
-
-  addPuzzleContainersToLine(numberOfPuzzles) {
-    this.arrOfPuzzleContainer = [];
-    for (let i = 0; i < numberOfPuzzles; i += 1) {
-      this.arrOfPuzzleContainer.push(elementCreator('div', 'puzzle-container'));
+  appendPuzzlesToContainer(puzzles) {
+    const puzzlesContainer = document.querySelector('.game__puzzles');
+    puzzlesContainer.append(...this.populatePuzzle(puzzles));
+    this.addPuzzleContainersToLine(puzzles.length);
+    this.dragAndDrop();
+    if (this.currentLine === 0 && this.eventListenersAddedState === false) {
+      this.addEventListenersToControls();
     }
-
-    this.boardLine.append(...this.arrOfPuzzleContainer);
-  }
-
-  start() {
-    this.getData();
-    this.addLine();
-
   }
 
   dragAndDrop() {
@@ -169,6 +235,7 @@ export default class Game {
 
     function dragStart() {
       selectedItem = this;
+
       setTimeout(() => {
         this.classList.add('hide');
       }, 0);
@@ -214,24 +281,20 @@ export default class Game {
 
     this.puzzleItem.forEach(item => item.addEventListener('dragstart', dragStart))
     this.puzzleItem.forEach(item => item.addEventListener('dragend', dragEnd))
-  };
+  }
 
-  checkBtnHandler() {
-    this.currentLineElements = [...this.boardLine.children].map(i => i.children[0]);
-    this.currentLineWords = [];
-    for (let i = 0; i < this.sentenceArr.length; i += 1) {
-      this.currentLineWords.push(this.boardLine.children[i].children[0].dataset.word)
+  addPuzzleContainersToLine(numberOfPuzzles) {
+    this.arrOfPuzzleContainer = [];
+    for (let i = 0; i < numberOfPuzzles; i += 1) {
+      this.arrOfPuzzleContainer.push(elementCreator('div', ['puzzle-container', 'puzzle-container--active']));
     }
-    console.log(this.currentLineWords, this.sentenceArr, this.currentLineElements);
-    this.checkedArr = this.compareTwoSameLengthArraysAndReturnArrayOfBoolean(this.currentLineWords, this.sentenceArr);
-    this.showWrongAndRightAnswers(this.currentLineElements, this.checkedArr);
+
+    this.boardLine.append(...this.arrOfPuzzleContainer);
   }
 
   showWrongAndRightAnswers(currentLineElements, arrOfBoolean) {
     for (let i = 0; i < currentLineElements.length; i += 1) {
       if (arrOfBoolean[i]) {
-        console.log(currentLineElements[i]);
-
         currentLineElements[i].classList.add('game__jigsaw--correct')
       } else {
         currentLineElements[i].classList.add('game__jigsaw--wrong')
@@ -252,6 +315,25 @@ export default class Game {
     return this.arrayOfBoolean;
   }
 
+  init() {
+    this.gameContainer = document.createElement('div');
+    this.gameContainer.classList.add('game-container');
 
+    this.controlsContainer = document.createElement('div');
+    this.controlsContainer.classList.add('controls');
+    this.tooltips = document.createElement('div');
+    this.tooltips.classList.add('tooltips');
+    this.gameBoard = document.createElement('div');
+    this.gameBoard.classList.add('game__main');
+
+    this.gameContainer.append(this.controlsContainer, this.tooltips, this.gameBoard);
+    wrapper.append(this.gameContainer);
+  }
+
+  start() {
+    this.getData();
+    this.addLine();
+
+  }
 }
 

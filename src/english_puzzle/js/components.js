@@ -10,7 +10,13 @@ export const elementCreatorWithParentAndChildren = (tagName, className, innerTex
 
 export const elementCreator = (tagName, className, innerText, idTitle, attribute, attributeValue) => {
   const newElement = document.createElement(`${tagName}`);
-  if (className) newElement.classList.add(`${className}`);
+  if (className) {
+    if (Array.isArray(className)) {
+      newElement.classList.add(...className);
+    } else {
+      newElement.classList.add(`${className}`)
+    }
+  };
   if (innerText) newElement.innerText = `${innerText}`;
   if (idTitle) newElement.id = idTitle;
   if (attribute) newElement.setAttribute(attribute, attributeValue);
