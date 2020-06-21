@@ -20,19 +20,25 @@ function Word(word) {
 }
 
 // My 
+
+const startPage = document.querySelector('.start-page');
+const mainWrapper = document.querySelector('.wrapper');
 const wordsContainer = document.querySelector('.words-container');
+
 const renderWords = (item) => `
-<div class="word">
-  <audio class="pronounce">
-    <source src=${item.audio}>    
-  </audio>
+<div class="word" data-myimage="${item.image}" data-myaudio="${item.audio}" data-transl="${item.translate}" data-wrt="${item.word}">  
   <i class="material-icons volume">volume_mute</i>         
   <p class="word-writing">${item.word}</p>          
   <p class="word-transcription">${item.transcription}</p>
-  <p class="word-translation invisible">${item.translate}</p>
-  <img class="word-img invisible" src=${item.image}>
 </div>
 `
+const renderGameResult = (item) => {
+  return `<div class="res-word" data-audio="${item.dataset.myaudio}">
+    <i class="material-icons volume-res">volume_mute</i>
+    <span class="res-writing">${item.dataset.wrt} &mdash; </span>
+    <span class="res-translation">${item.dataset.transl}</span>
+   </div>`;
+}
 
 async function getWords(group, page) {
   const url = `${API}words?group=${group}&page=${page}`;
@@ -43,39 +49,156 @@ async function getWords(group, page) {
 
 
 //My
-getWords(0,0).then(res => {
+/*getWords(0,0).then(res => {
   wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-})
+})*/
 //Events
 const currentImg = document.querySelector('.current-img');
 const translation = document.querySelector('.current-transl');
-const words = document.getElementsByClassName('word');
-const wordSpelling = document.getElementsByClassName('word-writing');
-let score = 0;
+const finishBtn = document.querySelector('.finish');
+const resultContainer = document.querySelector('.result');
+const errorsItems = document.querySelector('.errors-items');
+const succesItems = document.querySelector('.succes-items');
+const errNum = document.querySelector('.errors-num');
+const succesNum = document.querySelector('.succes-num');
+const microphone = document.querySelector('.mic-off');
+let words = document.getElementsByClassName('word');
+let wordSpelling = document.getElementsByClassName('word-writing');
+let imgAudio = document.querySelector('.pronounce');
+let output = document.querySelector('.word-output');
+let guessed = [];
 
-//const words = document.querySelectorAll('.word');
-//console.log(links);
-//console.log(words);
+// show game results
+function showResults() {
+  succesItems.innerHTML = guessed.map(item => renderGameResult(item)).join("");
+  succesNum.textContent = guessed.length;
+  let wrong =[...words].filter((item) => (!guessed.includes(item)));
+  errorsItems.innerHTML = wrong.map(item => renderGameResult(item)).join('');
+  errNum.textContent = wrong.length;
+  mainWrapper.classList.add('invisible');
+  resultContainer.classList.remove('invisible');
+}
+
+// listen pronounce
+
 document.addEventListener('click', event => {
+  // render words for game
+  if (event.target.classList.contains('start-btn')) {
+    startPage.classList.add('invisible');
+    mainWrapper.classList.remove('invisible');
+    getWords(0,0).then(res => {
+      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
+    })
+  }
+  // sound on word click
   if (event.target.classList.contains('word')) {
-    console.log(event.target);
-    event.target.querySelector('.pronounce').play();
-    let tr = event.target.querySelector('.word-translation').textContent;
-    let sr = event.target.querySelector('.word-img').getAttribute('src');
-    console.log(tr);
-    console.log(sr);
+    let tr = event.target.dataset.transl;
+    let sr = event.target.dataset.myimage;
+    let au = event.target.dataset.myaudio;    
     translation.innerText = tr;
     currentImg.setAttribute('src', sr);
+    imgAudio.setAttribute('src', au);
+    imgAudio.play();
     [...words].forEach(el => el.classList.remove('active'));
-    console.log(words);
     event.target.classList.add('active');
+  }
+  //sound on word click
+  if (event.target.parentElement.classList.contains('word')) {
+    let tr =event.target.parentElement.dataset.transl;
+    let sr = event.target.parentElement.dataset.myimage;
+    let au = event.target.parentElement.dataset.myaudio;
+    translation.innerText = tr;
+    currentImg.setAttribute('src', sr);
+    imgAudio.setAttribute('src', au);
+    imgAudio.play();
+    [...words].forEach(el => el.classList.remove('active'));
+    event.target.parentElement.classList.add('active'); 
+  }
+  //restart button
+  if (event.target.classList.contains('restart')) {
+    guessed.length = 0;
+    output.innerHTML = '';
+    output.classList.add('invisible');
+    getWords(0,0).then(res => {
+      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
+    })
+  }
+  // button return
+  if (event.target.classList.contains('return-btn')) {
+    resultContainer.classList.add('invisible');
+    mainWrapper.classList.remove('invisible');  
+  }
+  // button new game
+  if (event.target.classList.contains('new-btn')) {
+    resultContainer.classList.add('invisible');
+    mainWrapper.classList.remove('invisible');
+    guessed.length = 0;
+    output.innerHTML = '';
+    output.classList.add('invisible'); 
+    getWords(0,0).then(res => {
+      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
+    })
+  }
+  // finish button
+  if (event.target.classList.contains('finish')) {
+    showResults();
   }
 })
 
 //Speech recognition
 
+
+function speak() {  
+  output.classList.remove('invisible');
+  let span = document.createElement("span");
+  output.appendChild(span);
+//console.log();
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.start();
+
+  recognition.addEventListener("result", function(e) {
+    let text = Array.from(e.results)
+    .map(result => result[0])
+    .map(result => result.transcript)
+    .join('');
+    span.innerHTML = '';
+    span.innerHTML = text;  
+  });
+
+  recognition.addEventListener('end', function(e) {
+    [...words].forEach(el => {
+      if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
+        if (!guessed.includes(el)) {
+          el.classList.add('active');
+          currentImg.setAttribute('src', el.dataset.myimage);
+          
+          guessed.push(el);
+        }      
+      } // перенести в отдельную функцию
+    })
+    console.log(guessed);
+    recognition.start();
+  })
+}
+
+
+const speakBtn = document.querySelector('.speak');
+speakBtn.addEventListener('click', speak);
+microphone.addEventListener('click', event => {
+  speakBtn.removeEventListener('click', speak);
+})
+
+
+
+
+
+//speech recognition
+/*
 let output = document.querySelector('.word-output');
-var span = document.createElement("span");
+let span = document.createElement("span");
 output.appendChild(span);
 //console.log();
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -93,15 +216,34 @@ recognition.addEventListener("result", function(e) {
   span.innerHTML = text;  
 });
 
-recognition.addEventListener("end", function(e) {
-  [...wordSpelling].forEach(el => {
-    if (el.textContent === span.innerHTML) {
-      
-      el.parentElement.classList.add('active');
-      let ref = el.parentElement.querySelector('.word-img').getAttribute('src');
-      currentImg.setAttribute('src', ref);
-      score= score + 1;
-    }
+recognition.addEventListener('end', function(e) {
+  [...words].forEach(el => {
+    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
+      if (!guessed.includes(el)) {
+        el.classList.add('active');
+        currentImg.setAttribute('src', el.dataset.myimage);
+        //score++;
+        console.log(score);
+        guessed.push(el);
+      }      
+    } // перенести в отдельную функцию
+  })
+  console.log(guessed);
+  recognition.start();
+})
+*/
+function handleRecognition() {
+  if (guessed.length === 10) {
+    showResults();
+  }
+  [...words].forEach(el => {
+    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
+      if (!guessed.includes(el)) {
+        el.classList.add('active');
+        currentImg.setAttribute('src', el.dataset.myimage);        
+        guessed.push(el);
+      }      
+    } // перенести в отдельную функцию
   })
   recognition.start();
-});
+}
