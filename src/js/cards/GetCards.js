@@ -1,5 +1,5 @@
-import getNewWordsArray from "./Word";
-import Card from "./Card";
+import getNewWordsArray from './GetWord';
+import Card from './Card';
 
 export default async function getCards(group, page) {
 	const wordsArray = await getNewWordsArray(group, page);

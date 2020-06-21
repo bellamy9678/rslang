@@ -1,4 +1,4 @@
-import { ASSETS_STORAGE } from "../shared/constants";
+import { ASSETS_STORAGE } from '../shared/Constants';
 
 export default class Word {
 	constructor(word) {
@@ -9,7 +9,7 @@ export default class Word {
 		this.example = word.textExample;
 		this.exampleTranslate = word.textExampleTranslate;
 		this.textMeaning = word.textMeaning;
-		this.textMeaningTranslate = word.textMeaningTranslate; 
+		this.textMeaningTranslate = word.textMeaningTranslate;
 	}
 
 	getMediaUrls(word) {

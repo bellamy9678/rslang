@@ -9,8 +9,18 @@
 	"scripts": {
 		"dev": "webpack-dev-server --history-api-fallback --inline --open",
 		"prod": "npm run clear -s && webpack --progress",
-		"lint": "eslint ./**/*.js --fix",
+		"lint": "eslint ./**/*.js --fix --color",
 		"clear": "del-cli dist"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.(js)": [
+			"npm run lint"
+		]
 	},
 	"license": "MIT",
 	"contributors": [
@@ -43,7 +53,9 @@
 		"file-loader": "^4.3.0",
 		"html-loader": "^0.5.5",
 		"html-webpack-plugin": "^4.3.0",
+		"husky": "^4.2.5",
 		"image-webpack-loader": "^6.0.0",
+		"lint-staged": "^10.2.11",
 		"mini-css-extract-plugin": "^0.8.2",
 		"node-sass": "^4.14.1",
 		"postcss-loader": "^3.0.0",
