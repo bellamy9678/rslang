@@ -44,6 +44,9 @@ import TAGS from '../shared/Tags.json';
 		classes: 'welcome',
 		child: [wrapper],
 	});
-	app.removeChild(app.firstChild);
+
+	if (app.firstChild) {
+		app.firstChild.remove();
+	}
 	app.append(page);
 })();

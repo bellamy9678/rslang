@@ -70,6 +70,6 @@ export default function showWelcomePage(username) {
 		child: [wrapper],
 	});
 
-	app.removeChild(app.firstChild);
+	app.firstChild.remove();
 	app.append(page);
 }
