@@ -4,6 +4,7 @@ import moveWord from './moveWord'
 
 export default function generateWordContainers(array) {
     if (document.querySelector('.main-word')) {
+      document.querySelector('.main-word').style.top = '0px';
       document.querySelector('.main-word').remove();
     }
     arrayWithWords.length = 0;

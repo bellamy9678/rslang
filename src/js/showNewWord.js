@@ -36,7 +36,7 @@ export default async function showNewWord() {
 
   const trackTheEnd = setInterval(() => {
     if (+(mainWordContainer.style.top.slice(0, 3)) >= 496) {
-      mainWordContainer.style.display = 'none';
+      mainWordContainer.remove();
       handleWrongAnswer();
       clearInterval(trackTheEnd);
     }
@@ -44,7 +44,7 @@ export default async function showNewWord() {
 
   allAnswers.forEach((item) => {
     item.addEventListener('click', (event) => {
-      mainWordContainer.style.display = 'none';
+      mainWordContainer.remove();
       const choosenAnswer = event.target;
       if (choosenAnswer.textContent === mainWord.translation) {
         choosenAnswer.classList.add('right-answer__active');

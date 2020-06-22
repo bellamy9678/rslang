@@ -1,15 +1,22 @@
 export default function moveWord() {
   const start = Date.now();
-  const mainWord = document.querySelector('.main-word');
+  const mainWordContainer = document.querySelector('.main-word');
+  const allAnswers = document.querySelectorAll('.answers p');
   const timer = setInterval(() => {
     const timePassed = Date.now() - start;
-    if (timePassed >= 5000) {
+    if (+(mainWordContainer.style.top.slice(0, 3)) >= 497) {
       clearInterval(timer);
       return;
     }
     function draw(time) {
-      mainWord.style.top = `${time / 10}px`;
+      mainWordContainer.style.top = `${time / 10}px`;
     }
     draw(timePassed);
   }, 20);
+  
+  allAnswers.forEach((item) => {
+    item.addEventListener('click', () => {
+      clearInterval(timer);
+    })
+  });
 }
