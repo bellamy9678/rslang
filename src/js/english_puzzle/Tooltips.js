@@ -1,11 +1,21 @@
-import { elementCreator } from './components';
+import DOMElementCreator from '../utils/DOMElementCreator';
+
+const factory = new DOMElementCreator();
 
 export default class Tooltips {
-  init() {
-    this.tooltipsContainer = document.querySelector('.tooltips');
-    this.tooltipsContainer.append(
-      elementCreator('button', 'tooltips__play', 'Play_Icon', '', 'disabled', true),
-      elementCreator('div', 'tooltips__translate')
-    )
-  }
+	init() {
+		this.tooltipsContainer = document.querySelector('.tooltips');
+		this.tooltipsContainer.append(
+			factory.create({
+				elem : 'button',
+				classes : 'tooltips__play',
+				attr : {'disabled' : true},
+				child : 'Play_Icon'
+			}),
+			factory.create({
+				elem : 'div',
+				classes : 'tooltips__translate',
+			})
+		);
+	}
 }

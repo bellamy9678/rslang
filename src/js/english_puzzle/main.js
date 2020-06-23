@@ -13,15 +13,15 @@ const game = new Game();
 
 
 export function initEnglishPuzzle() {
-  game.init();
-  levelSelect.init();
-  hints.init();
-  tooltips.init();
-  gameField.init();
+	game.init();
+	levelSelect.init();
+	hints.init();
+	tooltips.init();
+	gameField.init();
 }
 
 export function startPuzzleGame() {
-  game.start();
+	game.start();
 }
 
 
