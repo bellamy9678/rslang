@@ -20,21 +20,74 @@ function Word(word) {
 }
 
 // My 
+const template = `
+<div class="start-page">
+    <h1 class="game-name"> Speak it</h1>
+    <div class="description">
+      <p>Click on the world to hear them sound</p>
+      <p>Click on the button and speak the words into the microphone </p>
+    </div>
+    <button class="start-btn">Start Game</button>
+  </div>
+  
+  <div class="wrapper invisible">
+    <button>New Set</button>
+    <div class="image-container">
+      <img src="../src/assets/images/engl.jpg" class="current-img">
+      <p class="current-transl"></p>
+      <p class="word-output invisible">
+        <i class="material-icons mic-off">mic_off</i>
+      </p>
+    </div>
+    <div class="words-container">
 
+    </div>
+    <audio class="pronounce">
+      <source src=''>    
+    </audio>
+    <div class="buttons-container">
+      <button class="restart">Restart</button>
+      <button class="speak">Speak please</button>
+      <button class="finish">Finish</button>
+    </div>
+  </div>
+  <div class="result invisible">
+    <div class="result-container">
+      <p class="errors">Ошибок
+        <span class="errors-num"></span>
+      </p>
+      <div class="errors-items">
+
+      </div>
+      <p class="succes">Знаю
+        <span class="succes-num"></span>
+      </p>
+      <div class="succes-items">
+
+      </div>
+      <div class="results-btn">
+        <button class="return-btn">Return</button>
+        <button class="new-btn">New game</button>
+      </div>
+    </div>
+  </div>
+ 
+</body>
+`
+const body = document.querySelector('body');
+body.innerHTML = template;
 const startPage = document.querySelector('.start-page');
 const mainWrapper = document.querySelector('.wrapper');
 const wordsContainer = document.querySelector('.words-container');
 
 const renderWords = (item) => `
 <div class="word" data-myimage="${item.image}" data-myaudio="${item.audio}" data-transl="${item.translate}" data-wrt="${item.word}">  
-  <i class="material-icons volume">volume_mute</i>         
   <p class="word-writing">${item.word}</p>          
   <p class="word-transcription">${item.transcription}</p>
 </div>
 `
 const renderGameResult = (item) => {
-  return `<div class="res-word" data-audio="${item.dataset.myaudio}">
-    <i class="material-icons volume-res">volume_mute</i>
+  return `<div class="res-word" data-audio="${item.dataset.myaudio}">    
     <span class="res-writing">${item.dataset.wrt} &mdash; </span>
     <span class="res-translation">${item.dataset.transl}</span>
    </div>`;
@@ -43,17 +96,17 @@ const renderGameResult = (item) => {
 async function getWords(group, page) {
   const url = `${API}words?group=${group}&page=${page}`;
   const data = await getData(url);
-  //console.log("getWords -> data.map(word => new Word(word))", data.map(word => new Word(word))); 
+  // console.log("getWords -> data.map(word => new Word(word))", data.map(word => new Word(word))); 
   return data.map(word => new Word(word));
 }
 
 
-//My
+// My
 
-//Events
+// Events
 const currentImg = document.querySelector('.current-img');
 const translation = document.querySelector('.current-transl');
-const finishBtn = document.querySelector('.finish');
+// const finishBtn = document.querySelector('.finish');
 const resultContainer = document.querySelector('.result');
 const errorsItems = document.querySelector('.errors-items');
 const succesItems = document.querySelector('.succes-items');
@@ -61,18 +114,17 @@ const errNum = document.querySelector('.errors-num');
 const succesNum = document.querySelector('.succes-num');
 const microphone = document.querySelector('.mic-off');
 const defaultImg = "../src/assets/images/engl.jpg";
-let words = document.getElementsByClassName('word');
-let wordSpelling = document.getElementsByClassName('word-writing');
-let imgAudio = document.querySelector('.pronounce');
-let output = document.querySelector('.word-output');
-let guessed = [];
+const words = document.getElementsByClassName('word');
+const imgAudio = document.querySelector('.pronounce');
+const output = document.querySelector('.word-output');
+const guessed = [];
 let trainMode = true;
 
 // show game results
 function showResults() {
   succesItems.innerHTML = guessed.map(item => renderGameResult(item)).join("");
   succesNum.textContent = guessed.length;
-  let wrong =[...words].filter((item) => (!guessed.includes(item)));
+  const wrong =[...words].filter((item) => (!guessed.includes(item)));
   errorsItems.innerHTML = wrong.map(item => renderGameResult(item)).join('');
   errNum.textContent = wrong.length;
   mainWrapper.classList.add('invisible');
@@ -103,9 +155,9 @@ document.addEventListener('click', event => {
   }
   // sound on word click
   if (event.target.classList.contains('word') && trainMode) {
-    let tr = event.target.dataset.transl;
-    let sr = event.target.dataset.myimage;
-    let au = event.target.dataset.myaudio;    
+    const tr = event.target.dataset.transl;
+    const sr = event.target.dataset.myimage;
+    const au = event.target.dataset.myaudio;    
     translation.innerText = tr;
     currentImg.setAttribute('src', sr);
     imgAudio.setAttribute('src', au);
@@ -113,11 +165,11 @@ document.addEventListener('click', event => {
     [...words].forEach(el => el.classList.remove('active'));
     event.target.classList.add('active');
   }
-  //sound on word click
+  // sound on word click
   if (event.target.parentElement.classList.contains('word') && trainMode) {
-    let tr =event.target.parentElement.dataset.transl;
-    let sr = event.target.parentElement.dataset.myimage;
-    let au = event.target.parentElement.dataset.myaudio;
+    const tr =event.target.parentElement.dataset.transl;
+    const sr = event.target.parentElement.dataset.myimage;
+    const au = event.target.parentElement.dataset.myaudio;
     translation.innerText = tr;
     currentImg.setAttribute('src', sr);
     imgAudio.setAttribute('src', au);
@@ -125,7 +177,7 @@ document.addEventListener('click', event => {
     [...words].forEach(el => el.classList.remove('active'));
     event.target.parentElement.classList.add('active'); 
   }
-  //restart button
+  // restart button
   if (event.target.classList.contains('restart')) {
     setDefaultState();
   }
@@ -138,13 +190,13 @@ document.addEventListener('click', event => {
   if (event.target.classList.contains('new-btn')) {
     resultContainer.classList.add('invisible');
     mainWrapper.classList.remove('invisible');
-    /*trainMode = true;
+    /* trainMode = true;
     guessed.length = 0;
     output.innerHTML = '';
     output.classList.add('invisible'); 
     getWords(0,0).then(res => {
       wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-    })*/
+    }) */
     setDefaultState();
   }
   // finish button
@@ -153,13 +205,13 @@ document.addEventListener('click', event => {
   }
 })
 
-//Speech recognition
+// Speech recognition
 
 
   
-  let span = document.createElement("span");
+  const span = document.createElement("span");
   output.appendChild(span);
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition = window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
   recognition.interimResults = true;
   recognition.lang = 'en-US';
@@ -204,38 +256,12 @@ document.addEventListener('click', event => {
     trainMode = true;
   } )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*speakBtn.addEventListener('click', speak);
+/* speakBtn.addEventListener('click', speak);
 microphone.addEventListener('click', event => {
   speakBtn.removeEventListener('click', speak);
-})*/
-
-
-
-
-
-//speech recognition
-/*
-let output = document.querySelector('.word-output');
+}) */
+// speech recognition
+/* let output = document.querySelector('.word-output');
 let span = document.createElement("span");
 output.appendChild(span);
 //console.log();
