@@ -17,13 +17,14 @@ function errorAnswerHandler() {
 	}
 }
 
+function againHandler() {
+	globalState.addCurrentWordToEnd();
+}
+
 function addListeners() {
-	document.addEventListener(WORDS_EVENTS.CORRECT_ANSWER, () =>
-		correctAnswerHandler()
-	);
-	document.addEventListener(WORDS_EVENTS.INCORRECT_ANSWER, () =>
-		errorAnswerHandler()
-	);
+	document.addEventListener(WORDS_EVENTS.CORRECT_ANSWER, correctAnswerHandler);
+	document.addEventListener(WORDS_EVENTS.INCORRECT_ANSWER, errorAnswerHandler);
+	document.addEventListener(WORDS_EVENTS.PUSHED_AGAIN, againHandler);
 }
 
 function removeListeners() {

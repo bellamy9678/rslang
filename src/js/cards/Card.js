@@ -4,6 +4,7 @@ import {
 	TEXT_EXAMPLE_CLOSE_TAG,
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
+	INPUT_ID
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -171,9 +172,9 @@ export default class Card {
 		const textInput = fab.create({
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
-			id: 'word',
+			id: INPUT_ID,
 			attr: [{ type: 'text' }, { name: 'input' }, { autofocus: true }],
-			name: 'word',
+			name: INPUT_ID,
 		});
 
 		const textExample = fab.create({
@@ -370,6 +371,7 @@ export default class Card {
 
 		againButton.addEventListener('click', () => {
 			againButton.dispatchEvent(againButtonEvent);
+			document.dispatchEvent(againButtonEvent);
 			card.dispatchEvent(submitEvent);
 		});
 

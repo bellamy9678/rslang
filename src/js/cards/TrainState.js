@@ -3,6 +3,8 @@ import {
 	CARD_CONTAINER,
 	START_LEVEL,
 	START_PAGE,
+	INPUT_ID,
+	EMPTY_STRING
 } from './CardConstants';
 import getNewWordsArray from './GetWord';
 import Card from './Card';
@@ -25,6 +27,7 @@ export default class TrainState {
 	addCard() {
 		if (this.currentPosition < this.cards.length) {
 			this.container.append(this.getCurrentCard());
+			this.container.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
 		} else {
 			this.finishGame();
 		}
