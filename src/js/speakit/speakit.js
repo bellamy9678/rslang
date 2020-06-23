@@ -49,9 +49,7 @@ async function getWords(group, page) {
 
 
 //My
-/*getWords(0,0).then(res => {
-  wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-})*/
+
 //Events
 const currentImg = document.querySelector('.current-img');
 const translation = document.querySelector('.current-transl');
@@ -62,11 +60,13 @@ const succesItems = document.querySelector('.succes-items');
 const errNum = document.querySelector('.errors-num');
 const succesNum = document.querySelector('.succes-num');
 const microphone = document.querySelector('.mic-off');
+const defaultImg = "../src/assets/images/engl.jpg";
 let words = document.getElementsByClassName('word');
 let wordSpelling = document.getElementsByClassName('word-writing');
 let imgAudio = document.querySelector('.pronounce');
 let output = document.querySelector('.word-output');
 let guessed = [];
+let trainMode = true;
 
 // show game results
 function showResults() {
@@ -77,6 +77,17 @@ function showResults() {
   errNum.textContent = wrong.length;
   mainWrapper.classList.add('invisible');
   resultContainer.classList.remove('invisible');
+}
+
+function setDefaultState() {
+  guessed.length = 0;
+  trainMode = true;
+  output.innerHTML = '';
+  output.classList.add('invisible');
+  currentImg.setAttribute('src', defaultImg);
+  getWords(0,0).then(res => {
+      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
+    })
 }
 
 // listen pronounce
@@ -91,7 +102,7 @@ document.addEventListener('click', event => {
     })
   }
   // sound on word click
-  if (event.target.classList.contains('word')) {
+  if (event.target.classList.contains('word') && trainMode) {
     let tr = event.target.dataset.transl;
     let sr = event.target.dataset.myimage;
     let au = event.target.dataset.myaudio;    
@@ -103,7 +114,7 @@ document.addEventListener('click', event => {
     event.target.classList.add('active');
   }
   //sound on word click
-  if (event.target.parentElement.classList.contains('word')) {
+  if (event.target.parentElement.classList.contains('word') && trainMode) {
     let tr =event.target.parentElement.dataset.transl;
     let sr = event.target.parentElement.dataset.myimage;
     let au = event.target.parentElement.dataset.myaudio;
@@ -116,12 +127,7 @@ document.addEventListener('click', event => {
   }
   //restart button
   if (event.target.classList.contains('restart')) {
-    guessed.length = 0;
-    output.innerHTML = '';
-    output.classList.add('invisible');
-    getWords(0,0).then(res => {
-      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-    })
+    setDefaultState();
   }
   // button return
   if (event.target.classList.contains('return-btn')) {
@@ -132,12 +138,14 @@ document.addEventListener('click', event => {
   if (event.target.classList.contains('new-btn')) {
     resultContainer.classList.add('invisible');
     mainWrapper.classList.remove('invisible');
+    /*trainMode = true;
     guessed.length = 0;
     output.innerHTML = '';
     output.classList.add('invisible'); 
     getWords(0,0).then(res => {
       wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-    })
+    })*/
+    setDefaultState();
   }
   // finish button
   if (event.target.classList.contains('finish')) {
@@ -148,48 +156,78 @@ document.addEventListener('click', event => {
 //Speech recognition
 
 
-function speak() {  
-  output.classList.remove('invisible');
+  
   let span = document.createElement("span");
   output.appendChild(span);
-//console.log();
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
   recognition.interimResults = true;
   recognition.lang = 'en-US';
-  recognition.start();
 
-  recognition.addEventListener("result", function(e) {
-    let text = Array.from(e.results)
-    .map(result => result[0])
-    .map(result => result.transcript)
-    .join('');
-    span.innerHTML = '';
-    span.innerHTML = text;  
-  });
-
-  recognition.addEventListener('end', function(e) {
+  function handleRecognition() {
+    if (guessed.length === 10) {
+      showResults();
+    }
     [...words].forEach(el => {
       if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
         if (!guessed.includes(el)) {
           el.classList.add('active');
-          currentImg.setAttribute('src', el.dataset.myimage);
-          
+          currentImg.setAttribute('src', el.dataset.myimage);        
           guessed.push(el);
         }      
-      } // перенести в отдельную функцию
+      }
     })
-    console.log(guessed);
+    console.log(guessed.length);
     recognition.start();
-  })
-}
+  }
 
 
-const speakBtn = document.querySelector('.speak');
-speakBtn.addEventListener('click', speak);
+  const speakBtn = document.querySelector('.speak');
+  speakBtn.addEventListener('click', () => {
+    recognition.start();
+    trainMode = false;
+    output.classList.remove('invisible');
+  });
+  
+
+  recognition.addEventListener("result", function(e) {
+    const last = e.results.length - 1;
+    const command = e.results[last][0].transcript;
+    span.innerHTML = '';
+    span.innerHTML = command;  
+  });  
+
+  recognition.addEventListener('end', handleRecognition);
+  microphone.addEventListener('click', ()=> {
+    recognition.removeEventListener('end', handleRecognition);
+    output.classList.add('invisible');
+    trainMode = true;
+  } )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*speakBtn.addEventListener('click', speak);
 microphone.addEventListener('click', event => {
   speakBtn.removeEventListener('click', speak);
-})
+})*/
 
 
 
@@ -232,18 +270,3 @@ recognition.addEventListener('end', function(e) {
   recognition.start();
 })
 */
-function handleRecognition() {
-  if (guessed.length === 10) {
-    showResults();
-  }
-  [...words].forEach(el => {
-    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
-      if (!guessed.includes(el)) {
-        el.classList.add('active');
-        currentImg.setAttribute('src', el.dataset.myimage);        
-        guessed.push(el);
-      }      
-    } // перенести в отдельную функцию
-  })
-  recognition.start();
-}
