@@ -15,6 +15,9 @@ export default class Game {
     this.currentLevel = 0;
     this.sentencesJSON = {};
     this.eventListenersAddedState = false;
+    this.numberOfPuzzles = 0;
+    this.activePuzzleContainers = [];
+
   }
 
   addEventListenersToControls() {
@@ -34,21 +37,21 @@ export default class Game {
     this.autoListeningBtn.addEventListener('click', () => { this.autoListeningBtnHandler() });
     this.showTranslationBtn.addEventListener('click', () => { this.showTranslationBtnHandler() });
     this.showListenBtn.addEventListener('click', () => { this.showListeningBtnHandler() });
-    this.playAudioBtn.addEventListener('click', () => { this.playAudioBtnHandler(this.sentenceAudioLink) })
+    this.playAudioBtn.addEventListener('click', () => { this.playAudio(this.sentenceAudioLink) })
     this.checkBtn.addEventListener('click', () => { this.checkBtnHandler() })
     this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler() })
     this.continueBtn.addEventListener('click', () => { this.continueBtnHandler() })
-    this.levelSeletBtn.addEventListener('change', (event) => { this.levelSeletBtnHandler(+event.target.value) });
-    this.roundSelectBtn.addEventListener('change', (event) => { this.roundSeletBtnHandler(+event.target.value) });
+    this.levelSeletBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value) });
+    this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value) });
 
   }
 
 
-  levelSeletBtnHandler(level) {
+  levelSelectBtnHandler(level) {
     this.loadCustomLevelAndRound(level, this.currentRound)
   }
 
-  roundSeletBtnHandler(round) {
+  roundSelectBtnHandler(round) {
     this.loadCustomLevelAndRound(this.currentLevel, round)
   }
 
@@ -57,12 +60,19 @@ export default class Game {
     this.currentActiveLine = document.querySelector('.board__line--active');
     this.currentActiveLine.classList.remove('board__line--active');
     this.currentActiveElements = document.querySelectorAll('.game__jigsaw--active');
-    this.currentActiveElements.forEach(element => element.classList.remove('game__jigsaw--active'));
+    this.currentActiveElements.forEach(element => {
+      element.removeAttribute('draggable');
+      element.classList.remove('game__jigsaw--active')
+    });
+    this.puzzleContainer = document.querySelectorAll('.puzzle-container--active');
+    this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
+    this.iDontKnowBtn.classList.remove('hide');
+    this.continueBtn.classList.add('hide');
     if (this.currentLine < 10) {
       this.addLine();
-      this.getSentences(this.sentencesJSON, this.currentLine);
       this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
       this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
+      this.getSentences(this.sentencesJSON, this.currentLine);
     } else {
       this.clearField();
       this.addLine();
@@ -100,7 +110,9 @@ export default class Game {
   iDontKnowBtnHandler() {
     this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
     this.activePuzzles.forEach(puzzle => puzzle.remove());
-    this.appendPuzzlesToFieldLine(this.sentenceArr)
+    this.iDontKnowBtn.classList.add('hide');
+    this.continueBtn.classList.remove('hide');
+    this.appendPuzzlesToFieldLine(this.sentenceArr);
   }
 
   checkBtnHandler() {
@@ -121,10 +133,12 @@ export default class Game {
     }
   }
 
-  playAudioBtnHandler(audioLink) {
+  playAudio(audioLink) {
     this.audio = new Audio(`https://raw.githubusercontent.com/garza0/rslang-data/master/${audioLink}`);
     this.audio.play();
   }
+
+
 
   showListeningBtnHandler() {
     this.showListenBtnState = !this.showListenBtnState;
@@ -166,9 +180,9 @@ export default class Game {
   handleJson(myJson) {
     console.log(myJson);
     this.sentencesJSON = myJson;
-    this.getSentences(myJson, this.currentLine);
     this.sentenceTranslate = myJson[0].textExampleTranslate;
     this.sentenceAudioLink = myJson[0].audioExample;
+    this.getSentences(myJson, this.currentLine);
   }
 
   getSentences(arr, line) {
@@ -181,14 +195,14 @@ export default class Game {
 
   addLine() {
     this.board = document.querySelector('.board');
-    this.boardLine = elementCreator('div', ['board__line', 'board__line--active']);
+    this.boardLine = elementCreator('div', ['board__line', 'board__line--active', `line${this.currentLine}`]);
     this.board.append(this.boardLine);
   }
 
   generatePuzzle(sentence) {
     const wordsArray = sentence.split(' ');
     this.sentenceArr = wordsArray;
-
+    this.numberOfPuzzles = wordsArray.length;
     const shuffledArr = this.shuffleArray(wordsArray);
     this.appendPuzzlesToContainer(shuffledArr);
   }
@@ -218,55 +232,70 @@ export default class Game {
 
   appendPuzzlesToContainer(puzzles) {
     const puzzlesContainer = document.querySelector('.game__puzzles');
+    puzzlesContainer.style.gridTemplateColumns = `repeat(${puzzles.length}, auto)`
     puzzlesContainer.append(...this.populatePuzzle(puzzles));
     this.addPuzzleContainersToLine(puzzles.length);
     this.dragAndDrop();
     if (this.currentLine === 0 && this.eventListenersAddedState === false) {
       this.addEventListenersToControls();
     }
+    if (this.autoListeningBtnState) {
+      this.playAudio(this.sentenceAudioLink);
+    }
   }
 
   dragAndDrop() {
 
-    this.puzzleItem = document.querySelectorAll('.game__jigsaw');
-    this.puzzleContainer = document.querySelectorAll('.puzzle-container');
+    this.puzzleItem = document.querySelectorAll('.game__jigsaw--active');
+    this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
     this.puzzlesField = document.querySelector('.game__puzzles');
     let selectedItem;
 
-    function dragStart() {
-      selectedItem = this;
+    const dragStart = (event) => {
+      selectedItem = event.target;
+
+      if (event.target.closest('.puzzle-container--active')) {
+        const container = event.target.closest('.puzzle-container--active');
+        container.classList.remove('container--full');
+      }
 
       setTimeout(() => {
-        this.classList.add('hide');
+        selectedItem.classList.add('hide');
       }, 0);
     };
 
-    function dragEnd() {
-      this.classList.remove('hide');
+    const dragEnd = (event) => {
+      event.target.classList.remove('hide');
     };
 
-    function dragOver(event) {
+    const dragOver = (event) => {
       event.preventDefault();
     };
 
-    function dragEnter(event) {
+    const dragEnter = (event) => {
       event.preventDefault();
-      this.classList.add('hovered');
-    };
-
-    function dragLeave() {
-      this.classList.remove('hovered');
-    };
-
-    function dragDrop() {
-
-      if (true) {
-        this.append(selectedItem);
-        this.classList.remove('hovered');
+      if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
+        event.target.classList.add('hovered');
       }
     };
 
-    this.puzzleContainer.forEach(cell => {
+    const dragLeave = (event) => {
+
+      event.target.classList.remove('hovered');
+    };
+
+    const dragDrop = (event) => {
+      if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
+        event.target.append(selectedItem);
+        event.target.classList.remove('hovered');
+        if (event.target.classList.contains('puzzle-container--active')) {
+          event.target.classList.add('container--full');
+          this.checkIfLineIsFull();
+        }
+      }
+    };
+
+    this.activePuzzleContainers.forEach(cell => {
       cell.addEventListener('dragover', dragOver);
       cell.addEventListener('dragenter', dragEnter);
       cell.addEventListener('dragleave', dragLeave);
@@ -283,24 +312,61 @@ export default class Game {
     this.puzzleItem.forEach(item => item.addEventListener('dragend', dragEnd))
   }
 
+  checkIfLineIsFull() {
+    this.numberOfFullContainers = 0;
+    this.activePuzzleContainers.forEach(container => {
+      if (container.classList.contains('container--full')) {
+        this.numberOfFullContainers += 1;
+      }
+    })
+    if (this.numberOfFullContainers === this.numberOfPuzzles) {
+      console.log('line is full of hell');
+      this.lineIsFullHandler();
+    }
+
+  }
+
+  lineIsFullHandler() {
+    // this.iDontKnowBtn.classList.add('hide');s
+    this.checkBtn.classList.remove('hide');
+    // this.continueBtn.classList.remove('hide');
+  }
+
   addPuzzleContainersToLine(numberOfPuzzles) {
+    // this.gridTemplate = [];
     this.arrOfPuzzleContainer = [];
     for (let i = 0; i < numberOfPuzzles; i += 1) {
       this.arrOfPuzzleContainer.push(elementCreator('div', ['puzzle-container', 'puzzle-container--active']));
+      // this.gridTemplate.push('1fr');
     }
-
+    this.boardLine.style.gridTemplateColumns = `repeat(${numberOfPuzzles}, auto)`;
     this.boardLine.append(...this.arrOfPuzzleContainer);
   }
 
   showWrongAndRightAnswers(currentLineElements, arrOfBoolean) {
+    this.rightAnswers = 0;
     for (let i = 0; i < currentLineElements.length; i += 1) {
       if (arrOfBoolean[i]) {
+        this.rightAnswers += 1;
         currentLineElements[i].classList.add('game__jigsaw--correct')
       } else {
         currentLineElements[i].classList.add('game__jigsaw--wrong')
       }
     }
-    this.nothing = false;
+    if (this.rightAnswers === currentLineElements.length) {
+      this.allIsRightHandler();
+    }
+  }
+
+  allIsRightHandler() {
+    if (this.currentLine < 10) {
+      this.iDontKnowBtn.classList.add('hide');
+      this.checkBtn.classList.add('hide');
+      this.continueBtn.classList.remove('hide');
+    } else {
+      console.log('round end');
+
+    }
   }
 
   compareTwoSameLengthArraysAndReturnArrayOfBoolean(arr1, arr2) {
@@ -335,5 +401,10 @@ export default class Game {
     this.addLine();
 
   }
+
+  // background-image: url(img/3_30.jpg);
+  //   background-size: 800px;
+  //   background-repeat: no-repeat;
+  //   background-position: 0px -25.8303px;
 }
 

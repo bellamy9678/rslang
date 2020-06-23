@@ -1,4 +1,4 @@
-import { elementCreatorWithParentAndChildren } from './components';
+import { elementCreatorWithParentAndChildren, elementCreator } from './components';
 
 export default class GameField {
   init() {
@@ -21,9 +21,14 @@ export default class GameField {
 
     this.gameBoardContainer.append(this.boardNumbers, this.board)
 
-    elementCreatorWithParentAndChildren('button', 'controls__btn-i-dont-know', 'I don\'t know', this.gameControlsContainer, '');
-    elementCreatorWithParentAndChildren('button', 'controls__btn-check', 'Check', this.gameControlsContainer, '');
-    elementCreatorWithParentAndChildren('button', 'controls__btn-continue', 'Continue', this.gameControlsContainer, '');
+    this.gameControlsContainer.append(elementCreator('button', 'controls__btn-i-dont-know', 'I don\'t know'));
+    this.gameControlsContainer.append(elementCreator('button', ['controls__btn-check', 'hide'], 'Check'));
+    this.gameControlsContainer.append(elementCreator('button', ['controls__btn-continue', 'hide'], 'Continue'))
+
+    // elementCreatorWithParentAndChildren('button', 'controls__btn-i-dont-know', 'I don\'t know', this.gameControlsContainer, '');
+    // elementCreatorWithParentAndChildren('button', 'controls__btn-check', 'Check', this.gameControlsContainer, '');
+
+    // elementCreatorWithParentAndChildren('button', 'controls__btn-continue', 'Continue', this.gameControlsContainer, '');
     this.gameContainer.append(
       this.gameBoardContainer,
       this.gamePuzzlesContainer,

@@ -14,7 +14,7 @@ export const elementCreator = (tagName, className, innerText, idTitle, attribute
     if (Array.isArray(className)) {
       newElement.classList.add(...className);
     } else {
-      newElement.classList.add(`${className}`)
+      newElement.classList.add(`${className}`);
     }
   };
   if (innerText) newElement.innerText = `${innerText}`;

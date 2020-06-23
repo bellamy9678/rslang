@@ -1,0 +1,26 @@
+// Abstract
+@import './abstract/constants';
+@import './abstract/mixins';
+@import './abstract/placeholders';
+
+// Base
+@import './base/base';
+@import './base/buttons';
+@import './base/icon';
+
+// Layouts
+@import './layouts/wrapper';
+@import './layouts/app';
+@import './layouts/header';
+@import './layouts/footer';
+
+// Components
+@import './components/dictionary';
+@import './components/navigation';
+@import './components/authorization';
+
+// Pages
+@import './pages/start-page';
+@import './pages/account-creation';
+@import './pages/welcome';
+@import './pages/english-puzzle';

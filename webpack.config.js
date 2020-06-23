@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+// const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const ENV = process.env.npm_lifecycle_event;
@@ -27,7 +27,9 @@ function setDMode() {
 
 const config = {
 	target: "web",
-	entry: { index: "./src/app.js" },
+	entry: {
+		index: "./src/app.js"
+	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
 		filename: "[name].js",
@@ -67,7 +69,9 @@ const config = {
 						loader: "postcss-loader",
 						options: {
 							sourceMap: true,
-							config: { path: "./postcss.config.js" },
+							config: {
+								path: "./postcss.config.js",
+							},
 						},
 					},
 					{
@@ -137,10 +141,12 @@ const config = {
 			filename: "./index.html",
 		}),
 		new CopyWebpackPlugin([
-			// {from: './src/static', to: './'},
-			// {from: './src/img', to: './img/'},
+			{
+				from: "./src/assets/",
+				to: "./assets/",
+			},
 		]),
-		new FaviconsWebpackPlugin("./src/english_puzzle/img/icon.jpg"),
+		// new FaviconsWebpackPlugin("./src/img/icon.jpg"),
 	],
 
 	devServer: {
