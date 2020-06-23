@@ -30,64 +30,28 @@ export default class Card {
 		return obj;
 	}
 
-	static getTextExample(text) {
-		const textExampleObject = Card.getObjectOfTextExample(text);
-
-		const textPartLeft = fab.create({
-			elem: TAGS.SPAN,
-			classes: 'card__text_part',
-			child: textExampleObject.first,
-		});
-
-		const textPartRight = fab.create({
-			elem: TAGS.SPAN,
-			classes: 'card__text_part',
-			child: textExampleObject.last,
-		});
-
-		const textWord = fab.create({
-			elem: TAGS.SPAN,
-			classes: 'card__text_word',
-			child: textExampleObject.word,
-		});
-
-		const textInput = fab.create({
-			elem: TAGS.INPUT,
-			classes: 'card__text_input',
-			attr: [{ type: 'text' }, { name: 'input' }],
-			name: 'word',
-			id: 'word',
-		});
-
-		const textExample = fab.create({
-			elem: TAGS.DIV,
-			classes: 'card__text',
-			id: 'text-example',
-			child: [textPartLeft, textInput, textWord, textPartRight],
-		});
-
-		return textExample;
-	}
-
 	static getTextMeaning(text) {
-		const textExampleObject = Card.getObjectOfTextMeaning(text);
+		const textMeaningObject = Card.getObjectOfTextMeaning(text);
 
 		const textPartLeft = fab.create({
 			elem: TAGS.SPAN,
 			classes: 'card__meaning_part',
-			child: textExampleObject.first,
+			id: 'meaning-part-first',
+			child: textMeaningObject.first,
 		});
 
 		const textPartRight = fab.create({
 			elem: TAGS.SPAN,
 			classes: 'card__meaning_part',
-			child: textExampleObject.last,
+			id: 'meaning-part-last',
+			child: textMeaningObject.last,
 		});
 
 		const textWord = fab.create({
 			elem: TAGS.SPAN,
 			classes: 'card__meaning_word',
-			child: textExampleObject.word,
+			id: 'meaning-part-word',
+			child: textMeaningObject.word,
 		});
 
 		const textMeaning = fab.create({
@@ -98,6 +62,33 @@ export default class Card {
 		});
 
 		return textMeaning;
+	}
+
+	correctAnswerHandler() {
+		console.log('correct answer');
+		const currentWord = this.card;
+		const correctEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
+			detail: currentWord,
+		});
+		document.dispatchEvent(correctEvent);
+	}
+
+	errorAnswerHandler() {
+		console.log('error answer');
+		const currentWord = this.card;
+		const correctEvent = new CustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, {
+			detail: currentWord,
+		});
+		document.dispatchEvent(correctEvent);
+	}
+
+	isCorrectReaction() {
+		const isCorrectAnswer = this.isCorrect();
+		if (isCorrectAnswer) {
+			this.correctAnswerHandler();
+		} else {
+			this.errorAnswerHandler();
+		}
 	}
 
 	create() {
@@ -126,14 +117,14 @@ export default class Card {
 			elem: TAGS.DIV,
 			classes: 'card__text',
 			id: 'word-translate',
-			child: this.card.wordTranslate,
+			child: this.card.translate,
 		});
 
 		const textExampleTranslate = fab.create({
 			elem: TAGS.DIV,
 			classes: 'card__text',
 			id: 'text-example-translate',
-			child: this.card.textExampleTranslate,
+			child: this.card.exampleTranslate,
 		});
 
 		const textMeaning = Card.getTextMeaning(this.card.textMeaning);
@@ -145,71 +136,109 @@ export default class Card {
 			child: this.card.textMeaningTranslate,
 		});
 
-		const textExample = Card.getTextExample(this.card.example);
+		const textExampleObject = Card.getObjectOfTextExample(this.card.example);
+
+		const textPartLeft = fab.create({
+			elem: TAGS.SPAN,
+			classes: 'card__text_part',
+			id: 'example-part-first',
+			child: textExampleObject.first,
+		});
+
+		const textPartRight = fab.create({
+			elem: TAGS.SPAN,
+			classes: 'card__text_part',
+			id: 'example-part-last',
+			child: textExampleObject.last,
+		});
+
+		const letters = textExampleObject.word.split('').map((letter) =>
+			fab.create({
+				elem: TAGS.SPAN,
+				classes: 'card__text_letter',
+				child: letter,
+			})
+		);
+
+		const textWord = fab.create({
+			elem: TAGS.SPAN,
+			classes: 'card__text_word',
+			id: 'example-part-word',
+			attr: [{ 'data-word': textExampleObject.word }],
+			child: letters,
+		});
+
+		const textInput = fab.create({
+			elem: TAGS.INPUT,
+			classes: 'card__text_input',
+			id: 'word',
+			attr: [{ type: 'text' }, { name: 'input' }, { autofocus: true }],
+			name: 'word',
+		});
+
+		const textExample = fab.create({
+			elem: TAGS.DIV,
+			classes: 'card__text',
+			id: 'text-example',
+			child: [textPartLeft, textInput, textWord, textPartRight],
+		});
 
 		const againButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'again-word-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.again,
 		});
 
 		const currentWord = this.card;
+
 		const againButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_AGAIN, {
 			detail: currentWord,
 		});
 
-		againButton.addEventListener('click', () =>
-			againButton.dispatchEvent(againButtonEvent)
-		);
-
 		const hardButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'hard-word-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.hard,
 		});
 
 		const hardButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_HARD, {
 			detail: currentWord,
 		});
-		hardButton.addEventListener('click', () =>
-			hardButton.dispatchEvent(hardButtonEvent)
-		);
 
 		const goodButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'good-word-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.good,
 		});
 
 		const goodButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_GOOD, {
 			detail: currentWord,
 		});
-		goodButton.addEventListener('click', () =>
-			goodButton.dispatchEvent(goodButtonEvent)
-		);
 
 		const easyButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'easy-word-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.easy,
 		});
 
 		const easyButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_EASY, {
 			detail: currentWord,
 		});
-		easyButton.addEventListener('click', () =>
-			easyButton.dispatchEvent(easyButtonEvent)
-		);
 
 		const buttonGroupComplexity = fab.create({
 			elem: TAGS.DIV,
-			class: 'button-group',
+			classes: 'button-group',
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
 		const addToDifficultButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'add-to-difficult-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.addToDifficult,
 		});
 
@@ -224,6 +253,7 @@ export default class Card {
 		const deleteFromDictionaryButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'delete-from-dictionary-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.deleteFromDictionary,
 		});
 
@@ -238,28 +268,37 @@ export default class Card {
 
 		const buttonGroupDictionary = fab.create({
 			elem: TAGS.DIV,
-			class: 'button-group',
+			classes: 'button-group',
 			child: [addToDifficultButton, deleteFromDictionaryButton],
 		});
 
 		const showAnswerButton = fab.create({
 			elem: TAGS.BUTTON,
 			id: 'show-answer-button',
+			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.showAnswer,
+		});
+
+		const continueButton = fab.create({
+			elem: TAGS.BUTTON,
+			id: 'continue-button',
+			attr: [{ type: 'button' }],
+			child: BUTTONS_WORDS.continue,
+		});
+
+		const continueButtonEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
+			detail: currentWord,
 		});
 
 		const showAnswerButtonEvent = new CustomEvent(
 			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
 			{ detail: currentWord }
 		);
-		showAnswerButton.addEventListener('click', () =>
-			showAnswerButton.dispatchEvent(showAnswerButtonEvent)
-		);
 
 		const buttonGroupShowAnswer = fab.create({
 			elem: TAGS.DIV,
-			class: 'button-group',
-			child: showAnswerButton,
+			classes: 'button-group',
+			child: [showAnswerButton, continueButton],
 		});
 
 		const audioWord = fab.create({
@@ -280,20 +319,21 @@ export default class Card {
 			attr: [{ controls: true }, { src: this.card.exampleAudio }],
 		});
 
-		const wrapper = fab.create({
-			elem: TAGS.DIV,
-			class: 'card',
+		const card = fab.create({
+			elem: TAGS.FORM,
+			classes: 'card',
+			id: 'card-container',
 			child: [
 				imgContainer,
 				transcription,
-				audioWord,
 				wordTranslate,
+				audioWord,
 				textExample,
-				audioExample,
 				textExampleTranslate,
+				audioExample,
 				textMeaning,
-				audioMeaning,
 				textMeaningTranslate,
+				audioMeaning,
 				buttonGroupComplexity,
 				buttonGroupDictionary,
 				buttonGroupDictionary,
@@ -301,7 +341,58 @@ export default class Card {
 			],
 		});
 
-		this.elem = wrapper;
+		const submitEvent = new Event('submit');
+
+		card.addEventListener('submit', (event) => {
+			event.preventDefault();
+			this.isCorrectReaction();
+		});
+
+		showAnswerButton.addEventListener('click', () => {
+			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
+			textInput.value = textWord.innerText;
+		});
+
+		continueButton.addEventListener('click', () => {
+			continueButton.dispatchEvent(continueButtonEvent);
+			card.dispatchEvent(submitEvent);
+		});
+
+		easyButton.addEventListener('click', () => {
+			easyButton.dispatchEvent(easyButtonEvent);
+			card.dispatchEvent(submitEvent);
+		});
+
+		goodButton.addEventListener('click', () => {
+			goodButton.dispatchEvent(goodButtonEvent);
+			card.dispatchEvent(submitEvent);
+		});
+
+		againButton.addEventListener('click', () => {
+			againButton.dispatchEvent(againButtonEvent);
+			card.dispatchEvent(submitEvent);
+		});
+
+		hardButton.addEventListener('click', () => {
+			hardButton.dispatchEvent(hardButtonEvent);
+			card.dispatchEvent(submitEvent);
+		});
+
+		this.elem = card;
 		return this.elem;
+	}
+
+	static makeStringComparable(str) {
+		return str.trim().toUpperCase();
+	}
+
+	isCorrect() {
+		const value = Card.makeStringComparable(
+			this.elem.querySelector('#word').value
+		);
+		const answer = Card.makeStringComparable(
+			this.elem.querySelector('#example-part-word').innerText
+		);
+		return value === answer;
 	}
 }
