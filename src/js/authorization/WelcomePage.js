@@ -1,5 +1,9 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
+import {
+	createUserNavigation,
+	createUserButtons
+} from './UserHeader';
 
 export default function showWelcomePage(username) {
 	const app = document.querySelector('.app');
@@ -19,11 +23,9 @@ export default function showWelcomePage(username) {
 	const settingsLink = newElem.create({
 		elem: TAGS.A,
 		classes: 'link-button',
-		attr: [
-			{
-				href: '#',
-			},
-		],
+		attr: [{
+			href: '#',
+		}, ],
 		child: [settingsIcon, settingsLinkText],
 	});
 
@@ -48,13 +50,12 @@ export default function showWelcomePage(username) {
 	const image = newElem.create({
 		elem: TAGS.IMG,
 		classes: 'welcome__image',
-		attr: [
-			{
-				src: './assets/images/welcome.svg',
-			},
-			{
-				alt: 'Settings',
-			},
+		attr: [{
+			src: './assets/images/welcome.svg',
+		},
+		{
+			alt: 'Settings',
+		},
 		],
 	});
 
@@ -72,4 +73,6 @@ export default function showWelcomePage(username) {
 
 	app.firstChild.remove();
 	app.append(page);
+	createUserNavigation();
+	createUserButtons(username);
 }

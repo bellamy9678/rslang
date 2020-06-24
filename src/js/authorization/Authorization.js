@@ -1,7 +1,15 @@
-import { EMAIL_PART } from './Constants';
-import { API, URL_PARAM_SIGN_IN } from '../shared/Constants';
-
+import {
+	EMAIL_PART,
+	USER_COOKIE_NAME
+} from './Constants';
+import {
+	API,
+	URL_PARAM_SIGN_IN
+} from '../shared/Constants';
 import showWelcomePage from './WelcomePage';
+import {
+	setUserCookie
+} from './Cookie';
 
 const signInButton = document.getElementById('sign-in');
 const autorizeForm = document.querySelector('.authorization');
@@ -14,9 +22,8 @@ function Authorization() {
 	this.password = userPassword.value;
 }
 
-async function authorizeUser(obj) {
+export default async function authorizeUser(obj) {
 	let user = obj;
-	console.log('authorizeUser -> user', user);
 	if (user === undefined) {
 		user = new Authorization();
 	}
@@ -31,10 +38,9 @@ async function authorizeUser(obj) {
 
 	const content = await rawResponse.json();
 	console.log(content);
-	document.cookie = `userToken=${content.token}`;
+	setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
 	autorizeForm.classList.add('none');
 	const name = user.email.replace(`${EMAIL_PART}`, '');
-
 	showWelcomePage(name);
 }
 
@@ -48,5 +54,3 @@ signInButton.addEventListener('click', () => {
 		authorizeUser();
 	});
 });
-
-export default authorizeUser;
