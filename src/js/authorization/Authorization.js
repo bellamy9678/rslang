@@ -41,6 +41,7 @@ export default async function authorizeUser(obj) {
 	setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
 	autorizeForm.classList.add('none');
 	const name = user.email.replace(`${EMAIL_PART}`, '');
+	setUserCookie(USER_COOKIE_NAME.NAME, name);
 	showWelcomePage(name);
 }
 

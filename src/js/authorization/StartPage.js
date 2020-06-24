@@ -50,4 +50,4 @@ export default function showStartPage() {
 	}
 	app.append(page);
 }
-showStartPage();
+

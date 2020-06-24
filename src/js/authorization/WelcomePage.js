@@ -70,8 +70,9 @@ export default function showWelcomePage(username) {
 		classes: 'welcome',
 		child: [wrapper],
 	});
-
-	app.firstChild.remove();
+	if (app.innerHTML !== '') {
+		app.firstChild.remove();
+	}
 	app.append(page);
 	createUserNavigation();
 	createUserButtons(username);

@@ -106,6 +106,7 @@ export function createUserButtons(username) {
 	buttons.append(logOutButton, user);
 	logOutButton.addEventListener('click', () => {
 		hideUserHeader();
+		deleteUserCookie(USER_COOKIE_NAME.NAME);
 		deleteUserCookie(USER_COOKIE_NAME.TOKEN);
 	});
 }
