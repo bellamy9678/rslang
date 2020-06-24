@@ -31,6 +31,7 @@ async function authorizeUser(obj) {
 
 	const content = await rawResponse.json();
 	console.log(content);
+	document.cookie = `userID=${content.userId}`;
 	document.cookie = `userToken=${content.token}`;
 	autorizeForm.classList.add('none');
 	const name = user.email.replace(`${EMAIL_PART}`, '');

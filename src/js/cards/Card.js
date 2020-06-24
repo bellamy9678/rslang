@@ -5,9 +5,12 @@ import {
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
 } from './CardConstants';
-import { BUTTONS_WORDS } from '../shared/Text';
+import {
+	BUTTONS_WORDS
+} from '../shared/Text';
 import TAGS from '../shared/Tags.json';
 import WORDS_EVENTS from '../observer/WordsEvents';
+import getUserWord from '../utils/UserWords';
 
 const fab = new DOMElementCreator();
 
@@ -54,7 +57,11 @@ export default class Card {
 		const textInput = fab.create({
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
-			attr: [{ type: 'text' }, { name: 'input' }],
+			attr: [{
+				type: 'text'
+			}, {
+				name: 'input'
+			}],
 			name: 'word',
 			id: 'word',
 		});
@@ -106,7 +113,11 @@ export default class Card {
 		const img = fab.create({
 			elem: TAGS.IMG,
 			id: 'image-card-example',
-			attr: [{ src: this.card.image }, { alt: this.card.word }],
+			attr: [{
+				src: this.card.image
+			}, {
+				alt: this.card.word
+			}],
 		});
 
 		const imgContainer = fab.create({
@@ -214,8 +225,9 @@ export default class Card {
 		});
 
 		const addToEasyButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT, {
+				detail: currentWord
+			}
 		);
 		addToDifficultButton.addEventListener('click', () =>
 			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
@@ -228,8 +240,9 @@ export default class Card {
 		});
 
 		const deleteFromDictionaryEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY, {
+				detail: currentWord
+			}
 		);
 
 		deleteFromDictionaryButton.addEventListener('click', () =>
@@ -249,12 +262,19 @@ export default class Card {
 		});
 
 		const showAnswerButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON, {
+				detail: currentWord
+			}
 		);
+
 		showAnswerButton.addEventListener('click', () =>
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent)
 		);
+
+		addToDifficultButton.addEventListener(WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT, (event) => {
+			console.log(event);
+			getUserWord(event);
+		});
 
 		const buttonGroupShowAnswer = fab.create({
 			elem: TAGS.DIV,
@@ -265,22 +285,34 @@ export default class Card {
 		const audioWord = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
-			attr: [{ controls: true }, { src: this.card.audio }],
+			attr: [{
+				controls: true
+			}, {
+				src: this.card.audio
+			}],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-meaning',
-			attr: [{ controls: true }, { src: this.card.meaningAudio }],
+			attr: [{
+				controls: true
+			}, {
+				src: this.card.meaningAudio
+			}],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-example',
-			attr: [{ controls: true }, { src: this.card.exampleAudio }],
+			attr: [{
+				controls: true
+			}, {
+				src: this.card.exampleAudio
+			}],
 		});
 
-		const wrapper = fab.create({
+		const card = fab.create({
 			elem: TAGS.DIV,
 			class: 'card',
 			child: [
@@ -301,7 +333,7 @@ export default class Card {
 			],
 		});
 
-		this.elem = wrapper;
+		this.elem = card;
 		return this.elem;
 	}
 }
