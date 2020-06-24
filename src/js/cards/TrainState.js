@@ -28,6 +28,7 @@ export default class TrainState {
 		if (this.currentPosition < this.cards.length) {
 			this.container.append(this.getCurrentCard());
 			this.container.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
+			this.container.querySelector(`#${INPUT_ID}`).focus();
 		} else {
 			this.finishGame();
 		}

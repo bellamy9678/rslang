@@ -4,7 +4,7 @@ import {
 	TEXT_EXAMPLE_CLOSE_TAG,
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
-	INPUT_ID
+	INPUT_ID,
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -109,14 +109,14 @@ export default class Card {
 
 		const transcription = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', 'card__text_transcription'],
 			id: 'transcription',
 			child: this.card.transcription,
 		});
 
 		const wordTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', 'card__text_translate'],
 			id: 'word-translate',
 			child: this.card.translate,
 		});
@@ -163,7 +163,7 @@ export default class Card {
 
 		const textWord = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__text_word',
+			classes: ['card__text_word', 'none'],
 			id: 'example-part-word',
 			attr: [{ 'data-word': textExampleObject.word }],
 			child: letters,
@@ -186,6 +186,7 @@ export default class Card {
 
 		const againButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'again-word-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.again,
@@ -199,6 +200,7 @@ export default class Card {
 
 		const hardButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'hard-word-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.hard,
@@ -210,6 +212,7 @@ export default class Card {
 
 		const goodButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'good-word-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.good,
@@ -221,6 +224,7 @@ export default class Card {
 
 		const easyButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'easy-word-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.easy,
@@ -238,6 +242,7 @@ export default class Card {
 
 		const addToDifficultButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'add-to-difficult-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.addToDifficult,
@@ -253,6 +258,7 @@ export default class Card {
 
 		const deleteFromDictionaryButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'delete-from-dictionary-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.deleteFromDictionary,
@@ -275,6 +281,7 @@ export default class Card {
 
 		const showAnswerButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'show-answer-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.showAnswer,
@@ -282,6 +289,7 @@ export default class Card {
 
 		const continueButton = fab.create({
 			elem: TAGS.BUTTON,
+			classes: 'button',
 			id: 'continue-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.continue,
@@ -305,19 +313,19 @@ export default class Card {
 		const audioWord = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
-			attr: [{ controls: true }, { src: this.card.audio }],
+			attr: [/* { controls: true }, */ { src: this.card.audio }],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-meaning',
-			attr: [{ controls: true }, { src: this.card.meaningAudio }],
+			attr: [/* { controls: true }, */ { src: this.card.meaningAudio }],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-example',
-			attr: [{ controls: true }, { src: this.card.exampleAudio }],
+			attr: [/* { controls: true }, */ { src: this.card.exampleAudio }],
 		});
 
 		const card = fab.create({

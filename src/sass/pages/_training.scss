@@ -1,0 +1,56 @@
+.card {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	align-items: flex-start;
+	width: 100%;
+	max-width: 45rem;
+	@include font($size: 1.6rem, $weight: 400);
+	border-radius: 2rem;
+	padding: 2rem;
+	box-shadow: $color-overlay 0 0 1rem;
+
+	&__image {
+		width: 100%;
+    display: flex;
+    align-items: center;
+		flex-direction: column;
+		user-select: none;
+
+		img {
+			width: 100%;
+    	border-radius: 2rem 2rem 0 0;
+		}
+	}
+
+	&__text {
+		margin-top: 1rem;
+		line-height: 2.2rem;
+
+		&_transcription {
+			align-self: center;
+		}
+
+		&_translate {
+			align-self: center;
+			@include font($size: 2.5rem, $weight: 500);
+			line-height: 3.5rem;
+    	text-transform: uppercase;
+		}
+
+		&_input {
+			display: inline-block;
+			border: none;
+			border-radius: 5px;
+			box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.04), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 10px 20px rgba(0, 0, 0, 0.04);
+			background-color: $color-border;
+			height: 3rem;
+			font-size: 1.6rem;
+
+			&:focus {
+					outline: none;
+			}
+		}
+
+	}
+}
