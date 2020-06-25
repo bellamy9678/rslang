@@ -1688,5 +1688,8 @@ const paintings6 = [
 	},
 ];
 
-export { paintings1, paintings2, paintings3, paintings4, paintings5, paintings6 };
+const paintings = [paintings1, paintings2, paintings3, paintings4, paintings5, paintings6];
+export default paintings;
+
+
 

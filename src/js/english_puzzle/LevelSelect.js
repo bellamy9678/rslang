@@ -1,9 +1,10 @@
+import { levels, rounds } from './constants';
 import DOMElementCreator from '../utils/DOMElementCreator';
 
 const factory = new DOMElementCreator();
 
 export default class LevelSelect {
-	init(levels = 6, rounds = 10) {
+	init() {
 		this.levelSelectLabel = factory.create({
 			elem: 'label',
 			attr: { 'for': 'level' },

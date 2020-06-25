@@ -1,4 +1,5 @@
-import { wrapper } from './constants';
+import { appContainer, rounds } from './constants';
+import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 
 const factory = new DOMElementCreator();
@@ -19,7 +20,7 @@ export default class Game {
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
 		this.activePuzzleContainers = [];
-
+		this.cypher = [];
 	}
 
 	addEventListenersToControls() {
@@ -43,9 +44,9 @@ export default class Game {
 		this.checkBtn.addEventListener('click', () => { this.checkBtnHandler(); });
 		this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler(); });
 		this.continueBtn.addEventListener('click', () => { this.continueBtnHandler(); });
-		this.levelSeletBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value); });
-		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value); });
-
+		this.levelSeletBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
+		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
+		this.showBgImageBtn.addEventListener('click', () => { this.showHideBackground(); });
 	}
 
 
@@ -70,7 +71,7 @@ export default class Game {
 		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
 		this.iDontKnowBtn.classList.remove('hide');
 		this.continueBtn.classList.add('hide');
-		if (this.currentLine < 10) {
+		if (this.currentLine < rounds) {
 			this.addLine();
 			this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
 			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
@@ -80,11 +81,14 @@ export default class Game {
 			this.addLine();
 			this.currentLine = 0;
 			this.currentRound += 1;
+			this.roundSelectBtn.selectedIndex = this.currentRound;
+			this.cypher = [];
 			this.getData();
 		}
 	}
 
 	loadCustomLevelAndRound(level, round) {
+		this.cypher = [];
 		this.currentLevel = level;
 		this.currentRound = round;
 		this.clearField();
@@ -108,13 +112,24 @@ export default class Game {
 		}
 	}
 
-
 	iDontKnowBtnHandler() {
 		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
-		this.activePuzzles.forEach(puzzle => puzzle.remove());
+		const puzzleNodes = [];
+		this.activePuzzles.forEach(puzzle => {
+			puzzleNodes.push(puzzle);
+			puzzle.remove();
+		});
 		this.iDontKnowBtn.classList.add('hide');
 		this.continueBtn.classList.remove('hide');
-		this.appendPuzzlesToFieldLine(this.sentenceArr);
+		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
+	}
+
+	sortPuzzles(puzzles) {
+		const sorted = [];
+		puzzles.forEach(puzzle => {
+			sorted[this.cypher[this.currentLine][0].indexOf(+puzzle.dataset.positionCrypted)] = puzzle;
+		});
+		return sorted;
 	}
 
 	checkBtnHandler() {
@@ -127,11 +142,10 @@ export default class Game {
 		this.showWrongAndRightAnswers(this.currentLineElements, this.checkedArr);
 	}
 
-	appendPuzzlesToFieldLine(puzzles) {
+	appendPuzzlesToFieldLine(sortedPuzzles) {
 		this.activeFieldLineContainers = document.querySelector('.board__line--active').children;
-		for (let i = 0; i < puzzles.length; i += 1) {
-			this.puzzles = [...this.populatePuzzle(puzzles)];
-			this.activeFieldLineContainers[i].append(this.puzzles[i]);
+		for (let i = 0; i < sortedPuzzles.length; i += 1) {
+			this.activeFieldLineContainers[i].append(sortedPuzzles[i]);
 		}
 	}
 
@@ -140,11 +154,8 @@ export default class Game {
 		this.audio.play();
 	}
 
-
-
 	showListeningBtnHandler() {
 		this.showListenBtnState = !this.showListenBtnState;
-
 		if (this.showListenBtnState) {
 			this.playAudioBtn.removeAttribute('disabled');
 		} else {
@@ -163,18 +174,15 @@ export default class Game {
 
 	autoListeningBtnHandler() {
 		this.autoListeningBtnState = !this.autoListeningBtnState;
-		console.log(this.sentenceArr, this.sentenceTranslate, this.sentenceAudioLink);
-
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
+
 		const url = `https://afternoon-falls-25894.herokuapp.com/words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
 		fetch(url)
 			.then(response => {
 				return response.json();
 			}).then(myJson => {
-				console.log(myJson);
-
 				this.handleJson(myJson);
 			});
 	}
@@ -189,8 +197,6 @@ export default class Game {
 
 	getSentences(arr, line) {
 		const sentencesArr = [];
-		console.log(arr, line);
-
 		arr.forEach(word => sentencesArr.push(word.textExample.replace(/<[^>]*>/g, '')));
 		this.generatePuzzle(sentencesArr[line]);
 	}
@@ -199,7 +205,8 @@ export default class Game {
 		this.board = document.querySelector('.board');
 		this.boardLine = factory.create({
 			elem: 'div',
-			classes: ['board__line', 'board__line--active', `line${this.currentLine}`],
+			classes: ['board__line', 'board__line--active'],
+			attr: { 'data-line': this.currentLine }
 		});
 		this.board.append(this.boardLine);
 	}
@@ -208,8 +215,9 @@ export default class Game {
 		const wordsArray = sentence.split(' ');
 		this.sentenceArr = wordsArray;
 		this.numberOfPuzzles = wordsArray.length;
-		const shuffledArr = this.shuffleArray(wordsArray);
-		this.appendPuzzlesToContainer(shuffledArr);
+		const puzzles = this.populatePuzzle(wordsArray);
+		const shuffledPuzzleArr = this.shuffleArray(puzzles);
+		this.appendPuzzlesToContainer(shuffledPuzzleArr);
 	}
 
 	shuffleArray(arr) {
@@ -227,22 +235,44 @@ export default class Game {
 	}
 
 	populatePuzzle(sentenceArr) {
-		this.puzzles = sentenceArr.map(word => {
+		const cypher = this.encryptPuzzlePlace(sentenceArr.length);
+		this.puzzles = sentenceArr.map((word, index) => {
+
 			this.newElement = factory.create({
 				elem: 'div',
 				classes: ['game__jigsaw', 'game__jigsaw--active'],
-				attr: [{ 'data-word': word }, { 'draggable': true }],
+				attr: [{ 'data-word': word }, { 'data-position-crypted': cypher[0][index] }, { 'data-line': this.currentLine }, { 'draggable': true }],
 				child: word
 			});
+			if (this.showBgImageBtnState) {
+				this.addBackgroundToPuzzles(this.newElement);
+			}
+
 			return this.newElement;
 		});
 		return this.puzzles;
 	}
 
+	encryptPuzzlePlace(length) {
+		const cryptArray = [];
+		const arr = [];
+		for (let i = 0; i < length; i += 1) {
+			arr.push(i);
+		}
+		cryptArray.push(this.shuffleArray(arr));
+		this.cypher.push(cryptArray);
+
+		return cryptArray;
+
+	}
+
 	appendPuzzlesToContainer(puzzles) {
 		const puzzlesContainer = document.querySelector('.game__puzzles');
-		puzzlesContainer.style.gridTemplateColumns = `repeat(${puzzles.length}, auto)`;
-		puzzlesContainer.append(...this.populatePuzzle(puzzles));
+		const gridTemplate = new Array(puzzles.length).fill('auto');
+		puzzlesContainer.style.gridTemplateColumns = gridTemplate.join(' ');
+		puzzlesContainer.append(...puzzles);
+		this.setGridTemplateForPuzzlesContainer();
+
 		this.addPuzzleContainersToLine(puzzles.length);
 		this.dragAndDrop();
 		if (this.currentLine === 0 && this.eventListenersAddedState === false) {
@@ -251,17 +281,20 @@ export default class Game {
 		if (this.autoListeningBtnState) {
 			this.playAudio(this.sentenceAudioLink);
 		}
+		this.calculateBackgroundPosition(puzzles);
 	}
 
 	dragAndDrop() {
-
 		this.puzzleItem = document.querySelectorAll('.game__jigsaw--active');
 		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
 		this.puzzlesField = document.querySelector('.game__puzzles');
 		let selectedItem;
+		let selectedItemWidth;
 
 		const dragStart = (event) => {
 			selectedItem = event.target;
+			selectedItemWidth = selectedItem.offsetWidth;
+
 
 			if (event.target.closest('.puzzle-container--active')) {
 				const container = event.target.closest('.puzzle-container--active');
@@ -283,6 +316,13 @@ export default class Game {
 
 		const dragEnter = (event) => {
 			event.preventDefault();
+			const targetParent = event.target.closest('.game__puzzles') || event.target.closest('.board__line--active');
+			if (event.target.closest('.board__line--active')) {
+				const position = event.target.dataset.containerPosition;
+				this.changeGridTemplateForOneColumn(targetParent, position, selectedItemWidth);
+				console.log(targetParent, position, selectedItemWidth);
+			}
+
 			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
 				event.target.classList.add('hovered');
 			}
@@ -329,36 +369,35 @@ export default class Game {
 			}
 		});
 		if (this.numberOfFullContainers === this.numberOfPuzzles) {
-			console.log('line is full of hell');
 			this.lineIsFullHandler();
 		}
 
 	}
 
 	lineIsFullHandler() {
-		// this.iDontKnowBtn.classList.add('hide');s
 		this.checkBtn.classList.remove('hide');
-		// this.continueBtn.classList.remove('hide');
 	}
 
 	addPuzzleContainersToLine(numberOfPuzzles) {
-		// this.gridTemplate = [];
+		this.gridTemplate = new Array(numberOfPuzzles).fill('auto');
 		this.arrOfPuzzleContainer = [];
 		for (let i = 0; i < numberOfPuzzles; i += 1) {
 			this.arrOfPuzzleContainer.push(
 				factory.create({
 					elem: 'div',
 					classes: ['puzzle-container', 'puzzle-container--active'],
+					attr: { 'data-container-position': i }
 				})
 			);
 		}
-		this.boardLine.style.gridTemplateColumns = `repeat(${numberOfPuzzles}, auto)`;
+		this.boardLine.style.gridTemplateColumns = this.gridTemplate.join(' ');
 		this.boardLine.append(...this.arrOfPuzzleContainer);
 	}
 
 	showWrongAndRightAnswers(currentLineElements, arrOfBoolean) {
 		this.rightAnswers = 0;
 		for (let i = 0; i < currentLineElements.length; i += 1) {
+			currentLineElements[i].classList.remove('game__jigsaw--correct', 'game__jigsaw--wrong');
 			if (arrOfBoolean[i]) {
 				this.rightAnswers += 1;
 				currentLineElements[i].classList.add('game__jigsaw--correct');
@@ -378,7 +417,6 @@ export default class Game {
 			this.continueBtn.classList.remove('hide');
 		} else {
 			console.log('round end');
-
 		}
 	}
 
@@ -395,29 +433,94 @@ export default class Game {
 	}
 
 	init() {
-		this.gameContainer = document.createElement('div');
-		this.gameContainer.classList.add('game-container');
+		this.controlsContainer = factory.create({
+			elem: 'div',
+			classes: 'controls'
+		});
+		this.tooltips = factory.create({
+			elem: 'div',
+			classes: 'tooltips'
+		});
+		this.gameBoard = factory.create({
+			elem: 'div',
+			classes: 'game__main'
+		});
 
-		this.controlsContainer = document.createElement('div');
-		this.controlsContainer.classList.add('controls');
-		this.tooltips = document.createElement('div');
-		this.tooltips.classList.add('tooltips');
-		this.gameBoard = document.createElement('div');
-		this.gameBoard.classList.add('game__main');
+		this.gameContainer = factory.create({
+			elem: 'div',
+			classes: 'game-container',
+			child: [this.controlsContainer, this.tooltips, this.gameBoard]
+		});
 
-		this.gameContainer.append(this.controlsContainer, this.tooltips, this.gameBoard);
-		wrapper.append(this.gameContainer);
+		this.wrapper = factory.create({
+			elem: 'div',
+			classes: 'wrapper',
+			child: this.gameContainer
+		});
+
+		appContainer.append(this.wrapper);
 	}
 
 	start() {
 		this.getData();
 		this.addLine();
+	}
+
+
+	addBackgroundToPuzzles(puzzle) {
+		const thisPuzzle = puzzle;
+		this.backgroundPicture = paintings[this.currentLevel][this.currentRound];
+		thisPuzzle.style.backgroundImage = `url(https://raw.githubusercontent.com/Garza0/rslang_data_paintings/master/${this.backgroundPicture.cutSrc})`;
 
 	}
 
-	// background-image: url(img/3_30.jpg);
-	//   background-size: 800px;
-	//   background-repeat: no-repeat;
-	//   background-position: 0px -25.8303px;
-}
+	calculateBackgroundPosition(elements) {
+		const sortedPuzzles = this.sortPuzzles(elements);
+		const elementsLine = elements[0].dataset.line;
+		const puzzleHeight = elements[0].offsetHeight;
+		const bgWidth = this.board.offsetWidth;
+		let previosPuzzlesWidth = 0;
 
+		sortedPuzzles.forEach(element => {
+			const puzzle = element;
+			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
+			puzzle.style.backgroundSize = `${bgWidth}px`;
+			previosPuzzlesWidth += puzzle.offsetWidth;
+		});
+	}
+
+	showHideBackground() {
+		this.showBgImageBtnState = !this.showBgImageBtnState;
+		const puzzles = document.querySelectorAll('.game__jigsaw');
+		if (this.showBgImageBtnState) {
+			puzzles.forEach(element => {
+				this.addBackgroundToPuzzles(element);
+			});
+		} else {
+			puzzles.forEach(element => element.style.removeProperty('background-image'));
+		}
+	}
+
+	setGridTemplateForPuzzlesContainer() {
+		this.puzzlesContainer = document.querySelector('.game__puzzles');
+		const puzzlesInsideContainer = this.puzzlesContainer.querySelectorAll('div');
+		const puzzlesWidthArr = [];
+		puzzlesInsideContainer.forEach(puzzle => puzzlesWidthArr.push(puzzle.offsetWidth));
+		const puzzlesContainerTemplate = puzzlesWidthArr.map(width => `${width}px`);
+		this.puzzlesContainer.style.gridTemplateColumns = puzzlesContainerTemplate.join(' ');
+	}
+
+	changeGridTemplateForOneColumn(element, position, width) {
+		console.log(element, +position, width);
+
+		const elementGridTemplate = element.style.gridTemplateColumns.split(' ');
+		elementGridTemplate[+position] = `${width}px`;
+		const test = document.querySelector('.board__line--active');
+		test.style.gridTemplateColumns = elementGridTemplate.join(' ');
+		console.log(test, elementGridTemplate.join(' '));
+
+
+		this.nothing = false;
+	}
+
+}

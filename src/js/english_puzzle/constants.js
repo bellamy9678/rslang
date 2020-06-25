@@ -1,4 +1,5 @@
-const wrapper = document.querySelector('.app');
-const count = 8;
+const appContainer = document.querySelector('.app');
+const levels = 6;
+const rounds = 10;
 
-export { wrapper, count };
+export { appContainer, levels, rounds };
