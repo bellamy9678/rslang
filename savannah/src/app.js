@@ -1,4 +1,4 @@
-import generateElements from './generateElements'
+import generateElements from './js/generateElements'
 
 window.onload = () => {
   const startingButton = document.querySelector('.starting-button');

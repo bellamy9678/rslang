@@ -34,4 +34,6 @@ const words = [
 ];
 const arrayWithWords = [];
 const arrForUniqness = [];
-export {words, arrayWithWords, arrForUniqness};
+const arrForRandFunc = [];
+
+export {words, arrayWithWords, arrForUniqness, arrForRandFunc};

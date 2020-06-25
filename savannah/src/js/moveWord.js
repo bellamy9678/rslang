@@ -12,8 +12,8 @@ export default function moveWord() {
       mainWordContainer.style.top = `${time / 10}px`;
     }
     draw(timePassed);
-  }, 20);
-  
+  }, 21);
+
   allAnswers.forEach((item) => {
     item.addEventListener('click', () => {
       clearInterval(timer);
