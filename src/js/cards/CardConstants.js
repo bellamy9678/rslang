@@ -12,3 +12,13 @@ export const START_LEVEL = 1;
 export const START_PAGE = 2;
 
 export const CARD_CONTAINER = document.body;
+export const INPUT_WIDTH_CORRECTION = 1;
+export const DOM_POSITION_CORRECTION = 1;
+export const INPUT_WIDTH_UNIT = 'px';
+export const DISPLAY_NONE_CLASS = 'none';
+export const HIDDEN_CLASS = 'hidden';
+
+export const WARNING_CLASS_LETTER = 'error-small';
+export const ERROR_CLASS_LETTER = 'error-big';
+export const CORRECT_CLASS_LETTER = 'correct';
+export const INVISIBLE_LETTER = 'invisible';

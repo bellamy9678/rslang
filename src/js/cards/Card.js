@@ -5,6 +5,7 @@ import {
 	TEXT_MEANING_OPEN_TAG,
 	TEXT_MEANING_CLOSE_TAG,
 	INPUT_ID,
+	HIDDEN_CLASS,
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -123,7 +124,7 @@ export default class Card {
 
 		const textExampleTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', HIDDEN_CLASS],
 			id: 'text-example-translate',
 			child: this.card.exampleTranslate,
 		});
@@ -132,7 +133,7 @@ export default class Card {
 
 		const textMeaningTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', HIDDEN_CLASS],
 			id: 'text-meaning-translate',
 			child: this.card.textMeaningTranslate,
 		});
@@ -163,7 +164,7 @@ export default class Card {
 
 		const textWord = fab.create({
 			elem: TAGS.SPAN,
-			classes: ['card__text_word', 'none'],
+			classes: ['card__text_word', 'card__text_answer', HIDDEN_CLASS],
 			id: 'example-part-word',
 			attr: [{ 'data-word': textExampleObject.word }],
 			child: letters,
@@ -173,15 +174,21 @@ export default class Card {
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
 			id: INPUT_ID,
-			attr: [{ type: 'text' }, { name: 'input' }, { autofocus: true }],
+			attr: [{ type: 'text' }, { name: 'input' } ],
 			name: INPUT_ID,
+		});
+
+		const inputContainer = fab.create({
+			elem: TAGS.DIV,
+			classes: ['card__text_container'],
+			child: [textWord, textInput],
 		});
 
 		const textExample = fab.create({
 			elem: TAGS.DIV,
 			classes: 'card__text',
 			id: 'text-example',
-			child: [textPartLeft, textInput, textWord, textPartRight],
+			child: [textPartLeft, inputContainer, textPartRight],
 		});
 
 		const againButton = fab.create({
@@ -236,7 +243,7 @@ export default class Card {
 
 		const buttonGroupComplexity = fab.create({
 			elem: TAGS.DIV,
-			classes: 'button-group',
+			classes: ['button-group', 'button-group__complexity', /* HIDDEN_CLASS */ ],
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
@@ -275,7 +282,7 @@ export default class Card {
 
 		const buttonGroupDictionary = fab.create({
 			elem: TAGS.DIV,
-			classes: 'button-group',
+			classes: ['button-group', 'button-group__dictionary'],
 			child: [addToDifficultButton, deleteFromDictionaryButton],
 		});
 
@@ -306,26 +313,26 @@ export default class Card {
 
 		const buttonGroupShowAnswer = fab.create({
 			elem: TAGS.DIV,
-			classes: 'button-group',
+			classes: ['button-group', 'button-group__answer'],
 			child: [showAnswerButton, continueButton],
 		});
 
 		const audioWord = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
-			attr: [/* { controls: true }, */ { src: this.card.audio }],
+			attr: [{ src: this.card.audio }],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-meaning',
-			attr: [/* { controls: true }, */ { src: this.card.meaningAudio }],
+			attr: [{ src: this.card.meaningAudio }],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-example',
-			attr: [/* { controls: true }, */ { src: this.card.exampleAudio }],
+			attr: [{ src: this.card.exampleAudio }],
 		});
 
 		const card = fab.create({
