@@ -11,8 +11,7 @@ import {
 	setUserCookie
 } from './Cookie';
 
-const signInButton = document.getElementById('sign-in');
-const autorizeForm = document.querySelector('.authorization');
+let authorizeForm;
 let userName;
 let userPassword;
 let authorizeButton;
@@ -22,7 +21,7 @@ function Authorization() {
 	this.password = userPassword.value;
 }
 
-export default async function authorizeUser(obj) {
+export async function authorizeUser(obj) {
 	let user = obj;
 	if (user === undefined) {
 		user = new Authorization();
@@ -39,19 +38,23 @@ export default async function authorizeUser(obj) {
 	const content = await rawResponse.json();
 	console.log(content);
 	setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
-	autorizeForm.classList.add('none');
+	authorizeForm.classList.add('none');
 	const name = user.email.replace(`${EMAIL_PART}`, '');
 	setUserCookie(USER_COOKIE_NAME.NAME, name);
 	showWelcomePage(name);
 }
 
-signInButton.addEventListener('click', () => {
-	autorizeForm.classList.toggle('none');
-	userName = document.querySelector('.authorization__username');
-	userPassword = document.querySelector('.authorization__password');
-	authorizeButton = document.querySelector('.authorization__button');
-	authorizeButton.addEventListener('click', (event) => {
-		event.preventDefault();
-		authorizeUser();
+export function addSignInForm() {
+	const signInButton = document.getElementById('sign-in');
+	authorizeForm = document.querySelector('.authorization');
+	signInButton.addEventListener('click', () => {
+		authorizeForm.classList.toggle('none');
+		userName = document.querySelector('.authorization__username');
+		userPassword = document.querySelector('.authorization__password');
+		authorizeButton = document.querySelector('.authorization__button');
+		authorizeButton.addEventListener('click', (event) => {
+			event.preventDefault();
+			authorizeUser();
+		});
 	});
-});
+}

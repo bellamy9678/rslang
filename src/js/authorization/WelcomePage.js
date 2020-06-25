@@ -1,6 +1,11 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import {
+	LINKS,
+	TEXT
+} from '../shared/Text';
+
+import {
 	createUserNavigation,
 	createUserButtons
 } from './UserHeader';
@@ -17,7 +22,7 @@ export default function showWelcomePage(username) {
 	const settingsLinkText = newElem.create({
 		elem: TAGS.SPAN,
 		classes: 'link-button__text',
-		child: ['Go to settings'],
+		child: LINKS.goToSettings,
 	});
 
 	const settingsLink = newElem.create({
@@ -32,7 +37,7 @@ export default function showWelcomePage(username) {
 	const title = newElem.create({
 		elem: TAGS.h1,
 		classes: 'welcome__title',
-		child: [`Hello, ${username}! Let's start?`],
+		child: [TEXT.welcomPage.title.leftPath, username, TEXT.welcomPage.title.rightPath],
 	});
 
 	const buttons = newElem.create({
@@ -70,7 +75,7 @@ export default function showWelcomePage(username) {
 		classes: 'welcome',
 		child: [wrapper],
 	});
-	if (app.innerHTML !== '') {
+	if (app.firstChild) {
 		app.firstChild.remove();
 	}
 	app.append(page);

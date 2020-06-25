@@ -1,11 +1,12 @@
 import {
-	USER_COOKIE_NAME
+	USER_COOKIE_NAME,
+	NOT_FOUND_VALUE
 } from './Constants';
 
 function User(cookie) {
-	this.name = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.NAME}`) !== -1).replace(`${USER_COOKIE_NAME.NAME}=`, '');
-	// this.id = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.ID}`) !== -1).replace(`${USER_COOKIE_NAME.ID}=`, '');
-	this.token = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.TOKEN}`) !== -1).replace(`${USER_COOKIE_NAME.TOKEN}=`, '');
+	this.name = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.NAME}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.NAME}=`, '');
+	// this.id = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.ID}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.ID}=`, '');
+	this.token = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.TOKEN}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.TOKEN}=`, '');
 }
 
 export function checkUserToken() {

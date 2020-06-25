@@ -1,5 +1,8 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
+import {
+	TEXT
+} from '../shared/Text';
 
 export default function showStartPage() {
 	const app = document.querySelector('.app');
@@ -8,13 +11,13 @@ export default function showStartPage() {
 	const title = newElem.create({
 		elem: TAGS.H1,
 		classes: 'start-page__title',
-		child: ['Upgrate your english with us!'],
+		child: TEXT.startPage.title,
 	});
 
 	const text = newElem.create({
 		elem: TAGS.P,
 		classes: 'start-page__text',
-		child: ['Dolore ea elit do Lorem aliquip. Do sint laboris Lorem quis incididunt non velit. Aute adipisicing quis et elit.'],
+		child: TEXT.startPage.text,
 	});
 
 	const content = newElem.create({
@@ -50,4 +53,3 @@ export default function showStartPage() {
 	}
 	app.append(page);
 }
-

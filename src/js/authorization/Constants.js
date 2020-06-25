@@ -5,3 +5,4 @@ export const USER_COOKIE_NAME = {
 	ID: 'userID',
 	TOKEN: 'userToken',
 };
+export const NOT_FOUND_VALUE = -1;

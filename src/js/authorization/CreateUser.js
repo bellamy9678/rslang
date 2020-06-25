@@ -4,7 +4,6 @@ import TAGS from '../shared/Tags.json';
 import authorizeUser from './Authorization';
 import DOMElementCreator from '../utils/DOMElementCreator';
 
-const signUpButton = document.getElementById('sign-up');
 let emailInput;
 let passwordInput;
 let createAccountButton;
@@ -39,7 +38,7 @@ async function createUser(event) {
 	}
 }
 
-function showCreateAccountPage() {
+export default function showCreateAccountPage() {
 	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();
 
@@ -154,5 +153,3 @@ function showCreateAccountPage() {
 	createAccountButton = document.querySelector('.account-creation__button');
 	createAccountButton.addEventListener('click', createUser);
 }
-
-signUpButton.addEventListener('click', showCreateAccountPage);

@@ -1,12 +1,19 @@
 import {
 	USER_COOKIE_NAME
 } from './Constants';
+import {
+	AUTHORIZATION_BUTTONS,
+	LINKS
+} from '../shared/Text';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import showStartPage from './StartPage';
 import {
 	deleteUserCookie
 } from './Cookie';
+// import {
+// 	createHeaderButtons
+// } from './Header';
 
 const newElem = new DOMElementCreator();
 const settingsLink = newElem.create({
@@ -16,7 +23,7 @@ const settingsLink = newElem.create({
 	attr: {
 		type: 'userElement'
 	},
-	child: ['Settings'],
+	child: LINKS.settings,
 });
 
 const statisticLink = newElem.create({
@@ -26,7 +33,7 @@ const statisticLink = newElem.create({
 	attr: {
 		type: 'userElement'
 	},
-	child: ['Statistic'],
+	child: LINKS.statistic,
 });
 
 const gamesLink = newElem.create({
@@ -36,7 +43,7 @@ const gamesLink = newElem.create({
 	attr: {
 		type: 'userElement'
 	},
-	child: ['Games'],
+	child: LINKS.games,
 });
 
 const dictionaryLink = newElem.create({
@@ -46,7 +53,7 @@ const dictionaryLink = newElem.create({
 	attr: {
 		type: 'userElement'
 	},
-	child: ['My Dictionary'],
+	child: LINKS.dictionary,
 });
 
 const logOutButton = newElem.create({
@@ -56,7 +63,7 @@ const logOutButton = newElem.create({
 	attr: {
 		type: 'userElement'
 	},
-	child: 'Log out',
+	child: AUTHORIZATION_BUTTONS.logOut,
 });
 
 const userName = newElem.create({
@@ -84,24 +91,13 @@ export function createUserNavigation() {
 }
 
 function hideUserHeader() {
-	const buttons = document.querySelectorAll('.button');
-	buttons.forEach(button => {
-		if (button.getAttribute('type') !== 'userElement') {
-			button.classList.remove('none');
-		}
-	});
 	document.querySelectorAll('[type=userElement]').forEach(element => element.remove());
 	showStartPage();
 }
 
 export function createUserButtons(username) {
 	const buttons = document.querySelector('.header__buttons');
-	buttons.querySelectorAll('.button').forEach(button => {
-		if (button.getAttribute('type') !== 'userElement') {
-			button.classList.add('none');
-		}
-	});
-
+	buttons.querySelectorAll('.button_unauthorized').forEach(button => button.remove());
 	userName.innerText = `${username}`;
 	buttons.append(logOutButton, user);
 	logOutButton.addEventListener('click', () => {
