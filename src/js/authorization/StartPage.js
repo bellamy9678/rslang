@@ -1,7 +1,7 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 
-(function showWelcomePage() {
+export default function showWelcomePage() {
 	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();
 
@@ -49,4 +49,4 @@ import TAGS from '../shared/Tags.json';
 		app.firstChild.remove();
 	}
 	app.append(page);
-})();
+}

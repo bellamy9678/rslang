@@ -1,0 +1,9 @@
+.settings {
+	&__input_text {
+		@extend %text-input;
+    }
+    
+    &__form {
+        display: flex;
+    }
+}
