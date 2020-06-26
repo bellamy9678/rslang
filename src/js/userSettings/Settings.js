@@ -49,6 +49,11 @@ const increaseProgress = function increaseProgress() {
 	}
 };
 
+const makeZeroProgress = function makeZeroProgress() {
+	this.newWordsShowed = 0;
+	this.cardsShowed = 0;
+};
+
 export default class Settings {
 	constructor() {
 		return Settings.getInstance();
@@ -74,6 +79,7 @@ export default class Settings {
 			incNewWordsShowed: increaseNewWords,
 			setProgress: setProgressGroupPage,
 			incProgress: increaseProgress,
+			newDay: makeZeroProgress,
 		};
 
 		Object.freeze(returnedSettingsObject);
