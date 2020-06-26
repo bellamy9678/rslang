@@ -1,11 +1,249 @@
-const API = 'https://afternoon-falls-25894.herokuapp.com/';
-const ASSETS_STORAGE = 'https://raw.githubusercontent.com/chaba-chaba/rslang-data/master/';
+import DOMElementCreator from '../utils/DOMElementCreator';
+
+import { API, ASSETS_STORAGE } from '../shared/Constants';
+
+import TAGS from '../shared/Tags.json';
+
+
+// Creat DOM
+const app = document.querySelector('.app');
+const newElem = new DOMElementCreator();
+
+// start page
+const gameName = newElem.create({
+  elem: TAGS.H1,
+  classes: 'game-name',
+  child: ['Speak it']
+});
+
+const startP1 = newElem.create({
+  elem: TAGS.P,
+  classes: 'description_p',
+  child: ['Click on the world to hear them sound'],
+});
+
+const startP2 = newElem.create({
+  elem: TAGS.P,
+  classes: 'description_p',
+  child: ['Click on the button and speak the words into the microphone'],
+});
+
+const gameDescription = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'description',  
+  child: [startP1, startP2],
+});
+
+const gameButton = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'start-btn',  
+  child: ['Start Game'],
+});
+
+const startPage = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'start-page',  
+  child: [gameName, gameDescription, gameButton],
+});
+
+
+// main-content
+
+const levelBtn1 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['1'],
+});
+const levelBtn2 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['2'],
+});
+const levelBtn3 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['3'],
+});
+const levelBtn4 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['4'],
+});
+const levelBtn5 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['5'],
+});
+const levelBtn6 = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'level-btn',  
+  child: ['6'],
+});
+
+const level = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'level',  
+  child: [levelBtn1, levelBtn2, levelBtn3, levelBtn4, levelBtn5, levelBtn6],
+});
+const currentImg = newElem.create({
+  elem: TAGS.IMG,
+  classes: 'current-image',
+  attr: [{
+    src: './assets/images/eng.jpg'
+  }, {
+    alt: 'Image'
+  }],
+});
+
+const translation = newElem.create({
+  elem: TAGS.P,
+  classes: 'current-transl',  
+});
+
+const output = newElem.create({
+  elem: TAGS.P,
+  classes: ['word-output', 'invisible'],
+});
+
+const imgCont =newElem.create({
+  elem: TAGS.DIV,
+  classes: 'image-container',  
+  child: [currentImg, translation, output],
+});
+
+const wordsContainer = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'words-container',
+});
+
+const audioSrc = newElem.create({
+  elem: TAGS.SOURCE,
+  attr: {
+    src: '',
+  } 
+});
+
+const imgAudio = newElem.create({
+  elem: TAGS.AUDIO,
+  classes: 'pronounce',  
+  child: [audioSrc],
+});
+
+const restButton = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'restart',  
+  child: ['Restart'],
+});
+
+const speakButton = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'speak',  
+  child: ['Speak, please'],
+});
+
+const  stopSpeak = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'stop-speak',  
+  child: ['Stop speak'],
+});
+
+const finishButton = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'finish',  
+  child: ['Finish'],
+});
+
+const btnContainer = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'buttons-container',  
+  child: [restButton, speakButton,  stopSpeak, finishButton],
+});
+
+const mainWrapper = newElem.create({
+  elem: TAGS.DIV,
+  classes: ['main-container', 'invisible'],  
+  child: [level, imgCont, wordsContainer, imgAudio, btnContainer],
+});
+
+// results
+const errNum = newElem.create({
+  elem: TAGS.SPAN,
+  classes: 'errors-num',
+});
+
+const succesNum = newElem.create({
+  elem: TAGS.SPAN,
+  classes: 'succes-num',
+});
+
+const errorP = newElem.create({
+  elem: TAGS.P,
+  classes: 'errors',  
+  child: ['Ошибок', errNum],
+});
+
+const successP = newElem.create({
+  elem: TAGS.P,
+  classes: 'succes',  
+  child: ['Знаю', succesNum],
+});
+
+const errorsItems = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'errors-items',
+});
+
+const succesItems = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'succes-items',
+});
+
+const returnBtn = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'return-btn',  
+  child: ['Return'],
+});
+
+const NewBtn = newElem.create({
+  elem: TAGS.BUTTON,
+  classes: 'new-btn',  
+  child: ['New Game'],
+});
+
+const resultBtnContainer = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'result-btn',  
+  child: [returnBtn, NewBtn],
+});
+
+const resultCont = newElem.create({
+  elem: TAGS.DIV,
+  classes: 'result-container',  
+  child: [errorP, errorsItems, successP, succesItems, resultBtnContainer],
+});
+
+const resultContainer = newElem.create({
+  elem: TAGS.DIV,
+  classes: ['result', 'invisible'],  
+  child: [resultCont],
+});
+
+const wrapper = newElem.create({
+  elem: TAGS.DIV,
+  classes: ['wrapper', 'speakit__wrapper'],  
+  child: [startPage, mainWrapper, resultContainer],
+});
+
+app.append(wrapper);
+
+
 
 async function getData(url) {
   const response = await fetch(url);
   const data = await response.json();
   return data;
 }
+
 
 function Word(word) {
   this.id = word.id;
@@ -19,79 +257,28 @@ function Word(word) {
   this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
 }
 
-// My 
-const template = `
-<div class="start-page">
-    <h1 class="game-name"> Speak it</h1>
-    <div class="description">
-      <p>Click on the world to hear them sound</p>
-      <p>Click on the button and speak the words into the microphone </p>
-    </div>
-    <button class="start-btn">Start Game</button>
-  </div>
-  
-  <div class="wrapper invisible">
-    <button>New Set</button>
-    <div class="image-container">
-      <img src="../src/assets/images/engl.jpg" class="current-img">
-      <p class="current-transl"></p>
-      <p class="word-output invisible">
-        <i class="material-icons mic-off">mic_off</i>
-      </p>
-    </div>
-    <div class="words-container">
-
-    </div>
-    <audio class="pronounce">
-      <source src=''>    
-    </audio>
-    <div class="buttons-container">
-      <button class="restart">Restart</button>
-      <button class="speak">Speak please</button>
-      <button class="finish">Finish</button>
-    </div>
-  </div>
-  <div class="result invisible">
-    <div class="result-container">
-      <p class="errors">Ошибок
-        <span class="errors-num"></span>
-      </p>
-      <div class="errors-items">
-
-      </div>
-      <p class="succes">Знаю
-        <span class="succes-num"></span>
-      </p>
-      <div class="succes-items">
-
-      </div>
-      <div class="results-btn">
-        <button class="return-btn">Return</button>
-        <button class="new-btn">New game</button>
-      </div>
-    </div>
-  </div>
- 
-</body>
-`
-const body = document.querySelector('body');
-body.innerHTML = template;
-const startPage = document.querySelector('.start-page');
-const mainWrapper = document.querySelector('.wrapper');
-const wordsContainer = document.querySelector('.words-container');
+const defaultImg = "./assets/images/eng.jpg";
+// Speech recognition
+const SpeechRecognition = window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+const span = document.createElement("span");
+output.appendChild(span);  
+recognition.interimResults = true;
+recognition.lang = 'en-US';
 
 const renderWords = (item) => `
-<div class="word" data-myimage="${item.image}" data-myaudio="${item.audio}" data-transl="${item.translate}" data-wrt="${item.word}">  
+<div class="word" data-myimage="${item.image}" data-myaudio="${item.audio}" data-transl="${item.translate}" data-wrt="${item.word}">
+  <img src="./assets/images/speak.png" class="volume">  
   <p class="word-writing">${item.word}</p>          
   <p class="word-transcription">${item.transcription}</p>
 </div>
 `
-const renderGameResult = (item) => {
-  return `<div class="res-word" data-audio="${item.dataset.myaudio}">    
+const renderGameResult = (item) =>`
+  <div class="res-word" data-audio="${item.dataset.myaudio}">
+    <img src="./assets/images/speak.png" class="res-volume">    
     <span class="res-writing">${item.dataset.wrt} &mdash; </span>
     <span class="res-translation">${item.dataset.transl}</span>
    </div>`;
-}
 
 async function getWords(group, page) {
   const url = `${API}words?group=${group}&page=${page}`;
@@ -100,23 +287,8 @@ async function getWords(group, page) {
   return data.map(word => new Word(word));
 }
 
-
-// My
-
 // Events
-const currentImg = document.querySelector('.current-img');
-const translation = document.querySelector('.current-transl');
-// const finishBtn = document.querySelector('.finish');
-const resultContainer = document.querySelector('.result');
-const errorsItems = document.querySelector('.errors-items');
-const succesItems = document.querySelector('.succes-items');
-const errNum = document.querySelector('.errors-num');
-const succesNum = document.querySelector('.succes-num');
-const microphone = document.querySelector('.mic-off');
-const defaultImg = "../src/assets/images/engl.jpg";
 const words = document.getElementsByClassName('word');
-const imgAudio = document.querySelector('.pronounce');
-const output = document.querySelector('.word-output');
 const guessed = [];
 let trainMode = true;
 
@@ -137,10 +309,30 @@ function setDefaultState() {
   output.innerHTML = '';
   output.classList.add('invisible');
   currentImg.setAttribute('src', defaultImg);
+  translation.textContent = '';
+  [...words].forEach(el => el.classList.remove('active'));
   getWords(0,0).then(res => {
       wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
     })
 }
+
+function handleRecognition() {
+  [...words].forEach(el => {
+    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
+      if (!guessed.includes(el)) {
+        el.classList.add('active');
+        currentImg.setAttribute('src', el.dataset.myimage);
+        guessed.push(el);
+  if (guessed.length === 10) {
+    showResults();
+  }
+      }
+    }
+  })
+
+  recognition.start();
+}
+
 
 // listen pronounce
 
@@ -180,6 +372,7 @@ document.addEventListener('click', event => {
   // restart button
   if (event.target.classList.contains('restart')) {
     setDefaultState();
+    recognition.removeEventListener('end', handleRecognition);    
   }
   // button return
   if (event.target.classList.contains('return-btn')) {
@@ -190,109 +383,52 @@ document.addEventListener('click', event => {
   if (event.target.classList.contains('new-btn')) {
     resultContainer.classList.add('invisible');
     mainWrapper.classList.remove('invisible');
-    /* trainMode = true;
-    guessed.length = 0;
-    output.innerHTML = '';
-    output.classList.add('invisible'); 
-    getWords(0,0).then(res => {
-      wordsContainer.innerHTML = res.slice(0, 10).map(item => renderWords(item)).join('');
-    }) */
     setDefaultState();
+    recognition.removeEventListener('end', handleRecognition);
   }
   // finish button
   if (event.target.classList.contains('finish')) {
-    showResults();
+    showResults();   
   }
-})
-
-// Speech recognition
-
-
-  
-  const span = document.createElement("span");
-  output.appendChild(span);
-  const SpeechRecognition = window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-
-  function handleRecognition() {
-    if (guessed.length === 10) {
-      showResults();
-    }
-    [...words].forEach(el => {
-      if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
-        if (!guessed.includes(el)) {
-          el.classList.add('active');
-          currentImg.setAttribute('src', el.dataset.myimage);        
-          guessed.push(el);
-        }      
-      }
-    })
-    console.log(guessed.length);
-    recognition.start();
+  // pronounciation on result click
+  if (event.target.classList.contains('res-word')) {
+    imgAudio.setAttribute('src', event.target.dataset.audio);
+    imgAudio.play();
   }
+  if (event.target.parentElement.classList.contains('res-word')) {
+    const au = event.target.parentElement.dataset.audio;
+    imgAudio.setAttribute('src', au);
+    imgAudio.play();
+  }
+}) 
 
-
+// speech recognition on
   const speakBtn = document.querySelector('.speak');
   speakBtn.addEventListener('click', () => {
-    recognition.start();
     trainMode = false;
     output.classList.remove('invisible');
+    [...words].forEach(el => el.classList.remove('active'));
+    translation.classList.add('invisible');
+    recognition.start();    
   });
   
 
-  recognition.addEventListener("result", function(e) {
+  recognition.addEventListener("result", (e) => {
+    if (guessed.length === 10) {
+      recognition.removeEventListener('end', handleRecognition);
+      showResults();
+    }
     const last = e.results.length - 1;
     const command = e.results[last][0].transcript;
     span.innerHTML = '';
-    span.innerHTML = command;  
+    span.innerHTML = command; 
   });  
 
   recognition.addEventListener('end', handleRecognition);
-  microphone.addEventListener('click', ()=> {
+  stopSpeak.addEventListener('click', ()=> {
     recognition.removeEventListener('end', handleRecognition);
     output.classList.add('invisible');
     trainMode = true;
-  } )
-
-/* speakBtn.addEventListener('click', speak);
-microphone.addEventListener('click', event => {
-  speakBtn.removeEventListener('click', speak);
-}) */
-// speech recognition
-/* let output = document.querySelector('.word-output');
-let span = document.createElement("span");
-output.appendChild(span);
-//console.log();
-window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.interimResults = true;
-recognition.lang = 'en-US';
-recognition.start();
-
-recognition.addEventListener("result", function(e) {
-  let text = Array.from(e.results)
-  .map(result => result[0])
-  .map(result => result.transcript)
-  .join('');
-  span.innerHTML = '';
-  span.innerHTML = text;  
-});
-
-recognition.addEventListener('end', function(e) {
-  [...words].forEach(el => {
-    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
-      if (!guessed.includes(el)) {
-        el.classList.add('active');
-        currentImg.setAttribute('src', el.dataset.myimage);
-        //score++;
-        console.log(score);
-        guessed.push(el);
-      }      
-    } // перенести в отдельную функцию
-  })
-  console.log(guessed);
-  recognition.start();
-})
-*/
+    translation.classList.remove('invisible');
+    translation.textContent = '';
+  } ) 

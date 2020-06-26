@@ -1,15 +1,27 @@
-$body-color: blanchedalmond;
 $start-btn: pink;
 
 * {
   box-sizing: border-box;
 }
 body {
-  background-color: $body-color;
+  background-color: $color-background;
   min-height: 100vh;
+  font-size:10px;
 }
 p {
   margin: 0;
+}
+
+.main-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1140px;
+  min-height: 100vh;
 }
 .start-page {
   display: flex;
@@ -33,18 +45,33 @@ p {
   line-height: 1.4;
   font-weight: 300;
 }
-.start-btn {
-  font-size: 24px;
+.level {
+  margin-bottom:50px;
+  margin-top: 20px;
+}
+.level_btn {
+  margin-right: 10px;
+}
+.buttons-container {
+  display: flex;
+  margin-top: 60px;
+}
+.start-btn, .speak, .restart, .finish, .stop-speak {
+  font-size: 1.6rem;
   text-align: center;
+  outline: none;
   padding: 15px 25px;
   border-radius: 5px;
   border: none;
-  background-color: $start-btn;
+  margin-right: 15px;
+  background-color: $color-primary;
+  color: $color-text-light;
   min-width: 200px;
   cursor: pointer;
   box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
 }
-.start-btn:hover {
+.start-btn:hover, .speak:hover,
+.restart:hover, .finish:hover, .stop-speak:hover {
   transform: scale(1.1);
 }
 .word {
@@ -65,10 +92,8 @@ p {
 }
 .volume {
   position: absolute;
-  top: 18px;
-  left: 10px;
-  font-size: 45px;
-  color: violet;
+  top: 30px;
+  left: 20px;
 }
 .word-output {
     display: block;
@@ -94,7 +119,7 @@ p {
   margin: auto;
   margin-bottom: 30px;
 }
-.current-img {
+.current-image {
   width: 390px;
   display: block;
   height: 260px;
@@ -126,15 +151,15 @@ p {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /*position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;*/
   text-align: center;
   padding: 10px
 }
 
+.errors, .succes {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
 .result-container {
   width: 100%;
   max-width: 780px;
@@ -169,7 +194,7 @@ p {
   border: 1px solid rgb(206, 212, 218);
   border-radius: 5px;
   text-align: center;
-  vertical-align: center;
+  margin:auto;
   margin-bottom: 12px;
   padding-top: 8px;
   cursor: pointer;
@@ -181,13 +206,17 @@ p {
   font-size: 24px;
   color: violet;
 }
+.result-btn {
+  display: flex;
+  justify-content: space-evenly;
+}
 .return-btn, .new-btn {
   /*margin: 0;*/
   font-size: 20px;
   padding: 10px 15px;
   min-width: 160px;
   color: rgba(14, 30, 37, .7);
-  background: lightblue;
+  background: $color-additional;
   border: 1px solid rgba(14, 30, 37, .7);
   border-radius: 5px;
   cursor: pointer;
@@ -196,6 +225,11 @@ p {
   display: none;
 }
 
-.mic-off {
-  cursor: pointer;
+.res-word {
+  position: relative;
+}
+.res-volume {
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
