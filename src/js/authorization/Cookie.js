@@ -3,27 +3,26 @@ import {
 	NOT_FOUND_VALUE
 } from './Constants';
 
-function User(cookie) {
-	this.name = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.NAME}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.NAME}=`, '');
-	// this.id = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.ID}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.ID}=`, '');
-	this.token = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.TOKEN}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.TOKEN}=`, '');
-}
-
-export function checkUserToken() {
-	const cookieArr = document.cookie.split(';');
-	try {
-		const userCookie = new User(cookieArr);
-		if (userCookie.token !== ' ') return userCookie.name;
-	} catch (error) {
-		console.error('Cookie not found');
+export default class Cookie {
+	constructor(cookie) {
+		this.name = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.NAME}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.NAME}=`, '');
+		// this.id = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.ID}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.ID}=`, '');
+		this.token = cookie.find(item => item.indexOf(`${USER_COOKIE_NAME.TOKEN}`) !== NOT_FOUND_VALUE).replace(`${USER_COOKIE_NAME.TOKEN}=`, '');
 	}
-	return false;
-}
 
-export function setUserCookie(name, value) {
-	document.cookie = `${name}=${value}`;
-}
+	checkUserToken() {
+		if (this.token !== ' ') {
+			return this.name;
+		}
+		return false;
+	}
 
-export function deleteUserCookie(name) {
-	document.cookie = `${name}=; expires=-1`;
+	static setUserCookie(name, value) {
+		document.cookie = `${name}=${value}`;
+	}
+
+	static deleteUserCookie(name) {
+		document.cookie = `${name}=; expires=-1`;
+	}
+
 }

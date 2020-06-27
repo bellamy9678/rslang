@@ -1,20 +1,22 @@
-import {
-	checkUserToken
-} from './Cookie';
-import showStartPage from './StartPage';
-import showWelcomePage from './WelcomePage';
-import {
-	createUnauthorisedUserLinks,
-	createUnauthorisedUserButtons
-} from './Header';
+import Cookie from './Cookie';
+import WelcomePage from './WelcomePage';
+import Header from './Header';
+import StartPage from './StartPage';
 
 window.addEventListener('load', () => {
-	const userName = checkUserToken();
-	if (userName) {
-		showWelcomePage(userName);
-	} else {
-		createUnauthorisedUserButtons();
-		showStartPage();
+	try {
+		const cookieArr = document.cookie.split(';');
+		const cookie = new Cookie(cookieArr);
+		const userName = cookie.checkUserToken();
+		if (userName) {
+			WelcomePage.showWelcomePage(userName);
+		} else {
+			StartPage.showStartPage();
+		}
+	} catch (error) {
+		console.error('Cookie not found');
+		StartPage.showStartPage();
+	} finally {
+		Header.create();
 	}
-	createUnauthorisedUserLinks();
 });

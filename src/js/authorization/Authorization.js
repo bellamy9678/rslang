@@ -6,55 +6,44 @@ import {
 	API,
 	URL_PARAM_SIGN_IN
 } from '../shared/Constants';
-import showWelcomePage from './WelcomePage';
-import {
-	setUserCookie
-} from './Cookie';
+import WelcomePage from './WelcomePage';
+import Cookie from './Cookie';
 
-let authorizeForm;
-let userName;
-let userPassword;
-let authorizeButton;
-
-function Authorization() {
-	this.email = `${userName.value}${EMAIL_PART}`;
-	this.password = userPassword.value;
-}
-
-export async function authorizeUser(obj) {
-	let user = obj;
-	if (user === undefined) {
-		user = new Authorization();
+export default class Authorization {
+	constructor() {
+		this.email = `${Authorization.getUserData().name}${EMAIL_PART}`;
+		this.password = Authorization.getUserData().password;
 	}
-	const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(user),
-	});
 
-	const content = await rawResponse.json();
-	console.log(content);
-	setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
-	authorizeForm.classList.add('none');
-	const name = user.email.replace(`${EMAIL_PART}`, '');
-	setUserCookie(USER_COOKIE_NAME.NAME, name);
-	showWelcomePage(name);
-}
+	static getUserData() {
+		const userName = document.getElementById('user__name');
+		const userPassword = document.getElementById('user__password');
+		return {
+			name: userName.value,
+			password: userPassword.value,
+		};
+	}
 
-export function addSignInForm() {
-	const signInButton = document.getElementById('sign-in');
-	authorizeForm = document.querySelector('.authorization');
-	signInButton.addEventListener('click', () => {
-		authorizeForm.classList.toggle('none');
-		userName = document.querySelector('.authorization__username');
-		userPassword = document.querySelector('.authorization__password');
-		authorizeButton = document.querySelector('.authorization__button');
-		authorizeButton.addEventListener('click', (event) => {
-			event.preventDefault();
-			authorizeUser();
-		});
-	});
+	static async authorizeUser() {
+		try {
+			const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(new Authorization),
+			});
+			const content = await rawResponse.json();
+			console.log(content);
+			const userData = new Authorization();
+			const userName = userData.email.replace(`${EMAIL_PART}`, '');
+			console.log('Authorization -> userName', userName);
+			Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
+			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
+			WelcomePage.showWelcomePage(userName);
+		} catch (error) {
+			console.error('This user is not found');
+		}
+	}
 }

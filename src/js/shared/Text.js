@@ -36,3 +36,9 @@ export const TEXT = {
 		}
 	},
 };
+
+export const AUTHORIZATION_FORM = {
+	userName: 'Username',
+	password: 'Password',
+	button: 'Go',
+};
