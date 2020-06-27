@@ -1,6 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import { WRONG_LIST_NAME, RIGHT_LIST_NAME, AUDIO_SRC, HEADER_TEXT } from './constants';
+import * as CONST from './constants';
 
 const factory = new DOMElementCreator();
 
@@ -45,7 +45,7 @@ export default class Result {
 		this.resultHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-header',
-			child: HEADER_TEXT
+			child: CONST.HEADER_TEXT
 		});
 		return this.resultHeader;
 	}
@@ -54,13 +54,13 @@ export default class Result {
 		this.iDontKnowLabel = factory.create({
 			elem: TAGS.SPAN,
 			classes: ['result__header-list-label', 'result__header-list-label--wrong'],
-			child: this.wrongAnswers.length || '0'
+			child: this.wrongAnswers.length || CONST.ZERO
 		});
 
 		this.iDontKnowHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__list-header-name',
-			child: [WRONG_LIST_NAME, this.iDontKnowLabel]
+			child: [CONST.WRONG_LIST_NAME, this.iDontKnowLabel]
 		});
 
 		this.iDontKnowList = this.wrongAnswers.map(obj => {
@@ -76,7 +76,7 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(/<[^>]*>/g, '') :
+					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
 					`${obj.word} - ${obj.wordTranslate}`
 			});
 
@@ -104,7 +104,7 @@ export default class Result {
 		this.iKnowHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__list-header-name',
-			child: [RIGHT_LIST_NAME, this.iKnowLabel]
+			child: [CONST.RIGHT_LIST_NAME, this.iKnowLabel]
 		});
 
 		this.iKnowList = this.rightAnswers.map(obj => {
@@ -120,7 +120,7 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(/<[^>]*>/g, '') :
+					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
 					`${obj.word} - ${obj.wordTranslate}`
 			});
 
@@ -155,7 +155,7 @@ export default class Result {
 				elem: TAGS.AUDIO,
 				classes: 'result__audio-sentences',
 				attr: [{ 'data-word': obj.word }, {
-					'src': `${AUDIO_SRC} ${this.sentenceResult ? obj.audioExample : obj.audio}`
+					'src': `${CONST.AUDIO_SRC} ${this.sentenceResult ? obj.audioExample : obj.audio}`
 				}]
 			});
 			return audioEl;
