@@ -1,5 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
+import { WRONG_LIST_NAME, RIGHT_LIST_NAME, AUDIO_SRC, HEADER_TEXT } from './constants';
 
 const factory = new DOMElementCreator();
 
@@ -44,7 +45,7 @@ export default class Result {
 		this.resultHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-header',
-			child: 'Result'
+			child: HEADER_TEXT
 		});
 		return this.resultHeader;
 	}
@@ -59,7 +60,7 @@ export default class Result {
 		this.iDontKnowHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__list-header-name',
-			child: ['I don\'t know ', this.iDontKnowLabel]
+			child: [WRONG_LIST_NAME, this.iDontKnowLabel]
 		});
 
 		this.iDontKnowList = this.wrongAnswers.map(obj => {
@@ -103,7 +104,7 @@ export default class Result {
 		this.iKnowHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__list-header-name',
-			child: ['I know ', this.iKnowLabel]
+			child: [RIGHT_LIST_NAME, this.iKnowLabel]
 		});
 
 		this.iKnowList = this.rightAnswers.map(obj => {
@@ -154,7 +155,7 @@ export default class Result {
 				elem: TAGS.AUDIO,
 				classes: 'result__audio-sentences',
 				attr: [{ 'data-word': obj.word }, {
-					'src': `https://raw.githubusercontent.com/garza0/rslang-data/master/${this.sentenceResult ? obj.audioExample : obj.audio}`
+					'src': `${AUDIO_SRC} ${this.sentenceResult ? obj.audioExample : obj.audio}`
 				}]
 			});
 			return audioEl;
