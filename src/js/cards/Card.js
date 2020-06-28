@@ -366,7 +366,7 @@ export default class Card {
 
 		showAnswerButton.addEventListener('click', () => {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
-			textInput.value = textWord.innerText;
+			textInput.value = textWord.dataset.word;
 		});
 
 		continueButton.addEventListener('click', () => {

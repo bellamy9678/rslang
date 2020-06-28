@@ -1,7 +1,7 @@
 $color-again : #be1f1d;
-$color-hard : #ff6334;
+$color-hard : #eb8b35;
 $color-good : #ffb400;
-$color-easy : #bdd002;
+$color-easy : #4f8901;
 
 $color-letter-correct : #3e5336;
 $color-letter-warning : #eb8b35;
@@ -41,8 +41,8 @@ $color-letter-error : #be1f1d;
     box-sizing: border-box;
 
 		&_transcription {
-			background: #ec615b;
-			color: #ffffff;
+			background: $color-primary;
+			color: $color-text-light;
 			width: 100%;
 			text-align: center;
 			padding: 1rem 0 0;
@@ -53,8 +53,8 @@ $color-letter-error : #be1f1d;
 			@include font($size: 2.5rem, $weight: 500);
 			line-height: 3.5rem;
 			text-transform: uppercase;
-			background: #ec615b;
-			color: #ffffff;
+			background: $color-primary;
+			color: $color-text-light;
 			width: 100%;
 			text-align: center;
 			padding: 1rem;
@@ -94,7 +94,7 @@ $color-letter-error : #be1f1d;
 
 		&_letter {
 			transition: all 0.5s ease;
-			color : $color-overlay;
+			color : darken($color: $color-border, $amount: 20);
 
 			&.correct {
 				color : $color-letter-correct;

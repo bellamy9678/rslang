@@ -82,5 +82,6 @@ export default class InputHandler {
 
 	showError() {
 		this.countErrors();
+		this.clearInput();
 	}
 }

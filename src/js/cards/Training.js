@@ -38,7 +38,6 @@ function correctAnswerHandler() {
 	globalState.increasePosition();
 	globalState.updateCard();
 	input();
-	showTranslate();
 	checkDifficulty();
 }
 
@@ -49,7 +48,6 @@ function errorAnswerHandler() {
 		showTranslate();
 	}
 	globalState.inputHandler.showError();
-	globalState.inputHandler.clearInput();
 }
 
 function againHandler() {
