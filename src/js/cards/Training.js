@@ -4,6 +4,7 @@ import {
 	INPUT_WIDTH_UNIT,
 	DISPLAY_NONE_CLASS,
 	HIDDEN_CLASS,
+	FADE_CLASS,
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import TrainState from './TrainState';
@@ -36,9 +37,14 @@ function showTranslate() {
 function correctAnswerHandler() {
 	globalState.wasError = false;
 	globalState.increasePosition();
-	globalState.updateCard();
-	input();
+	document.querySelector('.card').classList.add(FADE_CLASS);
 	checkDifficulty();
+
+	setTimeout(() => {
+		globalState.updateCard();
+		document.querySelector('.card').classList.remove(FADE_CLASS);
+		input();
+	}, 500);
 }
 
 function errorAnswerHandler() {

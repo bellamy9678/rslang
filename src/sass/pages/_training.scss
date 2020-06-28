@@ -20,6 +20,17 @@ $color-letter-error : #be1f1d;
 	box-shadow: $color-overlay 0 0 3rem;
 	padding-bottom: 2rem;
 
+	transition: opacity 0.5s ease-in;
+	opacity: 1;
+
+	& *::selection {
+		background: $color-border;
+	}
+
+	&_fade {
+		opacity: 0;
+	}
+
 	&__image {
 		width: 100%;
 		display: flex;
@@ -61,6 +72,11 @@ $color-letter-error : #be1f1d;
 			box-sizing: border-box;
 		}
 
+		&_example {
+			@include font($size: 2.5rem);
+			text-align: center;
+		}
+
 		&_container {
 			display: inline-block;
 			position: relative;
@@ -74,7 +90,7 @@ $color-letter-error : #be1f1d;
 			left: 0;
 			top: 0;
 			bottom: 0;
-			padding: 1px 2px;
+			padding: 1px 1px 0px 5px;
 			line-height: 3rem;
 		}
 
@@ -84,8 +100,9 @@ $color-letter-error : #be1f1d;
 			border-radius: 5px;
 			background-color: #0000;
 			height: 3rem;
-			font-size: 1.6rem;
+			@include font($size: 2.5rem);
 			position: relative;
+			padding-left: 5px;
 
 			&:focus {
 				outline: none;
@@ -121,13 +138,20 @@ $color-letter-error : #be1f1d;
     flex-direction: row;
 		justify-content: space-between;
     padding: 0 1.5rem;
-    box-sizing: border-box;
+		box-sizing: border-box;
+		user-select: none;
 
 		.button {
 			border: 0;
 			margin: 0.5rem;
 			text-transform: lowercase;
 			transition: all 0.3s ease;
+			width: 100%;
+
+			@include media-mobile() {
+				flex: 1 0 40%;
+			}
+
 		}
 
 		&__complexity {
@@ -150,6 +174,10 @@ $color-letter-error : #be1f1d;
 				background-color : $color-easy;
 				color: $color-text-light;
 			}
+
+			@include media-mobile() {
+				flex-wrap: wrap;
+			}
 		}
 
 		&__dictionary {
@@ -160,7 +188,7 @@ $color-letter-error : #be1f1d;
 		}
 
 		&__answer {
-			& .button:hover {
+			& .button:not([disabled]):hover {
 				background-color : $color-primary;
 				color: $color-text-light;
 			}

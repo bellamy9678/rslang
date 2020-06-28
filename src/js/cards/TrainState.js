@@ -4,7 +4,8 @@ import {
 	START_LEVEL,
 	START_PAGE,
 	INPUT_ID,
-	EMPTY_STRING
+	EMPTY_STRING,
+	FADE_CLASS
 } from './CardConstants';
 import getNewWordsArray from './GetWord';
 import Card from './Card';
@@ -51,6 +52,7 @@ export default class TrainState {
 			return cardElem;
 		});
 		this.addCard();
+		this.container.querySelector('.card').classList.remove(FADE_CLASS);
 	}
 
 	finishGame() {

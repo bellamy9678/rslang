@@ -2,6 +2,7 @@ export const TEXT_EXAMPLE_OPEN_TAG = '<b>';
 export const TEXT_EXAMPLE_CLOSE_TAG = '</b>';
 export const TEXT_MEANING_OPEN_TAG = '<i>';
 export const TEXT_MEANING_CLOSE_TAG = '</i>';
+export const TEXT_DEFAULT_HIDDEN = '[...]';
 
 export const EMPTY_STRING = '';
 export const INPUT_ID = 'word';
@@ -22,3 +23,4 @@ export const WARNING_CLASS_LETTER = 'error-small';
 export const ERROR_CLASS_LETTER = 'error-big';
 export const CORRECT_CLASS_LETTER = 'correct';
 export const INVISIBLE_LETTER = 'invisible';
+export const FADE_CLASS = 'card_fade';

@@ -6,6 +6,8 @@ import {
 	TEXT_MEANING_CLOSE_TAG,
 	INPUT_ID,
 	HIDDEN_CLASS,
+	FADE_CLASS,
+	TEXT_DEFAULT_HIDDEN
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -51,14 +53,15 @@ export default class Card {
 
 		const textWord = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__meaning_word',
+			classes: ['card__meaning_word'],
 			id: 'meaning-part-word',
-			child: textMeaningObject.word,
+			attr: {'data-secret-word' : textMeaningObject.word},
+			child: TEXT_DEFAULT_HIDDEN,
 		});
 
 		const textMeaning = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', 'hidden-answer-inside'],
 			id: 'text-meaning',
 			child: [textPartLeft, textWord, textPartRight],
 		});
@@ -124,7 +127,7 @@ export default class Card {
 
 		const textExampleTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', HIDDEN_CLASS],
+			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS],
 			id: 'text-example-translate',
 			child: this.card.exampleTranslate,
 		});
@@ -133,7 +136,7 @@ export default class Card {
 
 		const textMeaningTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', HIDDEN_CLASS],
+			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS],
 			id: 'text-meaning-translate',
 			child: this.card.textMeaningTranslate,
 		});
@@ -174,7 +177,7 @@ export default class Card {
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
 			id: INPUT_ID,
-			attr: [{ type: 'text' }, { name: 'input' } ],
+			attr: [{ type: 'text' }, { name: 'input' }],
 			name: INPUT_ID,
 		});
 
@@ -186,7 +189,7 @@ export default class Card {
 
 		const textExample = fab.create({
 			elem: TAGS.DIV,
-			classes: 'card__text',
+			classes: ['card__text', 'card__text_example'],
 			id: 'text-example',
 			child: [textPartLeft, inputContainer, textPartRight],
 		});
@@ -243,7 +246,12 @@ export default class Card {
 
 		const buttonGroupComplexity = fab.create({
 			elem: TAGS.DIV,
-			classes: ['button-group', 'button-group__complexity' ],
+			classes: [
+				'button-group',
+				'button-group__complexity',
+				FADE_CLASS,
+				HIDDEN_CLASS,
+			],
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
@@ -298,12 +306,8 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'continue-button',
-			attr: [{ type: 'button' }],
+			attr: [{ type: 'button', disabled: true }],
 			child: BUTTONS_WORDS.continue,
-		});
-
-		const continueButtonEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
-			detail: currentWord,
 		});
 
 		const showAnswerButtonEvent = new CustomEvent(
@@ -337,7 +341,7 @@ export default class Card {
 
 		const card = fab.create({
 			elem: TAGS.FORM,
-			classes: 'card',
+			classes: ['card', FADE_CLASS],
 			id: 'card-container',
 			child: [
 				imgContainer,
@@ -359,6 +363,14 @@ export default class Card {
 
 		const submitEvent = new Event('submit');
 
+		textInput.addEventListener('input', () => {
+			if (textInput.value.length > 0) {
+				continueButton.disabled = false;
+			} else {
+				continueButton.disabled = true;
+			}
+		});
+
 		card.addEventListener('submit', (event) => {
 			event.preventDefault();
 			this.isCorrectReaction();
@@ -367,10 +379,13 @@ export default class Card {
 		showAnswerButton.addEventListener('click', () => {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
+			buttonGroupComplexity.classList.remove(FADE_CLASS);
+			textExampleTranslate.classList.remove(FADE_CLASS);
+			textMeaningTranslate.classList.remove(FADE_CLASS);
+			textMeaning.classList.remove('hidden-answer-inside');
 		});
 
 		continueButton.addEventListener('click', () => {
-			continueButton.dispatchEvent(continueButtonEvent);
 			card.dispatchEvent(submitEvent);
 		});
 
@@ -386,7 +401,7 @@ export default class Card {
 
 		againButton.addEventListener('click', () => {
 			againButton.dispatchEvent(againButtonEvent);
-			document.dispatchEvent(againButtonEvent);
+			// document.dispatchEvent(againButtonEvent);
 			card.dispatchEvent(submitEvent);
 		});
 

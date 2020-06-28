@@ -33,7 +33,6 @@ export default class InputHandler {
 	}
 
 	countErrors() {
-
 		const answer = InputHandler.makeStringComparable(
 			this.wordHidden.dataset.word
 		);
