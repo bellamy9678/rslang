@@ -66,11 +66,18 @@ const checkNewDateNow = function checkNewDateNow() {
 	const lastUpdate = localStorage.getItem(user)
 		? new Date(+localStorage.getItem(user))
 		: new Date(DEFAULT_SETTINGS.VERY_OLD_DATE);
-	const expected = lastUpdate.setHours(lastUpdate.getHours() + 24);
+	const expected = lastUpdate.setHours(
+		lastUpdate.getHours() + DEFAULT_SETTINGS.NEXT_LEARNING_HOURS
+	);
 
 	if (now > expected) {
 		const checkDate = new Date();
-		checkDate.setHours(4, 0, 0, 0);
+		checkDate.setHours(
+			DEFAULT_SETTINGS.HOURS,
+			DEFAULT_SETTINGS.MINUTES,
+			DEFAULT_SETTINGS.SECONDS,
+			DEFAULT_SETTINGS.MILLISECONDS
+		);
 		localStorage.setItem(user, checkDate);
 		this.newDay();
 	}
