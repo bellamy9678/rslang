@@ -12,6 +12,7 @@ import Cookie from './Cookie';
 import StartPage from './StartPage';
 import CreateUser from './CreateUser';
 import Authorization from './Authorization';
+import InvalidUserData from './InvalidUserData';
 
 export default class Header {
 
@@ -55,7 +56,7 @@ export default class Header {
 		signInButton.addEventListener('click', () => {
 			const authorizationForm = document.querySelector('.authorization');
 			if (!authorizationForm) {
-				this.showForm();
+				this.createForm();
 			} else {
 				this.hideForm();
 			}
@@ -211,7 +212,12 @@ export default class Header {
 			const userName = document.getElementById('user__name').value;
 			const userPassword = document.getElementById('user__password').value;
 			const userData = new Authorization(userName, userPassword);
-			Authorization.authorizeUser(userData).then(() => this.hideForm()).then(() => this.create());
+			Authorization.authorizeUser(userData)
+				.then(() => this.hideForm(), () => {
+					InvalidUserData.showInvalidInput();
+					InvalidUserData.showErrorMessage();
+				})
+				.then(() => this.create(), null);
 		});
 
 		const authorizeForm = newElem.create({
@@ -232,18 +238,22 @@ export default class Header {
 			child: wrapper,
 		});
 
-		return modalWindow;
-	}
+		const overlay = newElem.create({
+			elem: TAGS.DIV,
+			classes: ['overlay'],
+		});
 
-	static showForm() {
-		const authorizeForm = this.createForm();
+		const app = document.querySelector('.app');
 		const header = document.querySelector('.header');
-		header.after(authorizeForm);
+		header.after(modalWindow);
+		app.append(overlay);
 	}
 
 	static hideForm() {
 		const authorizeForm = document.querySelector('.authorization');
+		const overlay = document.querySelector('.overlay');
 		authorizeForm.remove();
+		overlay.remove();
 	}
 
 	static create() {

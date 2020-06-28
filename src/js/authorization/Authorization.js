@@ -16,7 +16,6 @@ export default class Authorization {
 	}
 
 	static async authorizeUser(userData) {
-		console.log('Authorization -> authorizeUser -> userData', userData);
 		try {
 			const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
 				method: 'POST',
@@ -33,7 +32,7 @@ export default class Authorization {
 			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
 			WelcomePage.showWelcomePage(userName);
 		} catch (error) {
-			console.error('This user is not found');
+			throw new Error(error.message);
 		}
 	}
 }

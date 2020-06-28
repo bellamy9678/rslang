@@ -8,6 +8,11 @@ import {
 } from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
+import {
+	TEXT,
+	AUTHORIZATION_FORM,
+	AUTHORIZATION_BUTTONS
+} from '../shared/Text';
 
 export default class CreateUser {
 
@@ -48,7 +53,7 @@ export default class CreateUser {
 		const title = newElem.create({
 			elem: TAGS.H2,
 			classes: 'account-creation__title',
-			child: ['Create your free account'],
+			child: TEXT.createUserPage.title,
 		});
 
 		const signInLink = newElem.create({
@@ -57,13 +62,13 @@ export default class CreateUser {
 			attr: [{
 				href: '#',
 			}, ],
-			child: ['Sing in'],
+			child: AUTHORIZATION_BUTTONS.signIn,
 		});
 
 		const text = newElem.create({
 			elem: TAGS.P,
 			classes: 'account-creation__text',
-			child: ['Do you already have an account? ', signInLink],
+			child: [TEXT.createUserPage.text, signInLink]
 		});
 
 		const userNameLabel = newElem.create({
@@ -71,7 +76,7 @@ export default class CreateUser {
 			attr: [{
 				for: 'new-user__name',
 			}, ],
-			child: ['Username'],
+			child: AUTHORIZATION_FORM.userName,
 		});
 
 		const userNameInput = newElem.create({
@@ -92,7 +97,7 @@ export default class CreateUser {
 			attr: [{
 				for: 'new-user__password',
 			}, ],
-			child: ['Password'],
+			child: AUTHORIZATION_FORM.password,
 		});
 
 		const userPasswordInput = newElem.create({
@@ -112,7 +117,7 @@ export default class CreateUser {
 		const createUserButton = newElem.create({
 			elem: TAGS.BUTTON,
 			classes: ['button', 'button_colored', 'account-creation__button'],
-			child: ['Sign Up'],
+			child: AUTHORIZATION_BUTTONS.signUp,
 		});
 
 		const form = newElem.create({
@@ -143,8 +148,5 @@ export default class CreateUser {
 
 		app.firstChild.remove();
 		app.append(page);
-
-		const createAccountButton = document.querySelector('.account-creation__button');
-		createAccountButton.addEventListener('click', console.log('click'));
 	}
 }

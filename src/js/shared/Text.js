@@ -29,6 +29,10 @@ export const TEXT = {
 		title: 'Upgrate your english with us!',
 		text: 'Dolore ea elit do Lorem aliquip. Do sint laboris Lorem quis incididunt non velit. Aute adipisicing quis et elit.',
 	},
+	createUserPage: {
+		title: 'Create your free account',
+		text: 'Do you already have an account? ',
+	},
 	welcomPage: {
 		title: {
 			leftPath: 'Hello, ',
@@ -41,4 +45,8 @@ export const AUTHORIZATION_FORM = {
 	userName: 'Username',
 	password: 'Password',
 	button: 'Go',
+};
+
+export const ERROR_MESSAGES = {
+	authorizationErrorMessage: 'Invalid username or password. Please, try again!',
 };
