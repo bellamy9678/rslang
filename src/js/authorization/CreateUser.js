@@ -8,10 +8,6 @@ import {
 } from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
-// import Header from './Authorization';
-// import Authorization from './Authorization';
-import WelcomePage from './WelcomePage';
-// import Cookie from './Cookie';
 
 export default class CreateUser {
 
@@ -28,25 +24,18 @@ export default class CreateUser {
 		return PASSWORD_REG_EXP.test(password);
 	}
 
-	static async createUser(event) {
-		event.preventDefault();
-		const user = this.getNewUserData();
-		if (this.checkPassword(user.password)) {
-			console.log('createUser -> user', user);
+	static async createUser(userData) {
+		if (this.checkPassword(userData.password)) {
 			const rawResponse = await fetch(`${API}${URL_PARAM_USER}`, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(user),
+				body: JSON.stringify(userData),
 			});
 			const content = await rawResponse.json();
 			console.log(content);
-			// Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
-			// Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
-			// Header.create();
-			WelcomePage.showWelcomePage();
 		} else {
 			console.error('Password is not valid');
 		}
@@ -126,11 +115,6 @@ export default class CreateUser {
 			child: ['Sign Up'],
 		});
 
-		createUserButton.addEventListener('click', (event) => {
-			console.log('create');
-			this.createUser(event);
-		});
-
 		const form = newElem.create({
 			elem: TAGS.FORM,
 			classes: 'account-creation__form',
@@ -163,5 +147,4 @@ export default class CreateUser {
 		const createAccountButton = document.querySelector('.account-creation__button');
 		createAccountButton.addEventListener('click', console.log('click'));
 	}
-
 }

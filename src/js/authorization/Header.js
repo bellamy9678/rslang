@@ -63,6 +63,12 @@ export default class Header {
 
 		signUpButton.addEventListener('click', () => {
 			CreateUser.showCreateAccountPage();
+			const createUserButton = document.querySelector('.account-creation__button');
+			createUserButton.addEventListener('click', (event) => {
+				event.preventDefault();
+				const userData = CreateUser.getNewUserData();
+				CreateUser.createUser(userData).then(() => Authorization.authorizeUser(userData)).then(() => this.create());
+			});
 		});
 	}
 
@@ -202,7 +208,10 @@ export default class Header {
 
 		authorizeButton.addEventListener('click', (event) => {
 			event.preventDefault();
-			Authorization.authorizeUser().then(() => this.hideForm()).then(() => this.create());
+			const userName = document.getElementById('user__name').value;
+			const userPassword = document.getElementById('user__password').value;
+			const userData = new Authorization(userName, userPassword);
+			Authorization.authorizeUser(userData).then(() => this.hideForm()).then(() => this.create());
 		});
 
 		const authorizeForm = newElem.create({

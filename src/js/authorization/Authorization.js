@@ -10,21 +10,13 @@ import WelcomePage from './WelcomePage';
 import Cookie from './Cookie';
 
 export default class Authorization {
-	constructor() {
-		this.email = `${Authorization.getUserData().name}${EMAIL_PART}`;
-		this.password = Authorization.getUserData().password;
+	constructor(name, password) {
+		this.email = `${name}${EMAIL_PART}`;
+		this.password = password;
 	}
 
-	static getUserData() {
-		const userName = document.getElementById('user__name');
-		const userPassword = document.getElementById('user__password');
-		return {
-			name: userName.value,
-			password: userPassword.value,
-		};
-	}
-
-	static async authorizeUser() {
+	static async authorizeUser(userData) {
+		console.log('Authorization -> authorizeUser -> userData', userData);
 		try {
 			const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
 				method: 'POST',
@@ -32,13 +24,11 @@ export default class Authorization {
 					Accept: 'application/json',
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(new Authorization),
+				body: JSON.stringify(userData),
 			});
 			const content = await rawResponse.json();
 			console.log(content);
-			const userData = new Authorization();
 			const userName = userData.email.replace(`${EMAIL_PART}`, '');
-			console.log('Authorization -> userName', userName);
 			Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
 			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
 			WelcomePage.showWelcomePage(userName);
