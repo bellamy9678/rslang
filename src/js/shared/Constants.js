@@ -8,3 +8,5 @@ export const URL_PARAM_WORDS = 'words?';
 export const URL_PARAM_GROUP = 'group=';
 export const URL_PARAM_PAGE = 'page=';
 export const URL_ET = '&';
+
+

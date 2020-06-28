@@ -26,10 +26,15 @@ export default class GameField {
 			classes: ['controls__btn-continue', 'hide'],
 			child: 'Continue'
 		});
+		this.resultsBtn = factory.create({
+			elem: 'button',
+			classes: ['controls__btn-results', 'hide'],
+			child: 'Results'
+		});
 		this.gameControlsContainer = factory.create({
 			elem: 'div',
 			classes: 'game__controls',
-			child: [this.iDontKnowBtn, this.checkBtn, this.continueBtn]
+			child: [this.iDontKnowBtn, this.checkBtn, this.continueBtn, this.resultsBtn]
 		});
 
 		this.board = factory.create({

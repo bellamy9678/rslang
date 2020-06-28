@@ -1,6 +1,9 @@
-import { appContainer, rounds } from './constants';
+import { appContainer, rounds, levels } from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
+import Result from './Result';
+
+const result = new Result();
 
 const factory = new DOMElementCreator();
 
@@ -21,6 +24,10 @@ export default class Game {
 		this.numberOfPuzzles = 0;
 		this.activePuzzleContainers = [];
 		this.cypher = [];
+		this.wrongAnswersResult = [];
+		this.rightAnswersResult = [];
+		this.currentLineSentenceObj = {};
+		this.resultForCurrentLineState = false;
 	}
 
 	addEventListenersToControls() {
@@ -34,6 +41,7 @@ export default class Game {
 		this.iDontKnowBtn = document.querySelector('.controls__btn-i-dont-know');
 		this.checkBtn = document.querySelector('.controls__btn-check');
 		this.continueBtn = document.querySelector('.controls__btn-continue');
+		this.resulsBtn = document.querySelector('.controls__btn-results');
 		this.levelSeletBtn = document.querySelector('.controls__dropdown-level');
 		this.roundSelectBtn = document.querySelector('.controls__dropdown-round');
 
@@ -44,6 +52,7 @@ export default class Game {
 		this.checkBtn.addEventListener('click', () => { this.checkBtnHandler(); });
 		this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler(); });
 		this.continueBtn.addEventListener('click', () => { this.continueBtnHandler(); });
+		this.resulsBtn.addEventListener('click', () => { this.resultsBtnHandler(); });
 		this.levelSeletBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
 		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
 		this.showBgImageBtn.addEventListener('click', () => { this.showHideBackground(); });
@@ -71,8 +80,9 @@ export default class Game {
 		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
 		this.iDontKnowBtn.classList.remove('hide');
 		this.continueBtn.classList.add('hide');
-		if (this.currentLine < rounds) {
+		if (this.currentRound < rounds) {
 			this.addLine();
+			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
 			this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
 			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
 			this.getSentences(this.sentencesJSON, this.currentLine);
@@ -83,19 +93,69 @@ export default class Game {
 			this.currentRound += 1;
 			this.roundSelectBtn.selectedIndex = this.currentRound;
 			this.cypher = [];
+			this.wrongAnswersResult = [];
+			this.rightAnswersResult = [];
+			this.resulsBtn.classList.add('hide');
 			this.getData();
 		}
 	}
 
+	loadNextRound() {
+		if (this.currentRound + 2 < rounds) {
+			console.log(this.currentRound, rounds);
+
+		} else {
+			this.loadNextLevel();
+		}
+	}
+
+	loadNextLevel() {
+		if (this.currentLevel + 2 < levels) {
+			console.log(this.currentLevel, levels);
+
+		} else {
+			console.log('finish');
+
+		}
+	}
+
+	resultsBtnHandler() {
+		const resultContinueBtn = factory.create({
+			elem: 'button',
+			classes: ['result__button', 'result__continue-btn'],
+			child: 'Continue'
+		});
+
+		resultContinueBtn.addEventListener('click', () => {
+			result.closeResultWindow();
+			this.loadCustomLevelAndRound(this.currentLevel, this.currentRound + 1);
+		});
+
+		result.showResult({
+			rightAnswersSentences: this.rightAnswersResult,
+			wrongAnswersSentences: this.wrongAnswersResult,
+			buttons: [resultContinueBtn]
+		});
+	}
+
 	loadCustomLevelAndRound(level, round) {
 		this.cypher = [];
+		this.wrongAnswersResult = [];
+		this.rightAnswersResult = [];
 		this.currentLevel = level;
 		this.currentRound = round;
 		this.clearField();
 		this.clearPuzzlesContainer();
 		this.addLine();
 		this.currentLine = 0;
+		this.iDontKnowBtn.classList.remove('hide');
+		this.checkBtn.classList.add('hide');
+		this.continueBtn.classList.add('hide');
+		this.resulsBtn.classList.add('hide');
 		this.getData(level, round);
+		this.roundSelectBtn.selectedIndex = this.currentRound;
+
+
 	}
 
 	clearPuzzlesContainer() {
@@ -113,6 +173,10 @@ export default class Game {
 	}
 
 	iDontKnowBtnHandler() {
+		if (this.resultForCurrentLineState === false) {
+			this.wrongAnswersResult.push(this.currentLineSentenceObj);
+			this.resultForCurrentLineState = true;
+		}
 		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
 		const puzzleNodes = [];
 		this.activePuzzles.forEach(puzzle => {
@@ -122,6 +186,9 @@ export default class Game {
 		this.iDontKnowBtn.classList.add('hide');
 		this.continueBtn.classList.remove('hide');
 		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
+		if (this.currentLine === rounds - 1) {
+			this.resulsBtn.classList.remove('hide');
+		}
 	}
 
 	sortPuzzles(puzzles) {
@@ -188,7 +255,7 @@ export default class Game {
 	}
 
 	handleJson(myJson) {
-		console.log(myJson);
+		console.log(myJson, this.currentLevel, this.currentRound);
 		this.sentencesJSON = myJson;
 		this.sentenceTranslate = myJson[0].textExampleTranslate;
 		this.sentenceAudioLink = myJson[0].audioExample;
@@ -208,6 +275,7 @@ export default class Game {
 			classes: ['board__line', 'board__line--active'],
 			attr: { 'data-line': this.currentLine }
 		});
+		this.resultForCurrentLineState = false;
 		this.board.append(this.boardLine);
 	}
 
@@ -271,6 +339,7 @@ export default class Game {
 		const gridTemplate = new Array(puzzles.length).fill('auto');
 		puzzlesContainer.style.gridTemplateColumns = gridTemplate.join(' ');
 		puzzlesContainer.append(...puzzles);
+		this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
 		this.setGridTemplateForPuzzlesContainer();
 
 		this.addPuzzleContainersToLine(puzzles.length);
@@ -407,16 +476,32 @@ export default class Game {
 		}
 		if (this.rightAnswers === currentLineElements.length) {
 			this.allIsRightHandler();
+		} else {
+			this.notAllIsRigthHandler();
+		}
+	}
+
+	notAllIsRigthHandler() {
+		if (this.resultForCurrentLineState === false) {
+			this.wrongAnswersResult.push(this.currentLineSentenceObj);
+			this.resultForCurrentLineState = true;
 		}
 	}
 
 	allIsRightHandler() {
+		if (this.resultForCurrentLineState === false) {
+			this.rightAnswersResult.push(this.currentLineSentenceObj);
+			this.resultForCurrentLineState = true;
+		}
 		if (this.currentLine < 10) {
 			this.iDontKnowBtn.classList.add('hide');
 			this.checkBtn.classList.add('hide');
 			this.continueBtn.classList.remove('hide');
-		} else {
-			console.log('round end');
+			if (this.currentLine === rounds - 1) {
+				this.resulsBtn.classList.remove('hide');
+			} else {
+				console.log('round end');
+			}
 		}
 	}
 
