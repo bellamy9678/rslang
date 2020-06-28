@@ -1,7 +1,7 @@
 import DEFAULT_SETTINGS from './Constants';
-import CookieMonster from '../utils/CookieMonster';
+import SettingsController from './SettingsController';
 
-const biscuit = new CookieMonster();
+const controller = new SettingsController();
 
 const amountCardsToShow = function amountCardsToShow() {
 	return this.maxCards - this.cardsShowed;
@@ -59,13 +59,13 @@ const makeZeroProgress = function makeZeroProgress() {
 
 const checkNewDateNow = function checkNewDateNow() {
 	const now = new Date();
-	const user = sessionStorage.getItem('RSLangUser')
-		? sessionStorage.getItem('RSLangUser')
-		: 'MIKA';
-	sessionStorage.setItem('RSLangUser', user);
+	const user = sessionStorage.getItem(DEFAULT_SETTINGS.FIELD_USERNAME)
+		? sessionStorage.getItem(DEFAULT_SETTINGS.FIELD_USERNAME)
+		: DEFAULT_SETTINGS.DEFAULT_USERNAME;
+	sessionStorage.setItem(DEFAULT_SETTINGS.FIELD_USERNAME, user);
 	const lastUpdate = localStorage.getItem(user)
 		? new Date(+localStorage.getItem(user))
-		: new Date('01.01.2000 00:04');
+		: new Date(DEFAULT_SETTINGS.VERY_OLD_DATE);
 	const expected = lastUpdate.setHours(lastUpdate.getHours() + 24);
 
 	if (now > expected) {
@@ -76,22 +76,26 @@ const checkNewDateNow = function checkNewDateNow() {
 	}
 };
 
-const saveParametersInCookie = function saveParametersInCookie() {
+const saveParametersNow = function saveParametersNow() {
 	const toSaveObj = {
 		progress: this.progress,
 		maxNewWords: this.maxNewWords,
 		newWordsShowed: this.newWordsShowed,
 		maxCards: this.maxCards,
 		cardsShowed: this.cardsShowed,
+		translate: this.translate,
+		meaning: this.meaning,
+		example: this.example,
+		transcription: this.transcription,
+		picture: this.picture,
+		deleteButton: this.deleteButton,
+		difficultButton: this.difficultButton,
+		complexityButtons: this.complexityButtons,
+		playWord: this.playWord,
+		playMeaning: this.playMeaning,
+		playExample: this.playExample,
 	};
-	const saveJSON = JSON.stringify(toSaveObj);
-	const name = sessionStorage.getItem('RSLangUser');
-	const options = {
-		'max-age': 31536000,
-	};
-
-	console.log('toSaveObj', toSaveObj);
-	biscuit.setCookie(name, saveJSON, options);
+	controller.save(toSaveObj);
 };
 
 export default class Settings {
@@ -102,14 +106,10 @@ export default class Settings {
 	static init() {
 		const returnedSettingsObject = {};
 		const progressCopy = {};
-		const isOldUser = !!biscuit.getCookie(sessionStorage.getItem('RSLangUser'));
+		const isOldUser = !!controller.getUserName();
 
 		if (isOldUser) {
-			const userCookie = biscuit.getCookie(
-				sessionStorage.getItem('RSLangUser')
-			);
-			const userSettings = JSON.parse(userCookie);
-
+			const userSettings = controller.download();
 			returnedSettingsObject.maxNewWords = userSettings.maxNewWords;
 			returnedSettingsObject.newWordsShowed = userSettings.newWordsShowed;
 			returnedSettingsObject.maxCards = userSettings.maxCards;
@@ -131,6 +131,7 @@ export default class Settings {
 			returnedSettingsObject.newWordsShowed = DEFAULT_SETTINGS.NEW_WORDS_SHOWED;
 			returnedSettingsObject.maxCards = DEFAULT_SETTINGS.MAX_CARDS;
 			returnedSettingsObject.cardsShowed = DEFAULT_SETTINGS.CARDS_SHOWED;
+
 			progressCopy.group = DEFAULT_SETTINGS.PROGRESS.GROUP;
 			progressCopy.page = DEFAULT_SETTINGS.PROGRESS.PAGE;
 			returnedSettingsObject.progress = progressCopy;
@@ -158,7 +159,7 @@ export default class Settings {
 		returnedSettingsObject.incProgress = increaseProgress;
 		returnedSettingsObject.newDay = makeZeroProgress;
 		returnedSettingsObject.checkNewDate = checkNewDateNow;
-		returnedSettingsObject.saveParameters = saveParametersInCookie;
+		returnedSettingsObject.saveParameters = saveParametersNow;
 
 		returnedSettingsObject.checkNewDate();
 		returnedSettingsObject.saveParameters();
