@@ -1,6 +1,5 @@
 import { HIDDEN_CLASS, DISPLAY_NONE_CLASS } from './CardConstants';
 
-
 export default class InputHandler {
 	constructor () {
 		this.example = document.querySelector('#text-example-translate');

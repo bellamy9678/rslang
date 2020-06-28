@@ -243,7 +243,7 @@ export default class Card {
 
 		const buttonGroupComplexity = fab.create({
 			elem: TAGS.DIV,
-			classes: ['button-group', 'button-group__complexity', /* HIDDEN_CLASS */ ],
+			classes: ['button-group', 'button-group__complexity' ],
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
@@ -408,7 +408,7 @@ export default class Card {
 			this.elem.querySelector('#word').value
 		);
 		const answer = Card.makeStringComparable(
-			this.elem.querySelector('#example-part-word').innerText
+			this.elem.querySelector('#example-part-word').dataset.word
 		);
 		return value === answer;
 	}

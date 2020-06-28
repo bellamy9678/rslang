@@ -46,8 +46,8 @@ function errorAnswerHandler() {
 	if (!globalState.wasError) {
 		globalState.wasError = true;
 		globalState.addCurrentWordToEnd();
+		showTranslate();
 	}
-	showTranslate();
 	globalState.inputHandler.showError();
 	globalState.inputHandler.clearInput();
 }
