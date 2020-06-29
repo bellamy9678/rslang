@@ -7,11 +7,10 @@ import {
 	FADE_CLASS,
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
-import TrainState from './TrainState';
+import GlobalState from './GlobalState';
 import InputHandler from './InputHandler';
-import TranslateHandler from './TranslateHandler';
 
-const globalState = new TrainState();
+const globalState = new GlobalState();
 
 function input() {
 	globalState.inputHandler = new InputHandler();
@@ -29,9 +28,8 @@ function checkDifficulty() {
 }
 
 function showTranslate() {
-	const translateHandler = new TranslateHandler();
-	translateHandler.checkMeaning();
-	translateHandler.checkExample();
+	// translateHandler.checkMeaning();
+	// translateHandler.checkExample();
 }
 
 function correctAnswerHandler() {
@@ -43,7 +41,7 @@ function correctAnswerHandler() {
 	setTimeout(() => {
 		globalState.updateCard();
 		document.querySelector('.card').classList.remove(FADE_CLASS);
-		input();
+		input(); // в конце ошибка
 	}, 500);
 }
 

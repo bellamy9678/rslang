@@ -24,3 +24,23 @@ export const ERROR_CLASS_LETTER = 'error-big';
 export const CORRECT_CLASS_LETTER = 'correct';
 export const INVISIBLE_LETTER = 'invisible';
 export const FADE_CLASS = 'card_fade';
+
+export const SETTINGS_OBJECT_DEFAULT = {
+	transcription : true,
+	picture : true,
+	translate : true,
+
+	meaning : true,
+	meaningTranslate: true,
+	playMeaning : true,
+
+	example : true,
+	exampleTranslate: true,
+	playExample : true,
+	playWord : true,
+
+	showAnswerButton : true,
+	deleteButton : true,
+	difficultButton : true,
+	complexityButtons : true,
+};

@@ -5,12 +5,14 @@ import {
 	START_PAGE,
 	INPUT_ID,
 	EMPTY_STRING,
-	FADE_CLASS
+	FADE_CLASS,
+	SETTINGS_OBJECT_DEFAULT
 } from './CardConstants';
 import getNewWordsArray from './GetWord';
 import Card from './Card';
+import SettingsChecker from './SettingsChecker';
 
-export default class TrainState {
+export default class GlobalState {
 	constructor() {
 		this.currentPosition = DEFAULT_POSITION;
 		this.container = CARD_CONTAINER;
@@ -26,18 +28,20 @@ export default class TrainState {
 	}
 
 	addCard() {
-		if (this.currentPosition < this.cards.length) {
-			this.container.append(this.getCurrentCard());
-			this.container.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
-			this.container.querySelector(`#${INPUT_ID}`).focus();
-		} else {
-			this.finishGame();
-		}
+		this.container.append(this.getCurrentCard());
+		this.container.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
+		this.container.querySelector(`#${INPUT_ID}`).focus();
+		const translateHandler = new SettingsChecker();
+		translateHandler.checkAllSettings(SETTINGS_OBJECT_DEFAULT);
 	}
 
 	updateCard() {
 		this.removeCard();
-		this.addCard();
+		if (this.currentPosition < this.cards.length) {
+			this.addCard();
+		} else {
+			this.finishGame();
+		}
 	}
 
 	getCurrentCard() {
@@ -57,7 +61,6 @@ export default class TrainState {
 
 	finishGame() {
 		alert('Все карточки на сегодня!');
-		this.removeCard();
 		delete this.currentPosition;
 		delete this.words;
 		delete this.cards;

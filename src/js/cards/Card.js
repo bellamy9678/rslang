@@ -7,7 +7,8 @@ import {
 	INPUT_ID,
 	HIDDEN_CLASS,
 	FADE_CLASS,
-	TEXT_DEFAULT_HIDDEN
+	TEXT_DEFAULT_HIDDEN,
+	DISPLAY_NONE_CLASS
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -39,14 +40,14 @@ export default class Card {
 
 		const textPartLeft = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__meaning_part',
+			classes: ['card__meaning_part'],
 			id: 'meaning-part-first',
 			child: textMeaningObject.first,
 		});
 
 		const textPartRight = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__meaning_part',
+			classes: ['card__meaning_part'],
 			id: 'meaning-part-last',
 			child: textMeaningObject.last,
 		});
@@ -61,7 +62,7 @@ export default class Card {
 
 		const textMeaning = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', 'hidden-answer-inside'],
+			classes: ['card__text', 'hidden-answer-inside', DISPLAY_NONE_CLASS],
 			id: 'text-meaning',
 			child: [textPartLeft, textWord, textPartRight],
 		});
@@ -102,6 +103,7 @@ export default class Card {
 		const img = fab.create({
 			elem: TAGS.IMG,
 			id: 'image-card-example',
+			classes: DISPLAY_NONE_CLASS,
 			attr: [{ src: this.card.image }, { alt: this.card.word }],
 		});
 
@@ -113,21 +115,21 @@ export default class Card {
 
 		const transcription = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', 'card__text_transcription'],
+			classes: ['card__text', 'card__text_transcription', DISPLAY_NONE_CLASS],
 			id: 'transcription',
 			child: this.card.transcription,
 		});
 
 		const wordTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', 'card__text_translate'],
+			classes: ['card__text', 'card__text_translate', DISPLAY_NONE_CLASS],
 			id: 'word-translate',
 			child: this.card.translate,
 		});
 
 		const textExampleTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS],
+			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS, DISPLAY_NONE_CLASS],
 			id: 'text-example-translate',
 			child: this.card.exampleTranslate,
 		});
@@ -136,7 +138,7 @@ export default class Card {
 
 		const textMeaningTranslate = fab.create({
 			elem: TAGS.DIV,
-			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS],
+			classes: ['card__text', HIDDEN_CLASS, FADE_CLASS, DISPLAY_NONE_CLASS],
 			id: 'text-meaning-translate',
 			child: this.card.textMeaningTranslate,
 		});
@@ -145,14 +147,14 @@ export default class Card {
 
 		const textPartLeft = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__text_part',
+			classes: ['card__text_part', DISPLAY_NONE_CLASS],
 			id: 'example-part-first',
 			child: textExampleObject.first,
 		});
 
 		const textPartRight = fab.create({
 			elem: TAGS.SPAN,
-			classes: 'card__text_part',
+			classes: ['card__text_part', DISPLAY_NONE_CLASS],
 			id: 'example-part-last',
 			child: textExampleObject.last,
 		});
@@ -246,18 +248,20 @@ export default class Card {
 
 		const buttonGroupComplexity = fab.create({
 			elem: TAGS.DIV,
+			id: 'complexity-buttons',
 			classes: [
 				'button-group',
 				'button-group__complexity',
 				FADE_CLASS,
 				HIDDEN_CLASS,
+				DISPLAY_NONE_CLASS,
 			],
 			child: [againButton, hardButton, goodButton, easyButton],
 		});
 
 		const addToDifficultButton = fab.create({
 			elem: TAGS.BUTTON,
-			classes: 'button',
+			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'add-to-difficult-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.addToDifficult,
@@ -273,7 +277,7 @@ export default class Card {
 
 		const deleteFromDictionaryButton = fab.create({
 			elem: TAGS.BUTTON,
-			classes: 'button',
+			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'delete-from-dictionary-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.deleteFromDictionary,
@@ -296,7 +300,7 @@ export default class Card {
 
 		const showAnswerButton = fab.create({
 			elem: TAGS.BUTTON,
-			classes: 'button',
+			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'show-answer-button',
 			attr: [{ type: 'button' }],
 			child: BUTTONS_WORDS.showAnswer,
@@ -324,17 +328,20 @@ export default class Card {
 		const audioWord = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
+			classes : DISPLAY_NONE_CLASS,
 			attr: [{ src: this.card.audio }],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
+			classes : DISPLAY_NONE_CLASS,
 			id: 'audio-meaning',
 			attr: [{ src: this.card.meaningAudio }],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
+			classes : DISPLAY_NONE_CLASS,
 			id: 'audio-example',
 			attr: [{ src: this.card.exampleAudio }],
 		});
