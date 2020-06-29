@@ -6,11 +6,12 @@ import {
 	INPUT_ID,
 	EMPTY_STRING,
 	FADE_CLASS,
-	SETTINGS_OBJECT_DEFAULT
+	SETTINGS_OBJECT_DEFAULT,
 } from './CardConstants';
 import getNewWordsArray from './GetWord';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
+import WORDS_EVENTS from '../observer/WordsEvents';
 
 export default class GlobalState {
 	constructor() {
@@ -40,7 +41,8 @@ export default class GlobalState {
 		if (this.currentPosition < this.cards.length) {
 			this.addCard();
 		} else {
-			this.finishGame();
+			const gameOverEvent = new CustomEvent(WORDS_EVENTS.TRAINING_GAME_OVER, {});
+			CARD_CONTAINER.dispatchEvent(gameOverEvent);
 		}
 	}
 

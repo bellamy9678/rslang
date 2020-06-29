@@ -37,11 +37,9 @@ export default class InputHandler {
 			this.wordHidden.dataset.word
 		);
 		const answerLetters = answer.split(EMPTY_STRING);
-
 		const input = InputHandler.makeStringComparable(this.element.value);
 		const inputLetters = input.split(EMPTY_STRING);
 		const maxErrors = Math.round(answerLetters.length / 2);
-
 		const errorsPositions = [];
 
 		answerLetters.forEach((letter, position) => {
@@ -68,10 +66,6 @@ export default class InputHandler {
 			}
 		});
 
-		setTimeout(() => {
-			this.clearAllSpans();
-		}, 2000);
-
 		this.element.addEventListener('input', () => {
 			this.wordHidden.children.forEach((childNode) => {
 				childNode.classList.add(INVISIBLE_LETTER);
@@ -82,5 +76,10 @@ export default class InputHandler {
 	showError() {
 		this.countErrors();
 		this.clearInput();
+		setTimeout(() => {
+			if(this.element.value.length === 0) {
+				this.clearAllSpans();
+			}
+		}, 1500);
 	}
 }

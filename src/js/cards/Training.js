@@ -1,6 +1,5 @@
 import {
 	CARD_CONTAINER,
-	INPUT_WIDTH_CORRECTION,
 	INPUT_WIDTH_UNIT,
 	DISPLAY_NONE_CLASS,
 	HIDDEN_CLASS,
@@ -14,10 +13,7 @@ const globalState = new GlobalState();
 
 function input() {
 	globalState.inputHandler = new InputHandler();
-	globalState.inputHandler.element.style.width = `${
-		globalState.inputHandler.wordHidden.offsetWidth + INPUT_WIDTH_CORRECTION
-	}${INPUT_WIDTH_UNIT}`;
-	globalState.inputHandler.wordHidden.classList.add(HIDDEN_CLASS);
+	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth}${INPUT_WIDTH_UNIT}`;
 }
 
 function checkDifficulty() {
@@ -40,8 +36,12 @@ function correctAnswerHandler() {
 
 	setTimeout(() => {
 		globalState.updateCard();
-		document.querySelector('.card').classList.remove(FADE_CLASS);
-		input(); // в конце ошибка
+		if (globalState.currentPosition < globalState.cards.length) {
+			document.querySelector('.card').classList.remove(FADE_CLASS);
+			input();
+		}else {
+			globalState.finishGame();
+		}
 	}, 500);
 }
 
@@ -73,11 +73,15 @@ function removeListeners() {
 		WORDS_EVENTS.INCORRECT_ANSWER,
 		errorAnswerHandler
 	);
+	document.removeEventListener(WORDS_EVENTS.PUSHED_AGAIN, againHandler);
 }
 
-CARD_CONTAINER.addEventListener(WORDS_EVENTS.TRAINING_GAME_OVER, () =>
-	removeListeners()
-);
+function gameOverCallback() {
+	removeListeners();
+	CARD_CONTAINER.removeEventListener(WORDS_EVENTS.TRAINING_GAME_OVER, gameOverCallback);
+}
+
+CARD_CONTAINER.addEventListener(WORDS_EVENTS.TRAINING_GAME_OVER, gameOverCallback);
 
 export default async function training() {
 	await globalState.initGlobalState();
