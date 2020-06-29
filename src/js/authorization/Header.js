@@ -10,7 +10,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import Cookie from './Cookie';
 import StartPage from './StartPage';
-import CreateUser from './CreateUser';
+import NewUser from './NewUser';
 import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 
@@ -63,15 +63,19 @@ export default class Header {
 		});
 
 		signUpButton.addEventListener('click', () => {
-			CreateUser.showCreateAccountPage();
+			NewUser.showCreateAccountPage();
 			const createUserButton = document.querySelector('.account-creation__button');
 			createUserButton.addEventListener('click', (event) => {
 				event.preventDefault();
-				const userData = CreateUser.getNewUserData();
+				const userData = NewUser.getNewUserData();
 				const newUserName = document.getElementById('new-user__name');
-				CreateUser.createUser(userData)
-					.then(() => Authorization.authorizeUser(userData), () => InvalidUserData.showInvalidInput([newUserName]))
-					.then(() => this.create(), () => null);
+				try {
+					NewUser.createUser(userData)
+						.then(() => Authorization.authorizeUser(userData), () => InvalidUserData.showInvalidInput([newUserName]))
+						.then(() => this.create(), () => null);
+				} catch (error) {
+					console.error(error.message);
+				}
 			});
 		});
 	}
@@ -220,7 +224,7 @@ export default class Header {
 					InvalidUserData.showInvalidInput([userName, userPassword]);
 					InvalidUserData.showAuthorisationErrorMessage();
 				})
-				.then(() => this.create(), null);
+				.then(() => this.create());
 		});
 
 		const authorizeForm = newElem.create({
