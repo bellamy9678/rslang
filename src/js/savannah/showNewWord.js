@@ -56,7 +56,7 @@ export default async function showNewWord() {
     })
   });
 
-  document.addEventListener('keydown', (event) => {
+  /* document.addEventListener('keydown', (event) => {
     switch (event.keyCode) {
       case 49:
         checkAnswer(document.querySelector('.answers:nth-child(1)'));
@@ -72,5 +72,5 @@ export default async function showNewWord() {
         break;
       default:
     }
-  })
+  }) */
 }

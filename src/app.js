@@ -1,6 +1,9 @@
-import generateElements from './js/generateElements'
+import './sass/style.scss'
+import generateElements from './js/savannah/generateElements'
+import createMainPage from './js/savannah/createMainPage'
 
 window.onload = () => {
+  createMainPage();
   const startingButton = document.querySelector('.starting-button');
   const infoContainer = document.querySelector('.info');
   const main = document.querySelector('MAIN');
