@@ -68,7 +68,10 @@ export default class Header {
 			createUserButton.addEventListener('click', (event) => {
 				event.preventDefault();
 				const userData = CreateUser.getNewUserData();
-				CreateUser.createUser(userData).then(() => Authorization.authorizeUser(userData)).then(() => this.create());
+				const newUserName = document.getElementById('new-user__name');
+				CreateUser.createUser(userData)
+					.then(() => Authorization.authorizeUser(userData), () => InvalidUserData.showInvalidInput([newUserName]))
+					.then(() => this.create(), () => null);
 			});
 		});
 	}
@@ -209,13 +212,13 @@ export default class Header {
 
 		authorizeButton.addEventListener('click', (event) => {
 			event.preventDefault();
-			const userName = document.getElementById('user__name').value;
-			const userPassword = document.getElementById('user__password').value;
-			const userData = new Authorization(userName, userPassword);
+			const userName = document.getElementById('user__name');
+			const userPassword = document.getElementById('user__password');
+			const userData = new Authorization(userName.value, userPassword.value);
 			Authorization.authorizeUser(userData)
 				.then(() => this.hideForm(), () => {
-					InvalidUserData.showInvalidInput();
-					InvalidUserData.showErrorMessage();
+					InvalidUserData.showInvalidInput([userName, userPassword]);
+					InvalidUserData.showAuthorisationErrorMessage();
 				})
 				.then(() => this.create(), null);
 		});

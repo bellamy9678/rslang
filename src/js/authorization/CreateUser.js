@@ -1,5 +1,6 @@
 import {
 	EMAIL_PART,
+	USERNAME_REG_EXP,
 	PASSWORD_REG_EXP
 } from './Constants';
 import {
@@ -11,8 +12,10 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT,
 	AUTHORIZATION_FORM,
-	AUTHORIZATION_BUTTONS
+	AUTHORIZATION_BUTTONS,
+	ERROR_MESSAGES
 } from '../shared/Text';
+import InvalidUserData from './InvalidUserData';
 
 export default class CreateUser {
 
@@ -20,9 +23,14 @@ export default class CreateUser {
 		const emailInput = document.getElementById('new-user__name');
 		const passwordInput = document.getElementById('new-user__password');
 		return {
+			name: emailInput.value,
 			email: `${emailInput.value}${EMAIL_PART}`,
 			password: passwordInput.value,
 		};
+	}
+
+	static checkUsername(username) {
+		return USERNAME_REG_EXP.test(username);
 	}
 
 	static checkPassword(password) {
@@ -30,19 +38,36 @@ export default class CreateUser {
 	}
 
 	static async createUser(userData) {
-		if (this.checkPassword(userData.password)) {
-			const rawResponse = await fetch(`${API}${URL_PARAM_USER}`, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(userData),
-			});
-			const content = await rawResponse.json();
-			console.log(content);
-		} else {
-			console.error('Password is not valid');
+		let rawResponse;
+		const newUserName = document.getElementById('new-user__name');
+		const newUserPassword = document.getElementById('new-user__password');
+		try {
+			if (this.checkUsername(userData.name)) {
+				InvalidUserData.showInvalidInput([newUserName]);
+				throw new Error(ERROR_MESSAGES.invalidUsername);
+			} else if (!this.checkPassword(userData.password)) {
+				InvalidUserData.showInvalidInput([newUserPassword]);
+				throw new Error(ERROR_MESSAGES.invalidPassword);
+			} else {
+				try {
+					rawResponse = await fetch(`${API}${URL_PARAM_USER}`, {
+						method: 'POST',
+						headers: {
+							Accept: 'application/json',
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(userData),
+					});
+					const content = await rawResponse.json();
+					console.log(content);
+				} catch (error) {
+					InvalidUserData.showInvalidInput([newUserName, newUserPassword]);
+					throw new Error(ERROR_MESSAGES.existingUser);
+				}
+			}
+		} catch (error) {
+			InvalidUserData.showErrorMessage(error.message);
+			throw new Error(error.message);
 		}
 	}
 

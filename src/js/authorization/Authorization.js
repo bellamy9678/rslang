@@ -16,15 +16,15 @@ export default class Authorization {
 	}
 
 	static async authorizeUser(userData) {
+		const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(userData),
+		});
 		try {
-			const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(userData),
-			});
 			const content = await rawResponse.json();
 			console.log(content);
 			const userName = userData.email.replace(`${EMAIL_PART}`, '');
@@ -32,6 +32,7 @@ export default class Authorization {
 			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
 			WelcomePage.showWelcomePage(userName);
 		} catch (error) {
+			console.log(rawResponse.status);
 			throw new Error(error.message);
 		}
 	}

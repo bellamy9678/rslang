@@ -1,33 +1,41 @@
 import {
 	ERROR_MESSAGES
 } from '../shared/Text';
-
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
 
 export default class InvalidUserData {
-	static showInvalidInput() {
-		const userName = document.getElementById('user__name');
-		const userPassword = document.getElementById('user__password');
-		const newUserName = document.getElementById('new-user__name');
-		const newUserPassword = document.getElementById('new-user__password');
-		const name = userName || newUserName;
-		name.classList.add('error__input');
-		const password = userPassword || newUserPassword;
-		password.classList.add('error__input');
+	static showInvalidInput(elements) {
+		elements.forEach(element => element.classList.add('error__input'));
 	}
 
-	static showErrorMessage() {
+	static createMessage(text) {
 		const newElem = new DOMElementCreator();
-		const message = newElem.create({
+		return newElem.create({
 			elem: TAGS.SPAN,
 			classes: 'error__message',
-			child: ERROR_MESSAGES.authorizationErrorMessage,
+			child: text,
 		});
+	}
 
+	static showAuthorisationErrorMessage() {
+		const message = this.createMessage(ERROR_MESSAGES.authorizationErrorMessage);
 		const authorizationForm = document.querySelector('.authorization__form');
-		if (!document.querySelector('.error__message')) {
+		const previousMessage = document.querySelector('.authorization__form > .error__message');
+		if (!previousMessage) {
 			authorizationForm.prepend(message);
+		}
+	}
+
+	static showErrorMessage(messageText) {
+		const message = this.createMessage(messageText);
+		const previousMessage = document.querySelector('.error__message');
+		const newUserPassword = document.getElementById('new-user__password');
+		if (!previousMessage) {
+			newUserPassword.after(message);
+		} else if (previousMessage.innerText !== message) {
+			previousMessage.remove();
+			newUserPassword.after(message);
 		}
 	}
 }

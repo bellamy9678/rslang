@@ -48,5 +48,9 @@ export const AUTHORIZATION_FORM = {
 };
 
 export const ERROR_MESSAGES = {
+	invalidUsername: 'Username is not valid.',
+	invalidPassword: 'The password must contain at least 8 characters, at least one lowercase letter, one uppercase letter, one number and one special character from + -_ @ $!% *? & #.,;: [] {}',
 	authorizationErrorMessage: 'Invalid username or password. Please, try again!',
+	existingUser: 'User with this name already exists.',
+	default: 'Something went wrong.',
 };
