@@ -1,4 +1,4 @@
-import { appContainer, rounds, levels } from './constants';
+import { appContainer, rounds, levels, lines } from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from './Result';
@@ -42,7 +42,7 @@ export default class Game {
 		this.checkBtn = document.querySelector('.controls__btn-check');
 		this.continueBtn = document.querySelector('.controls__btn-continue');
 		this.resulsBtn = document.querySelector('.controls__btn-results');
-		this.levelSeletBtn = document.querySelector('.controls__dropdown-level');
+		this.levelSelectBtn = document.querySelector('.controls__dropdown-level');
 		this.roundSelectBtn = document.querySelector('.controls__dropdown-round');
 
 		this.autoListeningBtn.addEventListener('click', () => { this.autoListeningBtnHandler(); });
@@ -53,7 +53,7 @@ export default class Game {
 		this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler(); });
 		this.continueBtn.addEventListener('click', () => { this.continueBtnHandler(); });
 		this.resulsBtn.addEventListener('click', () => { this.resultsBtnHandler(); });
-		this.levelSeletBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
+		this.levelSelectBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
 		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
 		this.showBgImageBtn.addEventListener('click', () => { this.showHideBackground(); });
 	}
@@ -80,13 +80,19 @@ export default class Game {
 		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
 		this.iDontKnowBtn.classList.remove('hide');
 		this.continueBtn.classList.add('hide');
-		if (this.currentRound < rounds) {
+		if (this.currentLine < lines) {
 			this.addLine();
 			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
 			this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
 			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
 			this.getSentences(this.sentencesJSON, this.currentLine);
 		} else {
+			this.loadNextRound();
+		}
+	}
+
+	loadNextRound() {
+		if (this.currentRound + 1 < rounds) {
 			this.clearField();
 			this.addLine();
 			this.currentLine = 0;
@@ -96,22 +102,28 @@ export default class Game {
 			this.wrongAnswersResult = [];
 			this.rightAnswersResult = [];
 			this.resulsBtn.classList.add('hide');
+			this.continueBtn.classList.add('hide');
 			this.getData();
-		}
-	}
-
-	loadNextRound() {
-		if (this.currentRound + 2 < rounds) {
-			console.log(this.currentRound, rounds);
-
+			this.iDontKnowBtn.classList.remove('hide');
 		} else {
 			this.loadNextLevel();
 		}
 	}
 
 	loadNextLevel() {
-		if (this.currentLevel + 2 < levels) {
-			console.log(this.currentLevel, levels);
+		if (this.currentLevel + 1 < levels) {
+			this.clearField();
+			this.addLine();
+			this.currentLine = 0;
+			this.currentRound = 0;
+			this.currentLevel += 1;
+			this.roundSelectBtn.selectedIndex = this.currentRound;
+			this.levelSelectBtn.selectedIndex = this.currentLevel;
+			this.cypher = [];
+			this.wrongAnswersResult = [];
+			this.rightAnswersResult = [];
+			this.resulsBtn.classList.add('hide');
+			this.getData();
 
 		} else {
 			console.log('finish');
@@ -128,7 +140,8 @@ export default class Game {
 
 		resultContinueBtn.addEventListener('click', () => {
 			result.closeResultWindow();
-			this.loadCustomLevelAndRound(this.currentLevel, this.currentRound + 1);
+			this.loadNextRound();
+			// this.loadCustomLevelAndRound(this.currentLevel, this.currentRound + 1);
 		});
 
 		result.showResult({
