@@ -349,11 +349,11 @@ export default class Game {
 
 	appendPuzzlesToContainer(puzzles) {
 		const puzzlesContainer = document.querySelector('.game__puzzles');
-		const gridTemplate = new Array(puzzles.length).fill('auto');
-		puzzlesContainer.style.gridTemplateColumns = gridTemplate.join(' ');
+		// const gridTemplate = new Array(puzzles.length).fill('auto');
+		// puzzlesContainer.style.gridTemplateColumns = gridTemplate.join(' ');
 		puzzlesContainer.append(...puzzles);
 		this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
-		this.setGridTemplateForPuzzlesContainer();
+		// this.setGridTemplateForPuzzlesContainer();
 
 		this.addPuzzleContainersToLine(puzzles.length);
 		this.dragAndDrop();
@@ -401,7 +401,7 @@ export default class Game {
 			const targetParent = event.target.closest('.game__puzzles') || event.target.closest('.board__line--active');
 			if (event.target.closest('.board__line--active')) {
 				const position = event.target.dataset.containerPosition;
-				this.changeGridTemplateForOneColumn(targetParent, position, selectedItemWidth);
+				// this.changeGridTemplateForOneColumn(targetParent, position, selectedItemWidth);
 				console.log(targetParent, position, selectedItemWidth);
 			}
 
@@ -461,7 +461,7 @@ export default class Game {
 	}
 
 	addPuzzleContainersToLine(numberOfPuzzles) {
-		this.gridTemplate = new Array(numberOfPuzzles).fill('auto');
+		// this.gridTemplate = new Array(numberOfPuzzles).fill('auto');
 		this.arrOfPuzzleContainer = [];
 		for (let i = 0; i < numberOfPuzzles; i += 1) {
 			this.arrOfPuzzleContainer.push(
@@ -472,7 +472,7 @@ export default class Game {
 				})
 			);
 		}
-		this.boardLine.style.gridTemplateColumns = this.gridTemplate.join(' ');
+		// this.boardLine.style.gridTemplateColumns = this.gridTemplate.join(' ');
 		this.boardLine.append(...this.arrOfPuzzleContainer);
 	}
 
@@ -599,26 +599,26 @@ export default class Game {
 		}
 	}
 
-	setGridTemplateForPuzzlesContainer() {
-		this.puzzlesContainer = document.querySelector('.game__puzzles');
-		const puzzlesInsideContainer = this.puzzlesContainer.querySelectorAll('div');
-		const puzzlesWidthArr = [];
-		puzzlesInsideContainer.forEach(puzzle => puzzlesWidthArr.push(puzzle.offsetWidth));
-		const puzzlesContainerTemplate = puzzlesWidthArr.map(width => `${width}px`);
-		this.puzzlesContainer.style.gridTemplateColumns = puzzlesContainerTemplate.join(' ');
-	}
+	// setGridTemplateForPuzzlesContainer() {
+	// 	this.puzzlesContainer = document.querySelector('.game__puzzles');
+	// 	const puzzlesInsideContainer = this.puzzlesContainer.querySelectorAll('div');
+	// 	const puzzlesWidthArr = [];
+	// 	puzzlesInsideContainer.forEach(puzzle => puzzlesWidthArr.push(puzzle.offsetWidth));
+	// 	const puzzlesContainerTemplate = puzzlesWidthArr.map(width => `${width}px`);
+	// 	this.puzzlesContainer.style.gridTemplateColumns = puzzlesContainerTemplate.join(' ');
+	// }
 
-	changeGridTemplateForOneColumn(element, position, width) {
-		console.log(element, +position, width);
+	// changeGridTemplateForOneColumn(element, position, width) {
+	// 	console.log(element, +position, width);
 
-		const elementGridTemplate = element.style.gridTemplateColumns.split(' ');
-		elementGridTemplate[+position] = `${width}px`;
-		const test = document.querySelector('.board__line--active');
-		test.style.gridTemplateColumns = elementGridTemplate.join(' ');
-		console.log(test, elementGridTemplate.join(' '));
+	// 	const elementGridTemplate = element.style.gridTemplateColumns.split(' ');
+	// 	elementGridTemplate[+position] = `${width}px`;
+	// 	const test = document.querySelector('.board__line--active');
+	// 	test.style.gridTemplateColumns = elementGridTemplate.join(' ');
+	// 	console.log(test, elementGridTemplate.join(' '));
 
 
-		this.nothing = false;
-	}
+	// 	this.nothing = false;
+	// }
 
 }
