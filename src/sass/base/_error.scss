@@ -1,6 +1,6 @@
 .error {
 	&__input {
-		border: solid 1px $color-primary;
+		border: solid 1px $color-primary !important;
 	}
 
 	&__message {
