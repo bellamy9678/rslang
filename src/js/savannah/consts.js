@@ -1,35 +1,35 @@
 const words = [
   {
     word: 'Cat',
-    translation: 'Кот'
+    wordTranslate: 'Кот'
   },
   {
     word: 'Dog',
-    translation: 'Собака'
+    wordTranslate: 'Собака'
   },
   {
     word: 'Pig',
-    translation: 'Свинья'
+    wordTranslate: 'Свинья'
   },
   {
     word: 'Mom',
-    translation: 'Мать'
+    wordTranslate: 'Мать'
   },
   {
     word: 'Dad',
-    translation: 'Отец'
+    wordTranslate: 'Отец'
   },
   {
     word: 'Brother',
-    translation: 'Брат'
+    wordTranslate: 'Брат'
   },
   {
     word: 'Spoon',
-    translation: 'Ложка'
+    wordTranslate: 'Ложка'
   },
   {
     word: 'Khife',
-    translation: 'Нож'
+    wordTranslate: 'Нож'
   },
 ];
 const arrayWithWords = [];

@@ -20,6 +20,6 @@ export default function moveWord() {
   allAnswers.forEach((item) => {
     item.addEventListener('click', () => {
       clearInterval(timer);
-    })
+    });
   });
 }

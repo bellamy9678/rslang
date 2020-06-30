@@ -26,6 +26,6 @@ export default function generateWordContainers(array, arrForRandom) {
     main.prepend(mainWordContainer);
     setTimeout(() => {
       mainWordContainer.style.visibility = 'visible';
-    }, 100)
+    }, 100);
     moveWord();
   }

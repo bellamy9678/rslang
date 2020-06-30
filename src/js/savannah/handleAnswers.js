@@ -7,7 +7,7 @@ function handleWrongAnswer(mainWord) {
   mainWordContainer.style.opacity = newOpacity;
   mainWordContainer.style.fontSize = newFontSize;
   allAnswers.forEach(answer => {
-    if (answer.textContent === mainWord.translation) {
+    if (answer.textContent === mainWord.wordTranslate) {
       answer.classList.add('right-answer__active');
     }
   });
@@ -29,4 +29,4 @@ function handleRightAnswer() {
   }, 900);
 }
 
-export {handleWrongAnswer, handleRightAnswer}
+export {handleWrongAnswer, handleRightAnswer};

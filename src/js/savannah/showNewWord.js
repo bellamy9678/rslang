@@ -37,7 +37,7 @@ export default async function showNewWord() {
   }, 50);
 
   function checkAnswer(choosenAnswer) {
-    if (choosenAnswer.textContent === mainWord.translation) {
+    if (choosenAnswer.textContent === mainWord.wordTranslate) {
       choosenAnswer.classList.add('right-answer__active');
       handleRightAnswer();
       setTimeout(() => {
@@ -56,7 +56,7 @@ export default async function showNewWord() {
     item.addEventListener('click', (event) => {
       const choosenAnswer = event.target;
       checkAnswer(choosenAnswer);
-    })
+    });
   });
 
   /* document.addEventListener('keydown', (event) => {

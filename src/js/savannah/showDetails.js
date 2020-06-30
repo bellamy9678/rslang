@@ -12,7 +12,7 @@ export function arrayRandElement(fullArray) {
   }
   fullArray.splice(0, fullArray.length);
   forTest.forEach(item => {
-    fullArray.push(item)
+    fullArray.push(item);
   });
 }
 export function createElements() {
@@ -27,7 +27,7 @@ export function createElements() {
     const wordTranslation = creator.create({
       elem: TAGS.P,
       classes: 'answer',
-      child: `${arrayWithWords[i].translation}`
+      child: `${arrayWithWords[i].wordTranslate}`
     });
     answersContainer.append(wordTranslation);
     main.append(answersContainer);
