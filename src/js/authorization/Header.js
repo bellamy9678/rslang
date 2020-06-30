@@ -71,7 +71,10 @@ export default class Header {
 				const newUserName = document.getElementById('new-user__name');
 				try {
 					NewUser.createUser(userData)
-						.then(() => Authorization.authorizeUser(userData), () => InvalidUserData.showInvalidInput([newUserName]))
+						.then(() => Authorization.authorizeUser({
+							email: userData.email,
+							password: userData.password
+						}), () => InvalidUserData.showInvalidInput([newUserName]))
 						.then(() => this.create(), () => null);
 				} catch (error) {
 					console.error(error.message);
