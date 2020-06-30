@@ -9,6 +9,7 @@ import {
 	FADE_CLASS,
 	TEXT_DEFAULT_HIDDEN,
 	DISPLAY_NONE_CLASS,
+	EMPTY_STRING,
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -370,7 +371,7 @@ export default class Card {
 		const submitEvent = new Event('submit');
 
 		textInput.addEventListener('input', () => {
-			if (textInput.value.length > 0) {
+			if (textInput.value.length > EMPTY_STRING.length) {
 				continueButton.disabled = false;
 			} else {
 				continueButton.disabled = true;

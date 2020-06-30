@@ -4,6 +4,9 @@ import {
 	DISPLAY_NONE_CLASS,
 	HIDDEN_CLASS,
 	FADE_CLASS,
+	NEXT_AUDIO_CORRECTION,
+	START_AUDIO_TIME,
+	FADE_DURATION
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
@@ -36,16 +39,20 @@ function showTranslate() {
 
 function playAudio(audioArr) {
 	const playQueue = [];
+	const firstAudioPosition = 0;
+
 	audioArr.forEach((audioElement) => {
 		if (!audioElement.classList.contains(DISPLAY_NONE_CLASS)) {
 			playQueue.push(audioElement);
 		}
 	});
-	for (let i = 0; i < playQueue.length - 1; i += 1) {
-		playQueue[i].addEventListener('ended', () => playQueue[i + 1].play());
+
+	for (let i = 0; i < playQueue.length - NEXT_AUDIO_CORRECTION; i += 1) {
+		playQueue[i].addEventListener('ended', () => playQueue[i + NEXT_AUDIO_CORRECTION].play());
 	}
-	if (playQueue.length > 0) {
-		playQueue[0].play();
+
+	if (playQueue[firstAudioPosition]) {
+		playQueue[firstAudioPosition].play();
 	}
 }
 
@@ -56,9 +63,9 @@ function stopAllAudio() {
 	currentCard.querySelector('#audio-example').pause();
 	currentCard.querySelector('#audio-meaning').pause();
 
-	currentCard.querySelector('#audio-word').currentTime = 0.0;
-	currentCard.querySelector('#audio-example').currentTime = 0.0;
-	currentCard.querySelector('#audio-meaning').currentTime = 0.0;
+	currentCard.querySelector('#audio-word').currentTime = START_AUDIO_TIME;
+	currentCard.querySelector('#audio-example').currentTime = START_AUDIO_TIME;
+	currentCard.querySelector('#audio-meaning').currentTime = START_AUDIO_TIME;
 }
 
 function checkAudio() {
@@ -87,7 +94,7 @@ function nextCard() {
 		} else {
 			globalState.finishGame();
 		}
-	}, 500);
+	}, FADE_DURATION);
 }
 
 function checkHiddenFields() {

@@ -5,7 +5,8 @@ import {
 	CORRECT_CLASS_LETTER,
 	DOM_POSITION_CORRECTION,
 	INVISIBLE_LETTER,
-	HIDDEN_CLASS
+	HIDDEN_CLASS,
+	ERROR_CORRECT_INPUT_TIMEOUT,
 } from './CardConstants';
 
 export default class InputHandler {
@@ -32,6 +33,10 @@ export default class InputHandler {
 		this.element.value = EMPTY_STRING;
 	}
 
+	static getMiddleInteger(number) {
+		return Math.round(number / 2);
+	}
+
 	countErrors() {
 		const answer = InputHandler.makeStringComparable(
 			this.wordHidden.dataset.word
@@ -39,7 +44,7 @@ export default class InputHandler {
 		const answerLetters = answer.split(EMPTY_STRING);
 		const input = InputHandler.makeStringComparable(this.element.value);
 		const inputLetters = input.split(EMPTY_STRING);
-		const maxErrors = Math.round(answerLetters.length / 2);
+		const maxErrors = InputHandler.getMiddleInteger(answerLetters.length);
 		const errorsPositions = [];
 
 		answerLetters.forEach((letter, position) => {
@@ -77,9 +82,9 @@ export default class InputHandler {
 		this.countErrors();
 		this.clearInput();
 		setTimeout(() => {
-			if(this.element.value.length === 0) {
+			if (this.element.value.length === EMPTY_STRING.length) {
 				this.clearAllSpans();
 			}
-		}, 1500);
+		}, ERROR_CORRECT_INPUT_TIMEOUT);
 	}
 }

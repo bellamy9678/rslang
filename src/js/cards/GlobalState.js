@@ -65,7 +65,7 @@ export default class GlobalState {
 	}
 
 	finishGame() {
-		alert('Все карточки на сегодня!');
+		console.log('Все карточки на сегодня!');
 		delete this.currentPosition;
 		delete this.words;
 		delete this.cards;

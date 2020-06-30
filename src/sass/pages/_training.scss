@@ -20,7 +20,7 @@ $color-letter-error : #be1f1d;
 	box-shadow: $color-overlay 0 0 3rem;
 	padding-bottom: 2rem;
 
-	transition: opacity 0.5s ease-in;
+	transition: opacity 0.3s ease-in;
 	opacity: 1;
 
 	& *::selection {
@@ -51,7 +51,7 @@ $color-letter-error : #be1f1d;
     padding: 0.5rem 2rem;
 		box-sizing: border-box;
 		opacity: 1;
-		transition: opacity 0.5s ease;
+		transition: opacity 0.3s ease;
 
 		&.card_fade {
 			opacity: 0;
@@ -118,7 +118,7 @@ $color-letter-error : #be1f1d;
 		}
 
 		&_letter {
-			transition: all 0.5s ease;
+			transition: all 0.3s ease;
 			color : darken($color: $color-border, $amount: 20);
 
 			&.correct {
@@ -149,7 +149,7 @@ $color-letter-error : #be1f1d;
 		box-sizing: border-box;
 		user-select: none;
 		opacity: 1;
-		transition: opacity 0.5s ease;
+		transition: opacity 0.3s ease;
 
 		&.card_fade {
 			opacity: 0;
