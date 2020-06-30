@@ -65,7 +65,7 @@ export default class GlobalState {
 	}
 
 	finishGame() {
-		console.log('Все карточки на сегодня!');
+		alert('Все карточки на сегодня!');
 		delete this.currentPosition;
 		delete this.words;
 		delete this.cards;
@@ -73,6 +73,9 @@ export default class GlobalState {
 	}
 
 	addCurrentWordToEnd() {
-		this.cards.push(this.getCurrentCard());
+		const clearCard = new Card(this.words[this.currentPosition]);
+		const cardElem = clearCard.create();
+		this.cards.push(cardElem);
+		this.words.push(this.words[this.currentPosition]);
 	}
 }

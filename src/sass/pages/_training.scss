@@ -57,6 +57,10 @@ $color-letter-error : #be1f1d;
 			opacity: 0;
 		}
 
+		&.none {
+			display: none;
+		}
+
 		&_transcription {
 			background: $color-primary;
 			color: $color-text-light;
@@ -149,6 +153,10 @@ $color-letter-error : #be1f1d;
 
 		&.card_fade {
 			opacity: 0;
+		}
+
+		&.none {
+			display: none;
 		}
 
 		.button {

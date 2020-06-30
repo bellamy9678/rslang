@@ -395,6 +395,8 @@ export default class Card {
 		});
 
 		continueButton.addEventListener('click', () => {
+			const continueButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_CONTINUE);
+			document.dispatchEvent(continueButtonEvent);
 			card.dispatchEvent(submitEvent);
 		});
 

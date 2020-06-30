@@ -97,15 +97,19 @@ function checkHiddenFields() {
 }
 
 function correctAnswerHandler() {
-	if (globalState.pushedContinue) {
+	if (
+		globalState.pushedContinue ||
+		document
+			.querySelector('#complexity-buttons')
+			.classList.contains(DISPLAY_NONE_CLASS)
+	) {
 		nextCard();
 		globalState.pushedContinue = false;
 	} else {
-		globalState.wasError = false;
-		globalState.pushedContinue = true;
 		checkHiddenFields();
 		checkAudio();
 	}
+	globalState.wasError = false;
 }
 
 function errorAnswerHandler() {
@@ -121,6 +125,8 @@ function errorAnswerHandler() {
 function showAnswerHandler() {
 	checkHiddenFields();
 	checkAudio();
+	globalState.addCurrentWordToEnd();
+	globalState.pushedContinue = true;
 }
 
 function complexityButtonsHandler() {
@@ -136,7 +142,13 @@ function againHandler() {
 	nextCard();
 }
 
+function continueHandler() {
+	globalState.pushedContinue = true;
+}
+
 function addListeners() {
+	document.addEventListener(WORDS_EVENTS.PUSHED_CONTINUE, continueHandler);
+
 	document.addEventListener(WORDS_EVENTS.CORRECT_ANSWER, correctAnswerHandler);
 	document.addEventListener(WORDS_EVENTS.INCORRECT_ANSWER, errorAnswerHandler);
 	document.addEventListener(WORDS_EVENTS.PUSHED_AGAIN, againHandler);
@@ -154,6 +166,8 @@ function addListeners() {
 }
 
 function removeListeners() {
+	document.removeEventListener(WORDS_EVENTS.PUSHED_CONTINUE, continueHandler);
+
 	document.removeEventListener(
 		WORDS_EVENTS.CORRECT_ANSWER,
 		correctAnswerHandler
