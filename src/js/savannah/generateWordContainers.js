@@ -1,12 +1,12 @@
-import DOMElementCreator from '../utils/DOMElementCreator'
+import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import {arrayWithWords} from './consts'
-import {arrayRandElement, defineNewWord, createElements}  from './showDetails'
-import moveWord from './moveWord'
+import {arrayWithWords} from './consts';
+import {arrayRandElement, defineNewWord, createElements}  from './showDetails';
+import moveWord from './moveWord';
 
 export default function generateWordContainers(array, arrForRandom) {
     const creator = new DOMElementCreator();
-    const main = document.querySelector('MAIN');
+    const main = document.querySelector('.info-wrapper');
     const mainWord = document.querySelector('.main-word');
     if (mainWord) {
       const wordIndent = '0px';

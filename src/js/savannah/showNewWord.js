@@ -1,7 +1,7 @@
-import fetchWords from './fetchWords'
-import {arrForUniqness, arrayWithWords, arrForRandFunc} from './consts'
-import generateWordContainers from './generateWordContainers'
-import {handleWrongAnswer, handleRightAnswer} from './handleAnswers'
+import fetchWords from './fetchWords';
+import {arrForUniqness, arrayWithWords, arrForRandFunc} from './consts';
+import generateWordContainers from './generateWordContainers';
+import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
 
 export default async function showNewWord() {
   if (arrForUniqness.length === 0) {

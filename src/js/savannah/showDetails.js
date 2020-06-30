@@ -1,5 +1,5 @@
-import {arrayWithWords, arrForUniqness} from './consts'
-import DOMElementCreator from '../utils/DOMElementCreator'
+import {arrayWithWords, arrForUniqness} from './consts';
+import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 // ПЕРЕНАЗВАТЬ МОУДЛЬ
 export function arrayRandElement(fullArray) {
@@ -18,7 +18,7 @@ export function arrayRandElement(fullArray) {
 export function createElements() {
   const creator = new DOMElementCreator();
   const numberOfWords = 4;
-  const main = document.querySelector('MAIN');
+  const main = document.querySelector('.info-wrapper');
   const answersContainer = creator.create({
     elem: TAGS.DIV,
     classes: 'answers'

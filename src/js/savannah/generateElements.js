@@ -1,4 +1,4 @@
-import showNewWord from './showNewWord'
+import showNewWord from './showNewWord';
 
 export default function generateElements() {
   const stone = document.querySelector('.stone-icon');
@@ -11,7 +11,7 @@ export default function generateElements() {
       loader.remove();
       hint.style.visibility = 'hidden';
       resolve();
-    }, 4000); 
+    }, 4000);
   })
   showDetails.then(() => { // отображает основную страницу игры
     healthPoints.style.visibility = 'visible';

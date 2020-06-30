@@ -3,7 +3,7 @@
   /*src: url("fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");*/
 }
 
-body {
+.app {
   margin: 0;
   color: white;
   background-color: rgba(82, 34, 208, 0.7);
@@ -14,14 +14,14 @@ body {
   flex-direction: column;
 }
 
-main {
+.info-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: auto;
 }
 
-header {
+.settings-wrapper {
   display: flex;
   justify-content: space-between;
 }
@@ -173,7 +173,7 @@ header {
   overflow: hidden;
 }
 
-footer {
+.hint-wrapper {
   position: relative;
   flex-shrink: 0;
 }

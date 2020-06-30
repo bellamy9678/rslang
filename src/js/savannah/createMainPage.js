@@ -1,11 +1,9 @@
-import DOMElementCreator from '../utils/DOMElementCreator'
+import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 
 export default function createMainPage() {
   const creator = new DOMElementCreator();
-  const header = document.querySelector('HEADER');
-  const footer = document.querySelector('FOOTER');
-  const main = document.querySelector('MAIN');
+  const app = document.querySelector('.app');
   const nameOfTheGame = 'САВАННА';
   const infoText = 'Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь.';
   const startButtonText = 'Начать';
@@ -144,7 +142,20 @@ export default function createMainPage() {
       alt: `${imgAlt}`
     }],
   });
-  header.append(volumeSettings, healthPoints, closingIcon);
-  main.append(infoContainer);
-  footer.append(hint, stoneIcon)
+  const settings = creator.create({
+    elem: TAGS.DIV,
+    classes: 'settings-wrapper',
+    child: [volumeSettings, healthPoints, closingIcon]
+  });
+  const iconHolder = creator.create({
+    elem: TAGS.DIV,
+    classes: 'hint-wrapper',
+    child: [hint, stoneIcon]
+  });
+  const infoWrapper = creator.create({
+    elem: TAGS.DIV,
+    classes: 'info-wrapper',
+    child: [infoContainer]
+  });
+  app.append(settings, infoWrapper, iconHolder);
 }
