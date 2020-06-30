@@ -1,10 +1,10 @@
-// const guessed = [];
-// const SpeechRecognition = window.webkitSpeechRecognition;
-// export default  { guessed};
-/* const renderGameResult = (item) => {
-  console.log( item);
-  return `<div class="res-word" data-audio="${item.dataset.myaudio}">    
-    <span class="res-writing">${item.dataset.wrt} &mdash; </span>
-    <span class="res-translation">${item.dataset.transl}</span>
-   </div>`;
-} */
+export const nameGame = 'Speak it';
+export const promoFirst = 'Click on the world to hear them sound';
+export const promoSecond = 'Click on the button and speak the words into the microphone';
+export const buttonText = 'Start Game';
+export const restartBtnText = 'Restart';
+export const speakBtnText = 'Speak, please';
+export const stopSpeakText = 'Stop speak';
+export const finishBtnText = 'Finish';
+export const returnBtnText = 'Return';
+export const newGameText = 'New Game';

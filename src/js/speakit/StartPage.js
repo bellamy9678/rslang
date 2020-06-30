@@ -1,24 +1,29 @@
-/* import DOMElementCreator from '../utils/DOMElementCreator';
+import DOMElementCreator from '../utils/DOMElementCreator';
 
 import TAGS from '../shared/Tags.json';
 
-const newElem = new DOMElementCreator();
+import { nameGame, promoFirst, promoSecond, buttonText } from './speakconst';
+
+
+export default function initStartPage() {
+  const newElem = new DOMElementCreator();
+
 const gameName = newElem.create({
   elem: TAGS.H1,
   classes: 'game-name',
-  child: ['Speak it']
+  child: nameGame,
 });
 
 const startP1 = newElem.create({
   elem: TAGS.P,
   classes: 'description_p',
-  child: ['Click on the world to hear them sound'],
+  child: promoFirst,
 });
 
 const startP2 = newElem.create({
   elem: TAGS.P,
   classes: 'description_p',
-  child: ['Click on the button and speak the words into the microphone'],
+  child: promoSecond,
 });
 
 const gameDescription = newElem.create({
@@ -30,13 +35,14 @@ const gameDescription = newElem.create({
 const gameButton = newElem.create({
   elem: TAGS.BUTTON,
   classes: 'start-btn',  
-  child: ['Start Game'],
+  child: buttonText,
 });
 
-const firstPage = newElem.create({
+const startPage = newElem.create({
   elem: TAGS.DIV,
   classes: 'start-page',  
   child: [gameName, gameDescription, gameButton],
 });
 
-export { startPage}; */
+return startPage;
+}
