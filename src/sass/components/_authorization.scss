@@ -1,4 +1,6 @@
 .authorization {
+	position: relative;
+	z-index: 100;
 
 	&__wrapper {
 		position: relative;
@@ -21,4 +23,14 @@
 	input {
 		@extend %text-input;
 	}
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 50;
+	background: $color-overlay;
 }

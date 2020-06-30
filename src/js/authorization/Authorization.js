@@ -1,52 +1,39 @@
-import { EMAIL_PART } from './Constants';
-import { API, URL_PARAM_SIGN_IN } from '../shared/Constants';
+import {
+	EMAIL_PART,
+	USER_COOKIE_NAME
+} from './Constants';
+import {
+	API,
+	URL_PARAM_SIGN_IN
+} from '../shared/Constants';
+import WelcomePage from './WelcomePage';
+import Cookie from './Cookie';
 
-import showWelcomePage from './WelcomePage';
-
-const signInButton = document.getElementById('sign-in');
-const autorizeForm = document.querySelector('.authorization');
-let userName;
-let userPassword;
-let authorizeButton;
-
-function Authorization() {
-	this.email = `${userName.value}${EMAIL_PART}`;
-	this.password = userPassword.value;
-}
-
-async function authorizeUser(obj) {
-	let user = obj;
-	console.log('authorizeUser -> user', user);
-	if (user === undefined) {
-		user = new Authorization();
+export default class Authorization {
+	constructor(name, password) {
+		this.email = `${name}${EMAIL_PART}`;
+		this.password = password;
 	}
-	const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(user),
-	});
 
-	const content = await rawResponse.json();
-	console.log(content);
-	document.cookie = `userToken=${content.token}`;
-	autorizeForm.classList.add('none');
-	const name = user.email.replace(`${EMAIL_PART}`, '');
-
-	showWelcomePage(name);
+	static async authorizeUser(userData) {
+		const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(userData),
+		});
+		try {
+			const content = await rawResponse.json();
+			console.log(content);
+			const userName = userData.email.replace(`${EMAIL_PART}`, '');
+			Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
+			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
+			WelcomePage.showWelcomePage(userName);
+		} catch (error) {
+			console.log(rawResponse.status);
+			throw new Error(error.message);
+		}
+	}
 }
-
-signInButton.addEventListener('click', () => {
-	autorizeForm.classList.toggle('none');
-	userName = document.querySelector('.authorization__username');
-	userPassword = document.querySelector('.authorization__password');
-	authorizeButton = document.querySelector('.authorization__button');
-	authorizeButton.addEventListener('click', (event) => {
-		event.preventDefault();
-		authorizeUser();
-	});
-});
-
-export default authorizeUser;

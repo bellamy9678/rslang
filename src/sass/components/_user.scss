@@ -1,0 +1,15 @@
+.user {
+	margin-left: 10px;
+
+	&__name {
+        @include font($size: 1.6rem, $weight: 600);
+        color: $color-additional;
+	}
+
+	&__icon {
+        @include img-size ($width: 1.6rem, $height: 2.1rem);
+        @include bg-cover("../../src/assets/images/icons/user.svg");
+        vertical-align: text-bottom;
+        margin-right: 5px;
+    }
+}
