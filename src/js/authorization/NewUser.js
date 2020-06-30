@@ -65,7 +65,7 @@ export default class NewUser {
 		}
 	}
 
-	static createUser(userData) {
+	static async createUser(userData) {
 		const newUserName = document.getElementById('new-user__name');
 		const newUserPassword = document.getElementById('new-user__password');
 		try {

@@ -16,6 +16,7 @@ export default class Authorization {
 	}
 
 	static async authorizeUser(userData) {
+		console.log('Authorization -> authorizeUser -> userData', userData);
 		const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
 			method: 'POST',
 			headers: {
