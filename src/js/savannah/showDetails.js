@@ -1,11 +1,8 @@
 import {arrayWithWords, arrForUniqness} from './consts'
 // ПЕРЕНАЗВАТЬ МОУДЛЬ
 export function arrayRandElement(fullArray) {
-  const forTest = [];
+  const forTest = fullArray.slice();
   const numberOfAnswers = 4;
-  fullArray.forEach(item => {
-    forTest.push(item)
-  });
   for (let i = 0; i < numberOfAnswers; i += 1) {
     const randomIndex = Math.floor(Math.random() * fullArray.length);
     arrayWithWords.push(fullArray[randomIndex]);

@@ -7,10 +7,11 @@ import moveWord from './moveWord'
 export default function generateWordContainers(array, arrForRandom) {
     const creator = new DOMElementCreator();
     const main = document.querySelector('MAIN');
-    if (document.querySelector('.main-word')) {
+    const mainWord = document.querySelector('.main-word');
+    if (mainWord) {
       const wordIndent = '0px';
-      document.querySelector('.main-word').style.top = wordIndent;
-      document.querySelector('.main-word').remove();
+      mainWord.style.top = wordIndent;
+      mainWord.remove();
     }
     arrayWithWords.length = 0;
     if (main.lastChild) main.removeChild(main.lastChild);
