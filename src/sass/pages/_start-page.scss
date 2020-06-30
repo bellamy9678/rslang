@@ -8,7 +8,7 @@
     }
 
     &__content {
-        padding-right: 60px;
+        padding-right: 30px;
         text-align: center;
     }
 
@@ -17,7 +17,7 @@
     }
 
     &__text {
-        @include font($size: 1.6rem);
+        @include font($size: 1.6rem, $height: 1.5);
     }
 
     &__image {
