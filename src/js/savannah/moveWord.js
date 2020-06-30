@@ -4,7 +4,10 @@ export default function moveWord() {
   const allAnswers = document.querySelectorAll('.answers p');
   const timer = setInterval(() => {
     const timePassed = Date.now() - start;
-    if (+(mainWordContainer.style.top.slice(0, 3)) >= 497) {
+    const startIndex = 0;
+    const finalIndex = 3;
+    const requiredMargin = 497;
+    if (+(mainWordContainer.style.top.slice(startIndex, finalIndex)) >= requiredMargin) {
       clearInterval(timer);
       return;
     }

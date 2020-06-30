@@ -2,8 +2,10 @@ function handleWrongAnswer(mainWord) {
   const mainWordContainer = document.querySelector('.main-word');
   const allAnswers = document.querySelectorAll('.answers p');
   const lifeIcon = document.querySelector('.health-point-scale IMG');
-  mainWordContainer.style.opacity = '0';
-  mainWordContainer.style.fontSize = '100px';
+  const newOpacity = '0';
+  const newFontSize = '100px';
+  mainWordContainer.style.opacity = newOpacity;
+  mainWordContainer.style.fontSize = newFontSize;
   allAnswers.forEach(answer => {
     if (answer.textContent === mainWord.translation) {
       answer.classList.add('right-answer__active');
@@ -18,10 +20,12 @@ function handleWrongAnswer(mainWord) {
 
 function handleRightAnswer() {
   const mainWordContainer = document.querySelector('.main-word');
+  const newWidth = '1px';
+  const whiteColor = 'white';
   mainWordContainer.style.marginLeft = `${mainWordContainer.style.width / 2}px`;
-  mainWordContainer.style.width = '1px';
+  mainWordContainer.style.width = newWidth;
   setTimeout(() => {
-    mainWordContainer.style.backgroundColor = 'white';
+    mainWordContainer.style.backgroundColor = whiteColor;
   }, 900);
 }
 

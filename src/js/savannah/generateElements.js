@@ -11,7 +11,7 @@ export default function generateElements() {
       loader.remove();
       hint.style.visibility = 'hidden';
       resolve();
-    }, 1000); // СМЕНИТЬ НА 4000
+    }, 4000); 
   })
   showDetails.then(() => { // отображает основную страницу игры
     healthPoints.style.visibility = 'visible';

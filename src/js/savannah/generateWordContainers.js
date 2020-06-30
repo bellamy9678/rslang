@@ -8,7 +8,8 @@ export default function generateWordContainers(array, arrForRandom) {
     const creator = new DOMElementCreator();
     const main = document.querySelector('MAIN');
     if (document.querySelector('.main-word')) {
-      document.querySelector('.main-word').style.top = '0px';
+      const wordIndent = '0px';
+      document.querySelector('.main-word').style.top = wordIndent;
       document.querySelector('.main-word').remove();
     }
     arrayWithWords.length = 0;

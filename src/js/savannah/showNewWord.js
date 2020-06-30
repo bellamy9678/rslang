@@ -24,7 +24,10 @@ export default async function showNewWord() {
   const mainWord = arrayWithWords.filter((elem) => elem.word === mainWordContainer.textContent)[0];
   const allAnswers = document.querySelectorAll('.answers p');
   const trackTheEnd = setInterval(() => {
-    if (+(mainWordContainer.style.top.slice(0, 3)) >= 496) {
+    const startIndex = 0;
+    const finalIndex = 3;
+    const requiredMargin = 496;
+    if (+(mainWordContainer.style.top.slice(startIndex, finalIndex)) >= requiredMargin) {
       handleWrongAnswer(mainWord);
       setTimeout(() => {
         showNewWord();
