@@ -16,18 +16,13 @@ export default function generateWordContainers(array, arrForRandom) {
     arrayWithWords.length = 0;
     if (main.lastChild) main.removeChild(main.lastChild);
     arrayRandElement(arrForRandom);
-    const answersContainer = creator.create({
-      elem: TAGS.DIV,
-      classes: 'answers'
-    });
     const mainWordContainer = creator.create({
       elem: TAGS.P,
       classes: 'main-word',
       child: [`${defineNewWord(array).word}`]
     });
-    answersContainer.innerHTML = createElements();
+    createElements();
     mainWordContainer.style.visibility = 'hidden';
-    main.append(answersContainer);
     main.prepend(mainWordContainer);
     setTimeout(() => {
       mainWordContainer.style.visibility = 'visible';

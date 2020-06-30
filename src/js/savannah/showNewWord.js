@@ -7,8 +7,12 @@ export default async function showNewWord() {
   if (arrForUniqness.length === 0) {
     await fetchWords().then(async function (resolve){
       const wordInfo = resolve;
-      arrForUniqness = wordInfo.slice();
-      arrForRandFunc = wordInfo.slice();
+      wordInfo.forEach(item => {
+        arrForUniqness.push(item);
+      });
+      wordInfo.forEach(item => {
+        arrForRandFunc.push(item);
+      });
       await generateWordContainers(wordInfo, arrForRandFunc);
     })
   } else if (arrForUniqness.length !== 0) {

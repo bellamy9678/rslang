@@ -1,4 +1,6 @@
 import {arrayWithWords, arrForUniqness} from './consts'
+import DOMElementCreator from '../utils/DOMElementCreator'
+import TAGS from '../shared/Tags.json';
 // ПЕРЕНАЗВАТЬ МОУДЛЬ
 export function arrayRandElement(fullArray) {
   const forTest = fullArray.slice();
@@ -14,10 +16,22 @@ export function arrayRandElement(fullArray) {
   });
 }
 export function createElements() {
-  return `<p>${arrayWithWords[0].translation}</p>
-          <p>${arrayWithWords[1].translation}</p>
-          <p>${arrayWithWords[2].translation}</p>
-          <p>${arrayWithWords[3].translation}</p>`;
+  const creator = new DOMElementCreator();
+  const numberOfWords = 4;
+  const main = document.querySelector('MAIN');
+  const answersContainer = creator.create({
+    elem: TAGS.DIV,
+    classes: 'answers'
+  });
+  for (let i = 0; i < numberOfWords; i+=1) {
+    const wordTranslation = creator.create({
+      elem: TAGS.P,
+      classes: 'answer',
+      child: `${arrayWithWords[i].translation}`
+    });
+    answersContainer.append(wordTranslation);
+    main.append(answersContainer);
+  }
 }
 export function defineNewWord(arrayOfAnswers) {
   const randomIndex = Math.floor(Math.random() * arrayWithWords.length);
