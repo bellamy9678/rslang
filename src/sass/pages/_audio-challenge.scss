@@ -1,0 +1,95 @@
+.main-wrapper {
+	position: relative;
+	display: flex;
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(#5222D0, #EC615B);
+	font-family: Monseratt;
+	color: white;
+}
+
+.sound-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 150px;
+	height: 150px;
+	border-radius: 75px;
+	background-color: #E5E5E5;
+}
+
+.sound-icon {
+	width: 75px;
+	height: 75px;
+	filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%);
+}
+
+.answers-wrapper {
+	display: flex;
+	margin-top: 150px;
+	width: 80vw;
+	justify-content: space-around;
+
+	&__answer {
+		font-size: 30px;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}
+
+.skip-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 150px;
+	height: 40px;
+	border: 1px solid white;
+	border-radius: 8px;
+	margin-top: 180px;
+	font-size: 20px;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.right-answer-wrapper {
+	visibility: hidden;
+	position: absolute;
+	top: 169px;
+	left: 510px;
+	display: flex;
+	flex-direction: column;
+	&__image {
+		width: 150px;
+		height: 150px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 75px;
+		border: 2px white solid;
+	}
+	&__word-container {
+		margin-top: 25px;
+		display: flex;
+		width: 250px;
+		height: 80px;
+		&__icon {
+			width: 45px;
+			height: 45px;
+			filter: invert(100%) sepia(0%) saturate(7458%) hue-rotate(179deg) brightness(114%) contrast(93%);
+		}
+		&__word {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 200px;
+			height: 45px;
+			font-size: 30px;
+			color: white;
+		}
+	}
+}
