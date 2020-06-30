@@ -8,7 +8,7 @@ import {
 	HIDDEN_CLASS,
 	FADE_CLASS,
 	TEXT_DEFAULT_HIDDEN,
-	DISPLAY_NONE_CLASS
+	DISPLAY_NONE_CLASS,
 } from './CardConstants';
 import { BUTTONS_WORDS } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
@@ -56,7 +56,7 @@ export default class Card {
 			elem: TAGS.SPAN,
 			classes: ['card__meaning_word'],
 			id: 'meaning-part-word',
-			attr: {'data-secret-word' : textMeaningObject.word},
+			attr: { 'data-secret-word': textMeaningObject.word },
 			child: TEXT_DEFAULT_HIDDEN,
 		});
 
@@ -71,7 +71,6 @@ export default class Card {
 	}
 
 	correctAnswerHandler() {
-		console.log('correct answer');
 		const currentWord = this.card;
 		const correctEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
 			detail: currentWord,
@@ -80,7 +79,6 @@ export default class Card {
 	}
 
 	errorAnswerHandler() {
-		console.log('error answer');
 		const currentWord = this.card;
 		const correctEvent = new CustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, {
 			detail: currentWord,
@@ -288,9 +286,10 @@ export default class Card {
 			{ detail: currentWord }
 		);
 
-		deleteFromDictionaryButton.addEventListener('click', () =>
-			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent)
-		);
+		deleteFromDictionaryButton.addEventListener('click', () => {
+			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent);
+			document.dispatchEvent(deleteFromDictionaryEvent);
+		});
 
 		const buttonGroupDictionary = fab.create({
 			elem: TAGS.DIV,
@@ -328,20 +327,20 @@ export default class Card {
 		const audioWord = fab.create({
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
-			classes : DISPLAY_NONE_CLASS,
+			classes: DISPLAY_NONE_CLASS,
 			attr: [{ src: this.card.audio }],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
-			classes : DISPLAY_NONE_CLASS,
+			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-meaning',
 			attr: [{ src: this.card.meaningAudio }],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
-			classes : DISPLAY_NONE_CLASS,
+			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-example',
 			attr: [{ src: this.card.exampleAudio }],
 		});
@@ -385,11 +384,14 @@ export default class Card {
 
 		showAnswerButton.addEventListener('click', () => {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
+			document.dispatchEvent(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
-			buttonGroupComplexity.classList.remove(FADE_CLASS);
-			textExampleTranslate.classList.remove(FADE_CLASS);
-			textMeaningTranslate.classList.remove(FADE_CLASS);
-			textMeaning.classList.remove('hidden-answer-inside');
+			buttonGroupComplexity.classList.remove(FADE_CLASS, HIDDEN_CLASS);
+			textExampleTranslate.classList.remove(FADE_CLASS, HIDDEN_CLASS);
+			textMeaningTranslate.classList.remove(FADE_CLASS, HIDDEN_CLASS);
+			const hidden = textMeaning.querySelector('#meaning-part-word');
+			hidden.innerText = hidden.dataset.secretWord;
+			continueButton.disabled = false;
 		});
 
 		continueButton.addEventListener('click', () => {
@@ -398,23 +400,22 @@ export default class Card {
 
 		easyButton.addEventListener('click', () => {
 			easyButton.dispatchEvent(easyButtonEvent);
-			card.dispatchEvent(submitEvent);
+			document.dispatchEvent(easyButtonEvent);
 		});
 
 		goodButton.addEventListener('click', () => {
 			goodButton.dispatchEvent(goodButtonEvent);
-			card.dispatchEvent(submitEvent);
+			document.dispatchEvent(goodButtonEvent);
 		});
 
 		againButton.addEventListener('click', () => {
 			againButton.dispatchEvent(againButtonEvent);
-			// document.dispatchEvent(againButtonEvent);
-			card.dispatchEvent(submitEvent);
+			document.dispatchEvent(againButtonEvent);
 		});
 
 		hardButton.addEventListener('click', () => {
 			hardButton.dispatchEvent(hardButtonEvent);
-			card.dispatchEvent(submitEvent);
+			document.dispatchEvent(hardButtonEvent);
 		});
 
 		this.elem = card;

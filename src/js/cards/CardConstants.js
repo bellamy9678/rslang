@@ -7,10 +7,10 @@ export const TEXT_DEFAULT_HIDDEN = '[...]';
 export const EMPTY_STRING = '';
 export const INPUT_ID = 'word';
 
-export const DEFAULT_POSITION = 19;
+export const DEFAULT_POSITION = 18;
 export const ARRAY_LENGTH_COEFFICIENT = 1;
-export const START_LEVEL = 1;
-export const START_PAGE = 2;
+export const START_LEVEL = 3;
+export const START_PAGE = 5;
 
 export const CARD_CONTAINER = document.querySelector('.app');
 export const DOM_POSITION_CORRECTION = 1;

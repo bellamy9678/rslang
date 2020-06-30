@@ -8,7 +8,7 @@ import {
 	FADE_CLASS,
 	SETTINGS_OBJECT_DEFAULT,
 } from './CardConstants';
-import getNewWordsArray from './GetWord';
+import getNewWordsArray from './GetWordsFromAPI';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
 import WORDS_EVENTS from '../observer/WordsEvents';
@@ -41,7 +41,10 @@ export default class GlobalState {
 		if (this.currentPosition < this.cards.length) {
 			this.addCard();
 		} else {
-			const gameOverEvent = new CustomEvent(WORDS_EVENTS.TRAINING_GAME_OVER, {});
+			const gameOverEvent = new CustomEvent(
+				WORDS_EVENTS.TRAINING_GAME_OVER,
+				{}
+			);
 			CARD_CONTAINER.dispatchEvent(gameOverEvent);
 		}
 	}
@@ -62,7 +65,7 @@ export default class GlobalState {
 	}
 
 	finishGame() {
-		alert('Все карточки на сегодня!');
+		console.log('Все карточки на сегодня!');
 		delete this.currentPosition;
 		delete this.words;
 		delete this.cards;
