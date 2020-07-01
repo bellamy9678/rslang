@@ -104,6 +104,7 @@ function checkHiddenFields() {
 }
 
 function correctAnswerHandler() {
+	document.querySelector('#word').disabled = true;
 	if (
 		globalState.pushedContinue ||
 		document
@@ -134,6 +135,7 @@ function showAnswerHandler() {
 	checkAudio();
 	globalState.addCurrentWordToEnd();
 	globalState.pushedContinue = true;
+	document.querySelector('#word').disabled = true;
 }
 
 function complexityButtonsHandler() {
@@ -150,7 +152,9 @@ function againHandler() {
 }
 
 function continueHandler() {
-	globalState.pushedContinue = true;
+	if (document.querySelector('#word').disabled) {
+		globalState.pushedContinue = true;
+	}
 }
 
 function addListeners() {
