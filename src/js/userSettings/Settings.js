@@ -1,7 +1,7 @@
-import DEFAULT_SETTINGS from './Constants';
-import SettingsController from './SettingsController';
+import { DEFAULT_SETTINGS, WORD_OBJECT_DEFAULT } from './Constants';
+import SettingsService from './SettingsService';
 
-const controller = new SettingsController();
+const service = new SettingsService();
 
 const amountCardsToShow = function amountCardsToShow() {
 	return this.maxCards - this.cardsShowed;
@@ -12,13 +12,13 @@ const amountNewWordsToShow = function amountNewWordsToShow() {
 };
 
 const setupMaxNewWords = function setupMaxNewWords(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_AMOUNT) {
+	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
 		this.maxNewWords = +number;
 	}
 };
 
 const setupMaxCards = function setupMaxCards(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_AMOUNT) {
+	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
 		this.maxCards = +number;
 	}
 };
@@ -53,8 +53,8 @@ const increaseProgress = function increaseProgress() {
 };
 
 const makeZeroProgress = function makeZeroProgress() {
-	this.newWordsShowed = 0;
-	this.cardsShowed = 0;
+	this.newWordsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
+	this.cardsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
 };
 
 const checkNewDateNow = function checkNewDateNow() {
@@ -84,25 +84,12 @@ const checkNewDateNow = function checkNewDateNow() {
 };
 
 const saveParametersNow = function saveParametersNow() {
-	const toSaveObj = {
-		progress: this.progress,
-		maxNewWords: this.maxNewWords,
-		newWordsShowed: this.newWordsShowed,
-		maxCards: this.maxCards,
-		cardsShowed: this.cardsShowed,
-		translate: this.translate,
-		meaning: this.meaning,
-		example: this.example,
-		transcription: this.transcription,
-		picture: this.picture,
-		deleteButton: this.deleteButton,
-		difficultButton: this.difficultButton,
-		complexityButtons: this.complexityButtons,
-		playWord: this.playWord,
-		playMeaning: this.playMeaning,
-		playExample: this.playExample,
-	};
-	controller.save(toSaveObj);
+	const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
+	const toSaveObj = {};
+	keysToSave.forEach((key) => {
+		toSaveObj[key] = this[key];
+	});
+	service.save(toSaveObj);
 };
 
 export default class Settings {
@@ -110,50 +97,27 @@ export default class Settings {
 		return Settings.getInstance();
 	}
 
+	static getCopyDefaultObject() {
+		const copy = {};
+		const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
+		keysToSave.forEach((key) => {
+			copy[key] = WORD_OBJECT_DEFAULT[key];
+		});
+		return copy;
+	}
+
 	static init() {
-		const returnedSettingsObject = {};
-		const progressCopy = {};
-		const isOldUser = !!controller.getUserName();
+		const returnedSettingsObject = Settings.getCopyDefaultObject();
+		const isOldUser = !!service.getUserName();
+
+		Settings.getCopyDefaultObject(returnedSettingsObject);
 
 		if (isOldUser) {
-			const userSettings = controller.download();
-			returnedSettingsObject.maxNewWords = userSettings.maxNewWords;
-			returnedSettingsObject.newWordsShowed = userSettings.newWordsShowed;
-			returnedSettingsObject.maxCards = userSettings.maxCards;
-			returnedSettingsObject.cardsShowed = userSettings.cardsShowed;
-			returnedSettingsObject.progress = userSettings.progress;
-			returnedSettingsObject.translate = userSettings.translate;
-			returnedSettingsObject.meaning = userSettings.meaning;
-			returnedSettingsObject.example = userSettings.example;
-			returnedSettingsObject.transcription = userSettings.transcription;
-			returnedSettingsObject.picture = userSettings.picture;
-			returnedSettingsObject.deleteButton = userSettings.deleteButton;
-			returnedSettingsObject.difficultButton = userSettings.difficultButton;
-			returnedSettingsObject.complexityButtons = userSettings.complexityButtons;
-			returnedSettingsObject.playWord = userSettings.playWord;
-			returnedSettingsObject.playMeaning = userSettings.playMeaning;
-			returnedSettingsObject.playExample = userSettings.playExample;
-		} else {
-			returnedSettingsObject.maxNewWords = DEFAULT_SETTINGS.MAX_NEW_WORDS;
-			returnedSettingsObject.newWordsShowed = DEFAULT_SETTINGS.NEW_WORDS_SHOWED;
-			returnedSettingsObject.maxCards = DEFAULT_SETTINGS.MAX_CARDS;
-			returnedSettingsObject.cardsShowed = DEFAULT_SETTINGS.CARDS_SHOWED;
-
-			progressCopy.group = DEFAULT_SETTINGS.PROGRESS.GROUP;
-			progressCopy.page = DEFAULT_SETTINGS.PROGRESS.PAGE;
-			returnedSettingsObject.progress = progressCopy;
-
-			returnedSettingsObject.translate = true;
-			returnedSettingsObject.meaning = true;
-			returnedSettingsObject.example = true;
-			returnedSettingsObject.transcription = true;
-			returnedSettingsObject.picture = true;
-			returnedSettingsObject.deleteButton = true;
-			returnedSettingsObject.difficultButton = true;
-			returnedSettingsObject.complexityButtons = true;
-			returnedSettingsObject.playWord = true;
-			returnedSettingsObject.playMeaning = true;
-			returnedSettingsObject.playExample = true;
+			const userSettings = service.download();
+			const keysToSave = Object.keys(returnedSettingsObject);
+			keysToSave.forEach((key) => {
+				returnedSettingsObject[key] = userSettings[key];
+			});
 		}
 
 		returnedSettingsObject.cardsToShowAmount = amountCardsToShow;

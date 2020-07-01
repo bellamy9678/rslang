@@ -1,13 +1,13 @@
 import CookieMonster from '../utils/CookieMonster';
-import DEFAULT_SETTINGS from './Constants';
+import {DEFAULT_SETTINGS} from './Constants';
 
 const biscuit = new CookieMonster();
 
-export default class SettingsController {
+export default class SettingsService {
 	constructor() {
-		this.download = SettingsController.download;
-		this.getUserName = SettingsController.getUserName;
-		this.save = SettingsController.save;
+		this.download = SettingsService.download;
+		this.getUserName = SettingsService.getUserName;
+		this.save = SettingsService.save;
 	}
 
 	static download() {
@@ -28,7 +28,7 @@ export default class SettingsController {
 		const saveJSON = JSON.stringify(toSaveObj);
 		const name = sessionStorage.getItem(DEFAULT_SETTINGS.FIELD_USERNAME);
 		const options = {
-			'max-age': 31536000,
+			'max-age': DEFAULT_SETTINGS.SECONDS_IN_YEAR,
 		};
 		biscuit.setCookie(name, saveJSON, options);
 	}
