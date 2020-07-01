@@ -1,7 +1,8 @@
-import { appContainer, rounds, levels, lines } from './constants';
+import { appContainer, rounds, levels, lines, API_URL, puzzlesGap, RESULT_WINDOW_BTN_CONTINUE } from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
-import Result from './Result';
+import Result from '../game_result/Result';
+import TAGS from '../shared/Tags.json';
 
 const result = new Result();
 
@@ -9,16 +10,17 @@ const factory = new DOMElementCreator();
 
 export default class Game {
 	constructor() {
+		this.initState = JSON.parse(sessionStorage.getItem('en-puzzle-state')) || {};
 		this.sentenceArr = [];
 		this.sentenceTranslate = '';
 		this.sentenceAudioLink = '';
-		this.autoListeningBtnState = false;
-		this.showTranslationBtnState = false;
-		this.showListenBtnState = false;
-		this.showBgImageBtnState = false;
+		this.autoListeningBtnState = this.initState.auto || false;
+		this.showTranslationBtnState = this.initState.translation || false;
+		this.showListenBtnState = this.initState.audio || false;
+		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound = 0;
-		this.currentLevel = 0;
+		this.currentRound = this.initState.round || 0;
+		this.currentLevel = this.initState.level || 0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -56,6 +58,38 @@ export default class Game {
 		this.levelSelectBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
 		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
 		this.showBgImageBtn.addEventListener('click', () => { this.showHideBackground(); });
+
+		window.addEventListener('beforeunload', () => { this.beforeUnloadHandler(); });
+	}
+
+	beforeUnloadHandler() {
+		const stateObj = {
+			'level': this.currentLevel,
+			'round': this.currentRound,
+			'auto': this.autoListeningBtnState,
+			'translation': this.showTranslationBtnState,
+			'audio': this.showBgImageBtnState,
+			'picture': this.showBgImageBtnState
+		};
+		sessionStorage.setItem('en-puzzle-state', JSON.stringify(stateObj));
+	}
+
+	controlsStateUpgrade() {
+		this.levelSelectBtn.selectedIndex = this.currentLevel;
+		this.roundSelectBtn.selectedIndex = this.currentRound;
+		if (this.initState.auto) {
+			this.autoListeningBtn.classList.add('btn-icon--active');
+		}
+		if (this.initState.translation) {
+			this.showTranslationBtn.classList.add('btn-icon--active');
+			this.translationContainer.innerText = this.sentenceTranslate;
+		}
+		if (this.initState.audio) {
+			this.showListenBtn.classList.add('btn-icon--active');
+		}
+		if (this.initState.picture) {
+			this.showBgImageBtn.classList.add('btn-icon--active');
+		}
 	}
 
 
@@ -74,7 +108,7 @@ export default class Game {
 		this.currentActiveElements = document.querySelectorAll('.game__jigsaw--active');
 		this.currentActiveElements.forEach(element => {
 			element.removeAttribute('draggable');
-			element.classList.remove('game__jigsaw--active');
+			element.classList.remove('game__jigsaw--active', 'game__jigsaw--correct', 'game__jigsaw--wrong');
 		});
 		this.puzzleContainer = document.querySelectorAll('.puzzle-container--active');
 		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
@@ -133,15 +167,14 @@ export default class Game {
 
 	resultsBtnHandler() {
 		const resultContinueBtn = factory.create({
-			elem: 'button',
+			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
-			child: 'Continue'
+			child: RESULT_WINDOW_BTN_CONTINUE
 		});
 
 		resultContinueBtn.addEventListener('click', () => {
 			result.closeResultWindow();
 			this.loadNextRound();
-			// this.loadCustomLevelAndRound(this.currentLevel, this.currentRound + 1);
 		});
 
 		result.showResult({
@@ -191,8 +224,17 @@ export default class Game {
 			this.resultForCurrentLineState = true;
 		}
 		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
+		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
+		this.activePuzzleContainers.forEach(container => {
+			// eslint-disable-next-line no-param-reassign
+			container.style.width = null;
+			container.classList.remove('puzzle-container--active');
+		});
 		const puzzleNodes = [];
 		this.activePuzzles.forEach(puzzle => {
+			puzzle.classList.remove('game__jigsaw--active');
+			puzzle.removeAttribute('draggable');
+			puzzle.classList.remove('game__jigsaw--wrong', 'game__jigsaw--correct');
 			puzzleNodes.push(puzzle);
 			puzzle.remove();
 		});
@@ -236,6 +278,8 @@ export default class Game {
 
 	showListeningBtnHandler() {
 		this.showListenBtnState = !this.showListenBtnState;
+		this.showListenBtn.classList.toggle('btn-icon--active');
+
 		if (this.showListenBtnState) {
 			this.playAudioBtn.removeAttribute('disabled');
 		} else {
@@ -245,6 +289,7 @@ export default class Game {
 
 	showTranslationBtnHandler() {
 		this.showTranslationBtnState = !this.showTranslationBtnState;
+		this.showTranslationBtn.classList.toggle('btn-icon--active');
 		if (this.showTranslationBtnState) {
 			this.translationContainer.innerText = this.sentenceTranslate;
 		} else {
@@ -254,11 +299,13 @@ export default class Game {
 
 	autoListeningBtnHandler() {
 		this.autoListeningBtnState = !this.autoListeningBtnState;
+		this.autoListeningBtn.classList.toggle('btn-icon--active');
+
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
 
-		const url = `https://afternoon-falls-25894.herokuapp.com/words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
+		const url = `${API_URL}words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
 		fetch(url)
 			.then(response => {
 				return response.json();
@@ -268,11 +315,11 @@ export default class Game {
 	}
 
 	handleJson(myJson) {
-		console.log(myJson, this.currentLevel, this.currentRound);
 		this.sentencesJSON = myJson;
 		this.sentenceTranslate = myJson[0].textExampleTranslate;
 		this.sentenceAudioLink = myJson[0].audioExample;
 		this.getSentences(myJson, this.currentLine);
+		this.controlsStateUpgrade();
 	}
 
 	getSentences(arr, line) {
@@ -284,7 +331,7 @@ export default class Game {
 	addLine() {
 		this.board = document.querySelector('.board');
 		this.boardLine = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: ['board__line', 'board__line--active'],
 			attr: { 'data-line': this.currentLine }
 		});
@@ -320,7 +367,7 @@ export default class Game {
 		this.puzzles = sentenceArr.map((word, index) => {
 
 			this.newElement = factory.create({
-				elem: 'div',
+				elem: TAGS.DIV,
 				classes: ['game__jigsaw', 'game__jigsaw--active'],
 				attr: [{ 'data-word': word }, { 'data-position-crypted': cypher[0][index] }, { 'data-line': this.currentLine }, { 'draggable': true }],
 				child: word
@@ -349,11 +396,9 @@ export default class Game {
 
 	appendPuzzlesToContainer(puzzles) {
 		const puzzlesContainer = document.querySelector('.game__puzzles');
-		// const gridTemplate = new Array(puzzles.length).fill('auto');
-		// puzzlesContainer.style.gridTemplateColumns = gridTemplate.join(' ');
 		puzzlesContainer.append(...puzzles);
+		this.calculatePuzzlesSize(puzzles);
 		this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
-		// this.setGridTemplateForPuzzlesContainer();
 
 		this.addPuzzleContainersToLine(puzzles.length);
 		this.dragAndDrop();
@@ -370,21 +415,22 @@ export default class Game {
 		this.puzzleItem = document.querySelectorAll('.game__jigsaw--active');
 		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
 		this.puzzlesField = document.querySelector('.game__puzzles');
-		let selectedItem;
+		this.selectedItem = '';
 		let selectedItemWidth;
 
 		const dragStart = (event) => {
-			selectedItem = event.target;
-			selectedItemWidth = selectedItem.offsetWidth;
+			this.selectedItem = event.target;
+			selectedItemWidth = this.selectedItem.dataset.width;
 
 
 			if (event.target.closest('.puzzle-container--active')) {
 				const container = event.target.closest('.puzzle-container--active');
 				container.classList.remove('container--full');
+				container.style.width = null;
 			}
 
 			setTimeout(() => {
-				selectedItem.classList.add('hide');
+				this.selectedItem.classList.add('hide');
 			}, 0);
 		};
 
@@ -398,29 +444,31 @@ export default class Game {
 
 		const dragEnter = (event) => {
 			event.preventDefault();
-			const targetParent = event.target.closest('.game__puzzles') || event.target.closest('.board__line--active');
-			if (event.target.closest('.board__line--active')) {
-				const position = event.target.dataset.containerPosition;
-				// this.changeGridTemplateForOneColumn(targetParent, position, selectedItemWidth);
-				console.log(targetParent, position, selectedItemWidth);
-			}
+			// if (event.target.closest('.board__line--active')) {
+			// 	const position = event.target.dataset.containerPosition;
+			// }
 
 			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
 				event.target.classList.add('hovered');
+				if (event.target.classList.contains('puzzle-container--active')) {
+					event.target.classList.add('hovered--animation');
+				}
 			}
 		};
 
 		const dragLeave = (event) => {
 
-			event.target.classList.remove('hovered');
+			event.target.classList.remove('hovered', 'hovered--animation');
 		};
 
 		const dragDrop = (event) => {
 			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
-				event.target.append(selectedItem);
-				event.target.classList.remove('hovered');
+				event.target.append(this.selectedItem);
+				event.target.classList.remove('hovered', 'hovered--animation');
 				if (event.target.classList.contains('puzzle-container--active')) {
 					event.target.classList.add('container--full');
+					// eslint-disable-next-line no-param-reassign
+					event.target.style.width = selectedItemWidth;
 					this.checkIfLineIsFull();
 				}
 			}
@@ -452,6 +500,8 @@ export default class Game {
 		});
 		if (this.numberOfFullContainers === this.numberOfPuzzles) {
 			this.lineIsFullHandler();
+		} else {
+			this.checkBtn.classList.add('hide');
 		}
 
 	}
@@ -461,18 +511,16 @@ export default class Game {
 	}
 
 	addPuzzleContainersToLine(numberOfPuzzles) {
-		// this.gridTemplate = new Array(numberOfPuzzles).fill('auto');
 		this.arrOfPuzzleContainer = [];
 		for (let i = 0; i < numberOfPuzzles; i += 1) {
 			this.arrOfPuzzleContainer.push(
 				factory.create({
-					elem: 'div',
+					elem: TAGS.DIV,
 					classes: ['puzzle-container', 'puzzle-container--active'],
 					attr: { 'data-container-position': i }
 				})
 			);
 		}
-		// this.boardLine.style.gridTemplateColumns = this.gridTemplate.join(' ');
 		this.boardLine.append(...this.arrOfPuzzleContainer);
 	}
 
@@ -512,8 +560,6 @@ export default class Game {
 			this.continueBtn.classList.remove('hide');
 			if (this.currentLine === rounds - 1) {
 				this.resulsBtn.classList.remove('hide');
-			} else {
-				console.log('round end');
 			}
 		}
 	}
@@ -532,26 +578,26 @@ export default class Game {
 
 	init() {
 		this.controlsContainer = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'controls'
 		});
 		this.tooltips = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'tooltips'
 		});
 		this.gameBoard = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'game__main'
 		});
 
 		this.gameContainer = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'game-container',
 			child: [this.controlsContainer, this.tooltips, this.gameBoard]
 		});
 
 		this.wrapper = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'wrapper',
 			child: this.gameContainer
 		});
@@ -564,6 +610,49 @@ export default class Game {
 		this.addLine();
 	}
 
+	calculatePuzzlesSize(puzzlesLine) {
+		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
+		const homeContainerWidth = this.puzzlesHomeContainer.offsetWidth;
+		const lengthOfEachPuzzleInLine = [];
+		let finishWidthOfEachPuzzle = [];
+		puzzlesLine.forEach(puzzle => {
+			lengthOfEachPuzzleInLine.push(puzzle.dataset.word.length);
+		});
+		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b);
+		const sumWidthOfPuzzles = homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
+		const widthForOneSymbol = sumWidthOfPuzzles / lengthOfLine;
+		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map(puzzleLength => Math.round(puzzleLength * widthForOneSymbol));
+		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b);
+		if (sumOfEachPuzzleWidth === sumWidthOfPuzzles) {
+			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
+		} else if (sumOfEachPuzzleWidth < sumWidthOfPuzzles) {
+			let difference = sumWidthOfPuzzles - sumOfEachPuzzleWidth;
+			let index = 0;
+			do {
+				widthOfEachPuzzle[index] += 1;
+				index += 1;
+				difference -= 1;
+			}
+			while (difference > 0);
+			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
+		} else {
+			let difference = sumOfEachPuzzleWidth - sumWidthOfPuzzles;
+			let index = 0;
+			do {
+				widthOfEachPuzzle[index] -= 1;
+				index += 1;
+				difference -= 1;
+			}
+			while (difference > 0);
+			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
+		}
+
+		puzzlesLine.forEach((puzzle, index) => {
+			puzzle.setAttribute('data-width', `${finishWidthOfEachPuzzle[index]}px`);
+			// eslint-disable-next-line no-param-reassign
+			puzzle.style.width = `${finishWidthOfEachPuzzle[index]}px`;
+		});
+	}
 
 	addBackgroundToPuzzles(puzzle) {
 		const thisPuzzle = puzzle;
@@ -589,6 +678,8 @@ export default class Game {
 
 	showHideBackground() {
 		this.showBgImageBtnState = !this.showBgImageBtnState;
+		this.showBgImageBtn.classList.toggle('btn-icon--active');
+
 		const puzzles = document.querySelectorAll('.game__jigsaw');
 		if (this.showBgImageBtnState) {
 			puzzles.forEach(element => {
@@ -598,27 +689,5 @@ export default class Game {
 			puzzles.forEach(element => element.style.removeProperty('background-image'));
 		}
 	}
-
-	// setGridTemplateForPuzzlesContainer() {
-	// 	this.puzzlesContainer = document.querySelector('.game__puzzles');
-	// 	const puzzlesInsideContainer = this.puzzlesContainer.querySelectorAll('div');
-	// 	const puzzlesWidthArr = [];
-	// 	puzzlesInsideContainer.forEach(puzzle => puzzlesWidthArr.push(puzzle.offsetWidth));
-	// 	const puzzlesContainerTemplate = puzzlesWidthArr.map(width => `${width}px`);
-	// 	this.puzzlesContainer.style.gridTemplateColumns = puzzlesContainerTemplate.join(' ');
-	// }
-
-	// changeGridTemplateForOneColumn(element, position, width) {
-	// 	console.log(element, +position, width);
-
-	// 	const elementGridTemplate = element.style.gridTemplateColumns.split(' ');
-	// 	elementGridTemplate[+position] = `${width}px`;
-	// 	const test = document.querySelector('.board__line--active');
-	// 	test.style.gridTemplateColumns = elementGridTemplate.join(' ');
-	// 	console.log(test, elementGridTemplate.join(' '));
-
-
-	// 	this.nothing = false;
-	// }
 
 }

@@ -1,20 +1,29 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
+import TAGS from '../shared/Tags.json';
 
 const factory = new DOMElementCreator();
 
 export default class Hints {
 	init() {
-		this.hintsArr = ['auto-listening', 'translation', 'listening', 'background'];
+		const hintsArr = ['auto-listening', 'translation', 'listening', 'background'];
+		const hintIcons = ['../../assets/images/english_puzzle/a.png'
+			, '../../assets/images/english_puzzle/translate.png'
+			, '../../assets/images/english_puzzle/notes.png'
+			, '../../assets/images/english_puzzle/picture.png'];
 
-		this.hintControls = this.hintsArr.map(hint => factory.create({
-			elem: 'button',
-			classes: `controls__${hint}`,
-			child: hint
+		this.hintControls = hintsArr.map(hint => factory.create({
+			elem: TAGS.BUTTON,
+			classes: [`controls__${hint}`, 'btn-icon'],
 		})
 		);
 
+		this.hintControls.forEach((btn, i) => {
+			// eslint-disable-next-line no-param-reassign
+			btn.style.backgroundImage = `url(${hintIcons[i]})`;
+		});
+
 		this.hints = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'controls__hints',
 			child: this.hintControls
 		});

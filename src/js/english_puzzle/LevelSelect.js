@@ -1,35 +1,36 @@
-import { levels, rounds } from './constants';
+import * as CONST from './constants';
 import DOMElementCreator from '../utils/DOMElementCreator';
+import TAGS from '../shared/Tags.json';
 
 const factory = new DOMElementCreator();
 
 export default class LevelSelect {
 	init() {
 		this.levelSelectLabel = factory.create({
-			elem: 'label',
+			elem: TAGS.LABEL,
 			attr: { 'for': 'level' },
-			child: 'Level'
+			child: CONST.LEVEL
 		});
 
 		this.levelSelectDropdown = factory.create({
-			elem: 'select',
-			classes: 'controls__dropdown-level',
-			child: this.generateOptions(levels)
+			elem: TAGS.SELECT,
+			classes: ['controls__dropdown', 'controls__dropdown-level'],
+			child: this.generateOptions(CONST.levels)
 		});
 
 		this.roundSelectLabel = factory.create({
-			elem: 'label',
+			elem: TAGS.LABEL,
 			attr: { 'for': 'round' },
-			child: 'Round'
+			child: CONST.ROUND
 		});
 		this.roundSelectDropdown = factory.create({
-			elem: 'select',
-			classes: 'controls__dropdown-round',
-			child: this.generateOptions(rounds)
+			elem: TAGS.SELECT,
+			classes: ['controls__dropdown', 'controls__dropdown-round'],
+			child: this.generateOptions(CONST.rounds)
 		});
 
 		this.levelAndPageSelectContainer = factory.create({
-			elem: 'div',
+			elem: TAGS.DIV,
 			classes: 'controls__level-and-page',
 			child: [this.levelSelectLabel, this.levelSelectDropdown, this.roundSelectLabel, this.roundSelectDropdown]
 		});
@@ -43,9 +44,7 @@ export default class LevelSelect {
 		for (let i = 1; i <= quantity; i += 1) {
 			this.options.push(
 				factory.create({
-					elem: 'option',
-					classes: ['my-class', 'my-super-class'],
-					id: 'my-id',
+					elem: TAGS.OPTION,
 					attr: { 'value': i },
 					child: i
 				})
