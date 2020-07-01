@@ -84,7 +84,7 @@ function setDefaultState() {
   guessed.length = 0;
   trainMode = true;
   output.innerHTML = '';
-  output.classList.add('invisible');
+  output.classList.add('none');
   currentImg.setAttribute('src', defaultImg);
   translation.textContent = '';
   [...words].forEach(el => el.remove());
@@ -102,8 +102,7 @@ function handleRecognition() {
         currentImg.setAttribute('src', el.dataset.myimage);
         guessed.push(el);
   if (guessed.length === 10) {
-    // resultBtnHandler(); return
-    console.log('10');
+    // resultBtnHandler(); здесь должно появляться окошко с результатом
   }
       }
     }
@@ -111,6 +110,13 @@ function handleRecognition() {
 
   recognition.start();
 }
+
+function GetAnswers(item) {
+  this.word = item.dataset.wrt;
+  this.wordTranslate = item.dataset.transl;
+  this.transcription = item.dataset.transcription; 
+  this.audio = item.dataset.myaudio.replace(ASSETS_STORAGE, ''); 
+ }
 
 // Modal window 
 function resultBtnHandler() {
@@ -137,8 +143,8 @@ function resultBtnHandler() {
   })
       
   myResult.showResult({
-    rightAnswers: guessed,
-    wrongAnswers: [...words].filter((item) => (!guessed.includes(item))),
+    rightAnswers: guessed.map(item => new GetAnswers(item)),
+    wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
     buttons: [resultReturnBtn, resultNewGameBtn],
   });
 };
@@ -147,8 +153,8 @@ function resultBtnHandler() {
 document.addEventListener('click', event => {
   // render words for game
   if (event.target.classList.contains('start-btn')) {
-    startPage.classList.add('invisible');
-    mainWrapper.classList.remove('invisible');
+    startPage.classList.add('none');
+    mainWrapper.classList.remove('none');
     getWords(0,0).then(res => {
       const arr = res.slice(0, 10).map(item => renderWords(item));
       arr.forEach(el => wordsContainer.append(el));
@@ -189,9 +195,9 @@ document.addEventListener('click', event => {
   const speakBtn = document.querySelector('.speak');
   speakBtn.addEventListener('click', () => {
     trainMode = false;
-    output.classList.remove('invisible');
+    output.classList.remove('none');
     [...words].forEach(el => el.classList.remove('active'));
-    translation.classList.add('invisible');
+    translation.classList.add('none');
     recognition.start();    
   }); 
 
@@ -203,16 +209,22 @@ document.addEventListener('click', event => {
   }); 
   
   recognition.addEventListener('end', handleRecognition);
-  stopSpeak.addEventListener('click', () => {
+  stopSpeak.addEventListener('click', () => {    
     recognition.removeEventListener('end', handleRecognition);
-    output.classList.add('invisible');
+    output.classList.add('none');
     output.innerHTML = '';
     currentImg.setAttribute('src', defaultImg);
     [...words].forEach(el => el.classList.remove('active'));
     trainMode = true;
-    translation.classList.remove('invisible');
+    translation.classList.remove('none');
     translation.textContent = '';
   } )  
 
   const finishBtn = document.querySelector('.finish');
   finishBtn.addEventListener('click', resultBtnHandler);
+  
+  /* function GetAnswers(item) {
+   this.word = item.dataset.wrt;
+   this.wordTranslate = item.dataset.transl;
+   this.transcription = item.dataset.transcription; 
+  } */

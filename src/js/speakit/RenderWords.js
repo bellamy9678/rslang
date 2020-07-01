@@ -37,6 +37,8 @@ export default function renderWords(item) {
       'data-transl': `${item.translate}`,
     }, {
       'data-wrt': `${item.word}`,
+    }, {
+      'data-transcription': `${item.transcription}`,
     }],
     child: [Img, wordWriting, wordTranscript]
   });

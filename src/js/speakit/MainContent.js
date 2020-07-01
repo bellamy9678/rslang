@@ -62,7 +62,7 @@ export default function initMainContent() {
   
   const output = newElem.create({
     elem: TAGS.P,
-    classes: ['word-output', 'invisible'],
+    classes: ['word-output', 'none'],
   });
   
   const imgCont =newElem.create({
@@ -91,25 +91,25 @@ export default function initMainContent() {
   
   const restButton = newElem.create({
     elem: TAGS.BUTTON,
-    classes: 'restart',  
+    classes: ['button', 'button_colored','restart'],  
     child: restartBtnText,
   });
   
   const speakButton = newElem.create({
     elem: TAGS.BUTTON,
-    classes: 'speak',  
+    classes: ['button', 'button_colored','speak'],  
     child: speakBtnText,
   });
   
   const  stopSpeak = newElem.create({
     elem: TAGS.BUTTON,
-    classes: 'stop-speak',  
+    classes: ['button', 'button_colored','stop-speak'],  
     child: stopSpeakText,
   });
   
   const finishButton = newElem.create({
     elem: TAGS.BUTTON,
-    classes: 'finish',  
+    classes: ['button', 'button_colored','finish'],  
     child: finishBtnText,
   });
   
@@ -121,7 +121,7 @@ export default function initMainContent() {
   
   const mainWrapper = newElem.create({
     elem: TAGS.DIV,
-    classes: ['main-container', 'invisible'],  
+    classes: ['main-container', 'none'],  
     child: [level, imgCont, wordsContainer, imgAudio, btnContainer],
   });
 

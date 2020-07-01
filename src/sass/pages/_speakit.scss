@@ -1,16 +1,8 @@
-$start-btn: pink;
 
 * {
   box-sizing: border-box;
 }
-body {
-  background-color: $color-background;
-  min-height: 100vh;
-  font-size:10px;
-}
-p {
-  margin: 0;
-}
+
 
 .main-container {
   position: relative;
@@ -23,6 +15,7 @@ p {
   max-width: 1140px;
   min-height: 100vh;
 }
+// Start Page
 .start-page {
   display: flex;
   align-items: center;
@@ -34,17 +27,28 @@ p {
   outline: none;
 }
 .game-name {
-  font-size: 40px;
-  font-weight: 300px;
-  letter-spacing: 13px;
+  @include font($size: 4rem, $weight: 600);
+  letter-spacing: 1rem;
 }
 .description {
   max-width: 600px;
-  margin: 0 auto 60px;
-  font-size: 18px;
-  line-height: 1.4;
-  font-weight: 300;
+  margin: 0 auto 60px;  
 }
+.description_p {
+  @include font($size: 2.4rem, $weight: 300);
+  margin-bottom: 20px;
+}
+
+.start-btn {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  min-width: 200px;
+  &:hover {
+    @extend %transition;
+    background-color: $color-additional;
+  }
+}
+
+// Main page
 .level {
   margin-bottom:50px;
   margin-top: 20px;
@@ -56,23 +60,20 @@ p {
   display: flex;
   margin-top: 60px;
 }
-.start-btn, .speak, .restart, .finish, .stop-speak {
-  font-size: 1.6rem;
-  text-align: center;
-  outline: none;
-  padding: 15px 25px;
-  border-radius: 5px;
-  border: none;
-  margin-right: 15px;
-  background-color: $color-primary;
-  color: $color-text-light;
+.speak, .restart, .finish, .stop-speak {
   min-width: 200px;
-  cursor: pointer;
   box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  margin-right: 20px;
+  &:hover {
+    @extend %transition;
+    background-color: $color-additional;
+  }
 }
-.start-btn:hover, .speak:hover,
-.restart:hover, .finish:hover, .stop-speak:hover {
-  transform: scale(1.1);
+
+.words-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 33px;
 }
 .word {
   position: relative;
@@ -80,13 +81,11 @@ p {
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  padding: 10px;
-  padding-left: 40px;
-  font-size: 24px;
-  line-height: 1.4;
-  min-width: 200px;
-  min-height: 70px;
-  margin: 10px;
+  padding: 2rem 1rem 1rem 4rem;
+  @include font($size: 2.4rem, $height: 1.4);
+  min-width: 15rem;
+  min-height: 7rem;
+  margin: 1rem;
   border: 1px solid rgb(206, 212, 218);
   border-radius: 5px;
 }
@@ -94,6 +93,8 @@ p {
   position: absolute;
   top: 30px;
   left: 20px;
+  width: 20px;
+  height: 20px
 }
 .word-output {
     display: block;
@@ -103,18 +104,13 @@ p {
     padding: 5px 20px;
     margin: 0 auto;
     margin-bottom: 14px;
-    width: 100%;
     height: 50px;
-    max-width: 1140px;
-    font-size: 20px;
-    line-height: 40px;
-    color: rgba(14, 30, 37, .7);
+    max-width: 960px;
+    @include font($size: 2.2rem, $height: 4rem);
+    color: $color-text-dark;
     text-align: center;
-    font-size: 22px;
 }
-.invisible {
-  display: none;
-}
+
 .image-container {  
   margin: auto;
   margin-bottom: 30px;
@@ -136,100 +132,13 @@ p {
   margin-top: 20px;
   font-size: 25px;
 }
-.words-container {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 .active {
   border: 1px solid rgb(0, 173, 159);
   background-color: rgba(0, 173, 159, .15);
 }
 
-/*result*/
-.result {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: 10px
-}
-
-.errors, .succes {
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: 10px;
-}
-.result-container {
-  width: 100%;
-  max-width: 780px;
-  min-height: 600px;
-  padding: 40px 100px;
-  text-align: left;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
-}
-.errors-num {
-  background-color: #da5b4c;
-  color: #fff;
-  padding: 0 14px;
-  border-radius: 21px;
-  margin-left: 5px;
-}
-
-.succes-num {
-  background-color: #01AF61;
-  color: #fff;
-  padding: 0 14px;
-  border-radius: 21px;
-  margin-left: 5px;
-}
-
-.res-word {
-  position: relative;
-  width: 300px;
-  min-height: 40px;
-  font-size: 20px;
-  border: 1px solid rgb(206, 212, 218);
-  border-radius: 5px;
-  text-align: center;
-  margin:auto;
-  margin-bottom: 12px;
-  padding-top: 8px;
-  cursor: pointer;
-}
-.volume-res {
-  position: absolute;
-  top: 8px;
-  left: 10px;
-  font-size: 24px;
-  color: violet;
-}
-.result-btn {
-  display: flex;
-  justify-content: space-evenly;
-}
-.return-btn, .new-btn {
-  /*margin: 0;*/
-  font-size: 20px;
-  padding: 10px 15px;
-  min-width: 160px;
-  color: rgba(14, 30, 37, .7);
-  background: $color-additional;
-  border: 1px solid rgba(14, 30, 37, .7);
-  border-radius: 5px;
-  cursor: pointer;
-}
-.invisible {
+.none {
   display: none;
 }
 
-.res-word {
-  position: relative;
-}
-.res-volume {
-  position: absolute;
-  top: 10px;
-  left: 20px;
-}

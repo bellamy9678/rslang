@@ -34,7 +34,7 @@ const gameDescription = newElem.create({
 
 const gameButton = newElem.create({
   elem: TAGS.BUTTON,
-  classes: 'start-btn',  
+  classes: ['start-btn', 'button', 'button_colored'],  
   child: buttonText,
 });
 
