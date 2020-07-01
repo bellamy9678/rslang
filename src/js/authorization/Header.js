@@ -13,6 +13,7 @@ import StartPage from './StartPage';
 import NewUser from './NewUser';
 import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
+import showSettingsPage from '../settings/SettingsPage';
 
 export default class Header {
 
@@ -94,6 +95,8 @@ export default class Header {
 			},
 			child: LINKS.settings,
 		});
+
+		settingsLink.addEventListener('click', showSettingsPage);
 
 		const statisticLink = newElem.create({
 			elem: TAGS.LI,
@@ -280,5 +283,6 @@ export default class Header {
 			this.createUnauthorisedUserButtons();
 		}
 		this.createUnauthorisedUserLinks();
+		// followLinks();
 	}
 }

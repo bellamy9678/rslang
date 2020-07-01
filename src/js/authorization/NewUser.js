@@ -74,7 +74,7 @@ export default class NewUser {
 			} else if (!this.checkPassword(userData.password)) {
 				this.showInvalidUserData(newUserPassword, ERROR_MESSAGES.invalidPassword);
 			} else {
-				this.makeRequest(userData, [newUserName, newUserPassword], ERROR_MESSAGES.existingUser);
+				await this.makeRequest(userData, [newUserName, newUserPassword], ERROR_MESSAGES.existingUser);
 			}
 		} catch (error) {
 			InvalidUserData.showErrorMessage(error.message);
