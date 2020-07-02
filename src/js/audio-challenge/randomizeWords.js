@@ -1,6 +1,7 @@
 import generateElements from './generateElements';
 import {arrayForUniqness, arrayForRandom, idkText} from './consts';
 import changeStylesAfterAnswer from './changeStylesAfterAnswer';
+import catchButtonPresses from './catchButtonPresses';
 
 export default function randomizeWords(words, array) {
 	const mainWord = words[0];
@@ -26,4 +27,5 @@ export default function randomizeWords(words, array) {
 			randomizeWords(arrayForUniqness, arrayForRandom);
 		}
 	});
+	catchButtonPresses();
 }

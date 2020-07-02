@@ -3,7 +3,7 @@ import TAGS from '../shared/Tags.json';
 import {idkText} from './consts';
 import checkAnswer from './checkAnswer';
 
-export default function generateElements(mainWordObj, answers) {
+export default async function generateElements(mainWordObj, answers) {
 	const mainWrapper = document.querySelector('.main-wrapper');
 	if (mainWrapper) {
 		mainWrapper.remove();
@@ -85,16 +85,25 @@ export default function generateElements(mainWordObj, answers) {
 		classes: 'skip-button',
 		child: `${idkText}`
 	});
+	const wrapperContent = domCreator.create({
+		elem: TAGS.DIV,
+		classes: 'main-wrapper__content',
+		child: [soundIconWrapper, rightAnswerWrapper, answerContainer, idkButton]
+	});
 	const wrapper = domCreator.create({
 		elem: TAGS.DIV,
 		classes: 'main-wrapper',
-		child: [soundIconWrapper, rightAnswerWrapper, answerContainer, idkButton]
+		child: [wrapperContent]
 	});
 	app.append(wrapper);
 	const mainWordTranslationIndex = arrWithTranslations.indexOf(`${mainWordObj.wordTranslate}`);
 	const rightAnswer = document.querySelector(`.answers-wrapper__answer:nth-child(${mainWordTranslationIndex+1})`);
 	rightAnswer.classList.add('right-answer');
 	console.log(mainWord);
+	const delayBeforeAppearance = 10;
+	setTimeout(() => {
+		wrapperContent.style.left = '0px';
+	}, delayBeforeAppearance);
 	const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
 	answerContainers.forEach(container => {
 		container.addEventListener('click', checkAnswer);
