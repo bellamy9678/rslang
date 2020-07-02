@@ -2,7 +2,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import {idkText} from './consts';
 
-export default function generateElements(mainWord, answers) {
+export default function generateElements(mainWordObj, answers) {
 	const domCreator = new DOMElementCreator();
 	const app = document.querySelector('.app');
 	const soundIcon = domCreator.create({
@@ -17,7 +17,7 @@ export default function generateElements(mainWord, answers) {
 	const sound = domCreator.create({
 		elem: TAGS.AUDIO,
 		attr: [{
-			src: `${mainWord.audio}`
+			src: `${mainWordObj.audio}`
 		}],
 		classes: 'audio'
 	});
@@ -30,16 +30,16 @@ export default function generateElements(mainWord, answers) {
 		elem: TAGS.IMG,
 		classes: 'right-answer-wrapper__image',
 		attr: [{
-			src: `${mainWord.image}`
+			src: `${mainWordObj.image}`
 		}, {
 			alt: 'Image'
 		}],
 	});
-	const mainWordTranslation = mainWord.word;
+	const mainWord = mainWordObj.word;
 	const wordContainer= domCreator.create({
 		elem: TAGS.P,
 		classes: 'right-answer-wrapper__word-container__word',
-		child: `${mainWordTranslation}`
+		child: `${mainWord}`
 	});
 	const soundIcon2 = domCreator.create({
 		elem: TAGS.IMG,
@@ -65,12 +65,14 @@ export default function generateElements(mainWord, answers) {
 		classes: 'answers-wrapper',
 		child: []
 	});
+	const arrWithTranslations = [];
 	answers.forEach(item => {
 		const answer = domCreator.create({
 			elem: TAGS.P,
 			classes: 'answers-wrapper__answer',
 			child: `${item.wordTranslate}`
 		});
+		arrWithTranslations.push(item.wordTranslate);
 		answerContainer.append(answer);
 	});
 	const idkButton = domCreator.create({
@@ -84,6 +86,8 @@ export default function generateElements(mainWord, answers) {
 		child: [soundIconWrapper, rightAnswerWrapper, answerContainer, idkButton]
 	});
 	app.append(wrapper);
-	console.log(mainWord);
+	const mainWordTranslationIndex = arrWithTranslations.indexOf(`${mainWordObj.wordTranslate}`);
+	const rightAnswer = document.querySelector(`.answers-wrapper__answer:nth-child(${mainWordTranslationIndex+1})`);
+	rightAnswer.classList.add('right-answer');
 	// sound.play();
 }

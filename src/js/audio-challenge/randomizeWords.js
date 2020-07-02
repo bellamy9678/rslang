@@ -13,7 +13,6 @@ export default function randomizeWords(words, arrForRand) {
 		arrayForRandom.splice(randomIndex, 1);
 	}
 	words.splice(0, 1);
-	console.log(arrForRand);
 	const indexForMainWord = Math.floor(Math.random() * arrayWithAnswers.length);
 	arrayWithAnswers.splice(indexForMainWord, 0, mainWord);
 	generateElements(mainWord, arrayWithAnswers);
