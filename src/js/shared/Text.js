@@ -56,6 +56,7 @@ export const TEXT = {
 		complexityButtonsLabel: '"Again", "Difficult", "Good" and "Easy" buttons',
 		showAnswerButtonLabel: 'Button to show the correct answer',
 		saveSettingsButton: 'Save',
+		useLearnedWordsLabel: 'Use learned words in games',
 		errorMessage: 'At least one of three items must be selected (word translation, word meaning or a sentence with an example of using the studied word.',
 		successMessage: 'Your settings is saved',
 	},

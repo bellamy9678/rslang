@@ -5,8 +5,7 @@ import {
 } from '../shared/Text';
 import Settings from './Settings';
 
-export default function showSettingsPage() {
-	const app = document.querySelector('.app');
+function createSettingsPage() {
 	const newElem = new DOMElementCreator();
 
 	const title = newElem.create({
@@ -267,6 +266,22 @@ export default function showSettingsPage() {
 		child: [showAnswerButtonCheckbox, TEXT.settingsPage.showAnswerButtonLabel],
 	});
 
+	const useLearnedWordsCheckbox = newElem.create({
+		elem: TAGS.INPUT,
+		classes: 'settings__checkbox',
+		id: 'use-learned-words',
+		attr: [{
+			name: 'useLearnedWords',
+			type: 'checkbox',
+		}, ],
+	});
+
+	const useLearnedWordsLabel = newElem.create({
+		elem: TAGS.LABEL,
+		classes: 'settings__label',
+		child: [useLearnedWordsCheckbox, TEXT.settingsPage.useLearnedWordsLabel],
+	});
+
 	const checkboxWrapper = newElem.create({
 		elem: TAGS.DIV,
 		classes: 'settings__checkbox-wrapper',
@@ -282,6 +297,7 @@ export default function showSettingsPage() {
 			difficultButtonLabel,
 			complexityButtonsLabel,
 			showAnswerButtonLabel,
+			useLearnedWordsLabel,
 		]
 	});
 
@@ -322,6 +338,12 @@ export default function showSettingsPage() {
 		child: [title, form, saveButton],
 	});
 
+	return wrapper;
+}
+
+export default function showSettingsPage() {
+	const app = document.querySelector('.app');
+	const settingsPage = createSettingsPage();
 	app.firstChild.remove();
-	app.append(wrapper);
+	app.append(settingsPage);
 }
