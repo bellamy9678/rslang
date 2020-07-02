@@ -1,8 +1,9 @@
 .app {
-    height: calc(100% - 72px);
-    overflow: hidden;
+	position: relative;
+	height: calc(100% - 72px);
+	overflow: hidden;
 
-    &__wrapper {
-        height: 100%;
-    }
+	&__wrapper {
+		height: 100%;
+	}
 }

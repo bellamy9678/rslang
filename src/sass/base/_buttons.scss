@@ -17,6 +17,12 @@
         color: $color-text-light;
     }
 
+    &_colored-add {
+        background: $color-additional;
+        border: 1px solid $color-additional;
+        color: $color-text-light;
+    }
+
     &:focus {
         outline: none;
     }
