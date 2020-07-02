@@ -1,19 +1,29 @@
 import generateElements from './generateElements';
+import {arrayForUniqness, arrayForRandom, idkText} from './consts';
+import changeStylesAfterAnswer from './changeStylesAfterAnswer';
 
-export default function randomizeWords(words, arrForRand) {
+export default function randomizeWords(words, array) {
 	const mainWord = words[0];
 	const arrayWithAnswers = [];
 	const numberOfWrongAnswers = 4;
-	const arrayForRandom = arrForRand.slice();
+	const arrayForRand = array.slice();
 	for (arrayWithAnswers.length; arrayWithAnswers.length < numberOfWrongAnswers;) {
-		const randomIndex = Math.floor(Math.random() * arrayForRandom.length);
-		if (arrayForRandom[randomIndex] !== mainWord) {
-			arrayWithAnswers.push(arrayForRandom[randomIndex]);
+		const randomIndex = Math.floor(Math.random() * arrayForRand.length);
+		if (arrayForRand[randomIndex] !== mainWord) {
+			arrayWithAnswers.push(arrayForRand[randomIndex]);
 		}
-		arrayForRandom.splice(randomIndex, 1);
+		arrayForRand.splice(randomIndex, 1);
 	}
 	words.splice(0, 1);
 	const indexForMainWord = Math.floor(Math.random() * arrayWithAnswers.length);
 	arrayWithAnswers.splice(indexForMainWord, 0, mainWord);
 	generateElements(mainWord, arrayWithAnswers);
+	const skipButton = document.querySelector('.skip-button');
+	skipButton.addEventListener('click', () => {
+		if (skipButton.textContent === idkText) {
+			changeStylesAfterAnswer();
+		} else {
+			randomizeWords(arrayForUniqness, arrayForRandom);
+		}
+	});
 }

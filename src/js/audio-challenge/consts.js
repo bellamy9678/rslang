@@ -50,5 +50,7 @@ const words = [
 ];
 const idkText = 'НЕ ЗНАЮ';
 const skipText = '\u2192';
+const arrayForUniqness = [];
+const arrayForRandom = [];
 
-export {words, idkText, skipText};
+export {words, idkText, skipText, arrayForUniqness, arrayForRandom};

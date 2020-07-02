@@ -3,19 +3,17 @@ import './sass/style.scss';
 // import './js/authorization/StartPage';
 import giveWords from './js/audio-challenge/giveWords';
 import randomizeWords from './js/audio-challenge/randomizeWords';
-import goToTheNextWord from './js/audio-challenge/goToTheNextWord';
-import checkAnswer from './js/audio-challenge/checkAnswer';
+import {arrayForUniqness, arrayForRandom} from './js/audio-challenge/consts';
 
 async function a() {
 	const allWords = await giveWords();
-	const arrayForRandom = allWords.concat([]);
-	randomizeWords(allWords, arrayForRandom);
+	allWords.forEach(item => {
+		arrayForUniqness.push(item);
+	});
+	allWords.forEach(item => {
+		arrayForRandom.push(item);
+	});
+	randomizeWords(arrayForUniqness, arrayForRandom);
 }
 
-a().then(() => {
-	goToTheNextWord();
-	const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
-	answerContainers.forEach(container => {
-		container.addEventListener('click', checkAnswer);
-	});
-});
+a();
