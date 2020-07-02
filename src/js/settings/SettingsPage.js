@@ -136,6 +136,7 @@ function createSettingsPage() {
 			meaningTranslateCheckbox.removeAttribute('disabled');
 		} else {
 			meaningTranslateCheckbox.setAttribute('disabled', 'disabled');
+			meaningTranslateCheckbox.checked = false;
 		}
 	});
 
@@ -183,6 +184,7 @@ function createSettingsPage() {
 			sentenceExampleTranslateCheckbox.removeAttribute('disabled');
 		} else {
 			sentenceExampleTranslateCheckbox.setAttribute('disabled', 'disabled');
+			sentenceExampleTranslateCheckbox.checked = false;
 		}
 	});
 
