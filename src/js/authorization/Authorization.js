@@ -6,7 +6,7 @@ import {
 	API,
 	URL_PARAM_SIGN_IN
 } from '../shared/Constants';
-import WelcomePage from './WelcomePage';
+import showMainPage from '../mainPage/MainPage';
 import Cookie from './Cookie';
 
 export default class Authorization {
@@ -31,7 +31,7 @@ export default class Authorization {
 			const userName = userData.email.replace(`${EMAIL_PART}`, '');
 			Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
 			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
-			WelcomePage.showWelcomePage(userName);
+			showMainPage(userName);
 		} catch (error) {
 			console.log(rawResponse.status);
 			console.error(error);

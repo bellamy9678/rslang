@@ -1,5 +1,5 @@
 import Cookie from './Cookie';
-import WelcomePage from './WelcomePage';
+import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
 
@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
 		const cookie = new Cookie(cookieArr);
 		const userName = cookie.checkUserToken();
 		if (userName) {
-			WelcomePage.showWelcomePage(userName);
+			showMainPage(userName);
 		} else {
 			StartPage.showStartPage();
 		}

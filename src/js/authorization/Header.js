@@ -108,16 +108,6 @@ export default class Header {
 			child: LINKS.statistic,
 		});
 
-		const gamesLink = newElem.create({
-			elem: TAGS.LI,
-			classes: 'navigation__link',
-			id: 'link_games',
-			attr: {
-				type: 'userElement'
-			},
-			child: LINKS.games,
-		});
-
 		const dictionaryLink = newElem.create({
 			elem: TAGS.LI,
 			classes: 'navigation__link',
@@ -128,7 +118,7 @@ export default class Header {
 			child: LINKS.dictionary,
 		});
 		const navigation = document.querySelector('.navigation');
-		navigation.prepend(settingsLink, statisticLink, gamesLink, dictionaryLink);
+		navigation.prepend(settingsLink, statisticLink, dictionaryLink);
 	}
 
 	static createUserButtons(username) {
