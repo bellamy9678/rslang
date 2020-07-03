@@ -48,12 +48,18 @@
 		bottom: 0;
 		right: 0;
 		background-color: $color-game-overlay-add;
+
+		&:hover {
+			background-color: $color-game-overlay-add-hov;
+			@extend %transition;
+		}
 	}
 
 	&__title {
 		position: absolute;
 		top: -180px;
 		text-align: center;
+
 		&-text {
 			margin-top: 15px;
 		}
@@ -95,6 +101,11 @@
 
 		.game__overlay {
 			background-color: $color-game-overlay;
+
+			&:hover {
+				background-color: $color-game-overlay-hov;
+				@extend %transition;
+			}
 		}
 	}
 }
