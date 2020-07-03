@@ -8,16 +8,11 @@ import {
 function addSimilarDOMElements([...objects]) {
 	const newElem = new DOMElementCreator();
 	[...objects].forEach(el => {
-		const corner1 = newElem.create({
+		const overlay = newElem.create({
 			elem: TAGS.DIV,
-			classes: ['game__corner-1'],
+			classes: ['game__overlay'],
 		});
-
-		const corner2 = newElem.create({
-			elem: TAGS.DIV,
-			classes: ['game__corner-2'],
-		});
-		el.append(corner1, corner2);
+		el.append(overlay);
 	});
 }
 
@@ -63,22 +58,16 @@ export default function createGamesPage() {
 		child: [savannahName],
 	});
 
+	const description = newElem.create({
+		elem: TAGS.P,
+		classes: ['game__description'],
+		child: [TEXT.gamesPage.description],
+	});
+
 	const container1 = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['game__container'],
-		child: [englishPuzzleGame, speakItGame, savannahGame],
-	});
-
-	const title = newElem.create({
-		elem: TAGS.H2,
-		classes: ['game__title'],
-		child: [TEXT.gamesPage.title],
-	});
-
-	const content = newElem.create({
-		elem: TAGS.DIV,
-		classes: ['game__content'],
-		child: [title],
+		child: [englishPuzzleGame, speakItGame, savannahGame, description],
 	});
 
 	const audioChallengeName = newElem.create({
@@ -122,10 +111,31 @@ export default function createGamesPage() {
 
 	addSimilarDOMElements([englishPuzzleGame, speakItGame, savannahGame, audioChallengeGame, ownGame, sprintGame]);
 
+	const titleText = newElem.create({
+		elem: TAGS.H2,
+		classes: ['game__title-text'],
+		child: [TEXT.gamesPage.title],
+	});
+
+	const titleImage = newElem.create({
+		elem: TAGS.IMG,
+		attr: [{
+			src: './assets/images/brain.png'
+		}, {
+			width: '100'
+		}],
+	});
+
+	const title = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['game__title'],
+		child: [titleImage, titleText],
+	});
+
 	const container2 = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['game__container'],
-		child: [content, audioChallengeGame, sprintGame, ownGame],
+		child: [title, audioChallengeGame, sprintGame, ownGame],
 	});
 
 	const gameWrapper = newElem.create({

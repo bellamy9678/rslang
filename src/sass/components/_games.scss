@@ -1,102 +1,100 @@
 .game {
-	width: 150px;
-	height: 86px;
-	background-color: #ccc;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	background-size: auto 173px;
+	width: 200px;
+	height: 220px;
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	margin-right: 20px;
 	position: relative;
-	margin: 25px 5px;
-	text-align: center;
-	// zoom: 1;
 
 	&__wrapper {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: baseline;
-		position: relative;
+		padding: 80px 0;
+		background-image: url("../../src/assets/images/ellipse-bg.png");
+		background-repeat: no-repeat;
 	}
 
 	&__container {
+		position: relative;
 		display: flex;
 		flex-wrap: wrap-reverse;
-		width: 320px;
+		width: 440px;
 		justify-content: center;
 	}
 
 	&__container:last-child {
+		width: 420px;
 		flex-wrap: wrap;
 	}
 
-	&__content {
+	&__name {
+		@include font($size: 1.6rem, $weight: 600);
+		text-transform: uppercase;
+		color: $color-text-light;
+		z-index: 10;
+	}
+
+	&__overlay {
+		width: 100%;
+		height: 100%;
 		position: absolute;
-		top: 45px;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background-color: $color-game-overlay-add;
+	}
+
+	&__title {
+		position: absolute;
+		top: -180px;
+		text-align: center;
+		&-text {
+			margin-top: 15px;
+		}
+	}
+
+	&__description {
+		position: absolute;
+		bottom: -70px;
+		@include font($size: 1.6rem, $weight: 600);
+		text-align: center;
 	}
 
 	&__savannah {
-		@include bg-hex-game("../../src/assets/images/savannah.jpg");
+		@include bg-cover("../../src/assets/images/savannah.jpg");
+		margin-bottom: -36px;
 	}
 
 	&__english-puzzle {
-		@include bg-hex-game("../../src/assets/images/englishPuzzle.jpg");
+		@include bg-cover("../../src/assets/images/englishPuzzle.jpg");
 	}
 
 	&__speak-it {
-		@include bg-hex-game("../../src/assets/images/speakIt.jpg");
+		@include bg-cover("../../src/assets/images/speakIt.jpg");
 	}
 
-	&__name {
-		display: block;
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
+	&__audio-challenge {
+		@include bg-cover("../../src/assets/images/audioChallenge.jpg");
 	}
 
-	&__corner-1,
-	&__corner-2 {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: inherit;
-		z-index: -2;
-		overflow: hidden;
-		backface-visibility: hidden;
+	&__sprint {
+		@include bg-cover("../../src/assets/images/sprint.jpg");
+		margin-right: 0;
 	}
 
-	&__corner-1 {
-		z-index: -1;
-		transform: rotate(60deg);
-	}
+	&__own-game {
+		@include bg-cover("../../src/assets/images/ownGame.jpg");
+		margin-top: -36px;
+		margin-right: 0;
 
-	&__corner-2 {
-		transform: rotate(-60deg);
-	}
-
-	&__corner-1:before,
-	&__corner-2:before {
-		width: 173px;
-		height: 173px;
-		content: '';
-		position: absolute;
-		background: inherit;
-		top: 0;
-		left: 0;
-		z-index: 1;
-		backface-visibility: hidden;
-	}
-
-	&__corner-1:before {
-		transform: rotate(-60deg) translate(-87px, 0px);
-		transform-origin: 0 0;
-	}
-
-	&__corner-2:before {
-		transform: rotate(60deg) translate(-48px, -11px);
-		bottom: 0;
+		.game__overlay {
+			background-color: $color-game-overlay;
+		}
 	}
 }

@@ -43,6 +43,7 @@ export const TEXT = {
 
 	gamesPage: {
 		title: 'Try our amazing games!',
+		description: 'Lorem ipsum dolore si amet.',
 	},
 	settingsPage: {
 		title: 'Settings',
