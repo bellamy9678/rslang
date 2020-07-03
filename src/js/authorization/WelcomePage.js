@@ -4,6 +4,7 @@ import {
 	LINKS,
 	TEXT
 } from '../shared/Text';
+import createGamesPage from '../gamesPage/GamesPage';
 
 export default class WelcomePage {
 	static showWelcomePage(username) {
@@ -23,23 +24,30 @@ export default class WelcomePage {
 
 		const settingsLink = newElem.create({
 			elem: TAGS.A,
-			classes: 'link-button',
+			classes: 'welcome__link-button',
 			attr: [{
 				href: '#',
 			}, ],
 			child: [settingsIcon, settingsLinkText],
 		});
 
+		const trainingModeButton = newElem.create({
+			elem: TAGS.BUTTON,
+			classes: ['button', 'button_colored-add'],
+			id: 'button_training-mode',
+			child: [TEXT.welcomePage.trainingModeButton],
+		});
+
 		const title = newElem.create({
 			elem: TAGS.h1,
 			classes: 'welcome__title',
-			child: [TEXT.welcomPage.title.leftPath, username, TEXT.welcomPage.title.rightPath],
+			child: [TEXT.welcomePage.title.leftPath, username, TEXT.welcomePage.title.rightPath],
 		});
 
 		const buttons = newElem.create({
 			elem: TAGS.DIV,
 			classes: 'welcome__buttons',
-			child: [settingsLink],
+			child: [settingsLink, trainingModeButton],
 		});
 
 		const content = newElem.create({
@@ -60,10 +68,18 @@ export default class WelcomePage {
 			],
 		});
 
+		const welcomeWrapper = newElem.create({
+			elem: TAGS.DIV,
+			classes: ['welcome__wrapper'],
+			child: [content, image],
+		});
+
+		const gameWrapper = createGamesPage();
+
 		const wrapper = newElem.create({
 			elem: TAGS.DIV,
-			classes: ['wrapper', 'welcome__wrapper'],
-			child: [content, image],
+			classes: ['wrapper'],
+			child: [welcomeWrapper, gameWrapper],
 		});
 
 		const page = newElem.create({
@@ -71,9 +87,11 @@ export default class WelcomePage {
 			classes: 'welcome',
 			child: [wrapper],
 		});
+
 		if (app.firstChild) {
 			app.firstChild.remove();
 		}
+
 		app.append(page);
 	}
 }

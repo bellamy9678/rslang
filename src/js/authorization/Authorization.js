@@ -34,6 +34,7 @@ export default class Authorization {
 			WelcomePage.showWelcomePage(userName);
 		} catch (error) {
 			console.log(rawResponse.status);
+			console.error(error);
 			throw new Error(error.message);
 		}
 	}

@@ -287,6 +287,5 @@ export default class Header {
 		} finally {
 			this.createUnauthorisedUserLinks();
 		}
-		this.createUnauthorisedUserLinks();
 	}
 }

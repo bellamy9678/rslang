@@ -5,6 +5,13 @@
     line-height: $height;
 }
 
+@mixin bg-hex-game ($url) {
+	background-image: url($url);
+	background-size: auto 173px;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+}
+
 @mixin bg-cover ($url) {
     background-image: url($url);
     background-size: cover;
