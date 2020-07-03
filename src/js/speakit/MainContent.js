@@ -6,44 +6,30 @@ import { restartBtnText, speakBtnText, stopSpeakText, finishBtnText } from './sp
 
 
 const mainImage = './assets/images/eng.jpg';
+const microphoneOn ='./assets/images/mikro.png'; 
 const defaultSrc = '';
+const iterationStart = 1;
+const iterationEnd = 7;
 export default function initMainContent() {
   const newElem = new DOMElementCreator();
-  const levelBtn1 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['1'],
-  });
-  const levelBtn2 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['2'],
-  });
-  const levelBtn3 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['3'],
-  });
-  const levelBtn4 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['4'],
-  });
-  const levelBtn5 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['5'],
-  });
-  const levelBtn6 = newElem.create({
-    elem: TAGS.BUTTON,
-    classes: 'level-btn',  
-    child: ['6'],
-  });
-  
+
+  function createLevelsBtn() {
+    const arrBtn = [];
+    for( let i = iterationStart; i < iterationEnd; i += 1) {
+      const test = newElem.create({
+        elem: TAGS.BUTTON,
+        classes: 'level-btn',  
+        child: i,
+      });
+      arrBtn.push(test); 
+    }
+    return arrBtn;
+  }
+    
   const level = newElem.create({
     elem: TAGS.DIV,
     classes: 'level',  
-    child: [levelBtn1, levelBtn2, levelBtn3, levelBtn4, levelBtn5, levelBtn6],
+    child: createLevelsBtn(),
   });
   const currentImg = newElem.create({
     elem: TAGS.IMG,
@@ -59,10 +45,19 @@ export default function initMainContent() {
     elem: TAGS.P,
     classes: 'current-transl',  
   });
+
+  const Img = newElem.create({
+    elem: TAGS.IMG,
+    classes: 'micro',
+    attr: {
+      src: microphoneOn,
+    },
+  });
   
   const output = newElem.create({
     elem: TAGS.P,
     classes: ['word-output', 'none'],
+    child: Img,
   });
   
   const imgCont =newElem.create({
@@ -93,7 +88,7 @@ export default function initMainContent() {
     elem: TAGS.BUTTON,
     classes: ['button', 'button_colored','restart'],  
     child: restartBtnText,
-  });
+  });  
   
   const speakButton = newElem.create({
     elem: TAGS.BUTTON,

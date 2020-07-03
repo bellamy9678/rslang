@@ -32,7 +32,7 @@ export default function renderWords(item) {
     attr: [{
       'data-myimage': `${item.image}`,
     }, {
-     'data-myaudio': `${item.audio}`,
+      'data-myaudio': `${item.audio}`,
     }, {
       'data-transl': `${item.translate}`,
     }, {
@@ -42,6 +42,6 @@ export default function renderWords(item) {
     }],
     child: [Img, wordWriting, wordTranscript]
   });
-  
+
   return word
 }

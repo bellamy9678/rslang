@@ -12,7 +12,7 @@ import renderWords from './RenderWords';
 
 import Result from '../game_result/Result';
 
-import { returnBtnText, newGameText} from './speakconst';
+import { returnBtnText, newGameText, statisticText, emptyString } from './speakconst';
 
 
 // Creat DOM
@@ -65,11 +65,11 @@ function Word(word) {
 
 
 // Speech recognition
-
 const SpeechRecognition = window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 recognition.lang = language;
+
 
 async function getWords(group, page) {
   const url = `${API}words?group=${group}&page=${page}`;
@@ -83,10 +83,10 @@ const words = document.getElementsByClassName('word');
 function setDefaultState() {
   guessed.length = 0;
   trainMode = true;
-  output.innerHTML = '';
+  span.textContent = emptyString;
   output.classList.add('none');
   currentImg.setAttribute('src', defaultImg);
-  translation.textContent = '';
+  translation.textContent = emptyString;
   [...words].forEach(el => el.remove());
   getWords(0,0).then(res => {
     const arr = res.slice(0, 10).map(item => renderWords(item));
@@ -94,28 +94,21 @@ function setDefaultState() {
   })
 }
 
-function handleRecognition() {
-  [...words].forEach(el => {
-    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.innerHTML.toLowerCase()) {
-      if (!guessed.includes(el)) {
-        el.classList.add('active');
-        currentImg.setAttribute('src', el.dataset.myimage);
-        guessed.push(el);
-  if (guessed.length === 10) {
-    // resultBtnHandler(); здесь должно появляться окошко с результатом
-  }
-      }
-    }
-  })
-
-  recognition.start();
+function setStartingState() {
+  guessed.length = 0;
+  trainMode = true;
+  span.textContent = emptyString;
+  output.classList.add('none');
+  currentImg.setAttribute('src', defaultImg);
+  translation.textContent = emptyString;
+  [...words].forEach(el => el.remove());
 }
 
 function GetAnswers(item) {
   this.word = item.dataset.wrt;
   this.wordTranslate = item.dataset.transl;
   this.transcription = item.dataset.transcription; 
-  this.audio = item.dataset.myaudio.replace(ASSETS_STORAGE, ''); 
+  this.audio = item.dataset.myaudio.replace(ASSETS_STORAGE, emptyString); 
  }
 
 // Modal window 
@@ -130,7 +123,18 @@ function resultBtnHandler() {
     elem: TAGS.BUTTON,
     classes: ['result__button', 'result__continue-btn'],
     child: newGameText,
-  }); 
+  });
+  
+  const statisticBtn = newElem.create({
+    elem: TAGS.BUTTON,
+    classes: ['result__button', 'result__continue-btn'],
+    child: statisticText,
+  });
+
+  statisticBtn.addEventListener('click', () => {
+    myResult.closeResultWindow();
+    // дописать метод, показывающий статистику по игре
+  })
 
   resultReturnBtn.addEventListener('click', () => {
     myResult.closeResultWindow();
@@ -138,16 +142,37 @@ function resultBtnHandler() {
 
   resultNewGameBtn.addEventListener('click', () => {
     myResult.closeResultWindow();
-    setDefaultState();
-    recognition.removeEventListener('end', handleRecognition);
+    setStartingState();
+    recognition.stop();
+    mainWrapper.classList.add('none');
+    startPage.classList.remove('none');
   })
       
   myResult.showResult({
     rightAnswers: guessed.map(item => new GetAnswers(item)),
     wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
-    buttons: [resultReturnBtn, resultNewGameBtn],
+    buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn],
   });
 };
+
+
+function handleRecognition() {
+  [...words].forEach(el => {
+    if(el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
+      if (!guessed.includes(el)) {
+        el.classList.add('active');
+        currentImg.setAttribute('src', el.dataset.myimage);
+        guessed.push(el);
+  if (guessed.length === 10) {
+    resultBtnHandler();
+  }
+      }
+    }
+  })
+
+  recognition.start();
+}
+
 // Events
 
 document.addEventListener('click', event => {
@@ -155,6 +180,7 @@ document.addEventListener('click', event => {
   if (event.target.classList.contains('start-btn')) {
     startPage.classList.add('none');
     mainWrapper.classList.remove('none');
+    recognition.removeEventListener('end', handleRecognition);
     getWords(0,0).then(res => {
       const arr = res.slice(0, 10).map(item => renderWords(item));
       arr.forEach(el => wordsContainer.append(el));
@@ -187,9 +213,11 @@ document.addEventListener('click', event => {
   // restart button
   if (event.target.classList.contains('restart')) {
     setDefaultState();
+    recognition.stop();
     recognition.removeEventListener('end', handleRecognition);    
   }  
 }) 
+
 
 // speech recognition on
   const speakBtn = document.querySelector('.speak');
@@ -198,33 +226,29 @@ document.addEventListener('click', event => {
     output.classList.remove('none');
     [...words].forEach(el => el.classList.remove('active'));
     translation.classList.add('none');
-    recognition.start();    
+    recognition.start();
+    recognition.addEventListener('end', handleRecognition);    
   }); 
 
   recognition.addEventListener("result", (e) => {
     const last = e.results.length - 1;
     const command = e.results[last][0].transcript;
-    span.innerHTML = '';
-    span.innerHTML = command; 
+    span.textContent = emptyString;
+    span.textContent = command; 
   }); 
   
-  recognition.addEventListener('end', handleRecognition);
-  stopSpeak.addEventListener('click', () => {    
+  // speech recognition off
+  stopSpeak.addEventListener('click', () => {
+    recognition.stop();    
     recognition.removeEventListener('end', handleRecognition);
     output.classList.add('none');
-    output.innerHTML = '';
+    span.textContent = emptyString;
     currentImg.setAttribute('src', defaultImg);
     [...words].forEach(el => el.classList.remove('active'));
     trainMode = true;
     translation.classList.remove('none');
-    translation.textContent = '';
+    translation.textContent = emptyString;
   } )  
 
   const finishBtn = document.querySelector('.finish');
-  finishBtn.addEventListener('click', resultBtnHandler);
-  
-  /* function GetAnswers(item) {
-   this.word = item.dataset.wrt;
-   this.wordTranslate = item.dataset.transl;
-   this.transcription = item.dataset.transcription; 
-  } */
+  finishBtn.addEventListener('click', resultBtnHandler);  

@@ -98,6 +98,7 @@
 }
 .word-output {
     display: block;
+    position: relative;
     border: 0;
     border-bottom: 1px solid rgb(206, 212, 218);
     background-color: transparent;
@@ -109,6 +110,12 @@
     @include font($size: 2.2rem, $height: 4rem);
     color: $color-text-dark;
     text-align: center;
+}
+.micro {
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  width: 20px;
 }
 
 .image-container {  

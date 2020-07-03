@@ -8,3 +8,5 @@ export const stopSpeakText = 'Stop speak';
 export const finishBtnText = 'Finish';
 export const returnBtnText = 'Return';
 export const newGameText = 'New Game';
+export const statisticText = 'Statistics';
+export const emptyString = '';
