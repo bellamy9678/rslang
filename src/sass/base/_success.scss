@@ -1,0 +1,8 @@
+.success {
+	&__message {
+		display: block;
+		@include font($size: 1.2rem, $weight: 600);
+		margin-bottom: 10px;
+		color: $color-success;
+	}
+}

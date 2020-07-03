@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-//const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
+// const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const ENV = process.env.npm_lifecycle_event;
@@ -27,7 +27,9 @@ function setDMode() {
 
 const config = {
 	target: "web",
-	entry: { index: "./src/app.js" },
+	entry: {
+		index: "./src/app.js",
+	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
 		filename: "[name].js",
@@ -53,7 +55,7 @@ const config = {
 				exclude: [/node_modules/],
 			},
 			{
-				test: /\.css$/,
+				test: /\.s?css$/,
 				use: [
 					"style-loader",
 					MiniCssExtractPlugin.loader,
@@ -67,27 +69,9 @@ const config = {
 						loader: "postcss-loader",
 						options: {
 							sourceMap: true,
-							config: { path: "./postcss.config.js" },
-						},
-					},
-				],
-			},
-			{
-				test: /\.scss$/,
-				use: [
-					"style-loader",
-					MiniCssExtractPlugin.loader,
-					{
-						loader: "css-loader",
-						options: {
-							sourceMap: true,
-						},
-					},
-					{
-						loader: "postcss-loader",
-						options: {
-							sourceMap: true,
-							config: { path: "./postcss.config.js" },
+							config: {
+								path: "./postcss.config.js",
+							},
 						},
 					},
 					{
@@ -162,7 +146,7 @@ const config = {
 				to: "./assets/",
 			},
 		]),
-		//new FaviconsWebpackPlugin("./src/img/icon.jpg"),
+		// new FaviconsWebpackPlugin("./src/img/icon.jpg"),
 	],
 
 	devServer: {
