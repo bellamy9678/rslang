@@ -1,52 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>RS Lang</title>
-	</head>
-	<body>
-		<header class="header">
-			<div class="wrapper header__wrapper">
-				<a href="#" class="header__logo"></a>
-				<nav class="header__navigation">
-					<ul class="navigation">
-						<li class="navigation__link">Our Team</li>
-						<li class="navigation__link">Getting started</li>
-					</ul>
-				</nav>
-				<div class="header__buttons">
-					<button class="button button_bordered" id="sign-in">Sign in</button>
-					<button class="button button_colored" id="sign-up">Sign up</button>
-				</div>
-			</div>
-		</header>
-		<div class="authorization none">
-			<div class="wrapper authorization__wrapper">
-				<form class="authorization__form">
-					<label for="user__name">Username</label>
-					<input
-						class="authorization__username"
-						id="user__name"
-						type="text"
-						required
-					/>
-					<label for="user__password">Password</label>
-					<input
-						class="authorization__password"
-						id="user__password"
-						type="text"
-						required
-					/>
-					<button class="button button_colored authorization__button">
-						Go
-					</button>
-				</form>
-			</div>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="shortcut icon" href="./assets/images/favicon.svg" type="image/svg">
+	<title>RS Lang</title>
+</head>
+
+<body>
+	<header class="header">
+		<div class="wrapper header__wrapper">
+			<a href="#" class="header__logo"><img width="150" src = "./assets/images/logo.svg" alt = "Logo"></a>
+			<nav class="header__navigation">
+				<ul class="navigation"></ul>
+			</nav>
+			<div class="header__buttons"></div>
 		</div>
-		<main class="app"></main>
-		<footer class="footer">
-			<div class="wrapper"></div>
-		</footer>
-	</body>
+	</header>
+	<main class="app"></main>
+	<footer class="footer">
+		<div class="wrapper"></div>
+	</footer>
+</body>
+
 </html>

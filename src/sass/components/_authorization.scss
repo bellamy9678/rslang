@@ -1,20 +1,36 @@
 .authorization {
+	position: relative;
+	z-index: 100;
 
-    &__wrapper {
-        position: relative;
-    }
+	&__wrapper {
+		position: relative;
+	}
 
-    &__form {
-        width: $mobile-small-width;
-        background: $color-background;
-        border-radius: 0 0 10px 10px;
-        padding: 40px;
-        position: absolute;
-        right: 0;
-        z-index: 50;
-    }
+	&__form {
+		width: $mobile-small-width;
+		background: $color-background;
+		border-radius: 0 0 10px 10px;
+		padding: 40px;
+		position: absolute;
+		right: 0;
+		z-index: 50;
+	}
 
-    &__button {
-        width: 100%;
-    }
+	&__button {
+		width: 100%;
+	}
+
+	input {
+		@extend %text-input;
+	}
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 50;
+	background: $color-overlay;
 }

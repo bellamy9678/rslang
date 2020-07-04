@@ -6,7 +6,9 @@
 // Base
 @import './base/base';
 @import './base/buttons';
-@import './base/icon';
+@import './base/icons';
+@import './base/error';
+@import './base/success';
 
 // Layouts
 @import './layouts/wrapper';
@@ -18,8 +20,12 @@
 @import './components/dictionary';
 @import './components/navigation';
 @import './components/authorization';
+@import './components/user';
+@import './components/welcome';
+@import './components/games';
 
 // Pages
 @import './pages/start-page';
 @import './pages/account-creation';
-@import './pages/welcome';
+@import './pages/settings';
+@import './pages/gamesresult';
