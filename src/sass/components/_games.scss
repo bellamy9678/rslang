@@ -1,0 +1,111 @@
+.game {
+	width: 200px;
+	height: 220px;
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	margin-right: 20px;
+	position: relative;
+
+	&__wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: baseline;
+		padding: 80px 0;
+		background-image: url("../../src/assets/images/ellipse-bg.png");
+		background-repeat: no-repeat;
+	}
+
+	&__container {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap-reverse;
+		width: 440px;
+		justify-content: center;
+	}
+
+	&__container:last-child {
+		width: 420px;
+		flex-wrap: wrap;
+	}
+
+	&__name {
+		@include font($size: 1.6rem, $weight: 600);
+		text-transform: uppercase;
+		color: $color-text-light;
+		z-index: 10;
+	}
+
+	&__overlay {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background-color: $color-game-overlay-add;
+
+		&:hover {
+			background-color: $color-game-overlay-add-hov;
+			@extend %transition;
+		}
+	}
+
+	&__title {
+		position: absolute;
+		top: -180px;
+		text-align: center;
+
+		&-text {
+			margin-top: 15px;
+		}
+	}
+
+	&__description {
+		position: absolute;
+		bottom: -70px;
+		@include font($size: 1.6rem, $weight: 600);
+		text-align: center;
+	}
+
+	&__savannah {
+		@include bg-cover("../../src/assets/images/savannah.jpg");
+		margin-bottom: -36px;
+	}
+
+	&__english-puzzle {
+		@include bg-cover("../../src/assets/images/englishPuzzle.jpg");
+	}
+
+	&__speak-it {
+		@include bg-cover("../../src/assets/images/speakIt.jpg");
+	}
+
+	&__audio-challenge {
+		@include bg-cover("../../src/assets/images/audioChallenge.jpg");
+	}
+
+	&__sprint {
+		@include bg-cover("../../src/assets/images/sprint.jpg");
+		margin-right: 0;
+	}
+
+	&__own-game {
+		@include bg-cover("../../src/assets/images/ownGame.jpg");
+		margin-top: -36px;
+		margin-right: 0;
+
+		.game__overlay {
+			background-color: $color-game-overlay;
+
+			&:hover {
+				background-color: $color-game-overlay-hov;
+				@extend %transition;
+			}
+		}
+	}
+}

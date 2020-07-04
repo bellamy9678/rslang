@@ -15,6 +15,7 @@ export default class Settings {
 				settings[input.getAttribute('name')] = input.checked;
 			}
 		});
+		console.log(settings);
 		return settings;
 	}
 
