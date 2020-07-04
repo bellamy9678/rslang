@@ -1,9 +1,8 @@
 import { DISPLAY_NONE_CLASS } from './CardConstants';
 
 export default class SettingsChecker {
-	constructor() {
+	init() {
 		this.card = document.querySelector('#card-container');
-
 		this.translate = document.querySelector('#word-translate');
 		this.meaning = document.querySelector('#text-meaning');
 		this.meaningTranslate = document.querySelector('#text-meaning-translate');

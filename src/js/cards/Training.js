@@ -12,10 +12,11 @@ import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
 import InputHandler from './InputHandler';
 
-const globalState = new GlobalState();
+let globalState = new GlobalState();
 
 function setInput() {
 	globalState.inputHandler = new InputHandler();
+	globalState.inputHandler.init();
 	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth}${INPUT_WIDTH_UNIT}`;
 }
 
@@ -93,6 +94,7 @@ function nextCard() {
 			document.querySelector('.card').classList.remove(FADE_CLASS);
 		} else {
 			globalState.finishGame();
+			globalState = {};
 		}
 	}, FADE_DURATION);
 }

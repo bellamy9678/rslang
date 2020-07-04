@@ -10,7 +10,7 @@ import {
 } from './CardConstants';
 
 export default class InputHandler {
-	constructor() {
+	init() {
 		this.wordHidden = document.querySelector('#example-part-word');
 		this.element = document.querySelector('#word');
 	}

@@ -41,6 +41,7 @@ export default class GlobalState {
 		this.cardsContainer.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
 		this.cardsContainer.querySelector(`#${INPUT_ID}`).focus();
 		const translateHandler = new SettingsChecker();
+		translateHandler.init();
 		translateHandler.checkAllSettings(SETTINGS_OBJECT_DEFAULT);
 		this.calcProgress();
 	}
@@ -79,12 +80,6 @@ export default class GlobalState {
 	finishGame() {
 		console.log('Все карточки на сегодня!');
 		this.container.removeChild(this.cardsContainer);
-		delete this.currentPosition;
-		delete this.words;
-		delete this.cards;
-		delete this.container;
-		delete this.cardsContainer;
-		delete this.progressContainer;
 	}
 
 	addCurrentWordToEnd() {
