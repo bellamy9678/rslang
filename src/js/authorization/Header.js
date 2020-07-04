@@ -13,6 +13,7 @@ import StartPage from './StartPage';
 import NewUser from './NewUser';
 import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
+import showSettingsPage from '../settings/SettingsPage';
 
 export default class Header {
 
@@ -94,6 +95,8 @@ export default class Header {
 			},
 			child: LINKS.settings,
 		});
+
+		settingsLink.addEventListener('click', showSettingsPage);
 
 		const statisticLink = newElem.create({
 			elem: TAGS.LI,
@@ -267,17 +270,22 @@ export default class Header {
 	}
 
 	static create() {
-		const cookieArr = document.cookie.split(';');
-		const cookie = new Cookie(cookieArr);
-		const userName = cookie.checkUserToken();
-		const buttons = document.querySelector('.header__buttons');
-		buttons.querySelectorAll('*').forEach(button => button.remove());
-		document.querySelectorAll('.navigation__link').forEach(link => link.remove());
-		if (userName) {
+		try {
+			const cookieArr = document.cookie.split(';');
+			const cookie = new Cookie(cookieArr);
+			const userName = cookie.checkUserToken();
+			const buttons = document.querySelector('.header__buttons');
+			buttons.querySelectorAll('*').forEach(button => button.remove());
+			document.querySelectorAll('.navigation__link').forEach(link => link.remove());
+			if (!userName) {
+				throw new Error('User is not authorized');
+			}
 			this.createUserNavigation();
 			this.createUserButtons(userName);
-		} else {
+		} catch (error) {
 			this.createUnauthorisedUserButtons();
+		} finally {
+			this.createUnauthorisedUserLinks();
 		}
 		this.createUnauthorisedUserLinks();
 	}

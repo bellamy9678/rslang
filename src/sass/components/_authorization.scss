@@ -19,6 +19,10 @@
 	&__button {
 		width: 100%;
 	}
+
+	input {
+		@extend %text-input;
+	}
 }
 
 .overlay {
