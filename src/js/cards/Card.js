@@ -11,7 +11,9 @@ import {
 	DISPLAY_NONE_CLASS,
 	EMPTY_STRING,
 } from './CardConstants';
-import { BUTTONS_WORDS } from '../shared/Text';
+import {
+	BUTTONS_WORDS
+} from '../shared/Text';
 import TAGS from '../shared/Tags.json';
 import WORDS_EVENTS from '../observer/WordsEvents';
 
@@ -57,7 +59,9 @@ export default class Card {
 			elem: TAGS.SPAN,
 			classes: ['card__meaning_word'],
 			id: 'meaning-part-word',
-			attr: { 'data-secret-word': textMeaningObject.word },
+			attr: {
+				'data-secret-word': textMeaningObject.word
+			},
 			child: TEXT_DEFAULT_HIDDEN,
 		});
 
@@ -103,7 +107,11 @@ export default class Card {
 			elem: TAGS.IMG,
 			id: 'image-card-example',
 			classes: DISPLAY_NONE_CLASS,
-			attr: [{ src: this.card.image }, { alt: this.card.word }],
+			attr: [{
+				src: this.card.image
+			}, {
+				alt: this.card.word
+			}],
 		});
 
 		const imgContainer = fab.create({
@@ -170,7 +178,9 @@ export default class Card {
 			elem: TAGS.SPAN,
 			classes: ['card__text_word', 'card__text_answer', HIDDEN_CLASS],
 			id: 'example-part-word',
-			attr: [{ 'data-word': textExampleObject.word }],
+			attr: [{
+				'data-word': textExampleObject.word
+			}],
 			child: letters,
 		});
 
@@ -178,7 +188,11 @@ export default class Card {
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
 			id: INPUT_ID,
-			attr: [{ type: 'text' }, { name: 'input' }],
+			attr: [{
+				type: 'text'
+			}, {
+				name: 'input'
+			}],
 			name: INPUT_ID,
 		});
 
@@ -199,7 +213,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'again-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.again,
 		});
 
@@ -213,7 +229,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'hard-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.hard,
 		});
 
@@ -225,7 +243,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'good-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.good,
 		});
 
@@ -237,7 +257,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'easy-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.easy,
 		});
 
@@ -262,13 +284,16 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'add-to-difficult-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.addToDifficult,
 		});
 
 		const addToEasyButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT, {
+				detail: currentWord
+			}
 		);
 		addToDifficultButton.addEventListener('click', () =>
 			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
@@ -278,13 +303,16 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'delete-from-dictionary-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.deleteFromDictionary,
 		});
 
 		const deleteFromDictionaryEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY, {
+				detail: currentWord
+			}
 		);
 
 		deleteFromDictionaryButton.addEventListener('click', () => {
@@ -302,7 +330,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'show-answer-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.showAnswer,
 		});
 
@@ -310,13 +340,17 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'continue-button',
-			attr: [{ type: 'button', disabled: true }],
+			attr: [{
+				type: 'button',
+				disabled: true
+			}],
 			child: BUTTONS_WORDS.continue,
 		});
 
 		const showAnswerButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON, {
+				detail: currentWord
+			}
 		);
 
 		const buttonGroupShowAnswer = fab.create({
@@ -329,21 +363,27 @@ export default class Card {
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
 			classes: DISPLAY_NONE_CLASS,
-			attr: [{ src: this.card.audio }],
+			attr: [{
+				src: this.card.audio
+			}],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
 			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-meaning',
-			attr: [{ src: this.card.meaningAudio }],
+			attr: [{
+				src: this.card.meaningAudio
+			}],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
 			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-example',
-			attr: [{ src: this.card.exampleAudio }],
+			attr: [{
+				src: this.card.exampleAudio
+			}],
 		});
 
 		const card = fab.create({

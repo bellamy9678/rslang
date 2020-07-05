@@ -1,14 +1,14 @@
 import {
 	API,
-	URL_PARAM_WORDS,
-	URL_PARAM_GROUP,
+	URL_WORDS,
+	URL_GROUP,
 	URL_ET,
-	URL_PARAM_PAGE,
+	URL_PAGE,
 } from '../shared/Constants';
 import Word from './Word';
 
 function getUrlFromGroupAndPage(group, page) {
-	return `${API}${URL_PARAM_WORDS}${URL_PARAM_GROUP}${group}${URL_ET}${URL_PARAM_PAGE}${page}`;
+	return `${API}${URL_WORDS}?${URL_GROUP}${group}${URL_ET}${URL_PAGE}${page}`;
 }
 
 async function getNewWordsFromApi(url) {

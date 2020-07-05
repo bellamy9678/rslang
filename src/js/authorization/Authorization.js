@@ -4,7 +4,7 @@ import {
 } from './Constants';
 import {
 	API,
-	URL_PARAM_SIGN_IN
+	URL_SIGN_IN
 } from '../shared/Constants';
 import showMainPage from '../mainPage/MainPage';
 import Cookie from './Cookie';
@@ -17,7 +17,7 @@ export default class Authorization {
 
 	static async authorizeUser(userData) {
 		console.log('Authorization -> authorizeUser -> userData', userData);
-		const rawResponse = await fetch(`${API}${URL_PARAM_SIGN_IN}`, {
+		const rawResponse = await fetch(`${API}${URL_SIGN_IN}`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

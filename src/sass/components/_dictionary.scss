@@ -1,15 +1,12 @@
 .dictionary {
-    display: flex;
-    flex-wrap: wrap;
+	&__row {
+		display: flex;
+	}
 
-    div {
-        border: solid 1px black;
-        flex-basis: 33%;
-    }
-}
-
-.word {
-    &_difficult {
-        display: inline-block;
-    }
+	&__cell {
+		border: solid 1px black;
+		flex-basis: 33%;
+		@include font($size: 1.6rem);
+		padding: 5px 10px;
+	}
 }

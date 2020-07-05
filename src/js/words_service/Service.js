@@ -4,7 +4,7 @@ import {
 	WORDS_MINIMUM_AMOUNT,
 	PART_OF_NEW_WORDS_IN_TOTAL,
 } from './constants';
-import getNewWordsArray from '../cards/GetWord';
+import getNewWordsArray from '../cards/GetWordsFromAPI';
 
 const settings = DEFAULT_SETTINGS; // new SINGLETON_SETTINGS();
 

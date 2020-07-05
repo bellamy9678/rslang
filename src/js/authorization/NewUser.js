@@ -5,7 +5,7 @@ import {
 } from './Constants';
 import {
 	API,
-	URL_PARAM_USER
+	URL_USER
 } from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
@@ -48,7 +48,7 @@ export default class NewUser {
 				email: userData.email,
 				password: userData.password
 			};
-			const rawResponse = await fetch(`${API}${URL_PARAM_USER}`, {
+			const rawResponse = await fetch(`${API}${URL_USER}`, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
