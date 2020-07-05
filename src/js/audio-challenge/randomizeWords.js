@@ -24,7 +24,12 @@ export default function randomizeWords(words, array) {
 		if (skipButton.textContent === idkText) {
 			changeStylesAfterAnswer();
 		} else {
-			randomizeWords(arrayForUniqness, arrayForRandom);
+			const mainWrapperContent = document.querySelector('.main-wrapper__content');
+			mainWrapperContent.style.left = '-2000px';
+			setTimeout(() => {
+				randomizeWords(arrayForUniqness, arrayForRandom);
+			}, 1000);
+
 		}
 	});
 	catchButtonPresses();

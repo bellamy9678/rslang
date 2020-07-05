@@ -6,6 +6,7 @@ import randomizeWords from './js/audio-challenge/randomizeWords';
 import {arrayForUniqness, arrayForRandom} from './js/audio-challenge/consts';
 
 async function a() {
+
 	const allWords = await giveWords();
 	allWords.forEach(item => {
 		arrayForUniqness.push(item);
