@@ -1,10 +1,7 @@
-import DOMElementCreator from '../utils/DOMElementCreator';
-import TAGS from '../shared/Tags.json';
-// import addWordToDictionary from '../utils/DictionaryWords';
-import getCards from '../cards/GetCards';
+// import DOMElementCreator from '../utils/DOMElementCreator';
+// import TAGS from '../shared/Tags.json';
 
-// (function showDictionary() {
-// 	const app = document.querySelector('.app');
+// function createDictionaryPage() {
 // 	const newElem = new DOMElementCreator();
 
 // 	const word = newElem.create({
@@ -45,32 +42,14 @@ import getCards from '../cards/GetCards';
 // 		child: [studiedWords],
 // 	});
 
-// 	const page = newElem.create({
-// 		elem: TAGS.DIV,
-// 		classes: 'dictionary',
-// 		child: [wrapper],
-// 	});
+// 	return wrapper;
+// };
 
+// function showDictionaryPage() {
+// 	const app = document.querySelector('.app');
+// 	const dictionaryPage = createDictionaryPage();
 // 	if (app.firstChild) {
 // 		app.firstChild.remove();
 // 	}
 // 	app.append(page);
-// })();
-
-async function showCards() {
-	const app = document.querySelector('.app');
-	const cards = await getCards(0, 0);
-	console.log("cards", cards);
-	const newElem = new DOMElementCreator();
-	const wrapper = newElem.create({
-		elem: TAGS.DIV,
-		classes: 'wrapper',
-	});
-	app.firstChild.remove();
-	cards.forEach(card => {
-		wrapper.append(card);
-	});
-	app.append(wrapper);
-}
-
-showCards();
+// }
