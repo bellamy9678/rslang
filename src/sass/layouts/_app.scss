@@ -1,6 +1,6 @@
 .app {
 	position: relative;
-	height: calc(100% - 72px);
+	min-height: calc(100% - 72px);
 	overflow: hidden;
 
 	&__wrapper {
