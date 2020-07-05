@@ -1,13 +1,16 @@
-import { ASSETS_STORAGE, CATEGORIES } from '../shared/Constants';
+import {
+	ASSETS_STORAGE,
+	CATEGORIES
+} from '../shared/Constants';
 
 const NEW_WORD_PARAMETERS = {
-	progress : 0,
-	bestResult : 0,
-	showedCount : 0,
-	showedDate : 0,
-	learnDate : new Date(),
-	offset : 0,
-	category : CATEGORIES.NEW
+	progress: 0,
+	bestResult: 0,
+	showedCount: 0,
+	showedDate: 0,
+	learnDate: new Date(),
+	offset: 0,
+	category: CATEGORIES.NEW
 };
 
 export default class Word {
@@ -33,12 +36,14 @@ export default class Word {
 	}
 
 	addNewWordsParams() {
-		this.progress = NEW_WORD_PARAMETERS.progress;
-		this.bestResult = NEW_WORD_PARAMETERS.bestResult;
-		this.showedCount = NEW_WORD_PARAMETERS.showedCount;
-		this.showedDate = NEW_WORD_PARAMETERS.showedDate;
-		this.learnDate = NEW_WORD_PARAMETERS.learnDate;
-		this.offset = NEW_WORD_PARAMETERS.offset;
-		this.category = NEW_WORD_PARAMETERS.category;
+		this.optional = {
+			progress: NEW_WORD_PARAMETERS.progress,
+			bestResult: NEW_WORD_PARAMETERS.bestResult,
+			showedCount: NEW_WORD_PARAMETERS.showedCount,
+			showedDate: NEW_WORD_PARAMETERS.showedDate,
+			learnDate: NEW_WORD_PARAMETERS.learnDate,
+			offset: NEW_WORD_PARAMETERS.offset,
+			category: NEW_WORD_PARAMETERS.category,
+		}
 	}
 }

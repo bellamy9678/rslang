@@ -1,13 +1,15 @@
 import {
 	EMAIL_PART,
-	USER_COOKIE_NAME
 } from './Constants';
 import {
 	API,
 	URL_SIGN_IN
 } from '../shared/Constants';
+import {
+	USER,
+} from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
-import Cookie from './Cookie';
+import CookieMonster from '../utils/CookieMonster';
 
 export default class Authorization {
 	constructor(name, password) {
@@ -29,8 +31,10 @@ export default class Authorization {
 			const content = await rawResponse.json();
 			console.log(content);
 			const userName = userData.email.replace(`${EMAIL_PART}`, '');
-			Cookie.setUserCookie(USER_COOKIE_NAME.TOKEN, content.token);
-			Cookie.setUserCookie(USER_COOKIE_NAME.NAME, userName);
+			const cookie = new CookieMonster();
+			cookie.setCookie(USER.NAME, userName);
+			cookie.setCookie(USER.ID, content.userId);
+			cookie.setCookie(USER.TOKEN, content.token);
 			showMainPage(userName);
 		} catch (error) {
 			console.log(rawResponse.status);

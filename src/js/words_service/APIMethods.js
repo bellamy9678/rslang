@@ -1,3 +1,5 @@
+
+
 import Word from '../cards/Word';
 import url from './url';
 
@@ -32,7 +34,8 @@ APIMethods.getNewWordsArray = async function getNewWordsArray(group, page) {
 		wordObj.addNewWordsParams();
 		return wordObj;
 	});
-	APIMethods.saveWords(words); // await
+	// APIMethods.saveWords(words); // await
+	console.log(words);
 	return words;
 };
 

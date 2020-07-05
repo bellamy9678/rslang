@@ -7,7 +7,8 @@ import {
 	URL_NEXT,
 	URL_ET,
 	URL_PAGE,
-	URL_FILTER
+	URL_FILTER,
+	URL_PARAM
 } from '../shared/Constants';
 
 const userID = '5eff1c83635aec001764df35'; // убрать потом
@@ -17,7 +18,7 @@ const userID = '5eff1c83635aec001764df35'; // убрать потом
 const url = {};
 
 url.groupPage = function getUrlFromGroupAndPage(group, page) {
-	return `${API}${URL_WORDS}${URL_GROUP}${group}${URL_ET}${URL_PAGE}${page}`;
+	return `${API}${URL_WORDS}${URL_PARAM}${URL_GROUP}${group}${URL_ET}${URL_PAGE}${page}`;
 };
 
 url.allWords = function getUrlForAllUserWords() {

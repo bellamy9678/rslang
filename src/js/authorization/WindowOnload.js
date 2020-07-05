@@ -1,20 +1,20 @@
-import Cookie from './Cookie';
+import CookieMonster from '../utils/CookieMonster';
+import {
+	USER
+} from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
 
 window.addEventListener('load', () => {
 	try {
-		const cookieArr = document.cookie.split(';');
-		const cookie = new Cookie(cookieArr);
-		const userName = cookie.checkUserToken();
-		if (userName) {
-			showMainPage(userName);
-		} else {
-			StartPage.showStartPage();
+		const cookie = new CookieMonster();
+		const userName = cookie.getCookie(USER.NAME);
+		if (!userName) {
+			throw new Error ('Cookie not found');
 		}
+		showMainPage(userName);
 	} catch (error) {
-		console.error('Cookie not found');
 		StartPage.showStartPage();
 	} finally {
 		Header.create();

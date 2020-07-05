@@ -37,11 +37,12 @@ export default class CookieMonster {
 			document.cookie = updatedCookie;
 		};
 
-		this.deleteCookie = function deleteCookie(name) {
-			this.setCookie(name, '', {
-				'max-age': -1,
+		this.deleteCookie = function deleteCookie(...names) {
+			[...names].forEach(name => {
+				this.setCookie(name, '', {
+					'max-age': -1,
+				});
 			});
 		};
 	}
 }
-
