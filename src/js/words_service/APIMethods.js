@@ -5,7 +5,7 @@ import {
 	USER,
 } from '../utils/CookieConstants';
 import {
-	URL_USER_OPTIONAL,
+	URL_WORD_CATEGORY,
 } from '../shared/Constants';
 
 const APIMethods = {};
@@ -84,8 +84,9 @@ APIMethods.saveWord = async function saveWord(word) {
 };
 
 APIMethods.getUserWordsByCategory = async function (category) {
-	const filter = `{"${URL_USER_OPTIONAL}.category": "${category}"}`;
-	const APIUrl = url.aggregated(filter);
+	const filter = {};
+	filter[`${URL_WORD_CATEGORY}`] = category;
+	const APIUrl = url.aggregated(JSON.stringify(filter));
 	const rawResponse = await fetch(APIUrl, {
 		method: 'GET',
 		withCredentials: true,

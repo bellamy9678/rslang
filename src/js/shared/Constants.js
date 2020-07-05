@@ -9,7 +9,7 @@ export const URL_USER = 'users';
 export const URL_WORDS = 'words';
 export const URL_AGGREGATED = 'aggregatedWords';
 export const URL_FILTER = 'filter=';
-export const URL_USER_OPTIONAL = 'userWord.optional';
+export const URL_WORD_CATEGORY = 'userWord.optional.category';
 export const URL_ET = '&';
 export const URL_NEXT = '/';
 export const URL_PARAM = '?';
