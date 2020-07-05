@@ -5,7 +5,8 @@ export const BUTTONS_WORDS = {
 	easy: 'Легко',
 	addToDifficult: 'добавить в сложные',
 	deleteFromDictionary: 'удалить из изучаемых',
-	showAnswer: 'показать ответ'
+	showAnswer: 'показать ответ',
+	continue: 'дальше'
 };
 
 export const AUTHORIZATION_BUTTONS = {

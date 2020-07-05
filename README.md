@@ -3,7 +3,7 @@
 - [IDEAS](https://docs.google.com/spreadsheets/d/1Nv4CIGc43wxeTlf6oUhloaSTQxHIIT91cYOd1v-nwvU/edit#gid=0)
 - [JIRA](https://team-1592125956305.atlassian.net/secure/RapidBoard.jspa)
 - [retro](https://reetro-io.herokuapp.com/board/5eec6aae4e337f00168f25d4/5eec6afe4e337f00168f25eb)
-- созвон в **18:30**
+- созвон в **20:00**
 ## Ветки
 Ветка `develop` – основная ветка разработки. В `master` ничего не добавляем.
 
