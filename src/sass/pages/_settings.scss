@@ -9,12 +9,17 @@
 		margin-bottom: 40px;
 	}
 
+	&__form {
+		margin-bottom: 20px;
+	}
+
 	&__input {
 		@extend %text-input;
 	}
 
 	&__container {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 	}
 
