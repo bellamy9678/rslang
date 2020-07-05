@@ -10,10 +10,15 @@ import {
 	URL_FILTER,
 	URL_PARAM
 } from '../shared/Constants';
+import {
+	USER,
+} from '../utils/CookieConstants';
+import CookieMonster from '../utils/CookieMonster';
 
-const userID = '5eff1c83635aec001764df35'; // убрать потом
-
-// const biscuit = new CookieMonster();
+function getUserId() {
+	const biscuit = new CookieMonster();
+	return biscuit.getCookie(USER.ID);
+}
 
 const url = {};
 
@@ -22,17 +27,20 @@ url.groupPage = function getUrlFromGroupAndPage(group, page) {
 };
 
 url.allWords = function getUrlForAllUserWords() {
-	const userId = userID; // biscuit.getCookie(USER_COOKIE_NAME.NAME);
+	const userId = getUserId();
 	return `${API}${URL_USER}${userId}${URL_WORDS}`;
 };
 
 url.oneWord = function getUrlForUserWord(wordId) {
-	const userId = userID; // biscuit.getCookie(USER_COOKIE_NAME.NAME);
+	const userId = getUserId();
 	return `${API}${URL_USER}${userId}${URL_WORDS}${URL_NEXT}${wordId}`;
 };
 
 url.aggregated = function getUrlForAggregatedWord(criteria) {
-	const userId = userID; // biscuit.getCookie(USER_COOKIE_NAME.NAME);
+	// if (!criteria) {
+	// 	criteria = '';
+	// }
+	const userId = getUserId();
 	return `${API}${URL_USER}${userId}${URL_NEXT}${URL_AGGREGATED}${URL_FILTER}${criteria}`;
 };
 

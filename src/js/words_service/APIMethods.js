@@ -4,6 +4,9 @@ import CookieMonster from '../utils/CookieMonster';
 import {
 	USER,
 } from '../utils/CookieConstants';
+import {
+	URL_USER_OPTIONAL,
+} from '../shared/Constants';
 
 const APIMethods = {};
 
@@ -80,22 +83,38 @@ APIMethods.saveWord = async function saveWord(word) {
 	}
 };
 
-APIMethods.getAggregatedWord = async function getAggregatedWord(category) {
-	const APIUrl = url.aggregated(category);
-	let data = [];
-	try {
-		const response = fetch(APIUrl, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${getUserToken()}`,
-				Accept: 'application/json',
-			},
-		});
-		data = await response.json();
-	} catch (error) {
-		console.log(error);
-	}
+APIMethods.getUserWordsByCategory = async function (category) {
+	const filter = `{"${URL_USER_OPTIONAL}.category": "${category}"}`;
+	const APIUrl = url.aggregated(filter);
+	const rawResponse = await fetch(APIUrl, {
+		method: 'GET',
+		withCredentials: true,
+		headers: {
+			'Authorization': `Bearer ${getUserToken()}`,
+			'Accept': 'application/json',
+		}
+	});
+	const data = await rawResponse.json();
+	console.log('data', data);
 	return data;
-};
+}
+
+// APIMethods.getAggregatedWord = async function getAggregatedWord(category) {
+// 	const APIUrl = url.aggregated(category);
+// 	let data = []; // ???
+// 	try {
+// 		const response = fetch(APIUrl, {
+// 			method: 'POST',
+// 			headers: {
+// 				Authorization: `Bearer ${getUserToken()}`,
+// 				Accept: 'application/json',
+// 			},
+// 		});
+// 		data = await response.json();
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
+// 	return data;
+// };
 
 export default APIMethods;
