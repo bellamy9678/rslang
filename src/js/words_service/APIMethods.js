@@ -1,17 +1,15 @@
-
-
 import Word from '../cards/Word';
 import url from './url';
+import CookieMonster from '../utils/CookieMonster';
+import {
+	USER,
+} from '../utils/CookieConstants';
 
 const APIMethods = {};
-// const biscuit = new CookieMonster();
-
-const userToken =	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmYxYzgzNjM1YWVjMDAxNzY0ZGYzNSIsImlhdCI6MTU5Mzg3MTM1MCwiZXhwIjoxNTkzODg1NzUwfQ.j9Xf1RqyE21DFUFSqueAzoHVv_fIfnnGjyBmzJMd3oE'; // мока, убрать потом
-// token actual
 
 function getUserToken() {
-	const token = userToken; // biscuit.getCookie(USER_COOKIE_NAME.TOKEN);
-	return token;
+	const biscuit = new CookieMonster();
+	return biscuit.getCookie(USER.TOKEN);
 }
 
 async function makeRequestForNewWords(APIUrl) {
@@ -20,7 +18,7 @@ async function makeRequestForNewWords(APIUrl) {
 		const response = await fetch(APIUrl);
 		data = await response.json();
 	} catch (error) {
-		console.log(error);
+		console.error(error.message);
 	}
 	return data;
 }
@@ -28,7 +26,7 @@ async function makeRequestForNewWords(APIUrl) {
 APIMethods.getNewWordsArray = async function getNewWordsArray(group, page) {
 	const APIUrl = url.groupPage(group, page);
 	const data = await makeRequestForNewWords(APIUrl);
-	const words =  data.map((word) => {
+	const words = data.map((word) => {
 		const wordObj = new Word(word);
 		wordObj.getMediaUrls(word);
 		wordObj.addNewWordsParams();
@@ -59,7 +57,7 @@ async function makeRequestForAllUserWords(APIUrl) {
 APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
 	const APIUrl = url.allWords();
 	const data = await makeRequestForAllUserWords(APIUrl);
-	const words =  data.map((word) => {
+	const words = data.map((word) => {
 		// переобразовать в нормальный объект
 		return word;
 	});
@@ -85,7 +83,6 @@ APIMethods.saveWord = async function saveWord(word) {
 APIMethods.getAggregatedWord = async function getAggregatedWord(category) {
 	const APIUrl = url.aggregated(category);
 	let data = [];
-
 	try {
 		const response = fetch(APIUrl, {
 			method: 'POST',
