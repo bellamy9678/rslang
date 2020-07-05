@@ -34,11 +34,17 @@ export const TEXT = {
 		title: 'Create your free account',
 		text: 'Do you already have an account? ',
 	},
-	welcomPage: {
+	welcomePage: {
 		title: {
 			leftPath: 'Hello, ',
 			rightPath: '! Let\'s start?'
-		}
+		},
+		trainingModeButton: 'Start training',
+	},
+
+	gamesPage: {
+		title: 'Try our amazing games!',
+		description: 'Lorem ipsum dolore si amet.',
 	},
 	settingsPage: {
 		title: 'Settings',
@@ -75,4 +81,13 @@ export const ERROR_MESSAGES = {
 	authorizationErrorMessage: 'Invalid username or password. Please, try again!',
 	existingUser: 'User with this name already exists.',
 	default: 'Something went wrong.',
+};
+
+export const GAME_NAMES = {
+	englishPuzzle: 'English Puzzle',
+	speakIt: 'Speak It',
+	savannah: 'Savannah',
+	audioChallenge: 'Audio Challenge',
+	sprint: 'Sprint',
+	ownGame: 'Super duper game',
 };
