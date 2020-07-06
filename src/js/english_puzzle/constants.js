@@ -1,0 +1,13 @@
+export const appContainer = document.querySelector('.app');
+export const levels = 6;
+export const rounds = 10;
+export const lines = 10;
+export const puzzlesGap = 2;
+export const API_URL = 'http://pacific-castle-12388.herokuapp.com/';
+export const RESULT_WINDOW_BTN_CONTINUE = 'Продолжить';
+export const I_DONT_KNOW = 'Не знаю';
+export const CHECK = 'Проверить';
+export const CONTINUE = 'Продолжить';
+export const RESULTS = 'Результат';
+export const LEVEL = 'Уровень';
+export const ROUND = 'Раунд';
