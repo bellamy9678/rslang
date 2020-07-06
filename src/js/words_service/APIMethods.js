@@ -1,4 +1,4 @@
-import Word from '../cards/Word';
+import Word from './Word';
 import url from './url';
 import CookieMonster from '../utils/CookieMonster';
 import {
