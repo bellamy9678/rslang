@@ -1,8 +1,6 @@
 import {
 	DEFAULT_POSITION,
 	CARD_CONTAINER,
-	START_LEVEL,
-	START_PAGE,
 	INPUT_ID,
 	EMPTY_STRING,
 	FADE_CLASS,
@@ -11,7 +9,7 @@ import {
 	ARRAY_LENGTH_COEFFICIENT,
 	INPUT_WIDTH_UNIT
 } from './CardConstants';
-import getNewWordsArray from './GetWordsFromAPI';
+// import getNewWordsArray from './GetWordsFromAPI';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
 import WORDS_EVENTS from '../observer/WordsEvents';
@@ -66,7 +64,7 @@ export default class GlobalState {
 	async initGlobalState() {
 		this.addContainer();
 		this.cardsContainer = CARD_CONTAINER.querySelector('.wrapper');
-		this.words = await getNewWordsArray(START_LEVEL, START_PAGE);
+		this.words = await []; // getNewWordsArray(START_LEVEL, START_PAGE);
 		this.cards = this.words.map((word) => {
 			const cardUnit = new Card(word);
 			const cardElem = cardUnit.create();

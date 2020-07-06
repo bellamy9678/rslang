@@ -4,7 +4,6 @@ import {
 	WORDS_MINIMUM_AMOUNT,
 	PART_OF_NEW_WORDS_IN_TOTAL,
 } from './constants';
-import getNewWordsArray from '../cards/GetWordsFromAPI';
 
 const settings = DEFAULT_SETTINGS; // new SINGLETON_SETTINGS();
 
@@ -29,7 +28,7 @@ Service.getGameSpecificWords = async function getGameSpecificWords(
 	level,
 	round
 ) {
-	const words = await getNewWordsArray(level, round);
+	const words = await (() => [])(level, round); // APIMethods getNewWordsArray(level, round);
 	return words;
 };
 
@@ -41,7 +40,7 @@ Service.getNewWords = async function getNewWords() {
 		return userWords;
 	}
 
-	const words = await getNewWordsArray(settings.group, settings.page);
+	const words = await (() => [])(settings.group, settings.page); // APIMethods getNewWordsArray(settings.group, settings.page);
 	settings.incProgress();
 	settings.saveParameters();
 	// сохранить все новые слова в словаре
