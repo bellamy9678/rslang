@@ -112,8 +112,8 @@ export default class Game {
 		});
 		this.puzzleContainer = document.querySelectorAll('.puzzle-container--active');
 		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
-		this.iDontKnowBtn.classList.remove('hide');
-		this.continueBtn.classList.add('hide');
+		this.iDontKnowBtn.classList.remove('none');
+		this.continueBtn.classList.add('none');
 		if (this.currentLine < lines) {
 			this.addLine();
 			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
@@ -135,10 +135,10 @@ export default class Game {
 			this.cypher = [];
 			this.wrongAnswersResult = [];
 			this.rightAnswersResult = [];
-			this.resulsBtn.classList.add('hide');
-			this.continueBtn.classList.add('hide');
+			this.resulsBtn.classList.add('none');
+			this.continueBtn.classList.add('none');
 			this.getData();
-			this.iDontKnowBtn.classList.remove('hide');
+			this.iDontKnowBtn.classList.remove('none');
 		} else {
 			this.loadNextLevel();
 		}
@@ -156,7 +156,7 @@ export default class Game {
 			this.cypher = [];
 			this.wrongAnswersResult = [];
 			this.rightAnswersResult = [];
-			this.resulsBtn.classList.add('hide');
+			this.resulsBtn.classList.add('none');
 			this.getData();
 
 		} else {
@@ -194,10 +194,10 @@ export default class Game {
 		this.clearPuzzlesContainer();
 		this.addLine();
 		this.currentLine = 0;
-		this.iDontKnowBtn.classList.remove('hide');
-		this.checkBtn.classList.add('hide');
-		this.continueBtn.classList.add('hide');
-		this.resulsBtn.classList.add('hide');
+		this.iDontKnowBtn.classList.remove('none');
+		this.checkBtn.classList.add('none');
+		this.continueBtn.classList.add('none');
+		this.resulsBtn.classList.add('none');
 		this.getData(level, round);
 		this.roundSelectBtn.selectedIndex = this.currentRound;
 
@@ -238,11 +238,11 @@ export default class Game {
 			puzzleNodes.push(puzzle);
 			puzzle.remove();
 		});
-		this.iDontKnowBtn.classList.add('hide');
-		this.continueBtn.classList.remove('hide');
+		this.iDontKnowBtn.classList.add('none');
+		this.continueBtn.classList.remove('none');
 		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
 		if (this.currentLine === rounds - 1) {
-			this.resulsBtn.classList.remove('hide');
+			this.resulsBtn.classList.remove('none');
 		}
 	}
 
@@ -430,12 +430,12 @@ export default class Game {
 			}
 
 			setTimeout(() => {
-				this.selectedItem.classList.add('hide');
+				this.selectedItem.classList.add('none');
 			}, 0);
 		};
 
 		const dragEnd = (event) => {
-			event.target.classList.remove('hide');
+			event.target.classList.remove('none');
 		};
 
 		const dragOver = (event) => {
@@ -498,13 +498,13 @@ export default class Game {
 		if (this.numberOfFullContainers === this.numberOfPuzzles) {
 			this.lineIsFullHandler();
 		} else {
-			this.checkBtn.classList.add('hide');
+			this.checkBtn.classList.add('none');
 		}
 
 	}
 
 	lineIsFullHandler() {
-		this.checkBtn.classList.remove('hide');
+		this.checkBtn.classList.remove('none');
 	}
 
 	addPuzzleContainersToLine(numberOfPuzzles) {
@@ -552,11 +552,11 @@ export default class Game {
 			this.resultForCurrentLineState = true;
 		}
 		if (this.currentLine < 10) {
-			this.iDontKnowBtn.classList.add('hide');
-			this.checkBtn.classList.add('hide');
-			this.continueBtn.classList.remove('hide');
+			this.iDontKnowBtn.classList.add('none');
+			this.checkBtn.classList.add('none');
+			this.continueBtn.classList.remove('none');
 			if (this.currentLine === rounds - 1) {
-				this.resulsBtn.classList.remove('hide');
+				this.resulsBtn.classList.remove('none');
 			}
 		}
 	}

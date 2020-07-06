@@ -20,17 +20,17 @@ export default class GameField {
 		});
 		this.checkBtn = factory.create({
 			elem: TAGS.BUTTON,
-			classes: ['controls__btn', 'controls__btn-check', 'hide'],
+			classes: ['controls__btn', 'controls__btn-check', 'none'],
 			child: CONST.CHECK
 		});
 		this.continueBtn = factory.create({
 			elem: TAGS.BUTTON,
-			classes: ['controls__btn', 'controls__btn-continue', 'hide'],
+			classes: ['controls__btn', 'controls__btn-continue', 'none'],
 			child: CONST.CONTINUE
 		});
 		this.resultsBtn = factory.create({
 			elem: TAGS.BUTTON,
-			classes: ['controls__btn', 'controls__btn-results', 'hide'],
+			classes: ['controls__btn', 'controls__btn-results', 'none'],
 			child: CONST.RESULTS
 		});
 		this.gameControlsContainer = factory.create({
