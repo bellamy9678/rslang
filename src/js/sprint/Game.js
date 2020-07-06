@@ -1,0 +1,289 @@
+import GameField from './GameField';
+import * as CONST from './constants';
+import { API, ASSETS_STORAGE } from '../shared/Constants';
+import Result from '../game_result/Result';
+import DOMElementCreator from '../utils/DOMElementCreator';
+import * as TAGS from '../shared/Tags.json';
+
+const factory = new DOMElementCreator();
+const result = new Result();
+
+
+export default class Game {
+	constructor() {
+		GameField.generateField();
+		this.level = 0;
+		this.round = 0;
+		this.nextLevel = this.level + 1;
+		this.nextRound = this.round + 1;
+		this.gameLevel = 0;
+		this.wordIndex = 0;
+		this.wordsArr = [];
+		this.wrongWords = [];
+		this.pointsForAnswer = 10;
+		this.rigthTranslate = false;
+		this.rightAnswers = [];
+		this.wrongAnswers = [];
+		this.points = 0;
+		this.pointsForAnswer = 10;
+		this.rightAnswersInRow = 0;
+		this.playAudioState = false;
+		this.audio = new Audio();
+		this.gameStarted = false;
+		this.MAIN_CONTAINER = document.getElementById('main_container');
+		this.WORD_CONTAINER = document.getElementById('word');
+		this.TRANSLATION_CONTAINER = document.getElementById('translation');
+		this.WRONG_BTN = document.getElementById('wrongBtn');
+		this.CORRECT_BTN = document.getElementById('correctBtn');
+		this.WRONG_INDICATOR = document.getElementById('wrong');
+		this.RIGHT_INDICATOR = document.getElementById('correct');
+		this.AUDIO_BTN = document.getElementById('audio');
+		this.SCORE_CONTAINER = document.getElementById('score');
+		this.SUBLEVEL_DOTS = document.querySelectorAll('.sublevel__dot');
+		this.POINTS_FOR_WORD_CONTAINER = document.getElementById('points_for_word');
+		this.LEVEL_STARS = document.querySelectorAll('.level_star');
+		this.SUBLEVEL = document.getElementById('sublevel');
+		this.TIMER = document.getElementById('timer');
+
+		this.addEventListeners();
+
+
+	}
+
+	addEventListeners() {
+		this.WRONG_BTN.addEventListener('click', this.wrongBtnHandler.bind(this));
+		this.CORRECT_BTN.addEventListener('click', this.correctBtnHandler.bind(this));
+		this.AUDIO_BTN.addEventListener('click', this.audioBtnHandler.bind(this));
+
+		this.keyboardHandler = this.keyEventHandler.bind(this);
+		document.addEventListener('keydown', this.keyboardHandler);
+	}
+
+	audioBtnHandler() {
+		this.playAudioState = !this.playAudioState;
+		if (this.playAudioState) {
+			this.AUDIO_BTN.classList.add('main__play_audio_btn--active');
+		} else {
+			this.AUDIO_BTN.classList.remove('main__play_audio_btn--active');
+		}
+	}
+
+	keyEventHandler(event) {
+		if (event.keyCode === 37) {
+			this.WRONG_BTN.click();
+		}
+		if (event.keyCode === 39) {
+			this.CORRECT_BTN.click();
+		}
+	}
+
+	wrongBtnHandler() {
+		if (this.gameStarted === false) {
+			this.startCountdown();
+			this.gameStarted = true;
+		}
+
+		if (this.rigthTranslate) {
+			this.wrongAnswerHandler();
+
+		} else {
+			this.correctAnswerHandler();
+
+		}
+	}
+
+	correctBtnHandler() {
+		if (this.gameStarted === false) {
+			this.startCountdown();
+			this.gameStarted = true;
+		}
+		if (this.rigthTranslate) {
+			this.correctAnswerHandler();
+		} else {
+			this.wrongAnswerHandler();
+		}
+	}
+
+	opacityInOut(elem, shadow) {
+		// eslint-disable-next-line no-param-reassign
+		elem.style.opacity = '1';
+		this.MAIN_CONTAINER.style.boxShadow = shadow;
+		setTimeout(() => {
+			// eslint-disable-next-line no-param-reassign
+			elem.style.opacity = '0';
+			this.MAIN_CONTAINER.style.boxShadow = CONST.MAIN_SHADOW_DEFAUlT;
+
+		}, 400);
+	}
+
+	wrongAnswerHandler() {
+		this.opacityInOut(this.WRONG_INDICATOR, CONST.MAIN_SHADOW_WRONG);
+		CONST.WRONG_AUDIO.play();
+		this.SUBLEVEL_DOTS.forEach(el => el.classList.remove('sublevel__dot--right'));
+		this.pointsForAnswer = 10;
+		this.rightAnswersInRow = 0;
+		this.gameLevel = 0;
+		this.POINTS_FOR_WORD_CONTAINER.innerText = '';
+		this.SUBLEVEL.classList.remove('sublevel--active');
+		this.SUBLEVEL.style.backgroundColor = 'unset';
+		this.wrongAnswers.push(this.wordsArr[this.wordIndex]);
+
+		this.loadNextRound();
+	}
+
+
+	correctAnswerHandler() {
+		this.opacityInOut(this.RIGHT_INDICATOR, CONST.MAIN_SHADOW_RIGHT);
+		CONST.CORRECT_AUDIO.play();
+		if (this.rightAnswersInRow < 3) {
+			this.SUBLEVEL_DOTS[this.rightAnswersInRow].classList.add('sublevel__dot--right');
+		}
+		this.rightAnswersInRow += 1;
+		if (this.rightAnswersInRow > 3 && this.pointsForAnswer < 80) {
+			this.LEVEL_STARS[this.gameLevel].classList.remove('none');
+			this.SUBLEVEL.classList.add('sublevel--active');
+
+			this.gameLevel += 1;
+			this.rightAnswersInRow = 0;
+			if (this.pointsForAnswer < 40) {
+				this.SUBLEVEL_DOTS.forEach(el => el.classList.remove('sublevel__dot--right'));
+			}
+			this.pointsForAnswer *= 2;
+			if (this.pointsForAnswer === 20) {
+				this.SUBLEVEL.style.backgroundColor = CONST.LEVEL_YELLOW;
+				this.SUBLEVEL.style.color = 'black';
+			} else if (this.pointsForAnswer === 40) {
+				this.SUBLEVEL.style.backgroundColor = CONST.LEVEL_BRONSE;
+				this.SUBLEVEL.style.color = 'white';
+			} else if (this.pointsForAnswer === 80) {
+				this.SUBLEVEL.style.backgroundColor = CONST.LEVEL_RED;
+			}
+			this.POINTS_FOR_WORD_CONTAINER.innerText = `+${this.pointsForAnswer} ${CONST.POINTS_FOR_ANSWER_TEXT}`;
+		}
+		this.points += this.pointsForAnswer;
+		this.rightAnswers.push(this.wordsArr[this.wordIndex]);
+		this.updateScore();
+		this.loadNextRound();
+	}
+
+	updateScore() {
+		this.SCORE_CONTAINER.innerText = this.points;
+	}
+
+	loadNextRound() {
+		this.wordIndex += 1;
+		this.wrongWords.splice(0, 1);
+		this.showWord();
+		if (this.wrongWords.length < 5) {
+			this.loadNextWords(this.level, this.nextRound);
+		}
+	}
+
+	loadNextWords(nextLevel, nextRound) {
+		const url = `${API}words?group=${nextLevel}&page=${nextRound}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
+		fetch(url)
+			.then(response => {
+				return response.json();
+			}).then(myJson => {
+				console.log(this.wrongWords);
+
+				myJson.forEach(wordObj => this.wordsArr.push(wordObj));
+				this.getWrongWordsArr(myJson);
+				this.nextRound += 1;
+			});
+	}
+
+	getData(level = this.level, round = this.round) {
+		const url = `${API}words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
+		fetch(url)
+			.then(response => {
+				return response.json();
+			}).then(myJson => {
+				this.handleJson(myJson);
+			});
+	}
+
+	handleJson(json) {
+		this.wordsArr = json;
+		this.getWrongWordsArr(json);
+		this.showWord();
+	}
+
+	getWrongWordsArr(json) {
+		for (let i = 0; i < json.length; i += 1) {
+			if (i !== this.wordIndex) {
+				this.wrongWords.push(json[i].wordTranslate);
+			}
+		}
+	}
+
+	showWord() {
+		this.WORD_CONTAINER.innerText = this.wordsArr[this.wordIndex].word;
+		this.showTranslate();
+		if (this.playAudioState) {
+			this.audio = new Audio(`${ASSETS_STORAGE}${this.wordsArr[this.wordIndex].audio}`);
+			this.audio.play();
+		}
+	}
+
+	static returnRandomFromArr(arr) {
+		return arr[Math.floor(Math.random() * arr.length)];
+	}
+
+	showTranslate() {
+		const random = Math.random().toFixed(2);
+
+		if (random < CONST.CHANCE) {
+			this.rigthTranslate = true;
+			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
+		} else {
+			this.rigthTranslate = false;
+			this.TRANSLATION_CONTAINER.innerText = Game.returnRandomFromArr(this.wrongWords);
+		}
+
+	}
+
+	tick() {
+		const timeDisplay = document.getElementById('time');
+		let sec = this.secondsRemaining;
+		const shadowTimer = CONST.SHADOW_TIMER.split(' ');
+		shadowTimer[4] = `${(60 - this.secondsRemaining) / 2 + 3}px`;
+		const shadow = shadowTimer.join(' ');
+		this.TIMER.style.boxShadow = shadow;
+
+		if (sec < 10) {
+			sec = `0${sec}`;
+		}
+
+		timeDisplay.innerText = sec;
+		if (this.secondsRemaining === 0) {
+			clearInterval(this.intervalHandle);
+			this.stopGame();
+		}
+
+		this.secondsRemaining -= 1;
+	}
+
+	startCountdown() {
+		this.secondsRemaining = 60;
+		this.intervalHandle = setInterval(this.tick.bind(this), 1000);
+	}
+
+	stopGame() {
+		const resultContinueBtn = factory.create({
+			elem: TAGS.BUTTON,
+			classes: ['result__button', 'result__continue-btn'],
+			child: 'Continue'
+		});
+		resultContinueBtn.addEventListener('click', () => {
+			result.closeResultWindow();
+		});
+		result.showResult({
+			rightAnswers: this.rightAnswers,
+			wrongAnswers: this.wrongAnswers,
+			buttons: [resultContinueBtn]
+		});
+		document.removeEventListener('click', this.keyboardHandler);
+	}
+
+}
