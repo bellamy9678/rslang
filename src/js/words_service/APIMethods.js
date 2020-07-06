@@ -7,6 +7,7 @@ import {
 import {
 	URL_WORD_CATEGORY,
 } from '../shared/Constants';
+import IntervalRepetition from './IntervalRepetition';
 
 const APIMethods = {};
 
@@ -103,6 +104,28 @@ APIMethods.getUserWordsByCategory = async function (category) {
 		console.error(error.message);
 	}
 	return data;
+}
+
+APIMethods.updateUserWord = async function (wordObj, addParams) {
+	const cookie = new CookieMonster();
+	const userToken = cookie.getCookie(USER.TOKEN);
+	const wordData = new IntervalRepetition(wordObj);
+	try {
+		const APIUrl = url.oneWord(wordData.wordId);
+		const rawResponse = await fetch(APIUrl, {
+			method: 'PUT',
+			withCredentials: true,
+			headers: {
+				'Authorization': `Bearer ${userToken}`,
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify(addParams),
+		});
+		const data = await rawResponse.json();
+		console.log('IntervalRepetition -> updateUserWord -> data', data);
+	} catch (error) {
+		console.error(error.message);
+	}
 }
 
 // APIMethods.getAggregatedWord = async function getAggregatedWord(category) {
