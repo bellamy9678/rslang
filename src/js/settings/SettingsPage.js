@@ -56,6 +56,19 @@ function createSettingsPage() {
 		}, ],
 	});
 
+	wordsNumberInput.addEventListener('change', () => {
+		const wordsNumber = document.getElementById('words-number');
+		const cardsNumber = document.getElementById('cards-number');
+		if (cardsNumber.value > wordsNumber.value) {
+			cardsNumber.value = wordsNumber.value;
+		}
+	});
+
+	cardsNumberInput.addEventListener('focus', () => {
+		const wordsNumber = document.getElementById('words-number');
+		cardsNumberInput.setAttribute('max', wordsNumber.value);
+	});
+
 	const inputsWrapper = newElem.create({
 		elem: TAGS.DIV,
 		classes: 'settings__inputs-wrapper',
