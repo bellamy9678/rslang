@@ -87,16 +87,21 @@ APIMethods.getUserWordsByCategory = async function (category) {
 	const filter = {};
 	filter[`${URL_WORD_CATEGORY}`] = category;
 	const APIUrl = url.aggregated(JSON.stringify(filter));
-	const rawResponse = await fetch(APIUrl, {
-		method: 'GET',
-		withCredentials: true,
-		headers: {
-			'Authorization': `Bearer ${getUserToken()}`,
-			'Accept': 'application/json',
-		}
-	});
-	const data = await rawResponse.json();
-	console.log('data', data);
+	let data;
+	try {
+		const rawResponse = await fetch(APIUrl, {
+			method: 'GET',
+			withCredentials: true,
+			headers: {
+				'Authorization': `Bearer ${getUserToken()}`,
+				'Accept': 'application/json',
+			}
+		});
+		data = await rawResponse.json();
+		console.log('data', data);
+	} catch (error) {
+		console.error(error.message);
+	}
 	return data;
 }
 
