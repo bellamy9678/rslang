@@ -108,16 +108,18 @@ $bg-result-btn: rgb(143, 86, 113);
 	}
 }
 
-.game__main {
+.game {
+	&__main {
   width: 751px;
   margin: auto;
 }
 
-.game__board {
+&__board {
   display: flex;
   width: 100%;
   height: 418px;
   margin: 10px auto;
+}
 }
 
 .board {
@@ -237,7 +239,7 @@ $bg-result-btn: rgb(143, 86, 113);
 }
 
 .hovered {
-	background-color: #d1d8e2;
+	background-color: $bg-dark-grey;
 	&--animation{
 		animation: jiggle 0.4s infinite;
 	}
