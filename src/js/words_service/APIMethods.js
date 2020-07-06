@@ -1,13 +1,10 @@
 import Word from './Word';
 import url from './url';
 import CookieMonster from '../utils/CookieMonster';
-import {
-	USER,
-} from '../utils/CookieConstants';
-import {
-	URL_WORD_CATEGORY,
-} from '../shared/Constants';
+import { USER } from '../utils/CookieConstants';
+import { URL_WORD_CATEGORY } from '../shared/Constants';
 import IntervalRepetition from './IntervalRepetition';
+import WordFilter from './WordFilter';
 
 const APIMethods = {};
 
@@ -36,9 +33,14 @@ APIMethods.getNewWordsArray = async function getNewWordsArray(group, page) {
 		wordObj.addNewWordsParams();
 		return wordObj;
 	});
-	// APIMethods.saveWords(words); // await
-	console.log(words);
+	APIMethods.saveWords(words);
 	return words;
+};
+
+APIMethods.saveWordsArray = async function saveWordsArray(words) {
+	words.forEach((word) => {
+		APIMethods.saveWord(word);
+	});
 };
 
 async function makeRequestForAllUserWords(APIUrl) {
@@ -53,7 +55,7 @@ async function makeRequestForAllUserWords(APIUrl) {
 		});
 		data = await response.json();
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 	return data;
 }
@@ -62,7 +64,8 @@ APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
 	const APIUrl = url.allWords();
 	const data = await makeRequestForAllUserWords(APIUrl);
 	const words = data.map((word) => {
-		// переобразовать в нормальный объект
+		const userWord = new WordFilter(word);
+		userWord.getMediaUrls();
 		return word;
 	});
 	return words;
@@ -77,14 +80,14 @@ APIMethods.saveWord = async function saveWord(word) {
 				Authorization: `Bearer ${getUserToken()}`,
 				Accept: 'application/json',
 			},
-			body: JSON.stringify(word)
+			body: JSON.stringify(word),
 		});
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-APIMethods.getUserWordsByCategory = async function (category) {
+APIMethods.getUserWordsByCategory = async function getUserWordsByCategory (category) {
 	const filter = {};
 	filter[`${URL_WORD_CATEGORY}`] = category;
 	const APIUrl = url.aggregated(JSON.stringify(filter));
@@ -94,9 +97,9 @@ APIMethods.getUserWordsByCategory = async function (category) {
 			method: 'GET',
 			withCredentials: true,
 			headers: {
-				'Authorization': `Bearer ${getUserToken()}`,
-				'Accept': 'application/json',
-			}
+				Authorization: `Bearer ${getUserToken()}`,
+				Accept: 'application/json',
+			},
 		});
 		data = await rawResponse.json();
 		console.log('data', data);
@@ -104,9 +107,9 @@ APIMethods.getUserWordsByCategory = async function (category) {
 		console.error(error.message);
 	}
 	return data;
-}
+};
 
-APIMethods.updateUserWord = async function (wordObj, addParams) {
+APIMethods.updateUserWord = async function updateUserWord(wordObj, addParams) {
 	const cookie = new CookieMonster();
 	const userToken = cookie.getCookie(USER.TOKEN);
 	const wordData = new IntervalRepetition(wordObj);
@@ -116,8 +119,8 @@ APIMethods.updateUserWord = async function (wordObj, addParams) {
 			method: 'PUT',
 			withCredentials: true,
 			headers: {
-				'Authorization': `Bearer ${userToken}`,
-				'Accept': 'application/json',
+				Authorization: `Bearer ${userToken}`,
+				Accept: 'application/json',
 			},
 			body: JSON.stringify(addParams),
 		});
@@ -126,24 +129,6 @@ APIMethods.updateUserWord = async function (wordObj, addParams) {
 	} catch (error) {
 		console.error(error.message);
 	}
-}
-
-// APIMethods.getAggregatedWord = async function getAggregatedWord(category) {
-// 	const APIUrl = url.aggregated(category);
-// 	let data = []; // ???
-// 	try {
-// 		const response = fetch(APIUrl, {
-// 			method: 'POST',
-// 			headers: {
-// 				Authorization: `Bearer ${getUserToken()}`,
-// 				Accept: 'application/json',
-// 			},
-// 		});
-// 		data = await response.json();
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// 	return data;
-// };
+};
 
 export default APIMethods;
