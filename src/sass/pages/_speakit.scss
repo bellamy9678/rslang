@@ -49,7 +49,7 @@
 }
 
 // Main page
-.level {
+/* .level {
   margin-bottom:50px;
   margin-top: 20px;
 }
@@ -59,7 +59,21 @@
 .buttons-container {
   display: flex;
   margin-top: 60px;
+} */
+.level-container {
+	margin-bottom: 40px;
 }
+
+#level {
+	margin-right: 30px;
+	margin-left:15px;
+}
+
+#round {
+	margin-left:15px;
+}
+
+
 .speak, .restart, .finish, .stop-speak {
   min-width: 200px;
   box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);

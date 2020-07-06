@@ -8,29 +8,10 @@ import { restartBtnText, speakBtnText, stopSpeakText, finishBtnText } from './sp
 const mainImage = './assets/images/eng.jpg';
 const microphoneOn ='./assets/images/mikro.png'; 
 const defaultSrc = '';
-const iterationStart = 1;
-const iterationEnd = 7;
+
 export default function initMainContent() {
 	const newElem = new DOMElementCreator();
 
-	function createLevelsBtn() {
-		const arrBtn = [];
-		for( let i = iterationStart; i < iterationEnd; i += 1) {
-			const test = newElem.create({
-				elem: TAGS.BUTTON,
-				classes: 'level-btn',  
-				child: i,
-			});
-			arrBtn.push(test); 
-		}
-		return arrBtn;
-	}
-    
-	const level = newElem.create({
-		elem: TAGS.DIV,
-		classes: 'level',  
-		child: createLevelsBtn(),
-	});
 	const currentImg = newElem.create({
 		elem: TAGS.IMG,
 		classes: 'current-image',
@@ -117,7 +98,7 @@ export default function initMainContent() {
 	const mainWrapper = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['main-container', 'none'],  
-		child: [level, imgCont, wordsContainer, imgAudio, btnContainer],
+		child: [imgCont, wordsContainer, imgAudio, btnContainer],
 	});
 
 	return mainWrapper;
