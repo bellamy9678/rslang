@@ -444,9 +444,6 @@ export default class Game {
 
 		const dragEnter = (event) => {
 			event.preventDefault();
-			// if (event.target.closest('.board__line--active')) {
-			// 	const position = event.target.dataset.containerPosition;
-			// }
 
 			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
 				event.target.classList.add('hovered');
