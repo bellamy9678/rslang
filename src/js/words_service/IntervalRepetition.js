@@ -1,5 +1,5 @@
 import {
-	PROGRESS
+	INTERVAL_PARAMS
 } from './constants';
 
 export default class IntervalRepetition {
@@ -9,14 +9,14 @@ export default class IntervalRepetition {
 	}
 
 	increaseProgress() {
-		if (this.optional.progress < PROGRESS.MAX) {
+		if (this.optional.progress < INTERVAL_PARAMS.MAX_PROGRESS_LEVEL) {
 			this.optional.progress += 1;
 		}
 		return this.optional;
 	}
 
 	decreaseProgress() {
-		if (this.optional.progress > PROGRESS.MIN) {
+		if (this.optional.progress > INTERVAL_PARAMS.MIN_PROGRESS_LEVEL) {
 			this.optional.progress -= 1;
 		}
 		return this.optional;
