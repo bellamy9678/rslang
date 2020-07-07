@@ -15,6 +15,7 @@ const NEW_WORD_PARAMETERS = {
 
 export default class Word {
 	constructor(word) {
+		// eslint-disable-next-line no-underscore-dangle
 		this.id = word.id;
 		this.word = word.word;
 		this.translate = word.wordTranslate;

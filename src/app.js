@@ -3,6 +3,14 @@ import './sass/style.scss';
 import './js/authorization/NewUser';
 import './js/authorization/StartPage';
 import './js/authorization/WindowOnload';
-import APIMethods from './js/words_service/APIMethods';
+import Settings from './js/settings/Settings';
+import training from './js/cards/Training';
 
-APIMethods.getNewWordsArray(1, 1);
+async function initial() {
+	const settings = await new Settings();
+	await training();
+	console.log(settings);
+	return settings;
+}
+
+initial();

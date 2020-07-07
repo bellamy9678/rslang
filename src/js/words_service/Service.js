@@ -8,8 +8,14 @@ import Settings from '../settings/Settings';
 import APIMethods from './APIMethods';
 import { CATEGORIES } from '../shared/Constants';
 
-const settings = new Settings();
-const api = new APIMethods();
+let settings;
+
+async function initial() {
+	const settingsObj = await new Settings();
+	settings = settingsObj;
+}
+
+initial();
 
 const Service = {};
 
@@ -31,7 +37,7 @@ function sortByShowTime(array) {
 
 Service.getGameWords = async function getGameWords() {
 	if (settings.useLearnedWords) {
-		const listLearnedWords = await api.getUserWordsByCategory(
+		const listLearnedWords = await APIMethods.getUserWordsByCategory(
 			CATEGORIES.ACTIVE
 		);
 		const filtered = listLearnedWords.filter((word) => {
@@ -50,34 +56,31 @@ Service.getGameSpecificWords = async function getGameSpecificWords(
 	level,
 	round
 ) {
-	const words = await api.getNewWordsArray(level, round);
+	const words = await APIMethods.getNewWordsArray(level, round);
 	return getShuffledArray(words);
 };
 
 Service.getNewWords = async function getNewWords() {
-	const total = settings.newWordsToShowAmount();
-	const userWords = await api.getUserWordsByCategory(CATEGORIES.NEW);
-	if (userWords.length >= total) {
-		userWords.length = total;
-		return userWords;
-	}
-	const words = await api.getNewWordsArray(settings.group, settings.page);
+	const words = await APIMethods.getNewWordsArray(
+		settings.progress.group,
+		settings.progress.page
+	);
 	settings.incProgress();
 	settings.saveParameters();
-	api.saveWordsArray(words);
+	APIMethods.saveWordsArray(words);
 	return getShuffledArray(words);
 };
 
 Service.getRandomWords = async function getRandomWords() {
 	const total = settings.cardsToShowAmount();
 	if (total === 0) return [];
-
-	const hiddenWords = await api.getUserWordsByCategory(CATEGORIES.NEW);
+	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
 	if (hiddenWords.length < total) {
 		const newWords = await Service.getNewWords();
-		hiddenWords.concat(newWords);
+		hiddenWords = hiddenWords.concat(newWords);
 	}
 	const repeatedWords = await Service.getRepeatedWords();
+
 	const amountRepeatedWords = Math.round(total * PART_OF_NEW_WORDS_IN_TOTAL);
 	const amountNewWords = total - amountRepeatedWords;
 
@@ -88,27 +91,37 @@ Service.getRandomWords = async function getRandomWords() {
 };
 
 Service.getRepeatedWords = async function getRepeatedWords() {
-	const userWords = await api.getUserWordsByCategory(CATEGORIES.NEW);
+	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
+
+	console.log('getRepeatedWords', userWords);
+
 	const total =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	const repeatedWords = sortByShowTime(userWords);
-	return repeatedWords.slice(null, total);
+	if (userWords.length > 0) {
+		const repeatedWords = sortByShowTime(userWords);
+		return repeatedWords.slice(null, total);
+	}
+	return [];
 };
 
 Service.getDifficultWords = async function getDifficultWords() {
-	const userWords = await api.getUserWordsByCategory(CATEGORIES.DIFFICULT);
+	const userWords = await APIMethods.getUserWordsByCategory(
+		CATEGORIES.DIFFICULT
+	);
+
+	console.log('getDifficultWords', userWords);
+
 	const total =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	const difficultWords = [];
-	userWords.sortByShowTime();
-	for (let i = 0; i < total; i += 1) {
-		difficultWords.push(userWords[i]);
+	if (userWords.length > 0) {
+		const repeatedWords = sortByShowTime(userWords);
+		return repeatedWords.slice(null, total);
 	}
-	return difficultWords;
+	return [];
 };
 
 export default Service;

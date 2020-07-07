@@ -82,12 +82,13 @@ async function save(toSaveObj) {
 	const saveJSON = JSON.stringify(toSaveObj);
 	const userID = biscuit.getCookie(USER.ID);
 	const userToken = biscuit.getCookie(USER.TOKEN);
-	const url = `${API}${URL_USER}${URL_NEXT}${userID}${userID}${URL_SETTINGS}`;
+	const url = `${API}${URL_USER}${URL_NEXT}${userID}${URL_NEXT}${URL_SETTINGS}`;
 	const rawResponse = await fetch(url, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${userToken}`,
 			Accept: 'application/json',
+			'Content-Type': 'application/json',
 		},
 		body: saveJSON,
 	});
@@ -98,7 +99,8 @@ async function save(toSaveObj) {
 async function download() {
 	const userID = biscuit.getCookie(USER.ID);
 	const userToken = biscuit.getCookie(USER.TOKEN);
-	const url = `${API}${URL_USER}${URL_NEXT}${userID}${userID}${URL_SETTINGS}`;
+	const url = `${API}${URL_USER}${URL_NEXT}${userID}${URL_NEXT}${URL_SETTINGS}`;
+	let out = {};
 	const rawResponse = await fetch(url, {
 		method: 'GET',
 		headers: {
@@ -106,8 +108,10 @@ async function download() {
 			Accept: 'application/json',
 		},
 	});
-	const data = await rawResponse.json();
-	return data.optional;
+	if (rawResponse.ok) {
+		out = await rawResponse.json();
+	}
+	return out.optional || out;
 }
 
 const saveParametersNow = async function saveParametersNow() {
@@ -119,7 +123,7 @@ const saveParametersNow = async function saveParametersNow() {
 	try {
 		await save(toSaveObj);
 	} catch (error) {
-		console.error(error);
+		console.log('error save', error);
 	}
 };
 
@@ -130,7 +134,7 @@ const getSettingsNow = async function getSettingsNow() {
 		settings = data;
 		this.updateSettings(settings);
 	} catch (error) {
-		console.error(error);
+		console.log('error get', error);
 	}
 	return settings;
 };
@@ -140,6 +144,7 @@ const update = async function update(settings) {
 	keysToSave.forEach((key) => {
 		this[key] = settings[key];
 	});
+	this.saveParameters();
 };
 
 export default class Settings {
