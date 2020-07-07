@@ -3,11 +3,9 @@ import {
 	OFFSET_DATE_COEFFICIENT,
 } from './constants';
 import WORDS_EVENTS from '../observer/WordsEvents';
-import Word from './Word';
 
-export default class IntervalRepetition extends Word {
+export default class IntervalRepetition {
 	constructor(wordObj) {
-		super();
 		this.wordId = wordObj.id;
 		this.optional = wordObj.optional;
 	}
