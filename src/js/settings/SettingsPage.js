@@ -4,10 +4,39 @@ import {
 	TEXT
 } from '../shared/Text';
 import SettingsView from './SettingsView';
+import Settings from './Settings';
 
-function createSettingsPage() {
+function controlDisabledAttribute(conrolElem, slaveElem) {
+	if (conrolElem.checked === true) {
+		slaveElem.removeAttribute('disabled');
+	} else {
+		slaveElem.setAttribute('disabled', 'disabled');
+		/* eslint no-param-reassign: "error" */
+		slaveElem.checked = false;
+		// slaveElem.removeAttribute('checked');
+	}
+}
+
+function setCheckboxValues(obj) {
+	const checkboxes = document.querySelectorAll('.settings__checkbox');
+	const meaningCheckbox = document.getElementById('word_meaning');
+	const meaningTranslateCheckbox = document.getElementById('word_meaning-translate');
+	const exampleCheckbox = document.getElementById('word_sentence-example');
+	const exampleTranslateCheckbox = document.getElementById('word_sentence-example-translate');
+	checkboxes.forEach(checkbox => {
+		if (obj[checkbox.getAttribute('name')]) {
+			checkbox.setAttribute('checked', 'checked');
+		}
+		if (checkbox.getAttribute('disabled') && obj[checkbox.getAttribute('name')] || obj[checkbox.getAttribute('name')]) {
+			checkbox.removeAttribute('disabled');
+		}
+	});
+	controlDisabledAttribute(exampleCheckbox, exampleTranslateCheckbox);
+	controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
+}
+
+function createSettingsPage(obj) {
 	const newElem = new DOMElementCreator();
-
 	const title = newElem.create({
 		elem: TAGS.H2,
 		classes: 'settings__title',
@@ -29,7 +58,7 @@ function createSettingsPage() {
 		id: 'words-number',
 		attr: [{
 			name: 'maxNewWords',
-			value: 3,
+			value: obj.maxNewWords,
 			min: 0,
 			type: 'number',
 		}, ],
@@ -50,7 +79,7 @@ function createSettingsPage() {
 		id: 'cards-number',
 		attr: [{
 			name: 'maxCards',
-			value: 3,
+			value: obj.maxCards,
 			min: 0,
 			type: 'number',
 		}, ],
@@ -136,7 +165,7 @@ function createSettingsPage() {
 	const meaningTranslateCheckbox = newElem.create({
 		elem: TAGS.INPUT,
 		classes: 'settings__checkbox',
-		id: 'word-meaning-translate',
+		id: 'word_meaning-translate',
 		attr: [{
 			name: 'meaningTranslate',
 			type: 'checkbox',
@@ -145,12 +174,7 @@ function createSettingsPage() {
 	});
 
 	meaningCheckbox.addEventListener('change', () => {
-		if (meaningCheckbox.checked === true) {
-			meaningTranslateCheckbox.removeAttribute('disabled');
-		} else {
-			meaningTranslateCheckbox.setAttribute('disabled', 'disabled');
-			meaningTranslateCheckbox.checked = false;
-		}
+		controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
 	});
 
 	const meaningTranslateLabel = newElem.create({
@@ -193,12 +217,7 @@ function createSettingsPage() {
 	});
 
 	sentenceExampleCheckbox.addEventListener('change', () => {
-		if (sentenceExampleCheckbox.checked === true) {
-			sentenceExampleTranslateCheckbox.removeAttribute('disabled');
-		} else {
-			sentenceExampleTranslateCheckbox.setAttribute('disabled', 'disabled');
-			sentenceExampleTranslateCheckbox.checked = false;
-		}
+		controlDisabledAttribute(sentenceExampleCheckbox, sentenceExampleTranslateCheckbox);
 	});
 
 	const pictureCheckbox = newElem.create({
@@ -352,13 +371,19 @@ function createSettingsPage() {
 		classes: ['wrapper', 'settings__wrapper', 'settings__background'],
 		child: [title, form, saveButton],
 	});
-
 	return wrapper;
 }
 
 export default function showSettingsPage() {
 	const app = document.querySelector('.app');
-	const settingsPage = createSettingsPage();
-	app.firstChild.remove();
-	app.append(settingsPage);
+	const lastUserSettings = new Promise(resolve => {
+		const obj = new Settings();
+		resolve(obj);
+	});
+	lastUserSettings.then(obj => {
+		const settingsPage = createSettingsPage(obj);
+		app.firstChild.remove();
+		app.append(settingsPage);
+		setCheckboxValues(obj);
+	});
 }

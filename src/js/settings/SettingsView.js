@@ -5,14 +5,8 @@ import {
 } from '../shared/Text';
 import Settings from './Settings';
 
-let settingsObj;
-async function newSettings() {
-	settingsObj = await new Settings();
-};
-newSettings();
-
 export default class SettingsView {
-	static async getUserSettings() {
+	static getUserSettings() {
 		const inputs = [].slice.call(document.forms.settings.elements);
 		const settings = {};
 		inputs.forEach(input => {
@@ -23,14 +17,16 @@ export default class SettingsView {
 			}
 		});
 		console.log(settings);
-		settingsObj.updateSettings(settings);
 		return settings;
 	}
 
-	static checkUserSettings() {
+	static async checkUserSettings() {
 		const settings = this.getUserSettings();
+    console.log('SettingsView -> checkUserSettings -> settings', settings);
 		if (settings.translate || settings.meaning || settings.example) {
 			this.showSuccessMessage();
+			const settingsObj = await new Settings();
+			settingsObj.updateSettings(settings);
 			return settings;
 		}
 		return this.showError();
