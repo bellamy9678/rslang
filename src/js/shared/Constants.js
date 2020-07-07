@@ -15,6 +15,7 @@ export const URL_SETTINGS = 'settings';
 export const URL_ET = '&';
 export const URL_NEXT = '/';
 export const URL_PARAM = '?';
+export const MAX_WORDS_PARAMETER = '&wordsPerPage=3600';
 
 export const CATEGORIES = {
 	NEW : 'new', // они же hidden

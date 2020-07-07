@@ -41,56 +41,29 @@ APIMethods.saveWordsArray = async function saveWordsArray(words) {
 	});
 };
 
-// ! зачем вообще?
-
-// async function makeRequestForAllUserWords(APIUrl) {
-// 	let data = [];
-// 	try {
-// 		const response = await fetch(APIUrl, {
-// 			method: 'GET',
-// 			headers: {
-// 				Authorization: `Bearer ${getUserToken()}`,
-// 				Accept: 'application/json',
-// 			},
-// 		});
-// 		data = await response.json();
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// 	return data;
-// }
-
-// APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
-// 	const APIUrl = url.allWords();
-// 	const data = await makeRequestForAllUserWords(APIUrl);
-// 	const words = data.map((word) => {
-// 		const userWord = new Word(word);
-// 		userWord.getMediaUrls();
-// 		return word;
-// 	});
-// 	return words;
-// };
-
 APIMethods.saveWord = async function saveWord(word) {
 	const wordToSave = {
-		optional : word.optional
+		optional: word.optional,
 	};
 	const APIUrl = url.oneWord(word.id);
-	try {
-		fetch(APIUrl, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${getUserToken()}`,
-				Accept: 'application/json',
-			},
-			body: JSON.stringify(wordToSave),
-		});
-	} catch (error) {
-		console.log(error);
-	}
+	await fetch(APIUrl, {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${getUserToken()}`,
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(wordToSave),
+	});
 };
 
-APIMethods.getUserWordsByCategory = async function getUserWordsByCategory(category) {
+function convertIntoArray(filterResponse) {
+	return filterResponse[0].paginatedResults;
+}
+
+APIMethods.getUserWordsByCategory = async function getUserWordsByCategory(
+	category
+) {
 	const filter = {};
 	filter[`${URL_WORD_CATEGORY}`] = category;
 	const APIUrl = url.aggregated(JSON.stringify(filter));
@@ -102,14 +75,15 @@ APIMethods.getUserWordsByCategory = async function getUserWordsByCategory(catego
 			headers: {
 				Authorization: `Bearer ${getUserToken()}`,
 				Accept: 'application/json',
+				'Content-Type': 'application/json',
 			},
 		});
 		const res = await rawResponse.json();
-		if (res[0].totalCount.length !== 0) {
-			const words = data.map((word) => {
+		const answer = convertIntoArray(res);
+		if (answer.length > 0) {
+			const words = answer.map((word) => {
 				const wordObj = new Word(word);
 				wordObj.getMediaUrls(word);
-				wordObj.addNewWordsParams();
 				return wordObj;
 			});
 			return words;
@@ -132,6 +106,7 @@ APIMethods.updateUserWord = async function updateUserWord(wordObj, addParams) {
 			headers: {
 				Authorization: `Bearer ${userToken}`,
 				Accept: 'application/json',
+				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(addParams),
 		});
