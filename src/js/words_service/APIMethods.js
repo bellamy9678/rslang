@@ -4,7 +4,6 @@ import CookieMonster from '../utils/CookieMonster';
 import { USER } from '../utils/CookieConstants';
 import { URL_WORD_CATEGORY } from '../shared/Constants';
 import IntervalRepetition from './IntervalRepetition';
-import WordFilter from './WordFilter';
 
 const APIMethods = {};
 
@@ -42,36 +41,40 @@ APIMethods.saveWordsArray = async function saveWordsArray(words) {
 	});
 };
 
-async function makeRequestForAllUserWords(APIUrl) {
-	let data = [];
-	try {
-		const response = await fetch(APIUrl, {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${getUserToken()}`,
-				Accept: 'application/json',
-			},
-		});
-		data = await response.json();
-	} catch (error) {
-		console.error(error);
-	}
-	return data;
-}
+// ! зачем вообще?
 
-APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
-	const APIUrl = url.allWords();
-	const data = await makeRequestForAllUserWords(APIUrl);
-	const words = data.map((word) => {
-		const userWord = new WordFilter(word);
-		userWord.getMediaUrls();
-		return word;
-	});
-	return words;
-};
+// async function makeRequestForAllUserWords(APIUrl) {
+// 	let data = [];
+// 	try {
+// 		const response = await fetch(APIUrl, {
+// 			method: 'GET',
+// 			headers: {
+// 				Authorization: `Bearer ${getUserToken()}`,
+// 				Accept: 'application/json',
+// 			},
+// 		});
+// 		data = await response.json();
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// 	return data;
+// }
+
+// APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
+// 	const APIUrl = url.allWords();
+// 	const data = await makeRequestForAllUserWords(APIUrl);
+// 	const words = data.map((word) => {
+// 		const userWord = new Word(word);
+// 		userWord.getMediaUrls();
+// 		return word;
+// 	});
+// 	return words;
+// };
 
 APIMethods.saveWord = async function saveWord(word) {
-	// console.log('word', word.optional, word.id);
+	const wordToSave = {
+		optional : word.optional
+	};
 	const APIUrl = url.oneWord(word.id);
 	try {
 		fetch(APIUrl, {
@@ -80,18 +83,18 @@ APIMethods.saveWord = async function saveWord(word) {
 				Authorization: `Bearer ${getUserToken()}`,
 				Accept: 'application/json',
 			},
-			body: JSON.stringify(word),
+			body: JSON.stringify(wordToSave),
 		});
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-APIMethods.getUserWordsByCategory = async function getUserWordsByCategory (category) {
+APIMethods.getUserWordsByCategory = async function getUserWordsByCategory(category) {
 	const filter = {};
 	filter[`${URL_WORD_CATEGORY}`] = category;
 	const APIUrl = url.aggregated(JSON.stringify(filter));
-	let data = [];
+	const data = [];
 	try {
 		const rawResponse = await fetch(APIUrl, {
 			method: 'GET',
@@ -103,7 +106,13 @@ APIMethods.getUserWordsByCategory = async function getUserWordsByCategory (categ
 		});
 		const res = await rawResponse.json();
 		if (res[0].totalCount.length !== 0) {
-			data = res;
+			const words = data.map((word) => {
+				const wordObj = new Word(word);
+				wordObj.getMediaUrls(word);
+				wordObj.addNewWordsParams();
+				return wordObj;
+			});
+			return words;
 		}
 	} catch (error) {
 		console.error(error.message);
