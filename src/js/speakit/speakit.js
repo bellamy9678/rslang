@@ -36,6 +36,9 @@ const output = document.querySelector('.word-output');
 const stopSpeak = document.querySelector('.stop-speak');
 const startPage = document.querySelector('.start-page');
 const startBtn = document.querySelector('.start-btn');
+const restartBtn = document.querySelector('.restart');
+const speakBtn = document.querySelector('.speak');
+const finishBtn = document.querySelector('.finish');
 const words = document.getElementsByClassName('word');
 const defaultImg = './assets/images/eng.jpg';
 const language = 'en-US';
@@ -144,6 +147,66 @@ function clickHandler(event) {
 }
 
 // Modal window 
+
+
+function handleRecognition() {
+	[...words].forEach(el => {
+		if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
+			if (!guessed.includes(el)) {
+				el.classList.add('active');
+				currentImg.setAttribute('src', el.dataset.myimage);
+				guessed.push(el);
+				if (guessed.length === guessedAll) {
+					// resultBtnHandler(); // нужно вызывать модальное окошко потому что все угадано
+				}
+			}
+		}
+	});
+
+	recognition.start();
+}
+
+function recResultHandler(e) {
+	const last = e.results.length - 1;
+	const command = e.results[last][zero].transcript;
+	span.textContent = emptyString;
+	span.textContent = command;
+}
+
+function restartHandler() {
+	setDefaultState();
+	recognition.stop();
+	recognition.removeEventListener('result', recResultHandler);
+	recognition.removeEventListener('end', handleRecognition);
+}
+
+// start speak
+function startSpeakHandler() {
+	trainMode = false;
+	output.classList.remove('none');
+	[...words].forEach(el => el.classList.remove('active'));
+	translation.classList.add('none');
+	recognition.start();
+	recognition.addEventListener('result', recResultHandler);
+	recognition.addEventListener('end', handleRecognition);
+}
+
+// stop speak
+function stopSpeakHandler() {
+	recognition.stop();
+	recognition.removeEventListener('result', recResultHandler);
+	recognition.removeEventListener('end', handleRecognition);
+	output.classList.add('none');
+	span.textContent = emptyString;
+	currentImg.setAttribute('src', defaultImg);
+	[...words].forEach(el => el.classList.remove('active'));
+	trainMode = true;
+	translation.classList.remove('none');
+	translation.textContent = emptyString;
+}
+// event on start btn ckick
+
+
 function resultBtnHandler() {
 	const resultReturnBtn = newElem.create({
 		elem: TAGS.BUTTON,
@@ -171,6 +234,12 @@ function resultBtnHandler() {
 
 	resultReturnBtn.addEventListener('click', () => {
 		myResult.closeResultWindow();
+		document.removeEventListener('click', clickHandler);
+		restartBtn.removeEventListener('click', restartHandler);
+		speakBtn.removeEventListener('click', startSpeakHandler);
+		stopSpeak.removeEventListener('click', stopSpeakHandler);
+		finishBtn.removeEventListener('click', resultBtnHandler);
+		// startBtn.removeEventListener('click', startHandler);		
 	});
 
 	resultNewGameBtn.addEventListener('click', () => {
@@ -179,7 +248,7 @@ function resultBtnHandler() {
 		recognition.stop();
 		mainWrapper.classList.add('none');
 		startPage.classList.remove('none');
-		document.removeEventListener('click', clickHandler);
+		
 	});
 
 	myResult.showResult({
@@ -189,25 +258,11 @@ function resultBtnHandler() {
 	});
 };
 
-function handleRecognition() {
-	[...words].forEach(el => {
-		if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
-			if (!guessed.includes(el)) {
-				el.classList.add('active');
-				currentImg.setAttribute('src', el.dataset.myimage);
-				guessed.push(el);
-				if (guessed.length === guessedAll) {
-					resultBtnHandler();
-				}
-			}
-		}
-	});
 
-	recognition.start();
-}
 
-// event on start btn ckick
-startBtn.addEventListener('click', event => {
+
+
+function startHandler(event) {
 	if (event.target.classList.contains('start-btn')) {
 		startPage.classList.add('none');
 		mainWrapper.classList.remove('none');
@@ -219,47 +274,11 @@ startBtn.addEventListener('click', event => {
 			arr.forEach(el => wordsContainer.append(el));
 		});
 		document.addEventListener('click', clickHandler);
+		restartBtn.addEventListener('click', restartHandler);
+		speakBtn.addEventListener('click', startSpeakHandler);
+		stopSpeak.addEventListener('click', stopSpeakHandler);
+		finishBtn.addEventListener('click', resultBtnHandler); // нужно повесить вызов модального окошка на кнопку
 	}
-});
+}
 
-const restartBtn = document.querySelector('.restart');
-restartBtn.addEventListener('click', () => {
-	setDefaultState();
-	recognition.stop();
-	recognition.removeEventListener('end', handleRecognition);
-
-});
-
-// speech recognition on
-const speakBtn = document.querySelector('.speak');
-speakBtn.addEventListener('click', () => {
-	trainMode = false;
-	output.classList.remove('none');
-	[...words].forEach(el => el.classList.remove('active'));
-	translation.classList.add('none');
-	recognition.start();
-	recognition.addEventListener('end', handleRecognition);
-});
-
-recognition.addEventListener('result', (e) => {
-	const last = e.results.length - 1;
-	const command = e.results[last][zero].transcript;
-	span.textContent = emptyString;
-	span.textContent = command;
-});
-
-// speech recognition off
-stopSpeak.addEventListener('click', () => {
-	recognition.stop();
-	recognition.removeEventListener('end', handleRecognition);
-	output.classList.add('none');
-	span.textContent = emptyString;
-	currentImg.setAttribute('src', defaultImg);
-	[...words].forEach(el => el.classList.remove('active'));
-	trainMode = true;
-	translation.classList.remove('none');
-	translation.textContent = emptyString;
-});
-
-const finishBtn = document.querySelector('.finish');
-finishBtn.addEventListener('click', resultBtnHandler);  
+startBtn.addEventListener('click', startHandler);
