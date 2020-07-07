@@ -4,7 +4,7 @@ import {
 	DEFAULT_PAGE,
 	INTERVAL_PARAMS,
 } from './constants';
-import Settings from '../userSettings/Settings';
+import Settings from '../settings/Settings';
 import APIMethods from './APIMethods';
 import { CATEGORIES } from '../shared/Constants';
 
