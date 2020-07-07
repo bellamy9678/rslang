@@ -16,7 +16,7 @@ const NEW_WORD_PARAMETERS = {
 export default class Word {
 	constructor(word) {
 		// eslint-disable-next-line no-underscore-dangle
-		this.id = word.id;
+		this.id = word.id || word._id;
 		this.word = word.word;
 		this.translate = word.wordTranslate;
 		this.transcription = word.transcription;
@@ -27,6 +27,16 @@ export default class Word {
 		this.page = word.page;
 		this.group = word.group;
 		this.wordsPerExampleSentence = word.wordsPerExampleSentence;
+
+		this.optional = {
+			progress : word.userWord.optional.progress,
+			bestResult : word.userWord.optional.bestResult,
+			showedCount : word.userWord.optional.showedCount,
+			showedDate : word.userWord.optional.showedDate,
+			learnDate : word.userWord.optional.learnDate,
+			offset : word.userWord.optional.offset,
+			category : word.userWord.optional.category,
+		}
 	}
 
 	getMediaUrls(word) {

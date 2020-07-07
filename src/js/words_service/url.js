@@ -8,7 +8,8 @@ import {
 	URL_ET,
 	URL_PAGE,
 	URL_FILTER,
-	URL_PARAM
+	URL_PARAM,
+	MAX_WORDS_PARAMETER
 } from '../shared/Constants';
 import {
 	USER,
@@ -37,11 +38,8 @@ url.oneWord = function getUrlForUserWord(wordId) {
 };
 
 url.aggregated = function getUrlForAggregatedWord(criteria) {
-	// if (!criteria) {
-	// 	criteria = '';
-	// }
 	const userId = getUserId();
-	return `${API}${URL_USER}${URL_NEXT}${userId}${URL_NEXT}${URL_AGGREGATED}${URL_PARAM}${URL_FILTER}${criteria}`;
+	return `${API}${URL_USER}${URL_NEXT}${userId}${URL_NEXT}${URL_AGGREGATED}${URL_PARAM}${URL_FILTER}${criteria}${MAX_WORDS_PARAMETER}`;
 };
 
 export default url;

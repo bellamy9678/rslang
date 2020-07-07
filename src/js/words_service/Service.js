@@ -1,9 +1,4 @@
-import {
-	PART_OF_NEW_WORDS_IN_TOTAL,
-	DEFAULT_GROUP,
-	DEFAULT_PAGE,
-	INTERVAL_PARAMS,
-} from './constants';
+import { DEFAULT_GROUP, DEFAULT_PAGE, INTERVAL_PARAMS } from './constants';
 import Settings from '../settings/Settings';
 import APIMethods from './APIMethods';
 import { CATEGORIES } from '../shared/Constants';
@@ -74,6 +69,7 @@ Service.getNewWords = async function getNewWords() {
 Service.getRandomWords = async function getRandomWords() {
 	const total = settings.cardsToShowAmount();
 	if (total === 0) return [];
+
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
 	if (hiddenWords.length < total) {
 		const newWords = await Service.getNewWords();
@@ -81,20 +77,21 @@ Service.getRandomWords = async function getRandomWords() {
 	}
 	const repeatedWords = await Service.getRepeatedWords();
 
-	const amountRepeatedWords = Math.round(total * PART_OF_NEW_WORDS_IN_TOTAL);
-	const amountNewWords = total - amountRepeatedWords;
+	const amountRepeatedWords = repeatedWords.length;
+	const amountNewWords = settings.newWordsToShowAmount();
 
-	const output = repeatedWords
-		.slice(null, amountRepeatedWords)
-		.concat(hiddenWords.slice(null, amountNewWords));
+	const output = hiddenWords
+		.slice(null, amountNewWords)
+		.concat(repeatedWords.slice(null, amountRepeatedWords));
+
+	if (output.length > total) {
+		output.length = total;
+	}
 	return getShuffledArray(output);
 };
 
 Service.getRepeatedWords = async function getRepeatedWords() {
 	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
-
-	console.log('getRepeatedWords', userWords);
-
 	const total =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
@@ -110,9 +107,6 @@ Service.getDifficultWords = async function getDifficultWords() {
 	const userWords = await APIMethods.getUserWordsByCategory(
 		CATEGORIES.DIFFICULT
 	);
-
-	console.log('getDifficultWords', userWords);
-
 	const total =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length

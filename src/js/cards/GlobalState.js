@@ -65,8 +65,6 @@ export default class GlobalState {
 		this.addContainer();
 		this.cardsContainer = CARD_CONTAINER.querySelector('.wrapper');
 		this.words = await Service.getRandomWords();
-
-		console.log('this.words', this.words);
 		this.cards = this.words.map((word) => {
 			const cardUnit = new Card(word);
 			const cardElem = cardUnit.create();
