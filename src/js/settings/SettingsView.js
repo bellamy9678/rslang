@@ -3,9 +3,16 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT
 } from '../shared/Text';
+import Settings from './Settings';
+
+let settingsObj;
+async function newSettings() {
+	settingsObj = await new Settings();
+};
+newSettings();
 
 export default class SettingsView {
-	static getUserSettings() {
+	static async getUserSettings() {
 		const inputs = [].slice.call(document.forms.settings.elements);
 		const settings = {};
 		inputs.forEach(input => {
@@ -16,6 +23,7 @@ export default class SettingsView {
 			}
 		});
 		console.log(settings);
+		settingsObj.updateSettings(settings);
 		return settings;
 	}
 

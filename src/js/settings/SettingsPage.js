@@ -49,7 +49,7 @@ function createSettingsPage() {
 		classes: ['settings__cards-number', 'settings__input'],
 		id: 'cards-number',
 		attr: [{
-			name: 'maxNewCards',
+			name: 'maxCards',
 			value: 3,
 			min: 0,
 			type: 'number',
