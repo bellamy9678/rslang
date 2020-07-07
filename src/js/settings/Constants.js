@@ -8,16 +8,12 @@ export const DEFAULT_SETTINGS = {
 
 	VERY_OLD_DATE: '01.01.2000 00:04',
 	FIELD_USERNAME: 'RSLangUser',
-	DEFAULT_USERNAME: 'MIKA',
 
-	NEXT_LEARNING_HOURS: 24,
-
+	NEW_DAY_HOURS: 24,
 	HOURS: 4,
 	MINUTES: 0,
 	SECONDS: 0,
 	MILLISECONDS: 0,
-
-	SECONDS_IN_YEAR: 31536000,
 };
 
 const progressObj = {};
@@ -25,6 +21,8 @@ progressObj.group = 0;
 progressObj.page = 0;
 
 export const WORD_OBJECT_DEFAULT = {
+	lastUpdateDate: 0,
+
 	maxNewWords: 5,
 	maxCards: 10,
 	cardsShowed: 0,

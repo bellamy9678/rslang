@@ -1,7 +1,9 @@
 import { DEFAULT_SETTINGS, WORD_OBJECT_DEFAULT } from './Constants';
-import SettingsService from './SettingsService';
+import { API, URL_USER, URL_SETTINGS, URL_NEXT } from '../shared/Constants';
+import { USER } from '../utils/CookieConstants';
+import CookieMonster from '../utils/CookieMonster';
 
-const service = new SettingsService();
+const biscuit = new CookieMonster();
 
 const amountCardsToShow = function amountCardsToShow() {
 	return this.maxCards - this.cardsShowed;
@@ -59,37 +61,85 @@ const makeZeroProgress = function makeZeroProgress() {
 
 const checkNewDateNow = function checkNewDateNow() {
 	const now = new Date();
-	const user = sessionStorage.getItem(DEFAULT_SETTINGS.FIELD_USERNAME)
-		? sessionStorage.getItem(DEFAULT_SETTINGS.FIELD_USERNAME)
-		: DEFAULT_SETTINGS.DEFAULT_USERNAME;
-	sessionStorage.setItem(DEFAULT_SETTINGS.FIELD_USERNAME, user);
-	const lastUpdate = localStorage.getItem(user)
-		? new Date(+localStorage.getItem(user))
-		: new Date(DEFAULT_SETTINGS.VERY_OLD_DATE);
+	const lastUpdate = new Date(this.lastUpdateDate);
 	const expected = lastUpdate.setHours(
 		lastUpdate.getHours() + DEFAULT_SETTINGS.NEXT_LEARNING_HOURS
 	);
 
 	if (now > expected) {
-		const checkDate = new Date();
-		checkDate.setHours(
+		now.setHours(
 			DEFAULT_SETTINGS.HOURS,
 			DEFAULT_SETTINGS.MINUTES,
 			DEFAULT_SETTINGS.SECONDS,
 			DEFAULT_SETTINGS.MILLISECONDS
 		);
-		localStorage.setItem(user, checkDate);
+		this.lastUpdate = now;
 		this.newDay();
 	}
 };
 
-const saveParametersNow = function saveParametersNow() {
-	const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
-	const toSaveObj = {};
-	keysToSave.forEach((key) => {
-		toSaveObj[key] = this[key];
+async function save(toSaveObj) {
+	const saveJSON = JSON.stringify(toSaveObj);
+	const userID = biscuit.getCookie(USER.ID);
+	const userToken = biscuit.getCookie(USER.TOKEN);
+	const url = `${API}${URL_USER}${URL_NEXT}${userID}${userID}${URL_SETTINGS}`;
+	const rawResponse = await fetch(url, {
+		method: 'PUT',
+		headers: {
+			Authorization: `Bearer ${userToken}`,
+			Accept: 'application/json',
+		},
+		body: saveJSON,
 	});
-	service.save(toSaveObj);
+	const data = await rawResponse.json();
+	return data;
+}
+
+async function download() {
+	const userID = biscuit.getCookie(USER.ID);
+	const userToken = biscuit.getCookie(USER.TOKEN);
+	const url = `${API}${URL_USER}${URL_NEXT}${userID}${userID}${URL_SETTINGS}`;
+	const rawResponse = await fetch(url, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${userToken}`,
+			Accept: 'application/json',
+		},
+	});
+	const data = await rawResponse.json();
+	return data.optional;
+}
+
+const saveParametersNow = async function saveParametersNow() {
+	const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
+	const toSaveObj = { optional: {} };
+	keysToSave.forEach((key) => {
+		toSaveObj.optional[key] = this[key];
+	});
+	try {
+		await save(toSaveObj);
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+const getSettingsNow = async function getSettingsNow() {
+	let settings = null;
+	try {
+		const data = await download();
+		settings = data;
+		this.updateSettings(settings);
+	} catch (error) {
+		console.error(error);
+	}
+	return settings;
+};
+
+const update = async function update(settings) {
+	const keysToSave = Object.keys(settings);
+	keysToSave.forEach((key) => {
+		this[key] = settings[key];
+	});
 };
 
 export default class Settings {
@@ -106,20 +156,8 @@ export default class Settings {
 		return copy;
 	}
 
-	static init() {
+	static async init() {
 		const returnedSettingsObject = Settings.getCopyDefaultObject();
-		const isOldUser = !!service.getUserName();
-
-		Settings.getCopyDefaultObject(returnedSettingsObject);
-
-		if (isOldUser) {
-			const userSettings = service.download();
-			const keysToSave = Object.keys(returnedSettingsObject);
-			keysToSave.forEach((key) => {
-				returnedSettingsObject[key] = userSettings[key];
-			});
-		}
-
 		returnedSettingsObject.cardsToShowAmount = amountCardsToShow;
 		returnedSettingsObject.newWordsToShowAmount = amountNewWordsToShow;
 		returnedSettingsObject.setMaxNewWords = setupMaxNewWords;
@@ -131,7 +169,10 @@ export default class Settings {
 		returnedSettingsObject.newDay = makeZeroProgress;
 		returnedSettingsObject.checkNewDate = checkNewDateNow;
 		returnedSettingsObject.saveParameters = saveParametersNow;
+		returnedSettingsObject.getSettings = getSettingsNow;
+		returnedSettingsObject.updateSettings = update;
 
+		await returnedSettingsObject.getSettings();
 		returnedSettingsObject.checkNewDate();
 		returnedSettingsObject.saveParameters();
 

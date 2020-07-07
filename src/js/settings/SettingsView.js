@@ -4,7 +4,7 @@ import {
 	TEXT
 } from '../shared/Text';
 
-export default class Settings {
+export default class SettingsView {
 	static getUserSettings() {
 		const inputs = [].slice.call(document.forms.settings.elements);
 		const settings = {};

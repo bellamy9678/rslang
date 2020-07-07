@@ -3,7 +3,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT
 } from '../shared/Text';
-import Settings from './Settings';
+import SettingsView from './SettingsView';
 
 function createSettingsPage() {
 	const newElem = new DOMElementCreator();
@@ -333,7 +333,7 @@ function createSettingsPage() {
 
 	saveButton.addEventListener('click', event => {
 		event.preventDefault();
-		Settings.checkUserSettings();
+		SettingsView.checkUserSettings();
 	});
 
 	const form = newElem.create({
