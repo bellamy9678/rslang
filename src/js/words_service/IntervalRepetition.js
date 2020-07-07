@@ -39,19 +39,19 @@ export default class IntervalRepetition {
 	static defineDifficultyCoefficient(event) {
 		let coefficient;
 		switch (event.type) {
-			case WORDS_EVENTS.PUSHED_AGAIN:
-			case WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON:
-				coefficient = OFFSET_DATE_COEFFICIENT.AGAIN;
-				break;
-			case WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT:
-			case WORDS_EVENTS.PUSHED_HARD:
-				coefficient = OFFSET_DATE_COEFFICIENT.HARD;
-				break;
-			case WORDS_EVENTS.PUSHED_EASY:
-				coefficient = OFFSET_DATE_COEFFICIENT.EASY;
-				break;
-			default:
-				coefficient = OFFSET_DATE_COEFFICIENT.GOOD;
+		case WORDS_EVENTS.PUSHED_AGAIN:
+		case WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON:
+			coefficient = OFFSET_DATE_COEFFICIENT.AGAIN;
+			break;
+		case WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT:
+		case WORDS_EVENTS.PUSHED_HARD:
+			coefficient = OFFSET_DATE_COEFFICIENT.HARD;
+			break;
+		case WORDS_EVENTS.PUSHED_EASY:
+			coefficient = OFFSET_DATE_COEFFICIENT.EASY;
+			break;
+		default:
+			coefficient = OFFSET_DATE_COEFFICIENT.GOOD;
 		}
 		return coefficient;
 	}

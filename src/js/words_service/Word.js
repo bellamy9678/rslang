@@ -45,6 +45,6 @@ export default class Word {
 			learnDate: NEW_WORD_PARAMETERS.learnDate,
 			offset: NEW_WORD_PARAMETERS.offset,
 			category: NEW_WORD_PARAMETERS.category,
-		}
+		};
 	}
 }

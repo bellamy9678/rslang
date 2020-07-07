@@ -25,7 +25,7 @@ export default class WordFilter {
 			learnDate : word.userWord.learnDate,
 			offset : word.userWord.offset,
 			category : word.userWord.category,
-		}
+		};
 	}
 
 	getMediaUrls(word) {

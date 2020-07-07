@@ -36,4 +36,4 @@ export const OFFSET_DATE_COEFFICIENT = {
 	EASY: 1.3,
 	GOOD: 1,
 	HARD: 0.8,
-}
+};
