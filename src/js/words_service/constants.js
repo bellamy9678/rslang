@@ -23,3 +23,10 @@ export const PROGRESS = {
 	MAX: 4,
 	MIN: 0,
 };
+
+export const OFFSET_DATE_COEFFICIENT = {
+	AGAIN: 0,
+	EASY: 1.3,
+	GOOD: 1,
+	HARD: 0.8,
+}
