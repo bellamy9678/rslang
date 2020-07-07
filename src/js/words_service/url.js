@@ -33,7 +33,7 @@ url.allWords = function getUrlForAllUserWords() {
 
 url.oneWord = function getUrlForUserWord(wordId) {
 	const userId = getUserId();
-	return `${API}${URL_USER}${userId}${URL_WORDS}${URL_NEXT}${wordId}`;
+	return `${API}${URL_USER}${URL_NEXT}${userId}${URL_NEXT}${URL_WORDS}${URL_NEXT}${wordId}`;
 };
 
 url.aggregated = function getUrlForAggregatedWord(criteria) {
@@ -41,7 +41,7 @@ url.aggregated = function getUrlForAggregatedWord(criteria) {
 	// 	criteria = '';
 	// }
 	const userId = getUserId();
-	return `${API}${URL_USER}${userId}${URL_NEXT}${URL_AGGREGATED}${URL_FILTER}${criteria}`;
+	return `${API}${URL_USER}${URL_NEXT}${userId}${URL_NEXT}${URL_AGGREGATED}${URL_PARAM}${URL_FILTER}${criteria}`;
 };
 
 export default url;

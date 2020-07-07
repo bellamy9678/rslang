@@ -3,7 +3,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT
 } from '../shared/Text';
-import Settings from './Settings';
+import SettingsView from './SettingsView';
 
 function createSettingsPage() {
 	const newElem = new DOMElementCreator();
@@ -49,7 +49,7 @@ function createSettingsPage() {
 		classes: ['settings__cards-number', 'settings__input'],
 		id: 'cards-number',
 		attr: [{
-			name: 'maxNewCards',
+			name: 'maxCards',
 			value: 3,
 			min: 0,
 			type: 'number',
@@ -333,7 +333,7 @@ function createSettingsPage() {
 
 	saveButton.addEventListener('click', event => {
 		event.preventDefault();
-		Settings.checkUserSettings();
+		SettingsView.checkUserSettings();
 	});
 
 	const form = newElem.create({
