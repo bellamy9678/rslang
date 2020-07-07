@@ -33,7 +33,6 @@ APIMethods.getNewWordsArray = async function getNewWordsArray(group, page) {
 		wordObj.addNewWordsParams();
 		return wordObj;
 	});
-	APIMethods.saveWords(words);
 	return words;
 };
 
@@ -72,6 +71,7 @@ APIMethods.getAllUserWordsArray = async function getAllUserWordsArray() {
 };
 
 APIMethods.saveWord = async function saveWord(word) {
+	// console.log('word', word.optional, word.id);
 	const APIUrl = url.oneWord(word.id);
 	try {
 		fetch(APIUrl, {
@@ -91,7 +91,7 @@ APIMethods.getUserWordsByCategory = async function getUserWordsByCategory (categ
 	const filter = {};
 	filter[`${URL_WORD_CATEGORY}`] = category;
 	const APIUrl = url.aggregated(JSON.stringify(filter));
-	let data;
+	let data = [];
 	try {
 		const rawResponse = await fetch(APIUrl, {
 			method: 'GET',
@@ -101,8 +101,10 @@ APIMethods.getUserWordsByCategory = async function getUserWordsByCategory (categ
 				Accept: 'application/json',
 			},
 		});
-		data = await rawResponse.json();
-		console.log('data', data);
+		const res = await rawResponse.json();
+		if (res[0].totalCount.length !== 0) {
+			data = res;
+		}
 	} catch (error) {
 		console.error(error.message);
 	}

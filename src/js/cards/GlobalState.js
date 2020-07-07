@@ -9,13 +9,13 @@ import {
 	ARRAY_LENGTH_COEFFICIENT,
 	INPUT_WIDTH_UNIT
 } from './CardConstants';
-// import getNewWordsArray from './GetWordsFromAPI';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
 import WORDS_EVENTS from '../observer/WordsEvents';
 
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
+import Service from '../words_service/Service';
 
 const fab = new DOMElementCreator();
 
@@ -64,7 +64,9 @@ export default class GlobalState {
 	async initGlobalState() {
 		this.addContainer();
 		this.cardsContainer = CARD_CONTAINER.querySelector('.wrapper');
-		this.words = await []; // getNewWordsArray(START_LEVEL, START_PAGE);
+		this.words = await Service.getRandomWords();
+
+		console.log('this.words', this.words);
 		this.cards = this.words.map((word) => {
 			const cardUnit = new Card(word);
 			const cardElem = cardUnit.create();
