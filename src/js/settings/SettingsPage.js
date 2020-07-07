@@ -56,17 +56,17 @@ function createSettingsPage() {
 		}, ],
 	});
 
-	wordsNumberInput.addEventListener('change', () => {
+	cardsNumberInput.addEventListener('change', () => {
 		const wordsNumber = document.getElementById('words-number');
 		const cardsNumber = document.getElementById('cards-number');
-		if (cardsNumber.value > wordsNumber.value) {
-			cardsNumber.value = wordsNumber.value;
+		if (wordsNumber.value > cardsNumber.value) {
+			wordsNumber.value = cardsNumber.value;
 		}
 	});
 
-	cardsNumberInput.addEventListener('focus', () => {
-		const wordsNumber = document.getElementById('words-number');
-		cardsNumberInput.setAttribute('max', wordsNumber.value);
+	wordsNumberInput.addEventListener('focus', () => {
+		const cardsNumber = document.getElementById('cards-number');
+		wordsNumberInput.setAttribute('max', cardsNumber.value);
 	});
 
 	const inputsWrapper = newElem.create({
