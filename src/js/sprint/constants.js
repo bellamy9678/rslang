@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const BTN_TEXT_WRONG = 'Неверно';
 const BTN_TEXT_CORRECT = 'Верно';
+const CONTINUE_BTN_TEXT = 'Продолжить';
 const POINTS_FOR_ANSWER_TEXT = 'очков за слово';
 const APP_CONTAINER = document.querySelector('.app');
 const MAIN_SHADOW_WRONG = 'inset 0 0 2px 2px red';
@@ -27,6 +28,7 @@ export {
 	LEVEL_YELLOW,
 	LEVEL_BRONSE,
 	LEVEL_RED,
-	SHADOW_TIMER
+	SHADOW_TIMER,
+	CONTINUE_BTN_TEXT
 };
 

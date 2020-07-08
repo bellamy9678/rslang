@@ -23,7 +23,8 @@ window.addEventListener('load', () => {
 	} catch (error) {
 		console.error('Cookie not found');
 		// StartPage.showStartPage();
-		sprint.getData();
+		sprint.init();
+		sprint.start();
 		// GameField.generateField();
 	} finally {
 		Header.create();

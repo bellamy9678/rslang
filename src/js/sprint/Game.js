@@ -11,7 +11,6 @@ const result = new Result();
 
 export default class Game {
 	constructor() {
-		GameField.generateField();
 		this.level = 0;
 		this.round = 0;
 		this.nextLevel = this.level + 1;
@@ -30,6 +29,12 @@ export default class Game {
 		this.playAudioState = false;
 		this.audio = new Audio();
 		this.gameStarted = false;
+		this.keyUpState = true;
+		this.gameReadyState = false;
+	}
+
+	init() {
+		GameField.generateField();
 		this.MAIN_CONTAINER = document.getElementById('main_container');
 		this.WORD_CONTAINER = document.getElementById('word');
 		this.TRANSLATION_CONTAINER = document.getElementById('translation');
@@ -46,8 +51,10 @@ export default class Game {
 		this.TIMER = document.getElementById('timer');
 
 		this.addEventListeners();
+	}
 
-
+	start() {
+		this.getData();
 	}
 
 	addEventListeners() {
@@ -185,8 +192,6 @@ export default class Game {
 			.then(response => {
 				return response.json();
 			}).then(myJson => {
-				console.log(this.wrongWords);
-
 				myJson.forEach(wordObj => this.wordsArr.push(wordObj));
 				this.getWrongWordsArr(myJson);
 				this.nextRound += 1;
@@ -200,7 +205,7 @@ export default class Game {
 				return response.json();
 			}).then(myJson => {
 				this.handleJson(myJson);
-			});
+			}).catch(error => console.error(error));
 	}
 
 	handleJson(json) {
@@ -273,7 +278,7 @@ export default class Game {
 		const resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
-			child: 'Continue'
+			child: CONST.CONTINUE_BTN_TEXT
 		});
 		resultContinueBtn.addEventListener('click', () => {
 			result.closeResultWindow();
@@ -281,9 +286,10 @@ export default class Game {
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
-			buttons: [resultContinueBtn]
+			buttons: [resultContinueBtn],
+			points: this.points
 		});
-		document.removeEventListener('click', this.keyboardHandler);
+		document.removeEventListener('keydown', this.keyboardHandler);
 	}
 
 }
