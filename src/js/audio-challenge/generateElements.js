@@ -1,6 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import {idkText} from './consts';
+import {idkText, LEFT_MARGIN_OF_NEW_QUESTION} from './consts';
 import checkAnswer from './checkAnswer';
 
 export default async function generateElements(mainWordObj, answers) {
@@ -44,7 +44,14 @@ export default async function generateElements(mainWordObj, answers) {
 	const wordContainer= domCreator.create({
 		elem: TAGS.P,
 		classes: 'right-answer-wrapper__word-container__word',
-		child: `${mainWord}`
+		child: `${mainWord}`,
+		attr: [{
+			'data-translate': `${mainWordObj.translate}`
+		}, {
+			'data-image': `${mainWordObj.image}`
+		}, {
+			'data-audio': `${mainWordObj.audio}`
+		}]
 	});
 	const soundIcon2 = domCreator.create({
 		elem: TAGS.IMG,
@@ -67,17 +74,16 @@ export default async function generateElements(mainWordObj, answers) {
 	});
 	const answerContainer = domCreator.create({
 		elem: TAGS.DIV,
-		classes: 'answers-wrapper',
-		child: []
+		classes: 'answers-wrapper'
 	});
 	const arrWithTranslations = [];
 	answers.forEach(item => {
 		const answer = domCreator.create({
 			elem: TAGS.P,
 			classes: 'answers-wrapper__answer',
-			child: `${item.wordTranslate}`
+			child: `${item.translate}`
 		});
-		arrWithTranslations.push(item.wordTranslate);
+		arrWithTranslations.push(item.translate);
 		answerContainer.append(answer);
 	});
 	const idkButton = domCreator.create({
@@ -96,17 +102,16 @@ export default async function generateElements(mainWordObj, answers) {
 		child: [wrapperContent]
 	});
 	app.append(wrapper);
-	const mainWordTranslationIndex = arrWithTranslations.indexOf(`${mainWordObj.wordTranslate}`);
+	const mainWordTranslationIndex = arrWithTranslations.indexOf(`${mainWordObj.translate}`);
 	const rightAnswer = document.querySelector(`.answers-wrapper__answer:nth-child(${mainWordTranslationIndex+1})`);
 	rightAnswer.classList.add('right-answer');
-	console.log(mainWord);
 	const delayBeforeAppearance = 10;
 	setTimeout(() => {
-		wrapperContent.style.left = '0px';
+		wrapperContent.style.left = LEFT_MARGIN_OF_NEW_QUESTION;
 	}, delayBeforeAppearance);
 	const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
 	answerContainers.forEach(container => {
 		container.addEventListener('click', checkAnswer);
 	});
-	// sound.play();
+	sound.play();
 }

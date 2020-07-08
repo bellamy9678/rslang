@@ -1,7 +1,5 @@
-import {words} from './consts';
-
-export default async function fetchWords() {
-	return new Promise((resolve) => {
-		resolve(words);
-	});
+export default async function fetchWords(url) {
+	const response = await fetch(url);
+	const data = await response.json();
+	return data;
 }

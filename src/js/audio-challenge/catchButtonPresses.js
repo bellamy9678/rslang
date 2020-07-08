@@ -1,12 +1,10 @@
 import checkAnswer from './checkAnswer';
+import {POSITION_OF_NUMBER, WORD_BEGGINING, WORD_ENDING, VALUE_OF_KEYS} from './consts';
 
 export default function catchButtonPresses() {
 	document.addEventListener('keydown', function defineButton(event) {
-		const positionOfNumber = 5;
-		const wordBeggining = 0;
-		const wordEnding = 5;
-		const numberOfDigit = event.code.slice(positionOfNumber, event.code.length);
-		if (event.code.slice(wordBeggining, wordEnding) === 'Digit' && +numberOfDigit <= 5) {
+		const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
+		if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
 			const choosenAnswer = document.querySelector(`.answers-wrapper__answer:nth-child(${numberOfDigit})`);
 			checkAnswer(event, choosenAnswer);
 		}
