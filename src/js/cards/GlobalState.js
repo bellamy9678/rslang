@@ -7,17 +7,25 @@ import {
 	SETTINGS_OBJECT_DEFAULT,
 	PROGRESS_SEPARATOR,
 	ARRAY_LENGTH_COEFFICIENT,
-	INPUT_WIDTH_UNIT
+	INPUT_WIDTH_UNIT,
 } from './CardConstants';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
 import WORDS_EVENTS from '../observer/WordsEvents';
-
+import Settings from '../settings/Settings';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Service from '../words_service/Service';
 
 const fab = new DOMElementCreator();
+
+let settings;
+async function initial() {
+	settings = await new Settings();
+	return settings;
+}
+
+initial();
 
 export default class GlobalState {
 	constructor() {
@@ -31,6 +39,7 @@ export default class GlobalState {
 	}
 
 	removeCard() {
+		this.cardsElements[this.currentPosition - 1].removeListeners();
 		this.cardsContainer.removeChild(this.cardsContainer.lastChild);
 	}
 
@@ -63,10 +72,12 @@ export default class GlobalState {
 
 	async initGlobalState() {
 		this.addContainer();
+		this.cardsElements = [];
 		this.cardsContainer = CARD_CONTAINER.querySelector('.wrapper');
 		this.words = await Service.getRandomWords();
 		this.cards = this.words.map((word) => {
 			const cardUnit = new Card(word);
+			this.cardsElements.push(cardUnit);
 			const cardElem = cardUnit.create();
 			return cardElem;
 		});
@@ -81,10 +92,13 @@ export default class GlobalState {
 	}
 
 	addCurrentWordToEnd() {
-		const clearCard = new Card(this.words[this.currentPosition]);
-		const cardElem = clearCard.create();
-		this.cards.push(cardElem);
-		this.words.push(this.words[this.currentPosition]);
+		if (settings.cardsToShowAmount() > this.words.length) {
+			const clearCard = new Card(this.words[this.currentPosition]);
+			const cardElem = clearCard.create();
+			this.cards.push(cardElem);
+			this.words.push(this.words[this.currentPosition]);
+			this.cardsElements.push(clearCard);
+		}
 	}
 
 	addContainer() {
@@ -121,7 +135,9 @@ export default class GlobalState {
 	}
 
 	calcProgress() {
-		const separator = this.progressContainer.querySelector('.progress__separator');
+		const separator = this.progressContainer.querySelector(
+			'.progress__separator'
+		);
 		const current = this.progressContainer.querySelector('.progress__current');
 		const total = this.progressContainer.querySelector('.progress__total');
 
@@ -132,7 +148,10 @@ export default class GlobalState {
 		const sumWidth = current.offsetWidth + parametersWidth;
 		const allWidth = this.progressContainer.offsetWidth;
 
-		const neededWidth = (allWidth - sumWidth) / (+total.innerText - +current.innerText + ARRAY_LENGTH_COEFFICIENT) + current.offsetWidth;
+		const neededWidth =
+			(allWidth - sumWidth) /
+				(+total.innerText - +current.innerText + ARRAY_LENGTH_COEFFICIENT) +
+			current.offsetWidth;
 
 		current.style.width = neededWidth + INPUT_WIDTH_UNIT;
 	}

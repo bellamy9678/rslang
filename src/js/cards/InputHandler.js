@@ -9,10 +9,17 @@ import {
 	ERROR_CORRECT_INPUT_TIMEOUT,
 } from './CardConstants';
 
+function inputHandler() {
+	this.wordHidden.children.forEach((childNode) => {
+		childNode.classList.add(INVISIBLE_LETTER);
+	});
+}
+
 export default class InputHandler {
 	init() {
 		this.wordHidden = document.querySelector('#example-part-word');
 		this.element = document.querySelector('#word');
+		this.inputHandler = inputHandler.bind(this);
 	}
 
 	static makeStringComparable(str) {
@@ -71,11 +78,11 @@ export default class InputHandler {
 			}
 		});
 
-		this.element.addEventListener('input', () => {
-			this.wordHidden.children.forEach((childNode) => {
-				childNode.classList.add(INVISIBLE_LETTER);
-			});
-		});
+		this.element.addEventListener('input', this.inputHandler);
+	}
+
+	removeListener() {
+		this.element.addEventListener('input', this.inputHandler);
 	}
 
 	showError() {

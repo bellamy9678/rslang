@@ -19,9 +19,44 @@ import WORDS_EVENTS from '../observer/WordsEvents';
 
 const fab = new DOMElementCreator();
 
+function continueButtonHandler() {
+	const submitEvent = new Event('submit');
+	const continueButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_CONTINUE);
+	document.dispatchEvent(continueButtonEvent);
+	this.elem.dispatchEvent(submitEvent);
+}
+
+function textInputHandler() {
+	const textInput = this.elem.querySelector('#word');
+	const continueButton = this.elem.querySelector('#continue-button');
+	if (textInput.value.length > EMPTY_STRING.length) {
+		continueButton.disabled = false;
+	} else {
+		continueButton.disabled = true;
+	}
+};
+
+function cardHandler(event) {
+	event.preventDefault();
+	this.isCorrectReaction();
+}
+
+function removeListeners() {
+	const continueButton = this.elem.querySelector('#continue-button');
+	const textInput = this.elem.querySelector('#word');
+	const card = this.elem;
+	continueButton.removeEventListener('click', this.continueButtonHandler);
+	textInput.removeEventListener('click', this.textInputHandler);
+	card.removeEventListener('submit', this.cardHandler);
+}
+
 export default class Card {
 	constructor(word) {
 		this.card = word;
+		this.continueButtonHandler = continueButtonHandler.bind(this);
+		this.textInputHandler = textInputHandler.bind(this);
+		this.cardHandler = cardHandler.bind(this);
+		this.removeListeners = removeListeners.bind(this);
 	}
 
 	static getObjectOfTextExample(text) {
@@ -295,9 +330,11 @@ export default class Card {
 				detail: currentWord
 			}
 		);
-		addToDifficultButton.addEventListener('click', () =>
-			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
-		);
+
+		addToDifficultButton.addEventListener('click', function addToDifficultButtonHandler() {
+			addToDifficultButton.dispatchEvent(addToEasyButtonEvent);
+			addToDifficultButton.removeEventListener('click', addToDifficultButtonHandler);
+		});
 
 		const deleteFromDictionaryButton = fab.create({
 			elem: TAGS.BUTTON,
@@ -315,9 +352,10 @@ export default class Card {
 			}
 		);
 
-		deleteFromDictionaryButton.addEventListener('click', () => {
+		deleteFromDictionaryButton.addEventListener('click', function deleteFromDictionaryButtonHandler() {
 			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent);
 			document.dispatchEvent(deleteFromDictionaryEvent);
+			deleteFromDictionaryButton.removeEventListener('click', deleteFromDictionaryButtonHandler);
 		});
 
 		const buttonGroupDictionary = fab.create({
@@ -408,22 +446,11 @@ export default class Card {
 			],
 		});
 
-		const submitEvent = new Event('submit');
+		textInput.addEventListener('input', this.textInputHandler);
+		continueButton.addEventListener('click', this.continueButtonHandler);
+		card.addEventListener('submit', this.cardHandler);
 
-		textInput.addEventListener('input', () => {
-			if (textInput.value.length > EMPTY_STRING.length) {
-				continueButton.disabled = false;
-			} else {
-				continueButton.disabled = true;
-			}
-		});
-
-		card.addEventListener('submit', (event) => {
-			event.preventDefault();
-			this.isCorrectReaction();
-		});
-
-		showAnswerButton.addEventListener('click', () => {
+		showAnswerButton.addEventListener('click', function showAnswerButtonHandler() {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
 			document.dispatchEvent(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
@@ -433,32 +460,31 @@ export default class Card {
 			const hidden = textMeaning.querySelector('#meaning-part-word');
 			hidden.innerText = hidden.dataset.secretWord;
 			continueButton.disabled = false;
+			showAnswerButton.removeEventListener('click', showAnswerButtonHandler);
 		});
 
-		continueButton.addEventListener('click', () => {
-			const continueButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_CONTINUE);
-			document.dispatchEvent(continueButtonEvent);
-			card.dispatchEvent(submitEvent);
-		});
-
-		easyButton.addEventListener('click', () => {
+		easyButton.addEventListener('click', function easyButtonHandler() {
 			easyButton.dispatchEvent(easyButtonEvent);
 			document.dispatchEvent(easyButtonEvent);
+			easyButton.removeEventListener('click', easyButtonHandler);
 		});
 
-		goodButton.addEventListener('click', () => {
+		goodButton.addEventListener('click', function goodButtonHandler() {
 			goodButton.dispatchEvent(goodButtonEvent);
 			document.dispatchEvent(goodButtonEvent);
+			goodButton.removeEventListener('click', goodButtonHandler);
 		});
 
-		againButton.addEventListener('click', () => {
+		againButton.addEventListener('click', function againButtonHandler() {
 			againButton.dispatchEvent(againButtonEvent);
 			document.dispatchEvent(againButtonEvent);
+			againButton.removeEventListener('click', againButtonHandler);
 		});
 
-		hardButton.addEventListener('click', () => {
+		hardButton.addEventListener('click', function hardButtonHandler() {
 			hardButton.dispatchEvent(hardButtonEvent);
 			document.dispatchEvent(hardButtonEvent);
+			hardButton.removeEventListener('click', hardButtonHandler);
 		});
 
 		this.elem = card;

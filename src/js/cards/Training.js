@@ -86,6 +86,7 @@ function showHiddenWordInInput() {
 
 function nextCard() {
 	document.querySelector('.card').classList.add(FADE_CLASS);
+	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
 	setTimeout(() => {
 		globalState.updateCard();
