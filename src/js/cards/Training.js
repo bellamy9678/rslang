@@ -6,7 +6,8 @@ import {
 	FADE_CLASS,
 	NEXT_AUDIO_CORRECTION,
 	START_AUDIO_TIME,
-	FADE_DURATION
+	FADE_DURATION,
+	DEFAULT_POSITION
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
@@ -40,7 +41,6 @@ function showTranslate() {
 
 function playAudio(audioArr) {
 	const playQueue = [];
-	const firstAudioPosition = 0;
 
 	audioArr.forEach((audioElement) => {
 		if (!audioElement.classList.contains(DISPLAY_NONE_CLASS)) {
@@ -49,11 +49,13 @@ function playAudio(audioArr) {
 	});
 
 	for (let i = 0; i < playQueue.length - NEXT_AUDIO_CORRECTION; i += 1) {
-		playQueue[i].addEventListener('ended', () => playQueue[i + NEXT_AUDIO_CORRECTION].play());
+		playQueue[i].addEventListener('ended', () =>
+			playQueue[i + NEXT_AUDIO_CORRECTION].play()
+		);
 	}
 
-	if (playQueue[firstAudioPosition]) {
-		playQueue[firstAudioPosition].play();
+	if (playQueue[DEFAULT_POSITION]) {
+		playQueue[DEFAULT_POSITION].play();
 	}
 }
 
@@ -86,17 +88,27 @@ function showHiddenWordInInput() {
 
 function nextCard() {
 	document.querySelector('.card').classList.add(FADE_CLASS);
+	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
-	setTimeout(() => {
-		globalState.updateCard();
-		if (globalState.currentPosition < globalState.cards.length) {
-			setInput();
-			document.querySelector('.card').classList.remove(FADE_CLASS);
-		} else {
-			globalState.finishGame();
-			globalState = {};
+
+	let start = null;
+	window.requestAnimationFrame(function timeout(timestamp) {
+		if (start === null) {
+			start = timestamp;
 		}
-	}, FADE_DURATION);
+		if (timestamp < FADE_DURATION + start) {
+			window.requestAnimationFrame(timeout);
+		} else {
+			globalState.updateCard();
+			if (globalState.currentPosition < globalState.cards.length) {
+				setInput();
+				document.querySelector('.card').classList.remove(FADE_CLASS);
+			} else {
+				globalState.finishGame();
+				globalState = {};
+			}
+		}
+	});
 }
 
 function checkHiddenFields() {
@@ -227,6 +239,8 @@ CARD_CONTAINER.addEventListener(
 
 export default async function training() {
 	await globalState.initGlobalState();
-	addListeners();
-	setInput();
+	if (globalState.words.length !== 0) {
+		addListeners();
+		setInput();
+	}
 }

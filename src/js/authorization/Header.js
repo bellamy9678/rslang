@@ -3,17 +3,18 @@ import {
 	LINKS,
 	AUTHORIZATION_FORM,
 } from '../shared/Text';
-import {
-	USER_COOKIE_NAME
-} from './Constants';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import Cookie from './Cookie';
 import StartPage from './StartPage';
 import NewUser from './NewUser';
 import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 import showSettingsPage from '../settings/SettingsPage';
+import showDictionaryPage from '../dictionary/DictionaryPage';
+import {
+	USER
+} from '../utils/CookieConstants';
+import CookieMonster from '../utils/CookieMonster';
 
 export default class Header {
 
@@ -117,6 +118,9 @@ export default class Header {
 			},
 			child: LINKS.dictionary,
 		});
+
+		dictionaryLink.addEventListener('click', showDictionaryPage);
+
 		const navigation = document.querySelector('.navigation');
 		navigation.prepend(settingsLink, statisticLink, dictionaryLink);
 	}
@@ -135,8 +139,8 @@ export default class Header {
 
 		const buttons = document.querySelector('.header__buttons');
 		logOutButton.addEventListener('click', () => {
-			Cookie.deleteUserCookie(USER_COOKIE_NAME.NAME);
-			Cookie.deleteUserCookie(USER_COOKIE_NAME.TOKEN);
+			const cookie = new CookieMonster();
+			cookie.deleteCookie(USER.NAME, USER.TOKEN);
 			this.create();
 			StartPage.showStartPage();
 		});
@@ -261,9 +265,8 @@ export default class Header {
 
 	static create() {
 		try {
-			const cookieArr = document.cookie.split(';');
-			const cookie = new Cookie(cookieArr);
-			const userName = cookie.checkUserToken();
+			const cookie = new CookieMonster();
+			const userName = cookie.getCookie(USER.NAME);
 			const buttons = document.querySelector('.header__buttons');
 			buttons.querySelectorAll('*').forEach(button => button.remove());
 			document.querySelectorAll('.navigation__link').forEach(link => link.remove());

@@ -54,8 +54,10 @@ export const TEXT = {
 		transcriptionLabel: 'Word transcription',
 		translationLabel: 'Word translation',
 		meaningLabel: 'A sentence which explains the meaning of word',
+		meaningAudioLabel: 'Add a button to listen to sentences with the meaning of the word',
 		meaningTranslateLabel: 'A sentence translate which explains the meaning of word',
 		sentenceExempleLabel: 'A sentence with an example of using the studied word',
+		sentenceExampleAudioLabel: 'Add a button to listen to sentences with the example of the word',
 		sentenceExempleTranslateLabel: 'Translate of the sentence with an example of using the studied word',
 		pictureLabel: 'Picture',
 		deleteButtonLabel: 'Button to delete a word from the studied words',
@@ -90,4 +92,14 @@ export const GAME_NAMES = {
 	audioChallenge: 'Audio Challenge',
 	sprint: 'Sprint',
 	ownGame: 'Super duper game',
+};
+
+export const CATEGORY_NAMES = {
+	ACTIVE: 'Studied words',
+	DIFFICULT: 'Difficult words',
+	REMOVED: 'Removed words',
+};
+
+export const DICTIONARY_BUTTONS = {
+	RECOVER: 'Recover word'
 };

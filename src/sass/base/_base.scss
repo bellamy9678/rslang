@@ -1,33 +1,33 @@
 html {
-    font-size: 10px;
-    height: 100%;
+	font-size: 10px;
+	height: 100%;
 }
 
 body {
-    min-height: 100%;
-    @extend %font-prim;
-    color: $color-text-dark;
-		margin: 0;
+	height: 100%;
+	@extend %font-prim;
+	color: $color-text-dark;
+	margin: 0;
 }
 
 h2 {
-    @include font($size: 2.4rem, $weight: 600);
-    margin: 0;
+	@include font($size: 2.4rem, $weight: 600);
+	margin: 0;
 }
 
 p {
-    @include font($size: 1.4rem);
-    margin: 0;
+	@include font($size: 1.4rem);
+	margin: 0;
 }
 
 label {
-    @include font($size: 1.2rem, $weight: 600);
-    display: inline-block;
-    margin-bottom: 10px;
+	@include font($size: 1.2rem, $weight: 600);
+	display: inline-block;
+	margin-bottom: 10px;
 }
 
 .none {
-    display: none;
+	display: none;
 }
 
 .hidden {
