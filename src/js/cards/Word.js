@@ -10,6 +10,9 @@ export default class Word {
 		this.exampleTranslate = word.textExampleTranslate;
 		this.textMeaning = word.textMeaning;
 		this.textMeaningTranslate = word.textMeaningTranslate;
+		this.page = word.page;
+		this.group = word.group;
+		this.wordsPerExampleSentence = word.wordsPerExampleSentence;
 	}
 
 	getMediaUrls(word) {

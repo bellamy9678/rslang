@@ -5,7 +5,8 @@ export const BUTTONS_WORDS = {
 	easy: 'Легко',
 	addToDifficult: 'добавить в сложные',
 	deleteFromDictionary: 'удалить из изучаемых',
-	showAnswer: 'показать ответ'
+	showAnswer: 'показать ответ',
+	continue: 'дальше'
 };
 
 export const AUTHORIZATION_BUTTONS = {
@@ -33,11 +34,38 @@ export const TEXT = {
 		title: 'Create your free account',
 		text: 'Do you already have an account? ',
 	},
-	welcomPage: {
+	welcomePage: {
 		title: {
 			leftPath: 'Hello, ',
 			rightPath: '! Let\'s start?'
-		}
+		},
+		trainingModeButton: 'Start training',
+	},
+
+	gamesPage: {
+		title: 'Try our amazing games!',
+		description: 'Lorem ipsum dolore si amet.',
+	},
+	settingsPage: {
+		title: 'Settings',
+		wordsNumberLabel: 'Type the number of words that you will plan to learn in a day',
+		cardsNumberLabel: 'Type the number of cards with words for learning in a day',
+		cardsInformationText: 'What kind of information should the cards contain?',
+		transcriptionLabel: 'Word transcription',
+		translationLabel: 'Word translation',
+		meaningLabel: 'A sentence which explains the meaning of word',
+		meaningTranslateLabel: 'A sentence translate which explains the meaning of word',
+		sentenceExempleLabel: 'A sentence with an example of using the studied word',
+		sentenceExempleTranslateLabel: 'Translate of the sentence with an example of using the studied word',
+		pictureLabel: 'Picture',
+		deleteButtonLabel: 'Button to delete a word from the studied words',
+		difficultButtonLabel: 'Button to add a word to the difficult words',
+		complexityButtonsLabel: '"Again", "Difficult", "Good" and "Easy" buttons',
+		showAnswerButtonLabel: 'Button to show the correct answer',
+		saveSettingsButton: 'Save',
+		useLearnedWordsLabel: 'Use learned words in games',
+		errorMessage: 'At least one of three items must be selected (word translation, word meaning or a sentence with an example of using the studied word.',
+		successMessage: 'Your settings is saved',
 	},
 };
 
@@ -53,4 +81,13 @@ export const ERROR_MESSAGES = {
 	authorizationErrorMessage: 'Invalid username or password. Please, try again!',
 	existingUser: 'User with this name already exists.',
 	default: 'Something went wrong.',
+};
+
+export const GAME_NAMES = {
+	englishPuzzle: 'English Puzzle',
+	speakIt: 'Speak It',
+	savannah: 'Savannah',
+	audioChallenge: 'Audio Challenge',
+	sprint: 'Sprint',
+	ownGame: 'Super duper game',
 };

@@ -23,8 +23,8 @@
     }
 }
 
-@mixin media-desctop {
-    @media (max-width: $desctop-width) {
+@mixin media-desktop {
+    @media (max-width: $desktop-width) {
         @content;
     }
 }
