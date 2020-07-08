@@ -65,6 +65,7 @@ function createSettingsPage(obj) {
 			value: obj.maxNewWords,
 			min: 0,
 			type: 'number',
+			oninput: 'validity.valid||(value="")',
 		}, ],
 	});
 
@@ -85,14 +86,16 @@ function createSettingsPage(obj) {
 			name: 'maxCards',
 			value: obj.maxCards,
 			min: 0,
+			max: 100,
 			type: 'number',
+			oninput: 'validity.valid||(value="")',
 		}, ],
 	});
 
 	cardsNumberInput.addEventListener('change', () => {
 		const wordsNumber = document.getElementById('words-number');
 		const cardsNumber = document.getElementById('cards-number');
-		if (wordsNumber.value > cardsNumber.value) {
+		if (cardsNumber.valueAsNumber < wordsNumber.valueAsNumber) {
 			wordsNumber.value = cardsNumber.value;
 		}
 	});
