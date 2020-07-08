@@ -107,7 +107,7 @@ function compareWords() {
 		} else {
 			word.classList.add('yellow');
 			word.classList.remove('chosen');
-			word.classList.remove('.active');
+			transl.classList.remove('active');
 		}
 	}
 }
