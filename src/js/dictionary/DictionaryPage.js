@@ -1,55 +1,75 @@
-// import DOMElementCreator from '../utils/DOMElementCreator';
-// import TAGS from '../shared/Tags.json';
+import DOMElementCreator from '../utils/DOMElementCreator';
+import TAGS from '../shared/Tags.json';
+import {
+	CATEGORY_NAMES,
+} from '../shared/Text';
+import showWordsCategory from './CategoryView';
+import {
+	CATEGORIES,
+} from '../shared/Constants';
 
-// function createDictionaryPage() {
-// 	const newElem = new DOMElementCreator();
+function createDictionaryPage() {
+	const newElem = new DOMElementCreator();
 
-// 	const word = newElem.create({
-// 		elem: TAGS.SPAN,
-// 		classes: ['dictionary__cell', 'dictionary__word'],
-// 		child: ['word']
-// 	});
+	const activeCategoryButton = newElem.create({
+		elem: TAGS.BUTTON,
+		id: 'active-words',
+		classes: ['category__active'],
+		child: [CATEGORY_NAMES.ACTIVE],
+	});
 
-// 	const transcription = newElem.create({
-// 		elem: TAGS.SPAN,
-// 		classes: ['dictionary__cell', 'dictionary__transcription'],
-// 		child: ['transcription']
-// 	});
+	activeCategoryButton.addEventListener('click', () => {
+		showWordsCategory(CATEGORIES.ACTIVE);
+	});
 
-// 	const translate = newElem.create({
-// 		elem: TAGS.SPAN,
-// 		classes: ['dictionary__cell', 'dictionary__translate'],
-// 		child: ['translate']
-// 	});
+	const difficultCategoryButton = newElem.create({
+		elem: TAGS.BUTTON,
+		id: 'difficult-words',
+		classes: ['category__difficult'],
+		child: [CATEGORY_NAMES.DIFFICULT],
+	});
 
-// 	const row = newElem.create({
-// 		elem: TAGS.DIV,
-// 		classes: ['dictionary__row'],
-// 		child: [word, transcription, translate]
-// 	});
-//     console.log("showDictionary -> row", row)
+	difficultCategoryButton.addEventListener('click', () => {
+		showWordsCategory(CATEGORIES.DIFFICULT);
+	});
 
-// 	const studiedWords = newElem.create({
-// 		elem: TAGS.DIV,
-// 		classes: ['dictionary__studied'],
-// 		// child: [row, row, row]
-// 		child: addWordToDictionary()
-// 	});
+	const removedCategoryButton = newElem.create({
+		elem: TAGS.BUTTON,
+		id: 'removed-words',
+		classes: ['category__difficult'],
+		child: [CATEGORY_NAMES.REMOVED],
+	});
 
-// 	const wrapper = newElem.create({
-// 		elem: TAGS.DIV,
-// 		classes: ['wrapper'],
-// 		child: [studiedWords],
-// 	});
+	removedCategoryButton.addEventListener('click', () => {
+		showWordsCategory(CATEGORIES.REMOVED);
+	});
 
-// 	return wrapper;
-// };
+	const dictionaryButtons = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['dictionary__buttons'],
+		child: [activeCategoryButton, difficultCategoryButton, removedCategoryButton],
+	});
 
-// function showDictionaryPage() {
-// 	const app = document.querySelector('.app');
-// 	const dictionaryPage = createDictionaryPage();
-// 	if (app.firstChild) {
-// 		app.firstChild.remove();
-// 	}
-// 	app.append(page);
-// }
+	const category = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['dictionary__category'],
+	});
+
+	const wrapper = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['wrapper'],
+		child: [dictionaryButtons, category],
+	});
+
+	return wrapper;
+}
+
+export default function showDictionaryPage() {
+	const app = document.querySelector('.app');
+	const dictionaryPage = createDictionaryPage();
+	if (app.firstChild) {
+		app.firstChild.remove();
+	}
+	showWordsCategory(CATEGORIES.ACTIVE);
+	app.append(dictionaryPage);
+}

@@ -91,3 +91,13 @@ export const GAME_NAMES = {
 	sprint: 'Sprint',
 	ownGame: 'Super duper game',
 };
+
+export const CATEGORY_NAMES = {
+	ACTIVE: 'Studied words',
+	DIFFICULT: 'Difficult words',
+	REMOVED: 'Removed words',
+};
+
+export const DICTIONARY_BUTTONS = {
+	RECOVER: 'Recover word'
+};

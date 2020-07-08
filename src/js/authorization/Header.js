@@ -10,6 +10,7 @@ import NewUser from './NewUser';
 import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 import showSettingsPage from '../settings/SettingsPage';
+import showDictionaryPage from '../dictionary/DictionaryPage';
 import {
 	USER
 } from '../utils/CookieConstants';
@@ -117,6 +118,9 @@ export default class Header {
 			},
 			child: LINKS.dictionary,
 		});
+
+		dictionaryLink.addEventListener('click', showDictionaryPage);
+
 		const navigation = document.querySelector('.navigation');
 		navigation.prepend(settingsLink, statisticLink, dictionaryLink);
 	}
