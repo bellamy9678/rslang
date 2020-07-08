@@ -152,7 +152,7 @@ function GameHandlers() {
 	};
 
 
-	// кнопка статистики 
+	// statistic btn remove all listeners 
 	this.statisticHandler = () => {
 		document.removeEventListener('click', this.clickHandler);
 		restartBtn.removeEventListener('click', this.restartHandler);
@@ -166,11 +166,11 @@ function GameHandlers() {
 		this.returnButton.removeEventListener('click', this.returnHandler);
 		this.statButton.removeEventListener('click', this.statisticHandler);
 	};
-	// кнопка ретерн
+	// return btn
 	this.returnHandler = () => {
 		myResult.closeResultWindow();
 	};
-	// кнопка нью гейм
+	// new game button
 	this.newGameHandler = () => {
 		myResult.closeResultWindow();
 		setStartingState();
@@ -180,7 +180,7 @@ function GameHandlers() {
 	};
 
 
-	// речь
+	// speech
 	this.handleRecognition = ()=> {
 		[...words].forEach(el => {
 			if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
@@ -241,7 +241,7 @@ function GameHandlers() {
 	};
 
 
-	// кнопка старт гейм, добавить все обработчики
+	// start game add all listeners
 	this.startHandler = (event) => {
 		if (event.target.classList.contains('start-btn')) {
 			startPage.classList.add('none');

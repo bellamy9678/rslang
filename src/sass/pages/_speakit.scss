@@ -48,18 +48,6 @@
   }
 }
 
-// Main page
-/* .level {
-  margin-bottom:50px;
-  margin-top: 20px;
-}
-.level_btn {
-  margin-right: 10px;
-}
-.buttons-container {
-  display: flex;
-  margin-top: 60px;
-} */
 .level-container {
 	margin-bottom: 40px;
 }
@@ -133,8 +121,7 @@
 }
 
 .image-container {  
-  margin: auto;
-  margin-bottom: 30px;
+	margin: 10px auto 5px;
 }
 .current-image {
   width: 390px;
@@ -154,6 +141,14 @@
   font-size: 25px;
 }
 
+.word-writing {
+	margin-bottom: 5px;
+}
+
+.buttons-container {
+	margin-top: 10px;
+}
+
 .active {
   border: 1px solid rgb(0, 173, 159);
   background-color: rgba(0, 173, 159, .15);
@@ -162,4 +157,3 @@
 .none {
   display: none;
 }
-
