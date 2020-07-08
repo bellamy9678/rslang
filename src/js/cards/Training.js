@@ -7,6 +7,7 @@ import {
 	NEXT_AUDIO_CORRECTION,
 	START_AUDIO_TIME,
 	FADE_DURATION,
+	DEFAULT_POSITION
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
@@ -40,7 +41,6 @@ function showTranslate() {
 
 function playAudio(audioArr) {
 	const playQueue = [];
-	const firstAudioPosition = 0;
 
 	audioArr.forEach((audioElement) => {
 		if (!audioElement.classList.contains(DISPLAY_NONE_CLASS)) {
@@ -54,8 +54,8 @@ function playAudio(audioArr) {
 		);
 	}
 
-	if (playQueue[firstAudioPosition]) {
-		playQueue[firstAudioPosition].play();
+	if (playQueue[DEFAULT_POSITION]) {
+		playQueue[DEFAULT_POSITION].play();
 	}
 }
 
@@ -239,6 +239,8 @@ CARD_CONTAINER.addEventListener(
 
 export default async function training() {
 	await globalState.initGlobalState();
-	addListeners();
-	setInput();
+	if (globalState.words.length !== 0) {
+		addListeners();
+		setInput();
+	}
 }

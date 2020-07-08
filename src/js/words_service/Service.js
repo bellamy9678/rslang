@@ -1,14 +1,17 @@
-import { DEFAULT_GROUP, DEFAULT_PAGE, INTERVAL_PARAMS } from './constants';
+import {
+	DEFAULT_GROUP,
+	DEFAULT_PAGE,
+	INTERVAL_PARAMS,
+	EMPTY_ARRAY_LENGTH,
+	ARRAY_LENGTH_CORRECTION,
+} from './constants';
 import Settings from '../settings/Settings';
 import APIMethods from './APIMethods';
 import { CATEGORIES } from '../shared/Constants';
 
 let settings;
 async function initial() {
-	settings = new Settings();
-	await Settings.init();
 	settings = await Settings.getInstance();
-	return settings;
 }
 initial();
 
@@ -16,18 +19,24 @@ const Service = {};
 
 function getShuffledArray(array) {
 	const output = array;
-	for (let i = array.length - 1; i > 0; i -= 1) {
-		const randomIndex = Math.floor(Math.random() * (i + 1));
+	for (
+		let i = array.length - ARRAY_LENGTH_CORRECTION;
+		i > EMPTY_ARRAY_LENGTH;
+		i -= 1
+	) {
+		const randomIndex = Math.floor(
+			Math.random() * (i + ARRAY_LENGTH_CORRECTION)
+		);
 		[output[i], output[randomIndex]] = [array[randomIndex], array[i]];
 	}
 	return output;
 }
 
 function sortByShowTime(array) {
-	const filtered = array.filter((word) => {
+	const sorted = array.sort((word) => {
 		return new Date(word.optional.nextShowDate) <= new Date();
 	});
-	return filtered;
+	return sorted;
 }
 
 Service.getGameWords = async function getGameWords() {
@@ -67,11 +76,12 @@ Service.getNewWords = async function getNewWords() {
 };
 
 Service.getRandomWords = async function getRandomWords() {
-	const total = settings.cardsToShowAmount();
-	if (total === 0) return [];
+	const totalCards = settings.cardsToShowAmount();
+	if (totalCards === EMPTY_ARRAY_LENGTH) return [];
 
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
-	if (hiddenWords.length < total) {
+
+	if (hiddenWords.length < totalCards) {
 		const newWords = await Service.getNewWords();
 		hiddenWords = hiddenWords.concat(newWords);
 	}
@@ -84,21 +94,21 @@ Service.getRandomWords = async function getRandomWords() {
 		.slice(null, amountNewWords)
 		.concat(repeatedWords.slice(null, amountRepeatedWords));
 
-	if (output.length > total) {
-		output.length = total;
+	if (output.length > totalCards) {
+		output.length = totalCards;
 	}
 	return getShuffledArray(output);
 };
 
 Service.getRepeatedWords = async function getRepeatedWords() {
 	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
-	const total =
+	const totalCards =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	if (userWords.length > 0) {
+	if (userWords.length > EMPTY_ARRAY_LENGTH) {
 		const repeatedWords = sortByShowTime(userWords);
-		return repeatedWords.slice(null, total);
+		return repeatedWords.slice(null, totalCards);
 	}
 	return [];
 };
@@ -107,13 +117,14 @@ Service.getDifficultWords = async function getDifficultWords() {
 	const userWords = await APIMethods.getUserWordsByCategory(
 		CATEGORIES.DIFFICULT
 	);
-	const total =
+
+	const totalCards =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	if (userWords.length > 0) {
+	if (userWords.length > EMPTY_ARRAY_LENGTH) {
 		const repeatedWords = sortByShowTime(userWords);
-		return repeatedWords.slice(null, total);
+		return repeatedWords.slice(null, totalCards);
 	}
 	return [];
 };

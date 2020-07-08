@@ -18,8 +18,8 @@ export const URL_PARAM = '?';
 export const MAX_WORDS_PARAMETER = '&wordsPerPage=3600';
 
 export const CATEGORIES = {
-	NEW : 'new', // они же hidden
-	ACTIVE : 'active', // они же изучаемые
-	DIFFICULT : 'difficult', // они же сложные
-	REMOVED : 'removed', // они же удаленные
+	NEW : 'new',
+	ACTIVE : 'active',
+	DIFFICULT : 'difficult',
+	REMOVED : 'removed',
 };

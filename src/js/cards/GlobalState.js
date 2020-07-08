@@ -8,6 +8,7 @@ import {
 	PROGRESS_SEPARATOR,
 	ARRAY_LENGTH_COEFFICIENT,
 	INPUT_WIDTH_UNIT,
+	DOM_POSITION_CORRECTION,
 } from './CardConstants';
 import Card from './Card';
 import SettingsChecker from './SettingsChecker';
@@ -37,7 +38,7 @@ export default class GlobalState {
 	}
 
 	removeCard() {
-		this.cardsElements[this.currentPosition - 1].removeListeners();
+		this.cardsElements[this.currentPosition - DOM_POSITION_CORRECTION].removeListeners();
 		this.cardsContainer.removeChild(this.cardsContainer.lastChild);
 	}
 
@@ -73,6 +74,11 @@ export default class GlobalState {
 		this.cardsElements = [];
 		this.cardsContainer = CARD_CONTAINER.querySelector('.wrapper');
 		this.words = await Service.getRandomWords();
+		if (this.words.length === 0) {
+			this.finishGame();
+			return;
+		}
+
 		this.cards = this.words.map((word) => {
 			const cardUnit = new Card(word);
 			this.cardsElements.push(cardUnit);

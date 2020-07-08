@@ -26,6 +26,9 @@ async function makeRequestForNewWords(APIUrl) {
 APIMethods.getNewWordsArray = async function getNewWordsArray(group, page) {
 	const APIUrl = url.groupPage(group, page);
 	const data = await makeRequestForNewWords(APIUrl);
+
+	console.log('word.userWord', data.userWord, typeof data);
+
 	const words = data.map((word) => {
 		const wordObj = new Word(word);
 		wordObj.getMediaUrls(word);

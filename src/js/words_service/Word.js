@@ -28,7 +28,7 @@ export default class Word {
 		this.group = word.group;
 		this.wordsPerExampleSentence = word.wordsPerExampleSentence;
 
-		this.optional = {
+		this.optional = (word.userWord) ? {
 			progress : word.userWord.optional.progress,
 			bestResult : word.userWord.optional.bestResult,
 			showedCount : word.userWord.optional.showedCount,
@@ -36,7 +36,7 @@ export default class Word {
 			nextShowDate : word.userWord.optional.nextShowDate,
 			offset : word.userWord.optional.offset,
 			category : word.userWord.optional.category,
-		};
+		} : {};
 	}
 
 	getMediaUrls(word) {

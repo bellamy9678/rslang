@@ -9,6 +9,12 @@ import {
 } from '../shared/Text';
 import Settings from '../settings/Settings';
 
+let settingsObj;
+async function initial() {
+	settingsObj = await Settings.getInstance();
+}
+initial();
+
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
 	const categoryWords = words.map(wordData => {
@@ -167,7 +173,7 @@ function createDictionaryWords(words) {
 }
 
 async function updateWordViewWithUserSettings() {
-	const settings = await new Settings();
+	const settings = settingsObj;
 	const wordsData = document.querySelectorAll('[data-settings]');
 	wordsData.forEach(prop => {
 		const attr = prop.getAttribute('data-settings');

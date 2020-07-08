@@ -374,10 +374,16 @@ function createSettingsPage(obj) {
 	return wrapper;
 }
 
+let settingsObj;
+async function initial() {
+	settingsObj = await Settings.getInstance();
+}
+initial();
+
 export default function showSettingsPage() {
 	const app = document.querySelector('.app');
 	const lastUserSettings = new Promise(resolve => {
-		const obj = new Settings();
+		const obj = settingsObj;
 		resolve(obj);
 	});
 	lastUserSettings.then(obj => {
