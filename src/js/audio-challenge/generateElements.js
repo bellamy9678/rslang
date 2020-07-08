@@ -22,7 +22,8 @@ export default async function generateElements(mainWordObj, answers) {
 	const sound = domCreator.create({
 		elem: TAGS.AUDIO,
 		attr: [{
-			src: `${mainWordObj.audio}`
+			src: `${mainWordObj.audio}`,
+			autoplay: 'autoplay'
 		}],
 		classes: 'audio'
 	});
@@ -113,5 +114,4 @@ export default async function generateElements(mainWordObj, answers) {
 	answerContainers.forEach(container => {
 		container.addEventListener('click', checkAnswer);
 	});
-	sound.play();
 }

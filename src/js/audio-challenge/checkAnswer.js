@@ -6,12 +6,12 @@ export default function checkAnswer(event, element) {
 	function check(choosenAnswer) {
 		if (choosenAnswer.classList.contains('right-answer')) {
 			console.log('correct');
-			choosenAnswer.classList.add('green');
+			choosenAnswer.classList.add('answered-right');
 			arrayWithRightAnswers.push(mainWord);
 		}	else {
 			const rightAnswer = document.querySelector('.right-answer');
-			rightAnswer.style.backgroundColor = 'green';
-			choosenAnswer.classList.add('red');
+			rightAnswer.classList.add('answered-right');
+			choosenAnswer.classList.add('answered-wrong');
 			arrayWithWrongAnswers.push(mainWord);
 			// TODO: вызвать функцию передачи в словарь и записи в массив невыученных слов
 		}

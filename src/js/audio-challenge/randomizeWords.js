@@ -1,7 +1,7 @@
 import generateElements from './generateElements';
 import {NUMBER_OF_WRONG_ANSWERS, LEFT_MARGIN_OF_ANSWERED_QUESTION, arrayForUniqness, arrayForRandom, idkText, arrayWithRightAnswers, arrayWithWrongAnswers} from './consts';
 import changeStylesAfterAnswer from './changeStylesAfterAnswer';
-import catchButtonPresses from './catchButtonPresses';
+import {catchButtonPresses, defineButton} from './catchButtonPresses';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
@@ -32,30 +32,24 @@ export default function randomizeWords(words, array) {
 	skipButton.addEventListener('click', () => {
 		if (skipButton.textContent === idkText) {
 			changeStylesAfterAnswer();
-		} else if (arrayForUniqness.length === 0) {
+		} else if (arrayForUniqness.length === 10) {
+			document.removeEventListener('keydown', defineButton);
 			const creator = new DOMElementCreator();
 			const resultReturnBtn = creator.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn'],
 				child: 'returnBtnText',
 			});
-
 			const resultNewGameBtn = creator.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn'],
 				child: 'newGameText',
 			});
-
-			const statisticBtn = creator.create({
-				elem: TAGS.BUTTON,
-				classes: ['result__button', 'result__continue-btn'],
-				child: 'statisticText',
-			});
 			const result = new Result();
 			result.showResult({
 				rightAnswers: arrayWithRightAnswers.map(item => new GetAnswers(item)),
 				wrongAnswers: arrayWithWrongAnswers.map(item => new GetAnswers(item)),
-				buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn]
+				buttons: [resultReturnBtn, resultNewGameBtn]
 			});
 		} else {
 			const mainWrapperContent = document.querySelector('.main-wrapper__content');
