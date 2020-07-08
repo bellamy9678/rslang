@@ -6,7 +6,7 @@ import {
 	FADE_CLASS,
 	NEXT_AUDIO_CORRECTION,
 	START_AUDIO_TIME,
-	FADE_DURATION
+	FADE_DURATION,
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
@@ -49,7 +49,9 @@ function playAudio(audioArr) {
 	});
 
 	for (let i = 0; i < playQueue.length - NEXT_AUDIO_CORRECTION; i += 1) {
-		playQueue[i].addEventListener('ended', () => playQueue[i + NEXT_AUDIO_CORRECTION].play());
+		playQueue[i].addEventListener('ended', () =>
+			playQueue[i + NEXT_AUDIO_CORRECTION].play()
+		);
 	}
 
 	if (playQueue[firstAudioPosition]) {
@@ -88,16 +90,25 @@ function nextCard() {
 	document.querySelector('.card').classList.add(FADE_CLASS);
 	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
-	setTimeout(() => {
-		globalState.updateCard();
-		if (globalState.currentPosition < globalState.cards.length) {
-			setInput();
-			document.querySelector('.card').classList.remove(FADE_CLASS);
-		} else {
-			globalState.finishGame();
-			globalState = {};
+
+	let start = null;
+	window.requestAnimationFrame(function timeout(timestamp) {
+		if (start === null) {
+			start = timestamp;
 		}
-	}, FADE_DURATION);
+		if (timestamp < FADE_DURATION + start) {
+			window.requestAnimationFrame(timeout);
+		} else {
+			globalState.updateCard();
+			if (globalState.currentPosition < globalState.cards.length) {
+				setInput();
+				document.querySelector('.card').classList.remove(FADE_CLASS);
+			} else {
+				globalState.finishGame();
+				globalState = {};
+			}
+		}
+	});
 }
 
 function checkHiddenFields() {

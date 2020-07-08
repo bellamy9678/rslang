@@ -7,10 +7,7 @@ import Settings from './Settings';
 
 let settingsObj;
 async function initial() {
-	settingsObj = new Settings();
-	await Settings.init();
 	settingsObj = await Settings.getInstance();
-	return settingsObj;
 }
 initial();
 

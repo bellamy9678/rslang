@@ -25,7 +25,7 @@ function getShuffledArray(array) {
 
 function sortByShowTime(array) {
 	const filtered = array.filter((word) => {
-		return new Date(word.optional.learnDate) <= new Date();
+		return new Date(word.optional.nextShowDate) <= new Date();
 	});
 	return filtered;
 }

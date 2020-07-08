@@ -151,6 +151,10 @@ $color-letter-error : #be1f1d;
 		opacity: 1;
 		transition: opacity 0.3s ease;
 
+		@include media-tablet() {
+			flex-direction: column;
+		}
+
 		&.card_fade {
 			opacity: 0;
 		}
@@ -165,11 +169,6 @@ $color-letter-error : #be1f1d;
 			text-transform: lowercase;
 			transition: all 0.3s ease;
 			width: 100%;
-
-			@include media-mobile() {
-				flex: 1 0 40%;
-			}
-
 		}
 
 		&__complexity {

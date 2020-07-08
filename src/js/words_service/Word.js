@@ -8,7 +8,7 @@ const NEW_WORD_PARAMETERS = {
 	bestResult: 0,
 	showedCount: 0,
 	showedDate: 0,
-	learnDate: new Date(),
+	nextShowDate: new Date(),
 	offset: 0,
 	category: CATEGORIES.NEW
 };
@@ -33,7 +33,7 @@ export default class Word {
 			bestResult : word.userWord.optional.bestResult,
 			showedCount : word.userWord.optional.showedCount,
 			showedDate : word.userWord.optional.showedDate,
-			learnDate : word.userWord.optional.learnDate,
+			nextShowDate : word.userWord.optional.nextShowDate,
 			offset : word.userWord.optional.offset,
 			category : word.userWord.optional.category,
 		};
@@ -52,7 +52,7 @@ export default class Word {
 			bestResult: NEW_WORD_PARAMETERS.bestResult,
 			showedCount: NEW_WORD_PARAMETERS.showedCount,
 			showedDate: NEW_WORD_PARAMETERS.showedDate,
-			learnDate: NEW_WORD_PARAMETERS.learnDate,
+			nextShowDate: NEW_WORD_PARAMETERS.nextShowDate,
 			offset: NEW_WORD_PARAMETERS.offset,
 			category: NEW_WORD_PARAMETERS.category,
 		};

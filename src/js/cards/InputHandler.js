@@ -82,16 +82,23 @@ export default class InputHandler {
 	}
 
 	removeListener() {
-		this.element.addEventListener('input', this.inputHandler);
+		this.element.removeEventListener('input', this.inputHandler);
 	}
 
 	showError() {
 		this.countErrors();
 		this.clearInput();
-		setTimeout(() => {
-			if (this.element.value.length === EMPTY_STRING.length) {
+
+		let start = null;
+		window.requestAnimationFrame(function timeout(timestamp) {
+			if (start === null) {
+				start = timestamp;
+			}
+			if (start < ERROR_CORRECT_INPUT_TIMEOUT + start) {
+				window.requestAnimationFrame(timeout);
+			} else if (this.element.value.length === EMPTY_STRING.length) {
 				this.clearAllSpans();
 			}
-		}, ERROR_CORRECT_INPUT_TIMEOUT);
+		});
 	}
 }
