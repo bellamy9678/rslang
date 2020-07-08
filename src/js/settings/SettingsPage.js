@@ -20,8 +20,10 @@ function controlDisabledAttribute(conrolElem, slaveElem) {
 function setCheckboxValues(obj) {
 	const checkboxes = document.querySelectorAll('.settings__checkbox');
 	const meaningCheckbox = document.getElementById('word_meaning');
+	const meaningAudioCheckbox = document.getElementById('word_meaning-audio');
 	const meaningTranslateCheckbox = document.getElementById('word_meaning-translate');
 	const exampleCheckbox = document.getElementById('word_sentence-example');
+	const exampleAudioCheckbox = document.getElementById('word_sentence-example-audio');
 	const exampleTranslateCheckbox = document.getElementById('word_sentence-example-translate');
 	checkboxes.forEach(checkbox => {
 		if (obj[checkbox.getAttribute('name')]) {
@@ -31,8 +33,10 @@ function setCheckboxValues(obj) {
 			checkbox.removeAttribute('disabled');
 		}
 	});
-	controlDisabledAttribute(exampleCheckbox, exampleTranslateCheckbox);
+	controlDisabledAttribute(meaningCheckbox, meaningAudioCheckbox);
 	controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
+	controlDisabledAttribute(exampleCheckbox, exampleAudioCheckbox);
+	controlDisabledAttribute(exampleCheckbox, exampleTranslateCheckbox);
 }
 
 function createSettingsPage(obj) {
@@ -162,6 +166,23 @@ function createSettingsPage(obj) {
 		child: [meaningCheckbox, TEXT.settingsPage.meaningLabel],
 	});
 
+	const meaningAudioCheckbox = newElem.create({
+		elem: TAGS.INPUT,
+		classes: 'settings__checkbox',
+		id: 'word_meaning-audio',
+		attr: [{
+			name: 'playMeaning',
+			type: 'checkbox',
+			disabled: 'disabled',
+		}, ],
+	});
+
+	const meaningAudioLabel = newElem.create({
+		elem: TAGS.LABEL,
+		classes: 'settings__label',
+		child: [meaningAudioCheckbox, TEXT.settingsPage.meaningAudioLabel],
+	});
+
 	const meaningTranslateCheckbox = newElem.create({
 		elem: TAGS.INPUT,
 		classes: 'settings__checkbox',
@@ -173,14 +194,15 @@ function createSettingsPage(obj) {
 		}, ],
 	});
 
-	meaningCheckbox.addEventListener('change', () => {
-		controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
-	});
-
 	const meaningTranslateLabel = newElem.create({
 		elem: TAGS.LABEL,
 		classes: 'settings__label',
 		child: [meaningTranslateCheckbox, TEXT.settingsPage.meaningTranslateLabel],
+	});
+
+	meaningCheckbox.addEventListener('change', () => {
+		controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
+		controlDisabledAttribute(meaningCheckbox, meaningAudioCheckbox);
 	});
 
 	const sentenceExampleCheckbox = newElem.create({
@@ -197,6 +219,23 @@ function createSettingsPage(obj) {
 		elem: TAGS.LABEL,
 		classes: 'settings__label',
 		child: [sentenceExampleCheckbox, TEXT.settingsPage.sentenceExempleLabel],
+	});
+
+	const sentenceExampleAudioCheckbox = newElem.create({
+		elem: TAGS.INPUT,
+		classes: 'settings__checkbox',
+		id: 'word_sentence-example-audio',
+		attr: [{
+			name: 'playExample',
+			type: 'checkbox',
+			disabled: 'disabled',
+		}, ],
+	});
+
+	const sentenceExampleAudioLabel = newElem.create({
+		elem: TAGS.LABEL,
+		classes: 'settings__label',
+		child: [sentenceExampleAudioCheckbox, TEXT.settingsPage.sentenceExampleAudioLabel],
 	});
 
 	const sentenceExampleTranslateCheckbox = newElem.create({
@@ -218,6 +257,7 @@ function createSettingsPage(obj) {
 
 	sentenceExampleCheckbox.addEventListener('change', () => {
 		controlDisabledAttribute(sentenceExampleCheckbox, sentenceExampleTranslateCheckbox);
+		controlDisabledAttribute(sentenceExampleCheckbox, sentenceExampleAudioCheckbox);
 	});
 
 	const pictureCheckbox = newElem.create({
@@ -323,8 +363,10 @@ function createSettingsPage(obj) {
 			transcriptionLabel,
 			translationLabel,
 			meaningLabel,
+			meaningAudioLabel,
 			meaningTranslateLabel,
 			sentenceExampleLabel,
+			sentenceExampleAudioLabel,
 			sentenceExampleTranslateLabel,
 			pictureLabel,
 			deleteButtonLabel,
