@@ -17,6 +17,7 @@ export default class Result {
 		this.rightAnswers = settingsObj.rightAnswers || settingsObj.rightAnswersSentences;
 		this.wrongAnswers = settingsObj.wrongAnswers || settingsObj.wrongAnswersSentences;
 		this.buttons = settingsObj.buttons;
+
 		if (settingsObj.rightAnswersSentences || settingsObj.wrongAnswersSentences) {
 			this.sentenceResult = true;
 		}
