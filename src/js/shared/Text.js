@@ -97,3 +97,7 @@ export const CATEGORY_NAMES = {
 	DIFFICULT: 'Difficult words',
 	REMOVED: 'Removed words',
 };
+
+export const DICTIONARY_BUTTONS = {
+	RECOVER: 'Recover word'
+};

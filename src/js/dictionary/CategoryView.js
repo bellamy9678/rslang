@@ -1,6 +1,12 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import APIMethods from '../words_service/APIMethods';
+import {
+	CATEGORIES,
+} from '../shared/Constants';
+import {
+	DICTIONARY_BUTTONS,
+} from '../shared/Text';
 
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
@@ -139,6 +145,21 @@ function createDictionaryWords(words) {
 	return category;
 }
 
+function addRecoverButtonsToWords(categoryName) {
+	const newElem = new DOMElementCreator();
+	if (categoryName === CATEGORIES.REMOVED || categoryName === CATEGORIES.DIFFICULT) {
+		document.querySelectorAll('.category__word').forEach(word => {
+			const recoverRemovedWordButton = newElem.create({
+				elem: TAGS.BUTTON,
+				id: 'recover-removed-word',
+				classes: ['word__recover'],
+				child: DICTIONARY_BUTTONS.RECOVER,
+			});
+			word.append(recoverRemovedWordButton);
+		});
+	}
+}
+
 export default function showWordsCategory(categoryName) {
 	new Promise(resolve => {
 		const words = APIMethods.getUserWordsByCategory(categoryName);
@@ -151,6 +172,6 @@ export default function showWordsCategory(categoryName) {
 				categoryContainer.firstChild.remove();
 			}
 			categoryContainer.append(category);
+			addRecoverButtonsToWords(categoryName);
 		});
 }
-
