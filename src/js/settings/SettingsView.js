@@ -31,7 +31,6 @@ export default class SettingsView {
 
 	static async checkUserSettings() {
 		const settings = this.getUserSettings();
-		console.log('SettingsView -> checkUserSettings -> settings', settings);
 		if (settings.translate || settings.meaning || settings.example) {
 			this.showSuccessMessage();
 			settingsObj.updateSettings(settings);
