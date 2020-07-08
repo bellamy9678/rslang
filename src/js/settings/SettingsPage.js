@@ -11,7 +11,7 @@ function controlDisabledAttribute(conrolElem, slaveElem) {
 		slaveElem.removeAttribute('disabled');
 	} else {
 		slaveElem.setAttribute('disabled', 'disabled');
-		/* eslint no-param-reassign: "error" */
+		// eslint-disable-next-line no-param-reassign
 		slaveElem.checked = false;
 		// slaveElem.removeAttribute('checked');
 	}
