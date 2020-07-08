@@ -59,6 +59,6 @@ export default class IntervalRepetition {
 	setNextShowDate(event) {
 		const offset = (new Date() - this.optional.showedDate);
 		const coefficient = this.defineDifficultyCoefficient(event);
-		this.optional.nextShowDate = new Date((new Date + (2 * offset + 24 * 3600 * 1000)) * coefficient);
+		this.optional.nextShowDate = new Date((new Date() + (2 * offset + 24 * 3600 * 1000)) * coefficient);
 	}
 }
