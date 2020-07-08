@@ -5,7 +5,6 @@ export default function checkAnswer(event, element) {
 	const mainWord = document.querySelector('.right-answer-wrapper__word-container__word');
 	function check(choosenAnswer) {
 		if (choosenAnswer.classList.contains('right-answer')) {
-			console.log('correct');
 			choosenAnswer.classList.add('answered-right');
 			arrayWithRightAnswers.push(mainWord);
 		}	else {
@@ -13,7 +12,7 @@ export default function checkAnswer(event, element) {
 			rightAnswer.classList.add('answered-right');
 			choosenAnswer.classList.add('answered-wrong');
 			arrayWithWrongAnswers.push(mainWord);
-			// TODO: вызвать функцию передачи в словарь и записи в массив невыученных слов
+			// TODO: вызвать функцию передачи в словарь
 		}
 	}
 

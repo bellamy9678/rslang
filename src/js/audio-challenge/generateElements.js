@@ -103,6 +103,9 @@ export default async function generateElements(mainWordObj, answers) {
 		child: [wrapperContent]
 	});
 	app.append(wrapper);
+	soundIcon2.addEventListener('click', () => {
+		sound.play();
+	});
 	const mainWordTranslationIndex = arrWithTranslations.indexOf(`${mainWordObj.translate}`);
 	const rightAnswer = document.querySelector(`.answers-wrapper__answer:nth-child(${mainWordTranslationIndex+1})`);
 	rightAnswer.classList.add('right-answer');
