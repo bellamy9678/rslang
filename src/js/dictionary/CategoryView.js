@@ -7,6 +7,7 @@ import {
 import {
 	DICTIONARY_BUTTONS,
 } from '../shared/Text';
+import Settings from '../settings/Settings';
 
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
@@ -21,19 +22,26 @@ function createDictionaryWords(words) {
 			elem: TAGS.AUDIO,
 			classes: ['word__audio'],
 			attr: [{
-				src: wordData.audio
-			}],
+				src: wordData.audio,
+				'data-settings': 'playWord',
+			}, ],
 		});
 
 		const transcription = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__transcription'],
+			attr: [{
+				'data-settings': 'transcription',
+			}, ],
 			child: [wordData.transcription],
 		});
 
 		const translate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__trarnslate'],
+			attr: [{
+				'data-settings': 'translate',
+			}, ],
 			child: [wordData.translate],
 		});
 
@@ -42,14 +50,17 @@ function createDictionaryWords(words) {
 			classes: ['word__image'],
 			attr: [{
 				src: wordData.image,
-			}, {
 				alt: wordData.word,
-			}],
+				'data-settings': 'picture',
+			}, ],
 		});
 
 		const meaning = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__meaning'],
+			attr: [{
+				'data-settings': 'meaning',
+			}, ],
 			child: [wordData.textMeaning],
 		});
 
@@ -64,12 +75,18 @@ function createDictionaryWords(words) {
 		const meaningTranslate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__meaning-translate'],
+			attr: [{
+				'data-settings': 'meaningTranslate',
+			}, ],
 			child: [wordData.textMeaningTranslate],
 		});
 
 		const example = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__example'],
+			attr: [{
+				'data-settings': 'example',
+			}, ],
 			child: [wordData.example],
 		});
 
@@ -84,6 +101,9 @@ function createDictionaryWords(words) {
 		const exampleTranslate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__example-translate'],
+			attr: [{
+				'data-settings': 'exampleTranslate',
+			}, ],
 			child: [wordData.example],
 		});
 
@@ -136,6 +156,7 @@ function createDictionaryWords(words) {
 		});
 		return container;
 	});
+
 	const arr = [].slice.call(categoryWords);
 	const category = newElem.create({
 		elem: TAGS.DIV,
@@ -143,6 +164,17 @@ function createDictionaryWords(words) {
 		child: arr,
 	});
 	return category;
+}
+
+async function updateWordViewWithUserSettings() {
+	const settings = await new Settings();
+	const wordsData = document.querySelectorAll('[data-settings]');
+	wordsData.forEach(prop => {
+		const attr = prop.getAttribute('data-settings');
+		if (settings[attr] === false) {
+			prop.classList.add('none');
+		}
+	});
 }
 
 function addRecoverButtonsToWords(categoryName) {
@@ -173,5 +205,6 @@ export default function showWordsCategory(categoryName) {
 			}
 			categoryContainer.append(category);
 			addRecoverButtonsToWords(categoryName);
+			updateWordViewWithUserSettings();
 		});
 }
