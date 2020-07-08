@@ -46,10 +46,10 @@
 
 .volume-settings {
   visibility: hidden;
-}
 
-.volume-settings:hover {
-  cursor: pointer;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .volume-mute-icon {
@@ -92,12 +92,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.info__main-info {
-  width: 45vw;
-  text-align: center;
-  font-size: 20px;
+  &__main-info {
+    width: 45vw;
+    text-align: center;
+    font-size: 20px;
+  }
 }
 
 .starting-button {
@@ -107,16 +106,16 @@
   margin-top: 5vh;
   justify-content: center;
   align-items: center;
-  background-color: #5222D0;
+  background-color: $color-additional;
   border-radius: 5px;
-}
 
-.starting-button:hover {
-  cursor: pointer;
-}
+  &:hover {
+    cursor: pointer;
+  }
 
-.starting-button p {
-  font-size: 30px;
+  & p {
+    font-size: 30px;
+  }
 }
 
 .info__heading {
@@ -135,18 +134,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.answers p {
-  min-width: 15vw;
-  max-width: 25vw;
-  margin-left: 20px;
-  margin-right: 20px;
-  height: 40px;
-  margin-left: 10px;
-  text-align: center;
-  font-size: 20px;
-  width: fit-content;
+  & p {
+    min-width: 15vw;
+    max-width: 25vw;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 40px;
+    margin-left: 10px;
+    text-align: center;
+    font-size: 20px;
+    width: fit-content;
+  }
 }
 
 .right-answer__active {
@@ -181,7 +180,7 @@
 /* loader */
 .loader {
   margin-top: 10vh;
-  color: #ffffff;
+  color: $color-text-light;
   font-size: 90px;
   text-indent: -9999em;
   overflow: hidden;

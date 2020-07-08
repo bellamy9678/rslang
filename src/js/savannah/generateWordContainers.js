@@ -16,10 +16,18 @@ export default function generateWordContainers(array, arrForRandom) {
     arrayWithWords.length = 0;
     if (main.lastChild) main.removeChild(main.lastChild);
     arrayRandElement(arrForRandom);
+    const word = defineNewWord(array);
     const mainWordContainer = creator.create({
       elem: TAGS.P,
       classes: 'main-word',
-      child: [`${defineNewWord(array).word}`]
+      child: [`${word.word}`],
+      attr: [{
+           'data-translate': `${word.translate}`
+      }, {
+           'data-word': `${word.word}`
+      }, {
+           'data-audio': `${word.audio}`
+      }]
     });
     createElements();
     mainWordContainer.style.visibility = 'hidden';

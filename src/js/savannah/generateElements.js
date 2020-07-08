@@ -13,7 +13,7 @@ export default function generateElements() {
       resolve();
     }, 4000);
   })
-  showDetails.then(() => { // отображает основную страницу игры
+  showDetails.then(() => {
     healthPoints.style.visibility = 'visible';
     volumeContainer.style.visibility = 'visible';
     stone.style.visibility = 'visible';

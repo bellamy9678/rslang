@@ -1,4 +1,7 @@
-function handleWrongAnswer(mainWord) {
+import {arrayWithRightAnswers, arrayWithWrongAnswers} from './consts'
+import endgame from './endGame'
+
+function handleWrongAnswer() {
   const mainWordContainer = document.querySelector('.main-word');
   const allAnswers = document.querySelectorAll('.answers p');
   const lifeIcon = document.querySelector('.health-point-scale IMG');
@@ -7,14 +10,15 @@ function handleWrongAnswer(mainWord) {
   mainWordContainer.style.opacity = newOpacity;
   mainWordContainer.style.fontSize = newFontSize;
   allAnswers.forEach(answer => {
-    if (answer.textContent === mainWord.wordTranslate) {
+    if (answer.textContent === mainWordContainer.dataset.translate) {
       answer.classList.add('right-answer__active');
     }
   });
+  arrayWithWrongAnswers.push(mainWordContainer);
   if (lifeIcon !== null) {
     lifeIcon.remove();
   } else {
-    console.log('endgame');
+    endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
   }
 }
 
@@ -24,6 +28,7 @@ function handleRightAnswer() {
   const whiteColor = 'white';
   mainWordContainer.style.marginLeft = `${mainWordContainer.style.width / 2}px`;
   mainWordContainer.style.width = newWidth;
+  arrayWithRightAnswers.push(mainWordContainer);
   setTimeout(() => {
     mainWordContainer.style.backgroundColor = whiteColor;
   }, 900);
