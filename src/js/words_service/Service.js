@@ -4,12 +4,12 @@ import APIMethods from './APIMethods';
 import { CATEGORIES } from '../shared/Constants';
 
 let settings;
-
 async function initial() {
-	const settingsObj = await new Settings();
-	settings = settingsObj;
+	settings = new Settings();
+	await Settings.init();
+	settings = await Settings.getInstance();
+	return settings;
 }
-
 initial();
 
 const Service = {};

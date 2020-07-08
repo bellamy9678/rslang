@@ -21,10 +21,11 @@ const fab = new DOMElementCreator();
 
 let settings;
 async function initial() {
-	settings = await new Settings();
+	settings = new Settings();
+	await Settings.init();
+	settings = await Settings.getInstance();
 	return settings;
 }
-
 initial();
 
 export default class GlobalState {

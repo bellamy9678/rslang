@@ -148,10 +148,6 @@ const update = async function update(settings) {
 };
 
 export default class Settings {
-	constructor() {
-		return Settings.getInstance();
-	}
-
 	static getCopyDefaultObject() {
 		const copy = {};
 		const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
@@ -184,9 +180,9 @@ export default class Settings {
 		return returnedSettingsObject;
 	}
 
-	static getInstance() {
+	static async getInstance() {
 		if (Settings.instance === null) {
-			Settings.instance = Settings.init();
+			Settings.instance = await Settings.init();
 		}
 		return Settings.instance;
 	}

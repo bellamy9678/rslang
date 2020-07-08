@@ -7,9 +7,10 @@ import Settings from './js/settings/Settings';
 // import training from './js/cards/Training';
 
 async function initial() {
-	const settings = await new Settings();
+	let settings = new Settings();
+	await Settings.init();
+	settings = await Settings.getInstance();
 	// await training();
-	console.log(settings);
 	return settings;
 }
 

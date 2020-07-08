@@ -5,6 +5,15 @@ import {
 } from '../shared/Text';
 import Settings from './Settings';
 
+let settingsObj;
+async function initial() {
+	settingsObj = new Settings();
+	await Settings.init();
+	settingsObj = await Settings.getInstance();
+	return settingsObj;
+}
+initial();
+
 export default class SettingsView {
 	static getUserSettings() {
 		const inputs = [].slice.call(document.forms.settings.elements);
@@ -25,7 +34,6 @@ export default class SettingsView {
 		console.log('SettingsView -> checkUserSettings -> settings', settings);
 		if (settings.translate || settings.meaning || settings.example) {
 			this.showSuccessMessage();
-			const settingsObj = await new Settings();
 			settingsObj.updateSettings(settings);
 			return settings;
 		}
