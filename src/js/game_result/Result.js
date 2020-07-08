@@ -1,6 +1,7 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import * as CONST from './constants';
+import { ASSETS_STORAGE } from '../shared/Constants';
 
 const factory = new DOMElementCreator();
 
@@ -8,6 +9,7 @@ export default class Result {
 	constructor() {
 		this.rightAnswers = [];
 		this.wrongAnswers = [];
+		this.points = 0;
 		this.buttons = [];
 		this.sentenceResult = false;
 	}
@@ -22,14 +24,19 @@ export default class Result {
 			this.sentenceResult = true;
 		}
 
-		this.APP_CONTAINER.append(this.generateResultWindow());
+		this.APP_CONTAINER.append(this.generateResultWindow(settingsObj));
 	}
 
-	generateResultWindow() {
+	generateResultWindow(settingsObj) {
 		this.resultWindow = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-window',
-			child: [this.generateResultHeader(), this.generateResultContent(), this.generateResultFooter(), ...this.generateAudio()]
+			child: [
+				this.generateResultHeader(settingsObj),
+				this.generateResultContent(),
+				this.generateResultFooter(),
+				...this.generateAudio()
+			]
 		});
 
 		this.resultWithBackground = factory.create({
@@ -37,16 +44,28 @@ export default class Result {
 			classes: 'result__background',
 			child: this.resultWindow
 		});
-
 		return this.resultWithBackground;
 	}
 
-	generateResultHeader() {
+	generateResultScore(points) {
+		this.scoreContainer = factory.create({
+			elem: TAGS.DIV,
+			classes: 'result__score',
+			child: `${points} ${CONST.POINTS_TEXT}`
+		});
+		return this.scoreContainer;
+	}
+
+	generateResultHeader(settingsObj) {
 		this.resultHeader = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-header',
 			child: CONST.HEADER_TEXT
 		});
+
+		if (settingsObj.points) {
+			this.resultHeader.append(this.generateResultScore(settingsObj.points));
+		}
 		return this.resultHeader;
 	}
 
@@ -155,7 +174,7 @@ export default class Result {
 				elem: TAGS.AUDIO,
 				classes: 'result__audio-sentences',
 				attr: [{ 'data-word': obj.word }, {
-					'src': `${CONST.AUDIO_SRC} ${this.sentenceResult ? obj.audioExample : obj.audio}`
+					'src': `${ASSETS_STORAGE}${this.sentenceResult ? obj.audioExample : obj.audio}`
 				}]
 			});
 			return audioEl;
@@ -173,14 +192,18 @@ export default class Result {
 	}
 
 	closeResultWindow() {
+		const audioBtns = this.resultWindow.querySelectorAll('.result__play-audio-btn');
+		audioBtns.forEach(btn => btn.removeEventListener('click', this.audioHandler));
 		this.resultWithBackground.remove();
 	}
 
-	addEventListenerForPlayBtn(button) {
-		button.addEventListener('click', event => {
-			const audio = this.resultWindow.querySelector(`audio[data-word=${event.target.dataset.word}]`);
-			audio.play();
-		});
+	audioHandler(event) {
+		const audio = this.resultWindow.querySelector(`audio[data-word=${event.target.dataset.word}]`);
+		audio.play();
 	}
 
+	addEventListenerForPlayBtn(button) {
+		this.audioHandler = this.audioHandler.bind(this);
+		button.addEventListener('click', this.audioHandler);
+	}
 }
