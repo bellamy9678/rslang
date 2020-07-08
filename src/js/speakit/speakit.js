@@ -119,166 +119,187 @@ function GetAnswers(item) {
 	this.audio = item.dataset.myaudio.replace(ASSETS_STORAGE, emptyString);
 }
 
-function clickHandler(event) {
-	// sound on word click
-	if (event.target.classList.contains('word') && trainMode) {
-		const translateText = event.target.dataset.transl;
-		const wordSrc = event.target.dataset.myimage;
-		const wordAudio = event.target.dataset.myaudio;
-		translation.innerText = translateText;
-		currentImg.setAttribute('src', wordSrc);
-		imgAudio.setAttribute('src', wordAudio);
-		imgAudio.play();
-		[...words].forEach(el => el.classList.remove('active'));
-		event.target.classList.add('active');
-	}
-	// sound on word click
-	if (event.target.parentElement.classList.contains('word') && trainMode) {
-		const translateText = event.target.parentElement.dataset.transl;
-		const wordSrc = event.target.parentElement.dataset.myimage;
-		const wordAudio = event.target.parentElement.dataset.myaudio;
-		translation.innerText = translateText;
-		currentImg.setAttribute('src', wordSrc);
-		imgAudio.setAttribute('src', wordAudio);
-		imgAudio.play();
-		[...words].forEach(el => el.classList.remove('active'));
-		event.target.parentElement.classList.add('active');
-	}
-}
+function GameHandlers() {
 
-// Modal window 
-
-
-function handleRecognition() {
-	[...words].forEach(el => {
-		if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
-			if (!guessed.includes(el)) {
-				el.classList.add('active');
-				currentImg.setAttribute('src', el.dataset.myimage);
-				guessed.push(el);
-				if (guessed.length === guessedAll) {
-					// resultBtnHandler(); // нужно вызывать модальное окошко потому что все угадано
-				}
-			}
+	this.returnButton = document.querySelector('.return-btn');
+	this.newGameButton = document.querySelector('.new-game');
+	this.statButton = document.querySelector('.statistic');
+	
+	this.clickHandler = (event) => {
+		if (event.target.classList.contains('word') && trainMode) {
+			const translateText = event.target.dataset.transl;
+			const wordSrc = event.target.dataset.myimage;
+			const wordAudio = event.target.dataset.myaudio;
+			translation.innerText = translateText;
+			currentImg.setAttribute('src', wordSrc);
+			imgAudio.setAttribute('src', wordAudio);
+			imgAudio.play();
+			[...words].forEach(el => el.classList.remove('active'));
+			event.target.classList.add('active');
 		}
-	});
-
-	recognition.start();
-}
-
-function recResultHandler(e) {
-	const last = e.results.length - 1;
-	const command = e.results[last][zero].transcript;
-	span.textContent = emptyString;
-	span.textContent = command;
-}
-
-function restartHandler() {
-	setDefaultState();
-	recognition.stop();
-	recognition.removeEventListener('result', recResultHandler);
-	recognition.removeEventListener('end', handleRecognition);
-}
-
-// start speak
-function startSpeakHandler() {
-	trainMode = false;
-	output.classList.remove('none');
-	[...words].forEach(el => el.classList.remove('active'));
-	translation.classList.add('none');
-	recognition.start();
-	recognition.addEventListener('result', recResultHandler);
-	recognition.addEventListener('end', handleRecognition);
-}
-
-// stop speak
-function stopSpeakHandler() {
-	recognition.stop();
-	recognition.removeEventListener('result', recResultHandler);
-	recognition.removeEventListener('end', handleRecognition);
-	output.classList.add('none');
-	span.textContent = emptyString;
-	currentImg.setAttribute('src', defaultImg);
-	[...words].forEach(el => el.classList.remove('active'));
-	trainMode = true;
-	translation.classList.remove('none');
-	translation.textContent = emptyString;
-}
-// event on start btn ckick
+		// sound on word click
+		if (event.target.parentElement.classList.contains('word') && trainMode) {
+			const translateText = event.target.parentElement.dataset.transl;
+			const wordSrc = event.target.parentElement.dataset.myimage;
+			const wordAudio = event.target.parentElement.dataset.myaudio;
+			translation.innerText = translateText;
+			currentImg.setAttribute('src', wordSrc);
+			imgAudio.setAttribute('src', wordAudio);
+			imgAudio.play();
+			[...words].forEach(el => el.classList.remove('active'));
+			event.target.parentElement.classList.add('active');
+		}
+	};
 
 
-function resultBtnHandler() {
-	const resultReturnBtn = newElem.create({
-		elem: TAGS.BUTTON,
-		classes: ['result__button', 'result__continue-btn'],
-		child: returnBtnText,
-	});
-
-	const resultNewGameBtn = newElem.create({
-		elem: TAGS.BUTTON,
-		classes: ['result__button', 'result__continue-btn'],
-		child: newGameText,
-	});
-
-	const statisticBtn = newElem.create({
-		elem: TAGS.BUTTON,
-		classes: ['result__button', 'result__continue-btn'],
-		child: statisticText,
-	});
-
-	statisticBtn.addEventListener('click', () => {
+	// кнопка статистики 
+	this.statisticHandler = () => {
+		document.removeEventListener('click', this.clickHandler);
+		restartBtn.removeEventListener('click', this.restartHandler);
+		speakBtn.removeEventListener('click', this.startSpeakHandler);
+		stopSpeak.removeEventListener('click', this.stopSpeakHandler);
+		finishBtn.removeEventListener('click', this.resultBtnHandler);
+		recognition.stop();
+		recognition.removeEventListener('result', this.recResultHandler);
+		recognition.removeEventListener('end', this.handleRecognition);
+		this.newGameButton.removeEventListener('click', this.newGameHandler);
+		this.returnButton.removeEventListener('click', this.returnHandler);
+		this.statButton.removeEventListener('click', this.statisticHandler);
+	};
+	// кнопка ретерн
+	this.returnHandler = () => {
 		myResult.closeResultWindow();
-		document.removeEventListener('click', clickHandler);
-		// дописать метод, показывающий статистику по игре
-	});
-
-	resultReturnBtn.addEventListener('click', () => {
-		myResult.closeResultWindow();
-		document.removeEventListener('click', clickHandler);
-		restartBtn.removeEventListener('click', restartHandler);
-		speakBtn.removeEventListener('click', startSpeakHandler);
-		stopSpeak.removeEventListener('click', stopSpeakHandler);
-		finishBtn.removeEventListener('click', resultBtnHandler);
-		// startBtn.removeEventListener('click', startHandler);		
-	});
-
-	resultNewGameBtn.addEventListener('click', () => {
+	};
+	// кнопка нью гейм
+	this.newGameHandler = () => {
 		myResult.closeResultWindow();
 		setStartingState();
 		recognition.stop();
 		mainWrapper.classList.add('none');
 		startPage.classList.remove('none');
-		
-	});
-
-	myResult.showResult({
-		rightAnswers: guessed.map(item => new GetAnswers(item)),
-		wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
-		buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn],
-	});
-};
+	};
 
 
-
-
-
-function startHandler(event) {
-	if (event.target.classList.contains('start-btn')) {
-		startPage.classList.add('none');
-		mainWrapper.classList.remove('none');
-		recognition.removeEventListener('end', handleRecognition);
-		const level = document.getElementById('level').value;
-		const round = document.getElementById('round').value;
-		getWords(level, round).then(res => {
-			const arr = res.slice(zero, guessedAll).map(item => renderWords(item));
-			arr.forEach(el => wordsContainer.append(el));
+	// речь
+	this.handleRecognition = ()=> {
+		[...words].forEach(el => {
+			if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
+				if (!guessed.includes(el)) {
+					el.classList.add('active');
+					currentImg.setAttribute('src', el.dataset.myimage);
+					guessed.push(el);
+					if (guessed.length === guessedAll) {
+						this.resultBtnHandler(); // нужно вызывать модальное окошко потому что все угадано
+					}
+				}
+			}
 		});
-		document.addEventListener('click', clickHandler);
-		restartBtn.addEventListener('click', restartHandler);
-		speakBtn.addEventListener('click', startSpeakHandler);
-		stopSpeak.addEventListener('click', stopSpeakHandler);
-		finishBtn.addEventListener('click', resultBtnHandler); // нужно повесить вызов модального окошка на кнопку
-	}
+	
+		recognition.start();
+	};
+
+
+	this.recResultHandler = (e) => {
+		const last = e.results.length - 1;
+		const command = e.results[last][zero].transcript;
+		span.textContent = emptyString;
+		span.textContent = command;
+	};
+
+	// restart btn
+	this.restartHandler = () => {
+		setDefaultState();
+		recognition.stop();
+		recognition.removeEventListener('result', this.recResultHandler);
+		recognition.removeEventListener('end', this.handleRecognition);
+	};
+
+	// start speak button 
+	this.startSpeakHandler = ()=> {
+		trainMode = false;
+		output.classList.remove('none');
+		[...words].forEach(el => el.classList.remove('active'));
+		translation.classList.add('none');
+		recognition.start();
+		recognition.addEventListener('result', this.recResultHandler);
+		recognition.addEventListener('end', this.handleRecognition);
+	};
+
+
+	// stop speak button
+	this.stopSpeakHandler = () => {
+		recognition.stop();
+		recognition.removeEventListener('result', this.recResultHandler);
+		recognition.removeEventListener('end', this.handleRecognition);
+		output.classList.add('none');
+		span.textContent = emptyString;
+		currentImg.setAttribute('src', defaultImg);
+		[...words].forEach(el => el.classList.remove('active'));
+		trainMode = true;
+		translation.classList.remove('none');
+		translation.textContent = emptyString;
+	};
+
+
+	// кнопка старт гейм, добавить все обработчики
+	this.startHandler = (event) => {
+		if (event.target.classList.contains('start-btn')) {
+			startPage.classList.add('none');
+			mainWrapper.classList.remove('none');
+			recognition.removeEventListener('end', this.handleRecognition);
+			const level = document.getElementById('level').value;
+			const round = document.getElementById('round').value;
+			getWords(level, round).then(res => {
+				const arr = res.slice(zero, guessedAll).map(item => renderWords(item));
+				arr.forEach(el => wordsContainer.append(el));
+			});
+			document.addEventListener('click', this.clickHandler);
+			restartBtn.addEventListener('click', this.restartHandler);
+			speakBtn.addEventListener('click', this.startSpeakHandler);
+			stopSpeak.addEventListener('click', this.stopSpeakHandler);
+			finishBtn.addEventListener('click', this.resultBtnHandler);
+		}
+	};
+
+	
+	// modal window
+	this.resultBtnHandler = () => {
+		const resultReturnBtn = newElem.create({
+			elem: TAGS.BUTTON,
+			classes: ['result__button', 'result__continue-btn', 'return-btn'],
+			child: returnBtnText,
+		});
+	
+		const resultNewGameBtn = newElem.create({
+			elem: TAGS.BUTTON,
+			classes: ['result__button', 'result__continue-btn', 'new-game'],
+			child: newGameText,
+		});
+	
+		const statisticBtn = newElem.create({
+			elem: TAGS.BUTTON,
+			classes: ['result__button', 'result__continue-btn', 'statistic'],
+			child: statisticText,
+		});
+	
+		statisticBtn.addEventListener('click', this.statisticHandler); // дописать метод, показывающий статистику по игре);
+	
+		resultReturnBtn.addEventListener('click', this.returnHandler);
+	
+		resultNewGameBtn.addEventListener('click', this.newGameHandler);
+	
+		myResult.showResult({
+			rightAnswers: guessed.map(item => new GetAnswers(item)),
+			wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
+			buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn],
+		});
+	};
+
+	this.addAllListeners = () => {
+		startBtn.addEventListener('click', this.startHandler);
+	};
+
 }
 
-startBtn.addEventListener('click', startHandler);
+const speakHandlers = new GameHandlers();
+speakHandlers.addAllListeners();
