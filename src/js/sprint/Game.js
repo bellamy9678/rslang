@@ -78,7 +78,7 @@ export default class Game {
 		this.CORRECT_BTN.removeEventListener('click', this.correctBtnHand);
 		this.AUDIO_BTN.removeEventListener('click', this.audioBtnHand);
 		document.removeEventListener('keydown', this.keyboardHandler);
-		document.removeEventListener('keyup', this.keyUpHandler);
+		document.removeEventListener('keyup', this.keyUp);
 	}
 
 	audioBtnHandler() {
