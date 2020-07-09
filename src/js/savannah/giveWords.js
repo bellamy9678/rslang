@@ -1,7 +1,7 @@
 import fetchWords from './fetchWords';
 import { API, ASSETS_STORAGE } from '../shared/Constants';
 
-export default async function giveWords () {
+export default async function giveWords (page) {
 	function Word(word) {
 		return {
 			word: word.word,
@@ -10,7 +10,7 @@ export default async function giveWords () {
 			audio: `${ASSETS_STORAGE}${word.audio}`
 		}
 	}
-	const url = `${API}words?page=1`;
+	const url = `${API}words?page=${page}`;
 	const data = await fetchWords(url);
 	return data.map(word => new Word(word));
 }
