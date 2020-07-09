@@ -9,7 +9,7 @@ export default function createElements() {
     elem: TAGS.DIV,
     classes: 'answers'
   });
-  for (let i = 0; i < NUMBER_OF_WORDS; i+=1) {
+  for (let i = 0; i < NUMBER_OF_WORDS; i += 1) {
     const wordTranslation = creator.create({
       elem: TAGS.P,
       classes: 'answer',

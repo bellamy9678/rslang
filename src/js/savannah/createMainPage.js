@@ -1,5 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
+import {ERROR_SOUND_SRC, CORRECT_SOUND_SRC} from './consts';
 
 export default function createMainPage() {
   const creator = new DOMElementCreator();
@@ -22,14 +23,14 @@ export default function createMainPage() {
     elem: TAGS.AUDIO,
     classes: 'error-sound',
     attr: [{
-      src: 'https://raw.githubusercontent.com/garza0/rslang-data/master/wrong.mp3'
+      src: ERROR_SOUND_SRC
     }]
   });
   const correctSound = creator.create({
     elem: TAGS.AUDIO,
     classes: 'correct-sound',
     attr: [{
-      src: 'https://raw.githubusercontent.com/garza0/rslang-data/master/correct.mp3'
+      src: CORRECT_SOUND_SRC
     }]
   });
   const volumeMuteImg = creator.create({
