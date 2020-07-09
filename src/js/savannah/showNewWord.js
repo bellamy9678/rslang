@@ -1,4 +1,4 @@
-import {/* VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, */arrForRandFunc, arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import {VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 import defineArrays from './defineArrays';
 import endgame from './endGame';
 import generateWordContainers from './generateWordContainers';
@@ -20,6 +20,7 @@ export default async function showNewWord() {
     gameOver = true;
     endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
   }
+
   const mainWordContainer = document.querySelector('.main-word');
   const allAnswers = document.querySelectorAll('.answers p');
   if (!gameOver) {
@@ -33,7 +34,6 @@ export default async function showNewWord() {
   }
 
   function checkAnswer(choosenAnswer) {
-    console.log(choosenAnswer.textContent === mainWordContainer.dataset.translate);
     if (choosenAnswer.textContent === mainWordContainer.dataset.translate) {
       choosenAnswer.classList.add('right-answer__active');
       handleRightAnswer();
@@ -51,13 +51,13 @@ export default async function showNewWord() {
     });
   });
 
-  // function defineButton(event) {
-  // 	const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
-  // 	if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
-  // 		const choosenAnswer = document.querySelector(`.answer:nth-child(${numberOfDigit})`);
-  //     checkAnswer(choosenAnswer);
-  // 	}
-  //   document.removeEventListener('keydown', defineButton);
-  // }
-	// document.addEventListener('keydown', defineButton);
+  function defineButton(event) {
+  	const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
+  	if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
+  		const choosenAnswer = document.querySelector(`.answer:nth-child(${numberOfDigit})`);
+      checkAnswer(choosenAnswer);
+  	}
+    document.removeEventListener('keydown', defineButton);
+  }
+	document.addEventListener('keydown', defineButton);
 }

@@ -21,4 +21,7 @@ export default function moveWord() {
       clearInterval(timer);
     });
   });
+  document.addEventListener('keydown', () => {
+    clearInterval(timer);
+  });
 }
