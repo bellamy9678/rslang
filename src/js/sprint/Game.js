@@ -69,6 +69,8 @@ export default class Game {
 
 		this.keyboardHandler = this.keyEventHandler.bind(this);
 		document.addEventListener('keydown', this.keyboardHandler);
+		this.keyUp = this.keyUpHandler.bind(this);
+		document.addEventListener('keyup', this.keyUp);
 	}
 
 	removeEventListeners() {
@@ -76,6 +78,7 @@ export default class Game {
 		this.CORRECT_BTN.removeEventListener('click', this.correctBtnHand);
 		this.AUDIO_BTN.removeEventListener('click', this.audioBtnHand);
 		document.removeEventListener('keydown', this.keyboardHandler);
+		document.removeEventListener('keyup', this.keyUpHandler);
 	}
 
 	audioBtnHandler() {
@@ -88,15 +91,22 @@ export default class Game {
 	}
 
 	keyEventHandler(event) {
-		if (this.gameReadyState) {
+		if (this.gameReadyState && this.keyUpState) {
 			if (event.keyCode === 37) {
+				this.keyUpState = false;
 				this.WRONG_BTN.click();
 			}
 			if (event.keyCode === 39) {
+				this.keyUpState = false;
 				this.CORRECT_BTN.click();
 			}
 		}
+	}
 
+	keyUpHandler(event) {
+		if (event.keyCode === 37 || event.keyCode === 39) {
+			this.keyUpState = true;
+		}
 	}
 
 	wrongBtnHandler() {
