@@ -20,7 +20,7 @@ export default class Game {
 		this.wordsArr = [];
 		this.wrongWords = [];
 		this.pointsForAnswer = 10;
-		this.rigthTranslate = false;
+		this.rightTranslate = false;
 		this.rightAnswers = [];
 		this.wrongAnswers = [];
 		this.points = 0;
@@ -31,6 +31,7 @@ export default class Game {
 		this.gameStarted = false;
 		this.keyUpState = true;
 		this.gameReadyState = false;
+		this.wordShowed = false;
 	}
 
 	init() {
@@ -58,12 +59,23 @@ export default class Game {
 	}
 
 	addEventListeners() {
-		this.WRONG_BTN.addEventListener('click', this.wrongBtnHandler.bind(this));
-		this.CORRECT_BTN.addEventListener('click', this.correctBtnHandler.bind(this));
-		this.AUDIO_BTN.addEventListener('click', this.audioBtnHandler.bind(this));
+		this.wrongBtnHand = this.wrongBtnHandler.bind(this);
+		this.correctBtnHand = this.correctBtnHandler.bind(this);
+		this.audioBtnHand = this.audioBtnHandler.bind(this);
+
+		this.WRONG_BTN.addEventListener('click', this.wrongBtnHand);
+		this.CORRECT_BTN.addEventListener('click', this.correctBtnHand);
+		this.AUDIO_BTN.addEventListener('click', this.audioBtnHand);
 
 		this.keyboardHandler = this.keyEventHandler.bind(this);
 		document.addEventListener('keydown', this.keyboardHandler);
+	}
+
+	removeEventListeners() {
+		this.WRONG_BTN.removeEventListener('click', this.wrongBtnHand);
+		this.CORRECT_BTN.removeEventListener('click', this.correctBtnHand);
+		this.AUDIO_BTN.removeEventListener('click', this.audioBtnHand);
+		document.removeEventListener('keydown', this.keyboardHandler);
 	}
 
 	audioBtnHandler() {
@@ -76,38 +88,45 @@ export default class Game {
 	}
 
 	keyEventHandler(event) {
-		if (event.keyCode === 37) {
-			this.WRONG_BTN.click();
+		if (this.gameReadyState) {
+			if (event.keyCode === 37) {
+				this.WRONG_BTN.click();
+			}
+			if (event.keyCode === 39) {
+				this.CORRECT_BTN.click();
+			}
 		}
-		if (event.keyCode === 39) {
-			this.CORRECT_BTN.click();
-		}
+
 	}
 
 	wrongBtnHandler() {
-		if (this.gameStarted === false) {
-			this.startCountdown();
-			this.gameStarted = true;
-		}
+		if (this.gameReadyState) {
+			if (this.gameStarted === false) {
+				this.startCountdown();
+				this.gameStarted = true;
+			}
 
-		if (this.rigthTranslate) {
-			this.wrongAnswerHandler();
+			if (this.rightTranslate) {
+				this.wrongAnswerHandler();
 
-		} else {
-			this.correctAnswerHandler();
+			} else {
+				this.correctAnswerHandler();
 
+			}
 		}
 	}
 
 	correctBtnHandler() {
-		if (this.gameStarted === false) {
-			this.startCountdown();
-			this.gameStarted = true;
-		}
-		if (this.rigthTranslate) {
-			this.correctAnswerHandler();
-		} else {
-			this.wrongAnswerHandler();
+		if (this.gameReadyState) {
+			if (this.gameStarted === false) {
+				this.startCountdown();
+				this.gameStarted = true;
+			}
+			if (this.rightTranslate && this.wordShowed) {
+				this.correctAnswerHandler();
+			} else if (!this.rightTranslate && this.wordShowed) {
+				this.wrongAnswerHandler();
+			}
 		}
 	}
 
@@ -142,6 +161,14 @@ export default class Game {
 	correctAnswerHandler() {
 		this.opacityInOut(this.RIGHT_INDICATOR, CONST.MAIN_SHADOW_RIGHT);
 		CONST.CORRECT_AUDIO.play();
+		this.showSublevel();
+		this.points += this.pointsForAnswer;
+		this.rightAnswers.push(this.wordsArr[this.wordIndex]);
+		this.updateScore();
+		this.loadNextRound();
+	}
+
+	showSublevel() {
 		if (this.rightAnswersInRow < 3) {
 			this.SUBLEVEL_DOTS[this.rightAnswersInRow].classList.add('sublevel__dot--right');
 		}
@@ -167,10 +194,6 @@ export default class Game {
 			}
 			this.POINTS_FOR_WORD_CONTAINER.innerText = `+${this.pointsForAnswer} ${CONST.POINTS_FOR_ANSWER_TEXT}`;
 		}
-		this.points += this.pointsForAnswer;
-		this.rightAnswers.push(this.wordsArr[this.wordIndex]);
-		this.updateScore();
-		this.loadNextRound();
 	}
 
 	updateScore() {
@@ -195,7 +218,7 @@ export default class Game {
 				myJson.forEach(wordObj => this.wordsArr.push(wordObj));
 				this.getWrongWordsArr(myJson);
 				this.nextRound += 1;
-			});
+			}).catch(error => console.error(error));
 	}
 
 	getData(level = this.level, round = this.round) {
@@ -212,6 +235,7 @@ export default class Game {
 		this.wordsArr = json;
 		this.getWrongWordsArr(json);
 		this.showWord();
+		this.gameReadyState = true;
 	}
 
 	getWrongWordsArr(json) {
@@ -223,11 +247,18 @@ export default class Game {
 	}
 
 	showWord() {
-		this.WORD_CONTAINER.innerText = this.wordsArr[this.wordIndex].word;
-		this.showTranslate();
-		if (this.playAudioState) {
-			this.audio = new Audio(`${ASSETS_STORAGE}${this.wordsArr[this.wordIndex].audio}`);
-			this.audio.play();
+		this.wordShowed = false;
+		if (this.wordsArr[this.wordIndex]) {
+			this.WORD_CONTAINER.innerText = this.wordsArr[this.wordIndex].word;
+			this.showTranslate();
+			this.wordShowed = true;
+			if (this.playAudioState) {
+				this.audio = new Audio(`${ASSETS_STORAGE}${this.wordsArr[this.wordIndex].audio}`);
+				this.audio.play();
+			}
+		} else {
+			console.log(this.wordsArr[this.wordIndex], this.wordsArr, this.wordIndex, this.wordShowed);
+
 		}
 	}
 
@@ -239,10 +270,10 @@ export default class Game {
 		const random = Math.random().toFixed(2);
 
 		if (random < CONST.CHANCE) {
-			this.rigthTranslate = true;
+			this.rightTranslate = true;
 			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
 		} else {
-			this.rigthTranslate = false;
+			this.rightTranslate = false;
 			this.TRANSLATION_CONTAINER.innerText = Game.returnRandomFromArr(this.wrongWords);
 		}
 
@@ -275,21 +306,27 @@ export default class Game {
 	}
 
 	stopGame() {
-		const resultContinueBtn = factory.create({
+		this.resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
 			child: CONST.CONTINUE_BTN_TEXT
 		});
-		resultContinueBtn.addEventListener('click', () => {
-			result.closeResultWindow();
-		});
+		this.closeResult = Game.resultBtnHandler.bind(this);
+		this.resultContinueBtn.addEventListener('click', this.closeResult);
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
-			buttons: [resultContinueBtn],
+			buttons: [this.resultContinueBtn],
 			points: this.points
 		});
-		document.removeEventListener('keydown', this.keyboardHandler);
+		this.removeEventListeners();
 	}
+
+	static resultBtnHandler() {
+		result.closeResultWindow.call(result);
+		this.resultContinueBtn.removeEventListener('click', this.closeResult);
+	}
+
+
 
 }
