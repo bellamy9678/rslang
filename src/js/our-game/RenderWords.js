@@ -8,6 +8,14 @@ export default function renderWords(item) {
 	const word = newElem.create({
 		elem: TAGS.DIV,
 		classes: 'word',
+		attr: [{
+			'data-translation': `${item.translate}`
+		},
+		{'data-transciption': `${item.transcription}`
+		},
+		{'data-sound': `${item.audio}`
+		},
+		],
 		child: `${item.word}`,
 	}); 
 

@@ -1,0 +1,48 @@
+* {
+	box-sizing: border-box;
+}
+.game-container {
+	display: flex;
+  max-width: 940px;
+}
+
+.english-container, .translation-container {
+	width: 470px;
+	display: flex;
+	padding-right: 29px;
+	padding-left: 29px;
+	flex-wrap: wrap;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	border: 1px solid red;
+}
+
+.word, .word-translation {
+	width: 130px;
+  height: 90px;
+  border: 1px solid #000;
+  font-size: 14px;
+  font-weight: 900;
+  text-align: center;
+  margin-right: 3px;
+  padding-top: 35px;
+}
+
+.chosen, .active {
+	background-color: gray;
+}
+
+.green {
+	background-color: green;
+}
+.yellow {
+	background-color: yellow;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.none {
+	display: none;
+}
