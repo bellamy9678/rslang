@@ -148,7 +148,6 @@ export default class Game {
 			// eslint-disable-next-line no-param-reassign
 			elem.style.opacity = '0';
 			this.MAIN_CONTAINER.style.boxShadow = CONST.MAIN_SHADOW_DEFAUlT;
-
 		}, 400);
 	}
 
@@ -292,10 +291,7 @@ export default class Game {
 	tick() {
 		const timeDisplay = document.getElementById('time');
 		let sec = this.secondsRemaining;
-		const shadowTimer = CONST.SHADOW_TIMER.split(' ');
-		shadowTimer[4] = `${(60 - this.secondsRemaining) / 2 + 3}px`;
-		const shadow = shadowTimer.join(' ');
-		this.TIMER.style.boxShadow = shadow;
+		window.requestAnimationFrame(this.animationStep.bind(this));
 
 		if (sec < 10) {
 			sec = `0${sec}`;
@@ -308,6 +304,17 @@ export default class Game {
 		}
 
 		this.secondsRemaining -= 1;
+	}
+
+	animationStep() {
+		const shadowTimer = CONST.SHADOW_TIMER.split(' ');
+		shadowTimer[4] = `${(60 - this.secondsRemaining) / 2 + 3}px`;
+		const shadow = shadowTimer.join(' ');
+		this.TIMER.style.boxShadow = shadow;
+
+		if (this.secondsRemaining > 0) {
+			window.requestAnimationFrame(this.animationStep.bind(this));
+		}
 	}
 
 	startCountdown() {
