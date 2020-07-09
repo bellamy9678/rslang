@@ -1,5 +1,4 @@
-import {arrayWithRightAnswers, arrayWithWrongAnswers} from './consts'
-import endgame from './endGame'
+import {arrayWithRightAnswers, arrayWithWrongAnswers} from './consts';
 
 function handleWrongAnswer() {
   const mainWordContainer = document.querySelector('.main-word');
@@ -17,8 +16,6 @@ function handleWrongAnswer() {
   arrayWithWrongAnswers.push(mainWordContainer);
   if (lifeIcon !== null) {
     lifeIcon.remove();
-  } else {
-    endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
   }
 }
 

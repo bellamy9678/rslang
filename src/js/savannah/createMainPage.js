@@ -18,6 +18,13 @@ export default function createMainPage() {
       alt: `${imgAlt}`
     }],
   });
+  const errorSound = creator.create({
+    elem: TAGS.AUDIO,
+    classes: 'error-sound',
+    attr: [{
+      src: './assets/sounds/error.mp3'
+    }]
+  });
   const volumeMuteImg = creator.create({
     elem: TAGS.IMG,
     classes: 'volume-mute-icon',
@@ -30,7 +37,7 @@ export default function createMainPage() {
   const volumeSettings = creator.create({
     elem: TAGS.DIV,
     classes: 'volume-settings',
-    child: [volumeImg, volumeMuteImg]
+    child: [volumeImg, volumeMuteImg, errorSound]
   });
   const heartIcon1 = creator.create({
     elem: TAGS.IMG,
