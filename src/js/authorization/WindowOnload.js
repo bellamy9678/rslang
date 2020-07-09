@@ -2,13 +2,7 @@ import Cookie from './Cookie';
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
-import Game from '../sprint/Game';
 
-const sprint = new Game();
-
-// remove before commit
-
-// import GameField from '../sprint/GameField';
 
 window.addEventListener('load', () => {
 	try {
@@ -22,10 +16,7 @@ window.addEventListener('load', () => {
 		}
 	} catch (error) {
 		console.error('Cookie not found');
-		// StartPage.showStartPage();
-		sprint.init();
-		sprint.start();
-		// GameField.generateField();
+		StartPage.showStartPage();
 	} finally {
 		Header.create();
 	}
