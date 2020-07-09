@@ -2,9 +2,10 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import {ASSETS_STORAGE} from '../shared/Constants';
 import Result from '../game_result/Result';
+import stopMoving from './consts'
 
 export default function endgame(arrayWithRightAnswers, arrayWithWrongAnswers) {
-  // document.removeEventListener('keydown', defineButton);
+  document.removeEventListener('keydown', stopMoving);
   function GetAnswers(item) {
 		this.word = item.textContent;
 		this.wordTranslate = item.dataset.translate;

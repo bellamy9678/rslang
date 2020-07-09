@@ -1,4 +1,5 @@
 import showNewWord from './showNewWord';
+import {DELAY_BEFORE_GAME} from './consts';
 
 export default function generateElements() {
   const stone = document.querySelector('.stone-icon');
@@ -6,12 +7,12 @@ export default function generateElements() {
   const volumeContainer = document.querySelector('.volume-settings');
   const hint = document.querySelector('.hint');
   const loader = document.querySelector('.loader');
-  const showDetails = new Promise ((resolve) => { // показывает обратный отсчет на 4 сек
+  const showDetails = new Promise ((resolve) => {
     setTimeout(() => {
       loader.remove();
       hint.style.visibility = 'hidden';
       resolve();
-    }, 4000);
+    }, DELAY_BEFORE_GAME);
   })
   showDetails.then(() => {
     healthPoints.style.visibility = 'visible';
