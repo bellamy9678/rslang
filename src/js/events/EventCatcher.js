@@ -49,6 +49,8 @@ async function changeWordParams(event) {
 	}
 }
 
+
+
 export default function subscribeToEvents() {
 	const observer = new Observer();
 	const eventsList = [
@@ -66,12 +68,21 @@ export default function subscribeToEvents() {
 		WORDS_EVENTS.RECOVER_WORD,
 	];
 
-	eventsList.forEach(event => {
-		observer.subscribe(event, () => {
+	eventsList.forEach(eventName => {
+		observer.subscribe(eventName, (event) => {
 			new Promise(resolve => {
-				resolve(event);
+				resolve(eventName);
 			})
 				.then(() => changeWordParams(event));
 		});
 	});
+
+	// eventsList.forEach(eventName => {
+	// 	document.addEventListener(eventName, (event) => {
+	// 		new Promise(resolve => {
+	// 			resolve(eventName);
+	// 		})
+	// 			.then(() => changeWordParams(event));
+	// 	});
+	// });
 }
