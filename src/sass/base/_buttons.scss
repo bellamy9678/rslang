@@ -1,0 +1,29 @@
+.button {
+    @include font($size: 1.6rem, $weight: 500);
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &_bordered {
+        background: $color-background;
+        border: 1px solid $color-border;
+        color: $color-text-dark;
+        margin-right: 10px;
+    }
+
+    &_colored {
+        background: $color-primary;
+        border: 1px solid $color-primary;
+        color: $color-text-light;
+    }
+
+    &_colored-add {
+        background: $color-additional;
+        border: 1px solid $color-additional;
+        color: $color-text-light;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

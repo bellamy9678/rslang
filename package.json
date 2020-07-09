@@ -9,33 +9,30 @@
 	"scripts": {
 		"dev": "webpack-dev-server --history-api-fallback --inline --open",
 		"prod": "npm run clear -s && webpack --progress",
-		"lint": "eslint ./**/*.js --fix",
+		"lint": "eslint ./**/*.js --fix --color",
 		"clear": "del-cli dist"
 	},
-	"contributors": [
-		{
-			"name": "chaba-chaba"
-		},
-		{
-			"name": "bellamy9678"
-		},
-		{
-			"name": "leqsar"
-		},
-		{
-			"name": "garza0"
-		},
-		{
-			"name": "ttttanna"
-		},
-		{
-			"name": "aleksandr2102"
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
 		}
-	],
+	},
+	"lint-staged": {
+		"*.(js)": [
+			"npm run lint"
+		]
+	},
 	"license": "MIT",
+	"contributors": [
+		"chaba-chaba",
+		"bellamy9678",
+		"leqsar",
+		"garza0",
+		"ttttanna"
+	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/bellamy9678/rslang"
+		"url": "git+https://github.com/bellamy9678/rslang.git"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.9.6",
@@ -56,7 +53,9 @@
 		"file-loader": "^4.3.0",
 		"html-loader": "^0.5.5",
 		"html-webpack-plugin": "^4.3.0",
+		"husky": "^4.2.5",
 		"image-webpack-loader": "^6.0.0",
+		"lint-staged": "^10.2.11",
 		"mini-css-extract-plugin": "^0.8.2",
 		"node-sass": "^4.14.1",
 		"postcss-loader": "^3.0.0",
@@ -69,7 +68,10 @@
 		"webpack-dev-server": "^3.11.0"
 	},
 	"dependencies": {
+		"colorette": "^1.2.1",
 		"core-js": "^3.6.5",
+		"editorconfig": "^0.15.3",
+		"normalize.css": "^8.0.1",
 		"regenerator-runtime": "^0.13.3"
 	}
 }

@@ -1,0 +1,46 @@
+.settings {
+	&__wrapper {
+		padding-top: 45px;
+		min-height: 100%;
+		@include bg-cover("../../src/assets/images/settings-bg.svg");
+	}
+
+	&__title {
+		margin-bottom: 40px;
+	}
+
+	&__form {
+		margin-bottom: 20px;
+	}
+
+	&__input {
+		@extend %text-input;
+	}
+
+	&__container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	&__label {
+		display: block;
+	}
+
+	&__checkbox {
+		margin-right: 10px;
+	}
+
+	&__cards-information {
+		@include font($size: 1.6rem, $weight: 600);
+		margin-bottom: 20px;
+	}
+
+	&__button {
+		width: 140px;
+	}
+
+	// &__checkbox {
+	// 	display: none;
+	// }
+}

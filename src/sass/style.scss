@@ -1,2 +1,38 @@
+
+// Abstract
 @import './abstract/constants';
+@import './abstract/mixins';
+@import './abstract/placeholders';
+
+// Base
+@import './base/base';
+@import './base/buttons';
+@import './base/icons';
+@import './base/error';
+@import './base/success';
+
+// Layouts
+@import './layouts/wrapper';
+@import './layouts/app';
+@import './layouts/header';
+@import './layouts/footer';
+
+// Components
+@import './components/dictionary';
+@import './components/navigation';
+@import './components/authorization';
+@import './components/user';
+@import './components/welcome';
+@import './components/games';
+
+// Pages
+@import './pages/start-page';
+@import './pages/account-creation';
+@import './pages/english-puzzle';
+@import './pages/training';
+@import './pages/settings';
+@import './pages/gamesresult';
+@import './pages/sprint';
+@import './pages/audio-challenge';
 @import './pages/savannah';
+
