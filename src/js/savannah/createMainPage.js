@@ -22,7 +22,14 @@ export default function createMainPage() {
     elem: TAGS.AUDIO,
     classes: 'error-sound',
     attr: [{
-      src: './assets/sounds/error.mp3'
+      src: 'https://raw.githubusercontent.com/garza0/rslang-data/master/wrong.mp3'
+    }]
+  });
+  const correctSound = creator.create({
+    elem: TAGS.AUDIO,
+    classes: 'correct-sound',
+    attr: [{
+      src: 'https://raw.githubusercontent.com/garza0/rslang-data/master/correct.mp3'
     }]
   });
   const volumeMuteImg = creator.create({
@@ -37,7 +44,7 @@ export default function createMainPage() {
   const volumeSettings = creator.create({
     elem: TAGS.DIV,
     classes: 'volume-settings',
-    child: [volumeImg, volumeMuteImg, errorSound]
+    child: [volumeImg, volumeMuteImg, errorSound, correctSound]
   });
   const heartIcon1 = creator.create({
     elem: TAGS.IMG,

@@ -1,6 +1,7 @@
-import {VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import {VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 import defineArrays from './defineArrays';
 import endgame from './endGame';
+import generateWordContainers from './generateWordContainers';
 import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
 
 export default async function showNewWord() {
@@ -13,7 +14,7 @@ export default async function showNewWord() {
   if (arrForUniqness.length === 0 && lifeIcon) {
     await defineArrays();
   } else if (arrForUniqness.length !== 0 && lifeIcon) {
-    await defineArrays();
+    await generateWordContainers(arrForUniqness, arrForRandFunc);
   } else {
     endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
   }

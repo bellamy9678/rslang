@@ -19,6 +19,7 @@ export default function arrayRandElement(fullArray) {
     }]
   });
   const forTest = fullArray.slice();
+  fullArray.splice(fullArray.indexOf(mainWord), 1);
   for (let i = 0; i < NUMBER_OF_WORDS-1; i += 1) {
     const randomIndex = Math.floor(Math.random() * fullArray.length);
     arrayWithWords.push(fullArray[randomIndex]);

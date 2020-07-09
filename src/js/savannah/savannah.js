@@ -25,9 +25,11 @@ export default function savannah() {
 
     volumeContainer.addEventListener('click', () => {
       if (volumeOn.style.display === 'none') {
+        volumeContainer.classList.remove('silence-mode');
         volumeOn.style.display = 'block';
         volumeOff.style.display = 'none';
       } else {
+        volumeContainer.classList.add('silence-mode');
         volumeOn.style.display = 'none';
         volumeOff.style.display = 'block';
       }
