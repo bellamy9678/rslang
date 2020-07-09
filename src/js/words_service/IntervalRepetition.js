@@ -3,6 +3,7 @@ import {
 	OFFSET_DATE_COEFFICIENT,
 } from './constants';
 import WORDS_EVENTS from '../observer/WordsEvents';
+import APIMethods from './APIMethods';
 
 export default class IntervalRepetition {
 	constructor(wordObj) {
@@ -10,30 +11,36 @@ export default class IntervalRepetition {
 		this.optional = wordObj.optional;
 	}
 
-	increaseProgress() {
-		if (this.optional.progress < INTERVAL_PARAMS.MAX_PROGRESS_LEVEL) {
-			this.optional.progress += 1;
+	async increaseProgress() {
+		if (this.bestResult !== INTERVAL_PARAMS.MIN_PROGRESS_LEVEL && this.bestResult <= INTERVAL_PARAMS.MAX_PROGRESS_LEVEL) {
+			this.optional.progress = this.bestResult;
 		}
-		return this.optional;
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
 	}
 
-	decreaseProgress() {
+	async decreaseProgress() {
 		if (this.optional.progress > INTERVAL_PARAMS.MIN_PROGRESS_LEVEL) {
 			this.optional.progress -= 1;
 		}
-		return this.optional;
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
 	}
 
-	countBestResult() {
+	async countBestResult() {
 		this.optional.bestResult += 1;
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
 	}
 
-	resetBestResult() {
+	async resetBestResult() {
 		this.optional.bestResult = 0;
-	}
-
-	saveShowedDate() {
-		this.optional.showedDate = new Date();
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
 	}
 
 	static defineDifficultyCoefficient(event) {
@@ -56,9 +63,20 @@ export default class IntervalRepetition {
 		return coefficient;
 	}
 
-	setNextShowDate(event) {
+	async setDateParams(event) {
 		const offset = (new Date() - this.optional.showedDate);
 		const coefficient = this.defineDifficultyCoefficient(event);
+		this.optional.showedDate = new Date();
 		this.optional.nextShowDate = new Date((new Date() + (2 * offset + 24 * 3600 * 1000)) * coefficient);
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
+	}
+
+	async changeWordCategory(category) {
+		this.optional.category = category;
+		await APIMethods.updateUserWord(this.wordId, {
+			optional: this.optional
+		});
 	}
 }

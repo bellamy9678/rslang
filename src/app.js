@@ -6,6 +6,7 @@ import './js/authorization/WindowOnload';
 import Settings from './js/settings/Settings';
 // import training from './js/cards/Training';
 import './js/dictionary/CategoryView';
+import subscribeToEvents from './js/events/EventCatcher';
 
 async function initial() {
 	let settings = new Settings();
@@ -16,3 +17,4 @@ async function initial() {
 }
 
 initial();
+subscribeToEvents();

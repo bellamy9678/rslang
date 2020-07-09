@@ -8,6 +8,7 @@ import {
 	DICTIONARY_BUTTONS,
 } from '../shared/Text';
 import Settings from '../settings/Settings';
+import WORDS_EVENTS from '../observer/WordsEvents';
 
 let settingsObj;
 async function initial() {
@@ -183,15 +184,24 @@ async function updateWordViewWithUserSettings() {
 	});
 }
 
-function addRecoverButtonsToWords(categoryName) {
+function addRecoverButtonsToWords(categoryName, objWord) {
 	const newElem = new DOMElementCreator();
 	if (categoryName === CATEGORIES.REMOVED || categoryName === CATEGORIES.DIFFICULT) {
-		document.querySelectorAll('.category__word').forEach(word => {
+		document.querySelectorAll('.category__word').forEach((word, i) => {
 			const recoverRemovedWordButton = newElem.create({
 				elem: TAGS.BUTTON,
 				id: 'recover-removed-word',
 				classes: ['word__recover'],
 				child: DICTIONARY_BUTTONS.RECOVER,
+			});
+			const recoverWordEvent = new CustomEvent(
+				WORDS_EVENTS.RECOVER_WORD, {
+					detail: objWord[i],
+					bubbles: true,
+				}
+			);
+			recoverRemovedWordButton.addEventListener('click', () => {
+				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 			});
 			word.append(recoverRemovedWordButton);
 		});
@@ -210,7 +220,7 @@ export default function showWordsCategory(categoryName) {
 				categoryContainer.firstChild.remove();
 			}
 			categoryContainer.append(category);
-			addRecoverButtonsToWords(categoryName);
+			addRecoverButtonsToWords(categoryName, words);
 			updateWordViewWithUserSettings();
 		});
 }
