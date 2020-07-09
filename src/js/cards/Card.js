@@ -11,15 +11,52 @@ import {
 	DISPLAY_NONE_CLASS,
 	EMPTY_STRING,
 } from './CardConstants';
-import { BUTTONS_WORDS } from '../shared/Text';
+import {
+	BUTTONS_WORDS
+} from '../shared/Text';
 import TAGS from '../shared/Tags.json';
 import WORDS_EVENTS from '../observer/WordsEvents';
 
 const fab = new DOMElementCreator();
 
+function continueButtonHandler() {
+	const submitEvent = new Event('submit');
+	const continueButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_CONTINUE);
+	document.dispatchEvent(continueButtonEvent);
+	this.elem.dispatchEvent(submitEvent);
+}
+
+function textInputHandler() {
+	const textInput = this.elem.querySelector('#word');
+	const continueButton = this.elem.querySelector('#continue-button');
+	if (textInput.value.length > EMPTY_STRING.length) {
+		continueButton.disabled = false;
+	} else {
+		continueButton.disabled = true;
+	}
+};
+
+function cardHandler(event) {
+	event.preventDefault();
+	this.isCorrectReaction();
+}
+
+function removeListeners() {
+	const continueButton = this.elem.querySelector('#continue-button');
+	const textInput = this.elem.querySelector('#word');
+	const card = this.elem;
+	continueButton.removeEventListener('click', this.continueButtonHandler);
+	textInput.removeEventListener('click', this.textInputHandler);
+	card.removeEventListener('submit', this.cardHandler);
+}
+
 export default class Card {
 	constructor(word) {
 		this.card = word;
+		this.continueButtonHandler = continueButtonHandler.bind(this);
+		this.textInputHandler = textInputHandler.bind(this);
+		this.cardHandler = cardHandler.bind(this);
+		this.removeListeners = removeListeners.bind(this);
 	}
 
 	static getObjectOfTextExample(text) {
@@ -57,7 +94,9 @@ export default class Card {
 			elem: TAGS.SPAN,
 			classes: ['card__meaning_word'],
 			id: 'meaning-part-word',
-			attr: { 'data-secret-word': textMeaningObject.word },
+			attr: {
+				'data-secret-word': textMeaningObject.word
+			},
 			child: TEXT_DEFAULT_HIDDEN,
 		});
 
@@ -103,7 +142,11 @@ export default class Card {
 			elem: TAGS.IMG,
 			id: 'image-card-example',
 			classes: DISPLAY_NONE_CLASS,
-			attr: [{ src: this.card.image }, { alt: this.card.word }],
+			attr: [{
+				src: this.card.image
+			}, {
+				alt: this.card.word
+			}],
 		});
 
 		const imgContainer = fab.create({
@@ -170,7 +213,9 @@ export default class Card {
 			elem: TAGS.SPAN,
 			classes: ['card__text_word', 'card__text_answer', HIDDEN_CLASS],
 			id: 'example-part-word',
-			attr: [{ 'data-word': textExampleObject.word }],
+			attr: [{
+				'data-word': textExampleObject.word
+			}],
 			child: letters,
 		});
 
@@ -178,7 +223,11 @@ export default class Card {
 			elem: TAGS.INPUT,
 			classes: 'card__text_input',
 			id: INPUT_ID,
-			attr: [{ type: 'text' }, { name: 'input' }],
+			attr: [{
+				type: 'text'
+			}, {
+				name: 'input'
+			}],
 			name: INPUT_ID,
 		});
 
@@ -199,7 +248,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'again-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.again,
 		});
 
@@ -213,7 +264,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'hard-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.hard,
 		});
 
@@ -225,7 +278,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'good-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.good,
 		});
 
@@ -237,7 +292,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'easy-word-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.easy,
 		});
 
@@ -262,34 +319,43 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'add-to-difficult-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.addToDifficult,
 		});
 
 		const addToEasyButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT, {
+				detail: currentWord
+			}
 		);
-		addToDifficultButton.addEventListener('click', () =>
-			addToDifficultButton.dispatchEvent(addToEasyButtonEvent)
-		);
+
+		addToDifficultButton.addEventListener('click', function addToDifficultButtonHandler() {
+			addToDifficultButton.dispatchEvent(addToEasyButtonEvent);
+			addToDifficultButton.removeEventListener('click', addToDifficultButtonHandler);
+		});
 
 		const deleteFromDictionaryButton = fab.create({
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'delete-from-dictionary-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.deleteFromDictionary,
 		});
 
 		const deleteFromDictionaryEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY, {
+				detail: currentWord
+			}
 		);
 
-		deleteFromDictionaryButton.addEventListener('click', () => {
+		deleteFromDictionaryButton.addEventListener('click', function deleteFromDictionaryButtonHandler() {
 			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent);
 			document.dispatchEvent(deleteFromDictionaryEvent);
+			deleteFromDictionaryButton.removeEventListener('click', deleteFromDictionaryButtonHandler);
 		});
 
 		const buttonGroupDictionary = fab.create({
@@ -302,7 +368,9 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: ['button', DISPLAY_NONE_CLASS],
 			id: 'show-answer-button',
-			attr: [{ type: 'button' }],
+			attr: [{
+				type: 'button'
+			}],
 			child: BUTTONS_WORDS.showAnswer,
 		});
 
@@ -310,13 +378,17 @@ export default class Card {
 			elem: TAGS.BUTTON,
 			classes: 'button',
 			id: 'continue-button',
-			attr: [{ type: 'button', disabled: true }],
+			attr: [{
+				type: 'button',
+				disabled: true
+			}],
 			child: BUTTONS_WORDS.continue,
 		});
 
 		const showAnswerButtonEvent = new CustomEvent(
-			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON,
-			{ detail: currentWord }
+			WORDS_EVENTS.PUSHED_SHOW_ANSWER_BUTTON, {
+				detail: currentWord
+			}
 		);
 
 		const buttonGroupShowAnswer = fab.create({
@@ -329,21 +401,27 @@ export default class Card {
 			elem: TAGS.AUDIO,
 			id: 'audio-word',
 			classes: DISPLAY_NONE_CLASS,
-			attr: [{ src: this.card.audio }],
+			attr: [{
+				src: this.card.audio
+			}],
 		});
 
 		const audioMeaning = fab.create({
 			elem: TAGS.AUDIO,
 			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-meaning',
-			attr: [{ src: this.card.meaningAudio }],
+			attr: [{
+				src: this.card.meaningAudio
+			}],
 		});
 
 		const audioExample = fab.create({
 			elem: TAGS.AUDIO,
 			classes: DISPLAY_NONE_CLASS,
 			id: 'audio-example',
-			attr: [{ src: this.card.exampleAudio }],
+			attr: [{
+				src: this.card.exampleAudio
+			}],
 		});
 
 		const card = fab.create({
@@ -368,22 +446,11 @@ export default class Card {
 			],
 		});
 
-		const submitEvent = new Event('submit');
+		textInput.addEventListener('input', this.textInputHandler);
+		continueButton.addEventListener('click', this.continueButtonHandler);
+		card.addEventListener('submit', this.cardHandler);
 
-		textInput.addEventListener('input', () => {
-			if (textInput.value.length > EMPTY_STRING.length) {
-				continueButton.disabled = false;
-			} else {
-				continueButton.disabled = true;
-			}
-		});
-
-		card.addEventListener('submit', (event) => {
-			event.preventDefault();
-			this.isCorrectReaction();
-		});
-
-		showAnswerButton.addEventListener('click', () => {
+		showAnswerButton.addEventListener('click', function showAnswerButtonHandler() {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
 			document.dispatchEvent(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
@@ -393,32 +460,31 @@ export default class Card {
 			const hidden = textMeaning.querySelector('#meaning-part-word');
 			hidden.innerText = hidden.dataset.secretWord;
 			continueButton.disabled = false;
+			showAnswerButton.removeEventListener('click', showAnswerButtonHandler);
 		});
 
-		continueButton.addEventListener('click', () => {
-			const continueButtonEvent = new CustomEvent(WORDS_EVENTS.PUSHED_CONTINUE);
-			document.dispatchEvent(continueButtonEvent);
-			card.dispatchEvent(submitEvent);
-		});
-
-		easyButton.addEventListener('click', () => {
+		easyButton.addEventListener('click', function easyButtonHandler() {
 			easyButton.dispatchEvent(easyButtonEvent);
 			document.dispatchEvent(easyButtonEvent);
+			easyButton.removeEventListener('click', easyButtonHandler);
 		});
 
-		goodButton.addEventListener('click', () => {
+		goodButton.addEventListener('click', function goodButtonHandler() {
 			goodButton.dispatchEvent(goodButtonEvent);
 			document.dispatchEvent(goodButtonEvent);
+			goodButton.removeEventListener('click', goodButtonHandler);
 		});
 
-		againButton.addEventListener('click', () => {
+		againButton.addEventListener('click', function againButtonHandler() {
 			againButton.dispatchEvent(againButtonEvent);
 			document.dispatchEvent(againButtonEvent);
+			againButton.removeEventListener('click', againButtonHandler);
 		});
 
-		hardButton.addEventListener('click', () => {
+		hardButton.addEventListener('click', function hardButtonHandler() {
 			hardButton.dispatchEvent(hardButtonEvent);
 			document.dispatchEvent(hardButtonEvent);
+			hardButton.removeEventListener('click', hardButtonHandler);
 		});
 
 		this.elem = card;

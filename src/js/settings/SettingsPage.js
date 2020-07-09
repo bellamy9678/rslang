@@ -3,11 +3,44 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import {
 	TEXT
 } from '../shared/Text';
+import SettingsView from './SettingsView';
 import Settings from './Settings';
 
-function createSettingsPage() {
-	const newElem = new DOMElementCreator();
+function controlDisabledAttribute(conrolElem, slaveElem) {
+	if (conrolElem.checked === true) {
+		slaveElem.removeAttribute('disabled');
+	} else {
+		slaveElem.setAttribute('disabled', 'disabled');
+		// eslint-disable-next-line no-param-reassign
+		slaveElem.checked = false;
+		// slaveElem.removeAttribute('checked');
+	}
+}
 
+function setCheckboxValues(obj) {
+	const checkboxes = document.querySelectorAll('.settings__checkbox');
+	const meaningCheckbox = document.getElementById('word_meaning');
+	const meaningAudioCheckbox = document.getElementById('word_meaning-audio');
+	const meaningTranslateCheckbox = document.getElementById('word_meaning-translate');
+	const exampleCheckbox = document.getElementById('word_sentence-example');
+	const exampleAudioCheckbox = document.getElementById('word_sentence-example-audio');
+	const exampleTranslateCheckbox = document.getElementById('word_sentence-example-translate');
+	checkboxes.forEach(checkbox => {
+		if (obj[checkbox.getAttribute('name')]) {
+			checkbox.setAttribute('checked', 'checked');
+		}
+		if (checkbox.getAttribute('disabled') && obj[checkbox.getAttribute('name')] || obj[checkbox.getAttribute('name')]) {
+			checkbox.removeAttribute('disabled');
+		}
+	});
+	controlDisabledAttribute(meaningCheckbox, meaningAudioCheckbox);
+	controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
+	controlDisabledAttribute(exampleCheckbox, exampleAudioCheckbox);
+	controlDisabledAttribute(exampleCheckbox, exampleTranslateCheckbox);
+}
+
+function createSettingsPage(obj) {
+	const newElem = new DOMElementCreator();
 	const title = newElem.create({
 		elem: TAGS.H2,
 		classes: 'settings__title',
@@ -29,9 +62,10 @@ function createSettingsPage() {
 		id: 'words-number',
 		attr: [{
 			name: 'maxNewWords',
-			value: 3,
+			value: obj.maxNewWords,
 			min: 0,
 			type: 'number',
+			oninput: 'validity.valid||(value="")',
 		}, ],
 	});
 
@@ -49,11 +83,26 @@ function createSettingsPage() {
 		classes: ['settings__cards-number', 'settings__input'],
 		id: 'cards-number',
 		attr: [{
-			name: 'maxNewCards',
-			value: 3,
+			name: 'maxCards',
+			value: obj.maxCards,
 			min: 0,
+			max: 100,
 			type: 'number',
+			oninput: 'validity.valid||(value="")',
 		}, ],
+	});
+
+	cardsNumberInput.addEventListener('change', () => {
+		const wordsNumber = document.getElementById('words-number');
+		const cardsNumber = document.getElementById('cards-number');
+		if (cardsNumber.valueAsNumber < wordsNumber.valueAsNumber) {
+			wordsNumber.value = cardsNumber.value;
+		}
+	});
+
+	wordsNumberInput.addEventListener('focus', () => {
+		const cardsNumber = document.getElementById('cards-number');
+		wordsNumberInput.setAttribute('max', cardsNumber.value);
 	});
 
 	const inputsWrapper = newElem.create({
@@ -120,10 +169,27 @@ function createSettingsPage() {
 		child: [meaningCheckbox, TEXT.settingsPage.meaningLabel],
 	});
 
+	const meaningAudioCheckbox = newElem.create({
+		elem: TAGS.INPUT,
+		classes: 'settings__checkbox',
+		id: 'word_meaning-audio',
+		attr: [{
+			name: 'playMeaning',
+			type: 'checkbox',
+			disabled: 'disabled',
+		}, ],
+	});
+
+	const meaningAudioLabel = newElem.create({
+		elem: TAGS.LABEL,
+		classes: 'settings__label',
+		child: [meaningAudioCheckbox, TEXT.settingsPage.meaningAudioLabel],
+	});
+
 	const meaningTranslateCheckbox = newElem.create({
 		elem: TAGS.INPUT,
 		classes: 'settings__checkbox',
-		id: 'word-meaning-translate',
+		id: 'word_meaning-translate',
 		attr: [{
 			name: 'meaningTranslate',
 			type: 'checkbox',
@@ -131,19 +197,15 @@ function createSettingsPage() {
 		}, ],
 	});
 
-	meaningCheckbox.addEventListener('change', () => {
-		if (meaningCheckbox.checked === true) {
-			meaningTranslateCheckbox.removeAttribute('disabled');
-		} else {
-			meaningTranslateCheckbox.setAttribute('disabled', 'disabled');
-			meaningTranslateCheckbox.checked = false;
-		}
-	});
-
 	const meaningTranslateLabel = newElem.create({
 		elem: TAGS.LABEL,
 		classes: 'settings__label',
 		child: [meaningTranslateCheckbox, TEXT.settingsPage.meaningTranslateLabel],
+	});
+
+	meaningCheckbox.addEventListener('change', () => {
+		controlDisabledAttribute(meaningCheckbox, meaningTranslateCheckbox);
+		controlDisabledAttribute(meaningCheckbox, meaningAudioCheckbox);
 	});
 
 	const sentenceExampleCheckbox = newElem.create({
@@ -160,6 +222,23 @@ function createSettingsPage() {
 		elem: TAGS.LABEL,
 		classes: 'settings__label',
 		child: [sentenceExampleCheckbox, TEXT.settingsPage.sentenceExempleLabel],
+	});
+
+	const sentenceExampleAudioCheckbox = newElem.create({
+		elem: TAGS.INPUT,
+		classes: 'settings__checkbox',
+		id: 'word_sentence-example-audio',
+		attr: [{
+			name: 'playExample',
+			type: 'checkbox',
+			disabled: 'disabled',
+		}, ],
+	});
+
+	const sentenceExampleAudioLabel = newElem.create({
+		elem: TAGS.LABEL,
+		classes: 'settings__label',
+		child: [sentenceExampleAudioCheckbox, TEXT.settingsPage.sentenceExampleAudioLabel],
 	});
 
 	const sentenceExampleTranslateCheckbox = newElem.create({
@@ -180,12 +259,8 @@ function createSettingsPage() {
 	});
 
 	sentenceExampleCheckbox.addEventListener('change', () => {
-		if (sentenceExampleCheckbox.checked === true) {
-			sentenceExampleTranslateCheckbox.removeAttribute('disabled');
-		} else {
-			sentenceExampleTranslateCheckbox.setAttribute('disabled', 'disabled');
-			sentenceExampleTranslateCheckbox.checked = false;
-		}
+		controlDisabledAttribute(sentenceExampleCheckbox, sentenceExampleTranslateCheckbox);
+		controlDisabledAttribute(sentenceExampleCheckbox, sentenceExampleAudioCheckbox);
 	});
 
 	const pictureCheckbox = newElem.create({
@@ -291,8 +366,10 @@ function createSettingsPage() {
 			transcriptionLabel,
 			translationLabel,
 			meaningLabel,
+			meaningAudioLabel,
 			meaningTranslateLabel,
 			sentenceExampleLabel,
+			sentenceExampleAudioLabel,
 			sentenceExampleTranslateLabel,
 			pictureLabel,
 			deleteButtonLabel,
@@ -320,7 +397,7 @@ function createSettingsPage() {
 
 	saveButton.addEventListener('click', event => {
 		event.preventDefault();
-		Settings.checkUserSettings();
+		SettingsView.checkUserSettings();
 	});
 
 	const form = newElem.create({
@@ -339,13 +416,25 @@ function createSettingsPage() {
 		classes: ['wrapper', 'settings__wrapper', 'settings__background'],
 		child: [title, form, saveButton],
 	});
-
 	return wrapper;
 }
 
+let settingsObj;
+async function initial() {
+	settingsObj = await Settings.getInstance();
+}
+initial();
+
 export default function showSettingsPage() {
 	const app = document.querySelector('.app');
-	const settingsPage = createSettingsPage();
-	app.firstChild.remove();
-	app.append(settingsPage);
+	const lastUserSettings = new Promise(resolve => {
+		const obj = settingsObj;
+		resolve(obj);
+	});
+	lastUserSettings.then(obj => {
+		const settingsPage = createSettingsPage(obj);
+		app.firstChild.remove();
+		app.append(settingsPage);
+		setCheckboxValues(obj);
+	});
 }
