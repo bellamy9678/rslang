@@ -64,10 +64,15 @@ export default class IntervalRepetition {
 	}
 
 	async setDateParams(event) {
-		const offset = (new Date() - this.optional.showedDate);
-		const coefficient = this.defineDifficultyCoefficient(event);
-		this.optional.showedDate = new Date();
-		this.optional.nextShowDate = new Date((new Date() + (2 * offset + 24 * 3600 * 1000)) * coefficient);
+		const offset = (new Date() - new Date(this.optional.showedDate));
+		const coefficient = IntervalRepetition.defineDifficultyCoefficient(event);
+		const currentDate = new Date();
+		console.log('offset', offset);
+		console.log('coef', coefficient);
+		const nextDate = new Date((new Date().getTime() + (2 * offset + 24 * 60 * 60 * 1000) * coefficient));
+		console.log('nextDate', nextDate);
+		this.optional.showedDate = `${currentDate}`;
+		this.optional.nextShowDate = `${nextDate}`;
 		await APIMethods.updateUserWord(this.wordId, {
 			optional: this.optional
 		});
