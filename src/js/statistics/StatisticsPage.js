@@ -1,6 +1,7 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import { TEXT_STATISTICS, ARRAY_LENGTH_INDEX_CORRECTION, CHART_SETTINGS } from './constants';
+import { LINKS } from '../shared/Text';
 
 const factory = new DOMElementCreator();
 
@@ -55,6 +56,13 @@ export default class StatisticsPage {
 	}
 
 	getStatisticsPage() {
+
+		const header = factory.create({
+			elem: TAGS.H1,
+			classes: ['statistics-header'],
+			child : LINKS.statistic,
+		});
+
 		const chart = factory.create({
 			elem: TAGS.CANVAS,
 			classes: ['statistics-scale__chart'],
@@ -66,10 +74,20 @@ export default class StatisticsPage {
 			}],
 		});
 
+		const chartImage = factory.create({
+			elem: TAGS.IMG,
+			classes: ['statistics-scale__image'],
+			attr: [{
+				src: './assets/images/analyse.svg'
+			}, {
+				alt: 'analyse'
+			}],
+		});
+
 		const sectionChart = factory.create({
 			elem: TAGS.SECTION,
 			classes: ['statistics-scale'],
-			child: chart,
+			child: [chart, chartImage],
 		});
 
 		// tables
@@ -109,7 +127,7 @@ export default class StatisticsPage {
 		const wrapper = factory.create({
 			elem: TAGS.DIV,
 			classes: ['wrapper'],
-			child: [sectionChart, sectionGames],
+			child: [header, sectionChart, sectionGames],
 		});
 
 		return wrapper;
