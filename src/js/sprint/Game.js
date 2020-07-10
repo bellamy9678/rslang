@@ -4,10 +4,11 @@ import { API, ASSETS_STORAGE } from '../shared/Constants';
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
+import { GAMES_NAMES } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 const factory = new DOMElementCreator();
 const result = new Result();
-
 
 export default class Game {
 	constructor() {
@@ -330,6 +331,13 @@ export default class Game {
 		});
 		this.closeResult = Game.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
+
+		const resultPoints = {
+			name: GAMES_NAMES.SPRINT,
+			result: this.points,
+		};
+		Statistics.putGamesResult(resultPoints);
+
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
