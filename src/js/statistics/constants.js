@@ -1,6 +1,12 @@
 export const ARRAY_LENGTH_INDEX_CORRECTION = 1;
 export const FIRST_ELEMENT_INDEX = 0;
 export const TOTAL_WORDS_PERCENT = 36; // = 3600 / 100
+
+export const RESULT_MULTIPLIER = {
+	CORRECT : 10,
+	INCORRECT : 5,
+};
+
 export const CHART_OPTIONS = {
 	COLOR : 'rgba(82, 34, 208, 0.3)',
 	MIN_WORDS : 0,

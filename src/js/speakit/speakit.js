@@ -13,7 +13,8 @@ import renderWords from './RenderWords';
 import Result from '../game_result/Result';
 
 import { returnBtnText, newGameText, statisticText, emptyString } from './speakconst';
-
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 // Creat DOM
 const app = document.querySelector('.app');
@@ -124,7 +125,7 @@ function GameHandlers() {
 	this.returnButton = document.querySelector('.return-btn');
 	this.newGameButton = document.querySelector('.new-game');
 	this.statButton = document.querySelector('.statistic');
-	
+
 	this.clickHandler = (event) => {
 		if (event.target.classList.contains('word') && trainMode) {
 			const translateText = event.target.dataset.transl;
@@ -152,7 +153,7 @@ function GameHandlers() {
 	};
 
 
-	// statistic btn remove all listeners 
+	// statistic btn remove all listeners
 	this.statisticHandler = () => {
 		document.removeEventListener('click', this.clickHandler);
 		restartBtn.removeEventListener('click', this.restartHandler);
@@ -194,7 +195,7 @@ function GameHandlers() {
 				}
 			}
 		});
-	
+
 		recognition.start();
 	};
 
@@ -214,7 +215,7 @@ function GameHandlers() {
 		recognition.removeEventListener('end', this.handleRecognition);
 	};
 
-	// start speak button 
+	// start speak button
 	this.startSpeakHandler = ()=> {
 		trainMode = false;
 		output.classList.remove('none');
@@ -261,7 +262,7 @@ function GameHandlers() {
 		}
 	};
 
-	
+
 	// modal window
 	this.resultBtnHandler = () => {
 		const resultReturnBtn = newElem.create({
@@ -269,25 +270,33 @@ function GameHandlers() {
 			classes: ['result__button', 'result__continue-btn', 'return-btn'],
 			child: returnBtnText,
 		});
-	
+
 		const resultNewGameBtn = newElem.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn', 'new-game'],
 			child: newGameText,
 		});
-	
+
 		const statisticBtn = newElem.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn', 'statistic'],
 			child: statisticText,
 		});
-	
+
 		statisticBtn.addEventListener('click', this.statisticHandler); // дописать метод, показывающий статистику по игре);
-	
+
 		resultReturnBtn.addEventListener('click', this.returnHandler);
-	
+
 		resultNewGameBtn.addEventListener('click', this.newGameHandler);
-	
+
+		const resultPoints = {
+			name: GAMES_NAMES.SPEAK,
+			result:
+			guessed.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
+			([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+		};
+		Statistics.putGamesResult(resultPoints);
+
 		myResult.showResult({
 			rightAnswers: guessed.map(item => new GetAnswers(item)),
 			wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
