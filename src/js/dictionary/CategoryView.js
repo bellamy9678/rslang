@@ -9,6 +9,7 @@ import {
 } from '../shared/Text';
 import Settings from '../settings/Settings';
 import WORDS_EVENTS from '../observer/WordsEvents';
+import eventObserver from '../observer/Observer';
 
 let settingsObj;
 async function initial() {
@@ -197,11 +198,11 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			const recoverWordEvent = new CustomEvent(
 				WORDS_EVENTS.RECOVER_WORD, {
 					detail: objWord[i],
-					bubbles: true,
 				}
 			);
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
+				eventObserver.call(recoverWordEvent);
 			});
 			word.append(recoverRemovedWordButton);
 		});

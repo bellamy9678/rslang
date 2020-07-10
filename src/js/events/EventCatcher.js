@@ -3,7 +3,8 @@ import IntervalRepetition from '../words_service/IntervalRepetition';
 import {
 	CATEGORIES,
 } from '../shared/Constants';
-import Observer from '../observer/Observer';
+import eventObserver from '../observer/Observer';
+import showWordsCategory from '../dictionary/CategoryView';
 
 async function changeWordParams(event) {
 	const wordData = new IntervalRepetition(event.detail);
@@ -43,17 +44,15 @@ async function changeWordParams(event) {
 		break;
 	case WORDS_EVENTS.RECOVER_WORD:
 		await wordData.changeWordCategory(CATEGORIES.ACTIVE);
+		showWordsCategory(wordData.optional.category);
 		break;
 	default:
 		throw new Error('Event with this name is not found');
 	}
 }
 
-
-
 export default function subscribeToEvents() {
-	const observer = new Observer();
-	const eventsList = [
+	const eventList = [
 		WORDS_EVENTS.PUSHED_AGAIN,
 		WORDS_EVENTS.PUSHED_EASY,
 		WORDS_EVENTS.PUSHED_GOOD,
@@ -68,21 +67,12 @@ export default function subscribeToEvents() {
 		WORDS_EVENTS.RECOVER_WORD,
 	];
 
-	eventsList.forEach(eventName => {
-		observer.subscribe(eventName, (event) => {
+	eventList.forEach(eventName => {
+		eventObserver.subscribe(eventName, (event) => {
 			new Promise(resolve => {
 				resolve(eventName);
 			})
 				.then(() => changeWordParams(event));
 		});
 	});
-
-	// eventsList.forEach(eventName => {
-	// 	document.addEventListener(eventName, (event) => {
-	// 		new Promise(resolve => {
-	// 			resolve(eventName);
-	// 		})
-	// 			.then(() => changeWordParams(event));
-	// 	});
-	// });
 }
