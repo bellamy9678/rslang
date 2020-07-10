@@ -1,5 +1,23 @@
 export const ARRAY_LENGTH_INDEX_CORRECTION = 1;
-export const CHART_COLOR = 'rgba(82, 34, 208, 0.3)';
+export const FIRST_ELEMENT_INDEX = 0;
+export const TOTAL_WORDS_PERCENT = 36; // = 3600 / 100
+export const CHART_OPTIONS = {
+	COLOR : 'rgba(82, 34, 208, 0.3)',
+	MIN_WORDS : 0,
+	MAX_WORDS : 3600,
+	MIN_Y : 0,
+	MAX_Y : 100,
+	FONT_SIZE : 16,
+};
+
+export const GAMES_NAMES = {
+	PUZZLE: 'English Puzzle',
+	SPEAK: 'Speak It',
+	SAVANNAH: 'Savannah',
+	AUDIO: 'Audio Challenge',
+	SPRINT: 'Sprint',
+	OUR: 'Match',
+};
 
 export const TEXT_STATISTICS = {
 	DATE: 'date',
@@ -31,7 +49,7 @@ const myDates = [date0, date1, date2, date3];
 
 export const MOCA = {
 	statistics: {
-		dates : myDates,
+		dates: myDates,
 		data: [0, 5, 25, 27],
 		labels: [0, 15, 110, 250],
 	},
@@ -71,4 +89,36 @@ export const MOCA = {
 	],
 };
 
-
+export const INITIAL_STATISTICS = {
+	statistics: {
+		dates: [new Date()],
+		data: [0],
+		labels: [0],
+	},
+	games: [
+		{
+			name: GAMES_NAMES.AUDIO,
+			data: [],
+		},
+		{
+			name: GAMES_NAMES.OUR,
+			data: [],
+		},
+		{
+			name: GAMES_NAMES.PUZZLE,
+			data: [],
+		},
+		{
+			name: GAMES_NAMES.SAVANNAH,
+			data: [],
+		},
+		{
+			name: GAMES_NAMES.SPEAK,
+			data: [],
+		},
+		{
+			name: GAMES_NAMES.SPRINT,
+			data: [],
+		},
+	],
+};

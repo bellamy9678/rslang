@@ -1,7 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import { TEXT_STATISTICS, ARRAY_LENGTH_INDEX_CORRECTION, CHART_SETTINGS } from './constants';
-import addChart from './Chart';
 
 const factory = new DOMElementCreator();
 
@@ -112,8 +111,6 @@ export default class StatisticsPage {
 			classes: ['wrapper'],
 			child: [sectionChart, sectionGames],
 		});
-
-		addChart();
 
 		return wrapper;
 	}

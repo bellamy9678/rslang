@@ -11,6 +11,7 @@ export const URL_AGGREGATED = 'aggregatedWords';
 export const URL_FILTER = 'filter=';
 export const URL_WORD_CATEGORY = 'userWord.optional.category';
 export const URL_SETTINGS = 'settings';
+export const URL_STATISTICS = 'statistics';
 
 export const URL_ET = '&';
 export const URL_NEXT = '/';
