@@ -4,6 +4,10 @@ import {
 	TEXT,
 	GAME_NAMES
 } from '../shared/Text';
+import {
+	initEnglishPuzzle,
+	startPuzzleGame
+} from '../english_puzzle/main';
 
 function addSimilarDOMElements([...objects]) {
 	const newElem = new DOMElementCreator();
@@ -30,6 +34,13 @@ export default function createGamesPage() {
 		id: 'english-puzzle',
 		classes: ['game', 'game__english-puzzle'],
 		child: [englishPuzzleName],
+	});
+
+	englishPuzzleGame.addEventListener('click', () => {
+		const app = document.querySelector('.app');
+		app.firstChild.remove();
+		initEnglishPuzzle();
+		startPuzzleGame();
 	});
 
 	const speakItName = newElem.create({
@@ -108,6 +119,13 @@ export default function createGamesPage() {
 		classes: ['game', 'game__sprint'],
 		child: [sprintName],
 	});
+
+	// sprintGame.addEventListener('click', () => {
+	// 	const app = document.querySelector('.app');
+	// 	app.firstChild.remove();
+	// 	initEnglishPuzzle();
+	// 	startPuzzleGame();
+	// });
 
 	addSimilarDOMElements([englishPuzzleGame, speakItGame, savannahGame, audioChallengeGame, ownGame, sprintGame]);
 
