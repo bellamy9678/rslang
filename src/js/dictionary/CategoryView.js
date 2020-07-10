@@ -203,6 +203,7 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 				eventObserver.call(recoverWordEvent);
+				// eventObserver.unsubscribe.bind(eventObserver)(recoverWordEvent);
 			});
 			word.append(recoverRemovedWordButton);
 		});

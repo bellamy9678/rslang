@@ -49,6 +49,7 @@ async function changeWordParams(event) {
 	default:
 		throw new Error('Event with this name is not found');
 	}
+	await wordData.countShowNumber();
 }
 
 export default function subscribeToEvents() {
