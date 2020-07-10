@@ -4,6 +4,7 @@ import {
 	LINKS,
 	TEXT
 } from '../shared/Text';
+import training from '../cards/Training';
 
 export default function createWelcomePage(username) {
 	const newElem = new DOMElementCreator();
@@ -33,6 +34,10 @@ export default function createWelcomePage(username) {
 		classes: ['button', 'button_colored-add'],
 		id: 'button_training-mode',
 		child: [TEXT.welcomePage.trainingModeButton],
+	});
+
+	trainingModeButton.addEventListener('click', async () => {
+		await training();
 	});
 
 	const title = newElem.create({
