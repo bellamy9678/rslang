@@ -7,3 +7,15 @@ import './js/authorization/WindowOnload';
 // import Statistics from './js/statistics/Statistics';
 // import training from './js/cards/Training';
 import './js/dictionary/CategoryView';
+import subscribeToEvents from './js/events/EventCatcher';
+
+// async function initial() {
+// 	let settings = new Settings();
+// 	await Settings.init();
+// 	settings = await Settings.getInstance();
+// 	await training();
+// 	return settings;
+// }
+
+// initial();
+subscribeToEvents();
