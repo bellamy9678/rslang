@@ -1,6 +1,7 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import { TEXT_STATISTICS, ARRAY_LENGTH_INDEX_CORRECTION } from './constants';
+import { TEXT_STATISTICS, ARRAY_LENGTH_INDEX_CORRECTION, CHART_SETTINGS } from './constants';
+import addChart from './Chart';
 
 const factory = new DOMElementCreator();
 
@@ -56,9 +57,14 @@ export default class StatisticsPage {
 
 	getStatisticsPage() {
 		const chart = factory.create({
-			elem: TAGS.DIV,
+			elem: TAGS.CANVAS,
 			classes: ['statistics-scale__chart'],
 			id: 'chart',
+			attr: [{
+				width: CHART_SETTINGS.WIDTH
+			}, {
+				height: CHART_SETTINGS.HEIGHT
+			}],
 		});
 
 		const sectionChart = factory.create({
@@ -106,6 +112,8 @@ export default class StatisticsPage {
 			classes: ['wrapper'],
 			child: [sectionChart, sectionGames],
 		});
+
+		addChart();
 
 		return wrapper;
 	}
