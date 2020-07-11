@@ -1,4 +1,3 @@
-
 import './sass/style.scss';
 
 import './js/authorization/NewUser';
@@ -17,4 +16,3 @@ async function initial() {
 }
 
 initial();
-

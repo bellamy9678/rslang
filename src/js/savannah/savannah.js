@@ -5,23 +5,14 @@ export default function savannah() {
 	window.addEventListener('load', () => {
 		createMainPage();
 		const startingButton = document.querySelector('.starting-button');
-		const infoContainer = document.querySelector('.info');
-		const main = document.querySelector('.info-wrapper');
-		const hint = document.querySelector('.hint');
+		// const infoContainer = document.querySelector('.info');
+		// const main = document.querySelector('.info-wrapper');
+		// const hint = document.querySelector('.hint');
 		const volumeContainer = document.querySelector('.volume-settings');
 		const volumeOn = document.querySelector('.volume-up-icon');
 		const volumeOff = document.querySelector('.volume-mute-icon');
 
-		async function game() {
-			const loader = document.createElement('DIV');
-			loader.classList.add('loader');
-			infoContainer.remove();
-			hint.style.visibility = 'visible';
-			main.prepend(loader);
-			generateElements();
-		}
-
-		startingButton.addEventListener('click', game);
+		startingButton.addEventListener('click', generateElements);
 
 		volumeContainer.addEventListener('click', () => {
 			if (volumeOn.style.display === 'none') {
