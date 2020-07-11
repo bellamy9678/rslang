@@ -1,0 +1,180 @@
+$elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
+$level-yellow: yellow;
+$level-bronze: rgb(255, 115, 0);
+$level-red: red;
+
+.main {
+	position: relative;
+	width: 496px;
+	height: 396px;
+	margin: 0 auto 55px;
+	box-shadow: $elements-shadow;
+	border-radius: 8px;
+	background-color: white;
+	border: 1px solid #bbb;
+	transition: box-shadow 0.3s ease-in-out;
+
+	&__level {
+		height: 20%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	&__word {
+		height: 10%;
+		text-align: center;
+		line-height: 56px;
+    font-size: 3rem;
+	}
+	&__translation {
+		height: 10%;
+		text-align: center;
+		font-size: 2.5rem;
+		line-height: 54px;
+	}
+	&__wrong-right-answer {
+		height: 14%;
+		width: 86%;
+    border-bottom: 1px dotted grey;
+		margin: auto;
+		position: relative;
+
+	}
+	&__buttons {
+		width: 51%;
+    margin: 32px auto 0;
+    display: flex;
+    justify-content: space-between;
+	}
+	&__play_audio_btn {
+		width: 24px;
+    position: absolute;
+    bottom: -48px;
+    right: 6px;
+		height: 20px;
+		@include bg-cover("../../src/assets/images/sprint/speaker.png");
+		border: none;
+    background-color: transparent;
+    background-size: 19px 19px;
+		&--active {
+			background-color: green;
+		}
+	}
+	&__keyboard_btns_container {
+		position: absolute;
+    width: 62px;
+    height: 50px;
+    left: calc(50% - 31px);
+    bottom: -26px;
+    border-left: 1px dashed grey;
+    border-right: 1px dashed grey;
+	}
+}
+
+.level_star {
+	@include bg-cover("../../src/assets/images/sprint/star.png");
+	width: 30px;
+	height: 30px;
+}
+
+.keyboard {
+	&__key_left, &__key_right {
+		height: 30px;
+		width: 30px;
+		position: absolute;
+		bottom: -24px;
+	}
+	&__key_left {
+		left: -19px;
+		@include bg-cover("../../src/assets/images/sprint/left.png");
+
+	}
+	&__key_right {
+		right: -19px;
+		@include bg-cover("../../src/assets/images/sprint/right.png");
+	}
+}
+
+.timer-group {
+	width: 66px;
+	height: 66px;
+	position: absolute;
+	top: 45px;
+	right: -171px;
+	border-radius: 50%;
+}
+
+.button {
+	&--wrong, &--correct {
+		width: 45%;
+		color: white;
+	}
+	&--wrong {
+		background-color: red;
+	}
+	&--correct {
+		background-color: green;
+	}
+}
+
+.score {
+	height: 91px;
+	text-align: center;
+	font-size: 4rem;
+	line-height: 91px;
+}
+
+.sublevel {
+	height: 20%;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	color: white;
+	text-align: center;
+	font-size: 2rem;
+	&--active {
+		background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='#F6F6F6' fill-opacity='.5' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+		background-size: unset;
+		background-repeat: repeat;
+		box-shadow: $elements-shadow;
+	}
+	&__dots {
+		margin: auto;
+		height: 48%;
+		display: flex;
+		width: 60px;
+		justify-content: space-between;
+	}
+	&__dot {
+		height: 16px;
+    width: 16px;
+    border-radius: 50%;
+		background-color: grey;
+		margin-top: 33%;
+		&--right {
+		@include bg-cover('../assets/images/sprint/correct.png');
+		}
+	}
+}
+
+.indicator {
+	transition: .2s;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	left: calc(50% - 25px);
+	bottom: -25px;
+	opacity: 0;
+}
+
+#time {
+	text-align: center;
+	line-height: 66px;
+	font-size: 3rem;
+}
+
+
+
+
+
+
+

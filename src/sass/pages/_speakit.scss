@@ -1,0 +1,159 @@
+
+* {
+  box-sizing: border-box;
+}
+
+
+.main-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1140px;
+  min-height: 100vh;
+}
+// Start Page
+.start-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 10px;
+  margin-top: 140px;
+  outline: none;
+}
+.game-name {
+  @include font($size: 4rem, $weight: 600);
+  letter-spacing: 1rem;
+}
+.description {
+  max-width: 600px;
+  margin: 0 auto 60px;  
+}
+.description_p {
+  @include font($size: 2.4rem, $weight: 300);
+  margin-bottom: 20px;
+}
+
+.start-btn {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  min-width: 200px;
+  &:hover {
+    @extend %transition;
+    background-color: $color-additional;
+  }
+}
+
+.level-container {
+	margin-bottom: 40px;
+}
+
+#level {
+	margin-right: 30px;
+	margin-left:15px;
+}
+
+#round {
+	margin-left:15px;
+}
+
+
+.speak, .restart, .finish, .stop-speak {
+  min-width: 200px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  margin-right: 20px;
+  &:hover {
+    @extend %transition;
+    background-color: $color-additional;
+  }
+}
+
+.words-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 33px;
+}
+.word {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 2rem 1rem 1rem 4rem;
+  @include font($size: 2.4rem, $height: 1.4);
+  min-width: 15rem;
+  min-height: 7rem;
+  margin: 1rem;
+  border: 1px solid rgb(206, 212, 218);
+  border-radius: 5px;
+}
+.volume {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  width: 20px;
+  height: 20px
+}
+.word-output {
+    display: block;
+    position: relative;
+    border: 0;
+    border-bottom: 1px solid rgb(206, 212, 218);
+    background-color: transparent;
+    padding: 5px 20px;
+    margin: 0 auto;
+    margin-bottom: 14px;
+    height: 50px;
+    max-width: 960px;
+    @include font($size: 2.2rem, $height: 4rem);
+    color: $color-text-dark;
+    text-align: center;
+}
+.micro {
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  width: 20px;
+}
+
+.image-container {  
+	margin: 10px auto 5px;
+}
+.current-image {
+  width: 390px;
+  display: block;
+  height: 260px;
+  margin-bottom: 10px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 5px 5px 25px rgba(118,118,118,.25);
+  margin: auto;
+}
+.current-transl {
+  color: rgba(14, 30, 37, .7);
+  text-align: center;
+  min-height: 44px;
+  margin-top: 20px;
+  font-size: 25px;
+}
+
+.word-writing {
+	margin-bottom: 5px;
+}
+
+.buttons-container {
+	margin-top: 10px;
+}
+
+.active {
+  border: 1px solid rgb(0, 173, 159);
+  background-color: rgba(0, 173, 159, .15);
+}
+
+.none {
+  display: none;
+}

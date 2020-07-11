@@ -1,0 +1,12 @@
+.dictionary {
+	&__row {
+		display: flex;
+	}
+
+	&__cell {
+		border: solid 1px black;
+		flex-basis: 33%;
+		@include font($size: 1.6rem);
+		padding: 5px 10px;
+	}
+}
