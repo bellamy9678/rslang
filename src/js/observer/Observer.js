@@ -1,4 +1,4 @@
-export default class Observer {
+class Observer {
 	constructor() {
 		this.events = {};
 	}
@@ -11,16 +11,20 @@ export default class Observer {
 	}
 
 	unsubscribe(event) {
-		if (this.events[event]) {
-			delete this.events[event];
+		if (this.events[event.type]) {
+			delete this.events[event.type];
+			console.log(this.events);
 		}
 	}
 
-	call(event, obj) {
-		if (this.events[event]) {
-			this.events[event].forEach((callback) => {
-				callback(obj);
+	call(event) {
+		if (this.events[event.type]) {
+			this.events[event.type].forEach((callback) => {
+				callback(event);
 			});
 		}
 	}
 }
+
+const eventObserver = new Observer();
+export default eventObserver;

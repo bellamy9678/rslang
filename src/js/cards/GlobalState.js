@@ -110,6 +110,9 @@ export default class GlobalState {
 			elem: TAGS.DIV,
 			classes: 'wrapper',
 		});
+		// CARD_CONTAINER
+		const app = document.querySelector('.app');
+		app.firstChild.remove();
 		this.container.append(wrapper);
 	}
 
