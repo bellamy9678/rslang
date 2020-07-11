@@ -2,8 +2,10 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 
 import TAGS from '../shared/Tags.json';
 
+// import finishText from './OurGameConsts';
+
 export default function initMain() {
-	const newElem = new DOMElementCreator();	
+	const newElem = new DOMElementCreator();
 	
 	const engWordsContainer = newElem.create({
 		elem: TAGS.DIV,

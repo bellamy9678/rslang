@@ -1,9 +1,39 @@
 * {
 	box-sizing: border-box;
 }
+
+$finish-btn-color: #ffd700;
+
 .game-container {
 	display: flex;
   max-width: 940px;
+}
+
+.game-control {
+	display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+  margin: 10px 0;
+}
+.game-score {
+	@include font (2.4rem, $weight: bold);
+  color: #ffd700;
+  border: 1px solid #008000;
+  padding-top: 10px;
+  width: 200px;
+  text-align: center;
+  border-radius: 5px;
+  background-color: green;
+}
+
+.finish-btn {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  min-width: 200px;
+  &:hover {
+    @extend %transition;
+		background-color: $finish-btn-color;
+		border: 1px solid $finish-btn-color;
+  }
 }
 
 .english-container, .translation-container {
@@ -20,16 +50,54 @@
 .word, .word-translation {
 	width: 130px;
   height: 90px;
-  border: 1px solid #000;
   font-size: 14px;
   font-weight: 900;
   text-align: center;
   margin-right: 3px;
-  padding-top: 35px;
+	padding-top: 35px;
+	word-break: break-all;
+	cursor: pointer;
+	margin-bottom: 10px;
 }
 
-.chosen, .active {
-	background-color: gray;
+.word:nth-child(even) {
+  border-radius: 68% 32% 16% 84% / 54% 47% 53% 46%;
+  background-image: linear-gradient(to right, #9EEFE1 0%, #4830F0 51%, #9EEFE1 100%);
+	background-size: 200% auto;
+	border: 2px solid #6d5ae6;
+	box-shadow: 0 8px 15px rgba(0,0,0,.1);
+  transition: .5s;
+}
+
+.word:nth-child(even):hover {
+	background-position: right center;
+}
+
+.word:nth-child(odd) {
+	border-radius: 6% 94% 11% 89% / 62% 43% 57% 38%;
+	background-image: linear-gradient(to right, #d41c9d 0%, #eec2df 51%, #f766c6 100%);
+	background-size: 200% auto;
+	box-shadow: 0 8px 15px rgba(0,0,0,.1);
+	border: 2px solid  #f06ec9;
+	transition: .5s;
+}
+
+.word:nth-child(odd):hover {
+	background-position: right center;
+}
+
+.word-translation {
+	@include bg-cover("../../src/assets/images/unnamed.png");
+}
+
+.word:nth-child(odd).chosen, .word:nth-child(even).chosen {
+	background-image: none;
+}
+
+.active {
+	background-image: none;
+	border-radius: 15px;
+	box-shadow: 0 8px 15px rgba(0,0,0,.3);
 }
 
 .green {

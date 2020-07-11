@@ -16,7 +16,9 @@ import initStartPage from './StartPage';
 
 import Result from '../game_result/Result';
 
-import { emptyString, finishText, statisticText, newGameText } from './OurGameConsts';
+import { emptyString, statisticText, newGameText } from './OurGameConsts';
+
+import createHeader from './GameHeader';
 
 async function getData(url) {
 	const response = await fetch(url);
@@ -55,21 +57,10 @@ function initGame() {
 	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();
 
-	const score = newElem.create({
-		elem: TAGS.DIV,
-		classes: ['game-score', 'none'],
-	});
-
-	const finishBtn = newElem.create({
-		elem: TAGS.BUTTON,
-		classes: ['start-btn', 'button', 'button_colored'],  
-		child: finishText,
-	});
-
 	const wrapper = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['wrapper', 'ourgame__wrapper'],  
-		child: [initStartPage(), score, initMain(), finishBtn],
+		child: [initStartPage(), createHeader(), initMain()],
 	});
 
 	app.append(wrapper);
@@ -81,6 +72,7 @@ function initGame() {
 	const translationContainer = document.querySelector('.translation-container');
 	const engWords = document.getElementsByClassName('word');
 	const startBtn = document.querySelector('.start-btn');
+	const finishBtn = document.querySelector('.finish-btn');
 	const translation = document.getElementsByClassName('word-translation');
 	const points = document.querySelector('.game-score');
 	const gameResult = new Result();
@@ -163,10 +155,10 @@ function initGame() {
 			
 			if (word !== null && transl !== null) {
 				if( word.textContent === transl.dataset.word) {
-					word.classList.remove('chosen');
-					transl.classList.remove('active');
-					transl.classList.add('invisible');
 					word.classList.add('invisible');
+					transl.classList.add('invisible');					
+					word.classList.remove('chosen');
+					transl.classList.remove('active');					
 					correctSound.play();
 					wordsNumber -= 1;
 					if( !word.classList.contains('yellow')) {
