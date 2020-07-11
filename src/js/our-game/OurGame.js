@@ -19,6 +19,8 @@ import Result from '../game_result/Result';
 import { emptyString, statisticText, newGameText } from './OurGameConsts';
 
 import createHeader from './GameHeader';
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 async function getData(url) {
 	const response = await fetch(url);
@@ -48,7 +50,7 @@ function GetAnswers(item) {
 
 async function getWords(group, page) {
 	const url = `${API}words?group=${group}&page=${page}`;
-	const data = await getData(url); 
+	const data = await getData(url);
 	return data.map(word => new Word(word));
 }
 
@@ -59,7 +61,7 @@ function initGame() {
 
 	const wrapper = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['wrapper', 'ourgame__wrapper'],  
+		classes: ['wrapper', 'ourgame__wrapper'],
 		child: [initStartPage(), createHeader(), initMain()],
 	});
 
@@ -91,7 +93,7 @@ function initGame() {
 			let words = res.slice(zero, wordsNumber).map(item => renderWords(item));
 			words = shuffle(words);
 			words.forEach(el => engWordsContainer.append(el));
-		
+
 			let translations =res.slice(0, 15).map(item => renderTranslate(item));
 			translations = shuffle(translations);
 			translations.forEach(el => translationContainer.append(el));
@@ -124,24 +126,32 @@ function initGame() {
 		};
 
 		this.resultBtnHandler = () => {
-			
+
 			const statisticBtn = newElem.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn', 'stat'],
 				child: statisticText,
 			});
-	
+
 			const newGameBtn = newElem.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn', 'new-btn'],
 				child: newGameText,
 			});
-	
-	
+
+
 			statisticBtn.addEventListener('click', this.removeAllListeners);
-	
+
 			newGameBtn.addEventListener('click', this.startNewGame);
-	
+
+			const resultPoints = {
+				name: GAMES_NAMES.OUR,
+				result:
+				guessed.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
+				([...engWords].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+			};
+			Statistics.putGamesResult(resultPoints);
+
 			gameResult.showResult({
 				rightAnswers: guessed.map(item => new GetAnswers(item)),
 				wrongAnswers:  ([...engWords].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
@@ -153,13 +163,13 @@ function initGame() {
 		this.compareWords = () =>{
 			const word = document.querySelector('.chosen');
 			const transl = document.querySelector('.active');
-			
+
 			if (word !== null && transl !== null) {
 				if( word.textContent === transl.dataset.word) {
 					word.classList.add('invisible');
-					transl.classList.add('invisible');					
+					transl.classList.add('invisible');
 					word.classList.remove('chosen');
-					transl.classList.remove('active');					
+					transl.classList.remove('active');
 					correctSound.play();
 					wordsNumber -= 1;
 					if( !word.classList.contains('wrong')) {
@@ -169,41 +179,14 @@ function initGame() {
 					if (wordsNumber === zero) {
 						this.resultBtnHandler();
 					}
-				
+
 				} else {
 					word.classList.remove('chosen');
 					transl.classList.remove('active');
 					word.classList.add('wrong');
-					wrongSound.play();			
+					wrongSound.play();
 				}
-			}	
-		};
-	
-	
-		this.gameHandler = (event) => {
-			if (event.target.classList.contains('word')) {
-				if(event.target.classList.contains('chosen')) {
-					event.target.classList.toggle('chosen');
-				} else { 
-					[...engWords].forEach( el => {
-						el.classList.remove('chosen');
-						event.target.classList.add('chosen');		
-					});
-					this.compareWords();
-				}		
 			}
-		
-			if (event.target.classList.contains('word-translation')) {
-				if (event.target.classList.contains('active')) {
-					event.target.classList.toggle('active');
-				} else { 
-					[...translation].forEach( el => {
-						el.classList.remove('active');
-						event.target.classList.add('active');				
-					});
-				}
-				this.compareWords();
-			}	
 		};
 
 
@@ -211,26 +194,53 @@ function initGame() {
 			if (event.target.classList.contains('word')) {
 				if(event.target.classList.contains('chosen')) {
 					event.target.classList.toggle('chosen');
-				} else { 
+				} else {
 					[...engWords].forEach( el => {
 						el.classList.remove('chosen');
-						event.target.classList.add('chosen');		
+						event.target.classList.add('chosen');
 					});
 					this.compareWords();
-				}		
+				}
 			}
-		
+
 			if (event.target.classList.contains('word-translation')) {
 				if (event.target.classList.contains('active')) {
 					event.target.classList.toggle('active');
-				} else { 
+				} else {
 					[...translation].forEach( el => {
 						el.classList.remove('active');
-						event.target.classList.add('active');				
+						event.target.classList.add('active');
 					});
 				}
 				this.compareWords();
-			}	
+			}
+		};
+
+
+		this.gameHandler = (event) => {
+			if (event.target.classList.contains('word')) {
+				if(event.target.classList.contains('chosen')) {
+					event.target.classList.toggle('chosen');
+				} else {
+					[...engWords].forEach( el => {
+						el.classList.remove('chosen');
+						event.target.classList.add('chosen');
+					});
+					this.compareWords();
+				}
+			}
+
+			if (event.target.classList.contains('word-translation')) {
+				if (event.target.classList.contains('active')) {
+					event.target.classList.toggle('active');
+				} else {
+					[...translation].forEach( el => {
+						el.classList.remove('active');
+						event.target.classList.add('active');
+					});
+				}
+				this.compareWords();
+			}
 		};
 
 		this.startHandler = () => {
