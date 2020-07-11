@@ -101,7 +101,7 @@ function initGame() {
 
 	function GameHandlers() {
 
-		this.statisticBtn = document.querySelector('.stat');
+		// statisticBtn = document.getElementsByClassName('.stat');
 
 		this.startNewGame =  () => {
 			gameResult.closeResultWindow();
@@ -121,6 +121,7 @@ function initGame() {
 			document.removeEventListener('click', this.gameHandler);
 			finishBtn.removeEventListener('click', this.resultBtnHandler);
 			this.statisticBtn.removeEventListener('click', this.removeAllListeners);
+			app.remove(wrapper);
 		};
 
 		this.resultBtnHandler = () => {
@@ -137,8 +138,8 @@ function initGame() {
 				child: newGameText,
 			});
 	
-	
-			statisticBtn.addEventListener('click', this.removeAllListeners);
+			this.statisticBtn = statisticBtn;
+			this.statisticBtn.addEventListener('click', this.removeAllListeners);
 	
 			newGameBtn.addEventListener('click', this.startNewGame);
 	
