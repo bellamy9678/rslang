@@ -1,6 +1,9 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import {ERROR_SOUND_SRC, CORRECT_SOUND_SRC} from './consts';
+import {
+	ERROR_SOUND_SRC,
+	CORRECT_SOUND_SRC
+} from './consts';
 
 export default function createMainPage() {
 	const creator = new DOMElementCreator();
@@ -172,5 +175,11 @@ export default function createMainPage() {
 		classes: 'info-wrapper',
 		child: [infoContainer]
 	});
-	app.append(settings, infoWrapper, iconHolder);
+
+	const wrapper = creator.create({
+		elem: TAGS.DIV,
+		classes: ['wrapper', 'savannah__wrapper'],
+		child: [settings, infoWrapper, iconHolder],
+	});
+	app.append(wrapper);
 }

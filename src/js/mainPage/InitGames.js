@@ -7,17 +7,18 @@ import {
 	initEnglishPuzzle,
 	startPuzzleGame
 } from '../english_puzzle/main';
-// import startSpekItGame from '../speakit/speakit';
+import createSpeakItGame from '../speakit/speakit';
 import SprintGame from '../sprint/Game';
 import audioChallenge from '../audio-challenge/audio-challenge';
+import savannah from '../savannah/savannah';
 
-function addStartScreenToMiniGame(name, descr, startGamecallback) {
+function addStartScreenToMiniGame(name, descr, startGameCallback) {
 	const startScreen = new StartScreen();
 	startScreen.showStartScreen({
 		name,
 		descr,
 		callback() {
-			startGamecallback();
+			startGameCallback();
 		},
 	});
 }
@@ -32,6 +33,11 @@ export default function startMiniGame() {
 		game.addEventListener('click', event => {
 			switch (event.currentTarget.id) {
 			case 'savannah':
+				name = GAMES.savannah.name;
+				descr = GAMES.savannah.description;
+				callback = () => {
+					savannah();
+				};
 				break;
 			case 'english-puzzle':
 				name = GAMES.englishPuzzle.name;
@@ -42,11 +48,11 @@ export default function startMiniGame() {
 				};
 				break;
 			case 'speak-it':
-				// name = GAMES.speakIt.name;
-				// descr = GAMES.speakIt.description;
-				// callback = () => {
-				// 	startSpekItGame();
-				// };
+				name = GAMES.speakIt.name;
+				descr = GAMES.speakIt.description;
+				callback = () => {
+					createSpeakItGame();
+				};
 				break;
 			case 'audio-challenge':
 				name = GAMES.audioChallenge.name;

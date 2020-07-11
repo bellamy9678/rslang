@@ -96,7 +96,7 @@ export const GAMES = {
 	},
 	savannah: {
 		name: 'Savannah',
-		description: '',
+		description: 'Train Savannah develops vocabulary. The more words you know, the more points you\'ll get.',
 	},
 	audioChallenge: {
 		name: 'Audio Challenge',

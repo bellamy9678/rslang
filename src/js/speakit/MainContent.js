@@ -102,7 +102,7 @@ export default function initMainContent() {
 
 	const mainWrapper = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['main-container', 'none'],
+		classes: ['main-container'],
 		child: [imgCont, wordsContainer, imgAudio, btnContainer],
 	});
 
