@@ -41,7 +41,7 @@ export default function createWelcomePage(username) {
 	});
 
 	const title = newElem.create({
-		elem: TAGS.h1,
+		elem: TAGS.H1,
 		classes: 'welcome__title',
 		child: [TEXT.welcomePage.title.leftPath, username, TEXT.welcomePage.title.rightPath],
 	});

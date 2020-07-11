@@ -6,8 +6,10 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
+import StartScreen from '../start_screen/StartScreen';
 
 const factory = new DOMElementCreator();
+const startScreen = new StartScreen();
 const result = new Result();
 
 export default class Game {
@@ -35,6 +37,14 @@ export default class Game {
 		this.wordShowed = false;
 	}
 
+	initGameWithStartScreen() {
+		startScreen.showStartScreen({
+			name: 'English Puzzle',
+			descr: 'Click on words, collect phrases. Words can be drag and drop.',
+			callback: this.start.bind(this)
+		});
+	}
+
 	init() {
 		GameField.generateField();
 		this.MAIN_CONTAINER = document.getElementById('main_container');
@@ -56,6 +66,9 @@ export default class Game {
 	}
 
 	start() {
+		const data = startScreen.getData();
+		console.log(data);
+		this.init();
 		this.getData();
 	}
 
