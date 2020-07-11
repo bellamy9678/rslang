@@ -39,12 +39,12 @@ $finish-btn-color: #ffd700;
 .english-container, .translation-container {
 	width: 470px;
 	display: flex;
-	padding-right: 29px;
-	padding-left: 29px;
+	padding: 40px 29px;	
 	flex-wrap: wrap;
-	padding-top: 40px;
-	padding-bottom: 40px;
 	border: 1px solid red;
+	@include media-tablet {
+		padding: 20px 29px;
+	}
 }
 
 .word, .word-translation {
@@ -53,11 +53,19 @@ $finish-btn-color: #ffd700;
   font-size: 14px;
   font-weight: 900;
   text-align: center;
-  margin-right: 3px;
 	padding-top: 35px;
 	word-break: break-all;
 	cursor: pointer;
 	margin-bottom: 10px;
+	&:not(:nth-child(3n)) {
+		margin-right: 10px;
+	}
+@include media-tablet {
+	&:not(:nth-child(even)) {
+		margin-right: 10px;
+	}
+}
+
 }
 
 .word:nth-child(even) {
@@ -87,7 +95,7 @@ $finish-btn-color: #ffd700;
 }
 
 .word-translation {
-	@include bg-cover("../../src/assets/images/unnamed.png");
+	@include bg-cover("../../src/assets/images/paper.png");
 }
 
 .word:nth-child(odd).chosen, .word:nth-child(even).chosen {
@@ -100,11 +108,9 @@ $finish-btn-color: #ffd700;
 	box-shadow: 0 8px 15px rgba(0,0,0,.3);
 }
 
-.green {
-	background-color: green;
-}
-.yellow {
-	background-color: yellow;
+.word:nth-child(odd).wrong, .word:nth-child(even).wrong {
+	background-image: none;
+	background-color: gray;
 }
 
 .invisible {
@@ -113,4 +119,8 @@ $finish-btn-color: #ffd700;
 
 .none {
 	display: none;
+}
+
+.new-btn {
+	margin-right: 3px;
 }

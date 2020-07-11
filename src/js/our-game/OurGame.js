@@ -78,7 +78,7 @@ function initGame() {
 	const gameResult = new Result();
 	const correctSound = new Audio('https://raw.githubusercontent.com/garza0/rslang-data/master/correct.mp3');
 	const wrongSound = new Audio('https://raw.githubusercontent.com/garza0/rslang-data/master/wrong.mp3');
-	const notGuessed = [];
+	const guessed = [];
 	const zero = 0;
 	points.textContent = zero;
 	let wordsNumber = 15;
@@ -110,7 +110,8 @@ function initGame() {
 			gameContainer.classList.add('none');
 			[...engWords].forEach(el => el.remove());
 			[...translation].forEach(el => el.remove());
-			points.textContent = emptyString;
+			points.textContent = '0';
+			guessed.length = zero;
 			initGetWords();
 		};
 
@@ -142,8 +143,8 @@ function initGame() {
 			newGameBtn.addEventListener('click', this.startNewGame);
 	
 			gameResult.showResult({
-				rightAnswers: ([...engWords].filter((item) => (!notGuessed.includes(item)))).map(item => new GetAnswers(item)),
-				wrongAnswers:  notGuessed.map(item => new GetAnswers(item)),
+				rightAnswers: guessed.map(item => new GetAnswers(item)),
+				wrongAnswers:  ([...engWords].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
 				points: points.textContent,
 				buttons: [newGameBtn, statisticBtn],
 			});
@@ -161,8 +162,9 @@ function initGame() {
 					transl.classList.remove('active');					
 					correctSound.play();
 					wordsNumber -= 1;
-					if( !word.classList.contains('yellow')) {
+					if( !word.classList.contains('wrong')) {
 						points.textContent = +(points.textContent) + 100;
+						guessed.push(word);
 					}
 					if (wordsNumber === zero) {
 						this.resultBtnHandler();
@@ -171,8 +173,7 @@ function initGame() {
 				} else {
 					word.classList.remove('chosen');
 					transl.classList.remove('active');
-					word.classList.add('yellow');
-					notGuessed.push(word);
+					word.classList.add('wrong');
 					wrongSound.play();			
 				}
 			}	
