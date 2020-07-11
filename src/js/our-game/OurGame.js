@@ -101,8 +101,7 @@ function initGame() {
 
 	function GameHandlers() {
 
-		// statisticBtn = document.getElementsByClassName('.stat');
-
+		
 		this.startNewGame =  () => {
 			gameResult.closeResultWindow();
 			startPage.classList.remove('none');
@@ -139,7 +138,7 @@ function initGame() {
 			});
 	
 			this.statisticBtn = statisticBtn;
-			this.statisticBtn.addEventListener('click', this.removeAllListeners);
+			this.statisticBtn.addEventListener('click', this.removeAllListeners); // перенаправить на станицу статистики
 	
 			newGameBtn.addEventListener('click', this.startNewGame);
 	
