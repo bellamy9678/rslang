@@ -1,5 +1,5 @@
 import { ASSETS_STORAGE } from '../shared/Constants';
-import Service from '../words_service/Service'
+import Service from '../words_service/Service';
 
 export default async function giveWords (level, round) {
 	const words = await Service.getGameSpecificWords(level, round);
@@ -9,7 +9,7 @@ export default async function giveWords (level, round) {
 			translate: word.translate,
 			transcription: word.transcription,
 			audio: `${ASSETS_STORAGE}${word.audio}`
-		}
+		};
 	}
 	return words.map(word => new Word(word));
 }
