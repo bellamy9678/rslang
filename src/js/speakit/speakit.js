@@ -1,19 +1,19 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
-
-import { API, ASSETS_STORAGE } from '../shared/Constants';
-
+import {
+	API,
+	ASSETS_STORAGE
+} from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
-
 import initStartPage from './StartPage';
-
 import initMainContent from './MainContent';
-
 import renderWords from './RenderWords';
-
 import Result from '../game_result/Result';
-
-import { returnBtnText, newGameText, statisticText, emptyString } from './speakconst';
-
+import {
+	returnBtnText,
+	newGameText,
+	statisticText,
+	emptyString
+} from './speakconst';
 
 // Creat DOM
 const app = document.querySelector('.app');
@@ -24,8 +24,6 @@ const wrapper = newElem.create({
 	classes: ['wrapper', 'speakit__wrapper'],
 	child: [initStartPage(), initMainContent()],
 });
-
-app.append(wrapper);
 
 const mainWrapper = document.querySelector('.main-container');
 const currentImg = document.querySelector('.current-image');
@@ -50,7 +48,6 @@ let trainMode = true;
 const zero = 0;
 const guessedAll = 10;
 
-
 async function getData(url) {
 	const response = await fetch(url);
 	const data = await response.json();
@@ -69,7 +66,6 @@ function Word(word) {
 	this.exampleTranslate = word.textExampleTranslate;
 	this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
 }
-
 
 // Speech recognition
 const SpeechRecognition = window.webkitSpeechRecognition;
@@ -124,7 +120,7 @@ function GameHandlers() {
 	this.returnButton = document.querySelector('.return-btn');
 	this.newGameButton = document.querySelector('.new-game');
 	this.statButton = document.querySelector('.statistic');
-	
+
 	this.clickHandler = (event) => {
 		if (event.target.classList.contains('word') && trainMode) {
 			const translateText = event.target.dataset.transl;
@@ -152,7 +148,7 @@ function GameHandlers() {
 	};
 
 
-	// statistic btn remove all listeners 
+	// statistic btn remove all listeners
 	this.statisticHandler = () => {
 		document.removeEventListener('click', this.clickHandler);
 		restartBtn.removeEventListener('click', this.restartHandler);
@@ -181,7 +177,7 @@ function GameHandlers() {
 
 
 	// speech
-	this.handleRecognition = ()=> {
+	this.handleRecognition = () => {
 		[...words].forEach(el => {
 			if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
 				if (!guessed.includes(el)) {
@@ -194,7 +190,7 @@ function GameHandlers() {
 				}
 			}
 		});
-	
+
 		recognition.start();
 	};
 
@@ -214,8 +210,8 @@ function GameHandlers() {
 		recognition.removeEventListener('end', this.handleRecognition);
 	};
 
-	// start speak button 
-	this.startSpeakHandler = ()=> {
+	// start speak button
+	this.startSpeakHandler = () => {
 		trainMode = false;
 		output.classList.remove('none');
 		[...words].forEach(el => el.classList.remove('active'));
@@ -261,7 +257,7 @@ function GameHandlers() {
 		}
 	};
 
-	
+
 	// modal window
 	this.resultBtnHandler = () => {
 		const resultReturnBtn = newElem.create({
@@ -269,25 +265,25 @@ function GameHandlers() {
 			classes: ['result__button', 'result__continue-btn', 'return-btn'],
 			child: returnBtnText,
 		});
-	
+
 		const resultNewGameBtn = newElem.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn', 'new-game'],
 			child: newGameText,
 		});
-	
+
 		const statisticBtn = newElem.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn', 'statistic'],
 			child: statisticText,
 		});
-	
+
 		statisticBtn.addEventListener('click', this.statisticHandler); // дописать метод, показывающий статистику по игре);
-	
+
 		resultReturnBtn.addEventListener('click', this.returnHandler);
-	
+
 		resultNewGameBtn.addEventListener('click', this.newGameHandler);
-	
+
 		myResult.showResult({
 			rightAnswers: guessed.map(item => new GetAnswers(item)),
 			wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
@@ -301,5 +297,9 @@ function GameHandlers() {
 
 }
 
-const speakHandlers = new GameHandlers();
-speakHandlers.addAllListeners();
+export default function startSpeakItGame() {
+	app.append(wrapper);
+	const speakHandlers = new GameHandlers();
+	speakHandlers.addAllListeners();
+	console.log('speak');
+}
