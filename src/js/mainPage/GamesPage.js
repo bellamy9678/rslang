@@ -126,10 +126,16 @@ export default function createGamesPage() {
 		}],
 	});
 
+	const titleContainer = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['title__container'],
+		child: [titleImage, titleText],
+	});
+
 	const title = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['game__title'],
-		child: [titleImage, titleText],
+		child: [titleContainer],
 	});
 
 	const container2 = newElem.create({

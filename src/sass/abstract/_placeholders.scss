@@ -18,3 +18,15 @@
 		outline: none;
 	}
 }
+
+%square-game-box {
+	@include media-laptop {
+		box-sizing: border-box;
+		width: 220px;
+		height: 220px;
+		overflow: hidden;
+		margin: 7px;
+		border-radius: 5px;
+		padding: 10px;
+	}
+}
