@@ -13,7 +13,13 @@ $finish-btn-color: #ffd700;
 	display: flex;
   justify-content: space-between;
   padding: 0 50px;
-  margin: 10px 0;
+	margin: 10px 0;
+	@include media-mobile {
+		display: block;
+	}
+	@include media-mobilesmall {
+		padding: 0 30px;
+	}
 }
 .game-score {
 	@include font (2.4rem, $weight: bold);
@@ -23,7 +29,11 @@ $finish-btn-color: #ffd700;
   width: 200px;
   text-align: center;
   border-radius: 5px;
-  background-color: green;
+	background-color: green;
+	@include media-mobile {
+		padding: 10px 0;
+		margin-bottom: 20px;
+	}
 }
 
 .finish-btn {
@@ -37,23 +47,27 @@ $finish-btn-color: #ffd700;
 }
 
 .english-container, .translation-container {
-	width: 470px;
+	max-width: 470px;
 	display: flex;
-	padding: 40px 29px;	
+	padding: 40px 3px;	
 	flex-wrap: wrap;
-	border: 1px solid red;
 	@include media-tablet {
-		padding: 20px 29px;
+		padding: 20px 3px;
+	}
+	@include media-mobile {
+		padding: 20px 10px;
+	}
+	@include media-mobilesmall {
+		padding: 20px 0;
 	}
 }
 
 .word, .word-translation {
-	width: 130px;
-  height: 90px;
-  font-size: 14px;
-  font-weight: 900;
+	width: 145px;
+	height: 90px;
+	@include font (1.4rem, $weight: 900);
   text-align: center;
-	padding-top: 35px;
+	padding-top: 40px;
 	word-break: break-all;
 	cursor: pointer;
 	margin-bottom: 10px;
@@ -62,9 +76,19 @@ $finish-btn-color: #ffd700;
 	}
 @include media-tablet {
 	&:not(:nth-child(even)) {
-		margin-right: 10px;
+		margin-right: 35px;
 	}
 }
+@include media-mobile {
+	&:not(:nth-child(even)) {
+		margin-right: 0;
+	}
+}
+@include media-mobilesmall {
+	width: 125px;
+	font-size: 13px;
+}
+
 
 }
 
