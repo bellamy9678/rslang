@@ -4,7 +4,10 @@ import {
 } from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
-import StartPage from './StartPage';
+// import StartPage from './StartPage';
+import Game from '../english_puzzle/Game';
+
+const enPuzzle = new Game();
 
 
 window.addEventListener('load', () => {
@@ -12,11 +15,13 @@ window.addEventListener('load', () => {
 		const cookie = new CookieMonster();
 		const userName = cookie.getCookie(USER.NAME);
 		if (!userName) {
-			throw new Error ('Cookie not found');
+			throw new Error('Cookie not found');
 		}
 		showMainPage(userName);
 	} catch (error) {
-		StartPage.showStartPage();
+		enPuzzle.init();
+		enPuzzle.start();
+		// StartPage.showStartPage();
 	} finally {
 		Header.create();
 	}
