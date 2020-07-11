@@ -1,48 +1,42 @@
 @mixin font ($size, $height: $size, $weight: normal, $style: normal) {
-    font-size: $size;
-    font-style: $style;
-    font-weight: $weight;
-    line-height: $height;
+	font-size: $size;
+	font-style: $style;
+	font-weight: $weight;
+	line-height: $height;
 }
 
 @mixin bg-cover ($url) {
-    background-image: url($url);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+	background-image: url($url);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 @mixin img-size ($width, $height: $width) {
-    width: $width;
-    height: $height;
+	width: $width;
+	height: $height;
 }
 
 @mixin media-laptop {
-    @media (max-width: $content-width) {
-        @content;
-    }
-}
-
-@mixin media-desktop {
-    @media (max-width: $desktop-width) {
-        @content;
-    }
+	@media (max-width: $desktop-width) {
+		@content;
+	}
 }
 
 @mixin media-tablet {
-    @media (max-width: $tablet-width) {
-        @content;
-    }
+	@media (max-width: $tablet-width) {
+		@content;
+	}
 }
 
 @mixin media-mobile {
-    @media (max-width: $mobile-big-width) {
-        @content;
-    }
+	@media (max-width: $mobile-big-width) {
+		@content;
+	}
 }
 
 @mixin media-mobilesmall {
-    @media (max-width: $mobile-small-width) {
-        @content;
-    }
+	@media (max-width: $mobile-small-width) {
+		@content;
+	}
 }
