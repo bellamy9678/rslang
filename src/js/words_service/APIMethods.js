@@ -1,9 +1,12 @@
 import Word from './Word';
 import url from './url';
 import CookieMonster from '../utils/CookieMonster';
-import { USER } from '../utils/CookieConstants';
-import { URL_WORD_CATEGORY } from '../shared/Constants';
-import IntervalRepetition from './IntervalRepetition';
+import {
+	USER
+} from '../utils/CookieConstants';
+import {
+	URL_WORD_CATEGORY
+} from '../shared/Constants';
 
 const APIMethods = {};
 
@@ -97,12 +100,11 @@ APIMethods.getUserWordsByCategory = async function getUserWordsByCategory(
 	return data;
 };
 
-APIMethods.updateUserWord = async function updateUserWord(wordObj, addParams) {
+APIMethods.updateUserWord = async function (wordId, optional) {
 	const cookie = new CookieMonster();
 	const userToken = cookie.getCookie(USER.TOKEN);
-	const wordData = new IntervalRepetition(wordObj);
 	try {
-		const APIUrl = url.oneWord(wordData.wordId);
+		const APIUrl = url.oneWord(wordId);
 		const rawResponse = await fetch(APIUrl, {
 			method: 'PUT',
 			withCredentials: true,
@@ -111,7 +113,7 @@ APIMethods.updateUserWord = async function updateUserWord(wordObj, addParams) {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(addParams),
+			body: JSON.stringify(optional),
 		});
 		const data = await rawResponse.json();
 		console.log('IntervalRepetition -> updateUserWord -> data', data);

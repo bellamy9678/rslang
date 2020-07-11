@@ -16,6 +16,7 @@ import {
 } from '../shared/Text';
 import TAGS from '../shared/Tags.json';
 import WORDS_EVENTS from '../observer/WordsEvents';
+import eventObserver from '../observer/Observer';
 
 const fab = new DOMElementCreator();
 
@@ -325,14 +326,15 @@ export default class Card {
 			child: BUTTONS_WORDS.addToDifficult,
 		});
 
-		const addToEasyButtonEvent = new CustomEvent(
+		const addToDifficultButtonEvent = new CustomEvent(
 			WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT, {
 				detail: currentWord
 			}
 		);
 
 		addToDifficultButton.addEventListener('click', function addToDifficultButtonHandler() {
-			addToDifficultButton.dispatchEvent(addToEasyButtonEvent);
+			addToDifficultButton.dispatchEvent(addToDifficultButtonEvent);
+			eventObserver.call(addToDifficultButtonEvent);
 			addToDifficultButton.removeEventListener('click', addToDifficultButtonHandler);
 		});
 
@@ -355,6 +357,7 @@ export default class Card {
 		deleteFromDictionaryButton.addEventListener('click', function deleteFromDictionaryButtonHandler() {
 			deleteFromDictionaryButton.dispatchEvent(deleteFromDictionaryEvent);
 			document.dispatchEvent(deleteFromDictionaryEvent);
+			eventObserver.call(deleteFromDictionaryEvent);
 			deleteFromDictionaryButton.removeEventListener('click', deleteFromDictionaryButtonHandler);
 		});
 
@@ -452,7 +455,8 @@ export default class Card {
 
 		showAnswerButton.addEventListener('click', function showAnswerButtonHandler() {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
-			document.dispatchEvent(showAnswerButtonEvent);
+			// document.dispatchEvent(showAnswerButtonEvent);
+			eventObserver.call(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
 			buttonGroupComplexity.classList.remove(FADE_CLASS, HIDDEN_CLASS);
 			textExampleTranslate.classList.remove(FADE_CLASS, HIDDEN_CLASS);
@@ -465,25 +469,29 @@ export default class Card {
 
 		easyButton.addEventListener('click', function easyButtonHandler() {
 			easyButton.dispatchEvent(easyButtonEvent);
-			document.dispatchEvent(easyButtonEvent);
+			eventObserver.call(easyButtonEvent);
+			// document.dispatchEvent(easyButtonEvent);
 			easyButton.removeEventListener('click', easyButtonHandler);
 		});
 
 		goodButton.addEventListener('click', function goodButtonHandler() {
 			goodButton.dispatchEvent(goodButtonEvent);
-			document.dispatchEvent(goodButtonEvent);
+			eventObserver.call(goodButtonEvent);
+			// document.dispatchEvent(goodButtonEvent);
 			goodButton.removeEventListener('click', goodButtonHandler);
 		});
 
 		againButton.addEventListener('click', function againButtonHandler() {
 			againButton.dispatchEvent(againButtonEvent);
-			document.dispatchEvent(againButtonEvent);
+			eventObserver.call(againButtonEvent);
+			// document.dispatchEvent(againButtonEvent);
 			againButton.removeEventListener('click', againButtonHandler);
 		});
 
 		hardButton.addEventListener('click', function hardButtonHandler() {
 			hardButton.dispatchEvent(hardButtonEvent);
-			document.dispatchEvent(hardButtonEvent);
+			eventObserver.call(hardButtonEvent);
+			// document.dispatchEvent(hardButtonEvent);
 			hardButton.removeEventListener('click', hardButtonHandler);
 		});
 
