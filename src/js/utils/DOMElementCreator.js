@@ -28,23 +28,20 @@ export default class DOMElementCreator {
 		}
 
 		if (settingsObj.classes) {
-			const params = Array.isArray(settingsObj.classes)
-				? settingsObj.classes
-				: [settingsObj.classes];
+			const params = Array.isArray(settingsObj.classes) ?
+				settingsObj.classes : [settingsObj.classes];
 			DOMElementCreator.addClasses(element, params);
 		}
 
 		if (settingsObj.attr) {
-			const params = Array.isArray(settingsObj.attr)
-				? settingsObj.attr
-				: [settingsObj.attr];
+			const params = Array.isArray(settingsObj.attr) ?
+				settingsObj.attr : [settingsObj.attr];
 			DOMElementCreator.addAttributes(element, params);
 		}
 
 		if (settingsObj.child) {
-			const params = Array.isArray(settingsObj.child)
-				? settingsObj.child
-				: [settingsObj.child];
+			const params = Array.isArray(settingsObj.child) ?
+				settingsObj.child : [settingsObj.child];
 			DOMElementCreator.addChildren(element, params);
 		}
 

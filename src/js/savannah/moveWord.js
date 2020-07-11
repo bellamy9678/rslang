@@ -4,24 +4,30 @@ export default function moveWord() {
   const start = Date.now();
   const mainWordContainer = document.querySelector('.main-word');
   const allAnswers = document.querySelectorAll('.answers p');
-  const timer = setInterval(() => {
+  let requestId;
+  
+  function draw(time) {
+    mainWordContainer.style.top = `${time / 10}px`;
+  }
+
+  function step() {
     const timePassed = Date.now() - start;
     if (+(mainWordContainer.style.top.slice(START_INDEX, FINAL_INDEX)) >= REQUIRED_MARGIN) {
-      clearInterval(timer);
+      cancelAnimationFrame(requestId);
       return;
     }
-    function draw(time) {
-      mainWordContainer.style.top = `${time / 10}px`;
-    }
     draw(timePassed);
-  }, 21);
+    requestId = requestAnimationFrame(step);
+  }
+
+  step();
 
   allAnswers.forEach((item) => {
     item.addEventListener('click', () => {
-      clearInterval(timer);
+    cancelAnimationFrame(requestId);
     });
   });
   document.addEventListener('keydown', () => {
-    clearInterval(timer);
+    cancelAnimationFrame(requestId);
   });
 }

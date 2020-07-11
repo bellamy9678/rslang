@@ -11,7 +11,10 @@ const POSITION_OF_NUMBER = 5;
 const WORD_BEGGINING = 0;
 const WORD_ENDING = 5;
 const VALUE_OF_KEYS = 4;
-const fetchInfo = {page: 0};
+const fetchInfo = {
+  round: 0,
+  level: 0
+};
 const ERROR_SOUND_SRC = `https://raw.githubusercontent.com/garza0/rslang-data/master/wrong.mp3`;
 const CORRECT_SOUND_SRC = `https://raw.githubusercontent.com/garza0/rslang-data/master/correct.mp3`;
 const DELAY_BEFORE_GAME = 4000;

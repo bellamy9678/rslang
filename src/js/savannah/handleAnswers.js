@@ -1,4 +1,4 @@
-import {arrayWithRightAnswers, arrayWithWrongAnswers, WHITE_COLOR, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE} from './consts';
+import {arrayWithRightAnswers, arrayWithWrongAnswers, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE} from './consts';
 
 function handleWrongAnswer() {
   const mainWordContainer = document.querySelector('.main-word');
@@ -31,10 +31,8 @@ function handleRightAnswer() {
   }
   mainWordContainer.style.marginLeft = `${mainWordContainer.style.width / 2}px`;
   mainWordContainer.style.width = NEW_WIDTH;
+  mainWordContainer.style.overflow = 'hidden';
   arrayWithRightAnswers.push(mainWordContainer);
-  setTimeout(() => {
-    mainWordContainer.style.backgroundColor = WHITE_COLOR;
-  }, 900);
 }
 
 export {handleWrongAnswer, handleRightAnswer};

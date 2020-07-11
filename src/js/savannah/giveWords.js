@@ -1,16 +1,15 @@
-import fetchWords from './fetchWords';
-import { API, ASSETS_STORAGE } from '../shared/Constants';
+import { ASSETS_STORAGE } from '../shared/Constants';
+import Service from '../words_service/Service'
 
-export default async function giveWords (page) {
+export default async function giveWords (level, round) {
+	const words = await Service.getGameSpecificWords(level, round);
 	function Word(word) {
 		return {
 			word: word.word,
-			translate: word.wordTranslate,
+			translate: word.translate,
 			transcription: word.transcription,
 			audio: `${ASSETS_STORAGE}${word.audio}`
 		}
 	}
-	const url = `${API}words?page=${page}`;
-	const data = await fetchWords(url);
-	return data.map(word => new Word(word));
+	return words.map(word => new Word(word));
 }

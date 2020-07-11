@@ -3,8 +3,8 @@ import generateWordContainers from './generateWordContainers';
 import {arrForUniqness, arrForRandFunc, fetchInfo} from './consts';
 
 export default	async function defineArrays() {
-		fetchInfo.page += 1;
-		const allWords = await giveWords(fetchInfo.page);
+		fetchInfo.round += 1;
+		const allWords = await giveWords(fetchInfo.level, fetchInfo.round);
 		allWords.forEach(item => {
 			arrForUniqness.push(item);
 		});
