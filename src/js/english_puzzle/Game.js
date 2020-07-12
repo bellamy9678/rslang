@@ -1,4 +1,12 @@
-import { appContainer, rounds, levels, lines, API_URL, puzzlesGap, RESULT_WINDOW_BTN_CONTINUE } from './constants';
+import {
+	appContainer,
+	rounds,
+	levels,
+	lines,
+	API_URL,
+	puzzlesGap,
+	RESULT_WINDOW_BTN_CONTINUE
+} from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
@@ -19,8 +27,8 @@ export default class Game {
 		this.showListenBtnState = this.initState.audio || false;
 		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound = this.initState.round || 0;
-		this.currentLevel = this.initState.level || 0;
+		this.currentRound = this.initState.round || JSON.parse(localStorage.getItem('gameData')).level || 0;
+		this.currentLevel = this.initState.level || JSON.parse(localStorage.getItem('gameData')).round || 0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -47,19 +55,43 @@ export default class Game {
 		this.levelSelectBtn = document.querySelector('.controls__dropdown-level');
 		this.roundSelectBtn = document.querySelector('.controls__dropdown-round');
 
-		this.autoListeningBtn.addEventListener('click', () => { this.autoListeningBtnHandler(); });
-		this.showTranslationBtn.addEventListener('click', () => { this.showTranslationBtnHandler(); });
-		this.showListenBtn.addEventListener('click', () => { this.showListeningBtnHandler(); });
-		this.playAudioBtn.addEventListener('click', () => { this.playAudio(this.sentenceAudioLink); });
-		this.checkBtn.addEventListener('click', () => { this.checkBtnHandler(); });
-		this.iDontKnowBtn.addEventListener('click', () => { this.iDontKnowBtnHandler(); });
-		this.continueBtn.addEventListener('click', () => { this.continueBtnHandler(); });
-		this.resulsBtn.addEventListener('click', () => { this.resultsBtnHandler(); });
-		this.levelSelectBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
-		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
-		this.showBgImageBtn.addEventListener('click', () => { this.showHideBackground(); });
+		this.autoListeningBtn.addEventListener('click', () => {
+			this.autoListeningBtnHandler();
+		});
+		this.showTranslationBtn.addEventListener('click', () => {
+			this.showTranslationBtnHandler();
+		});
+		this.showListenBtn.addEventListener('click', () => {
+			this.showListeningBtnHandler();
+		});
+		this.playAudioBtn.addEventListener('click', () => {
+			this.playAudio(this.sentenceAudioLink);
+		});
+		this.checkBtn.addEventListener('click', () => {
+			this.checkBtnHandler();
+		});
+		this.iDontKnowBtn.addEventListener('click', () => {
+			this.iDontKnowBtnHandler();
+		});
+		this.continueBtn.addEventListener('click', () => {
+			this.continueBtnHandler();
+		});
+		this.resulsBtn.addEventListener('click', () => {
+			this.resultsBtnHandler();
+		});
+		this.levelSelectBtn.addEventListener('change', (event) => {
+			this.levelSelectBtnHandler(+event.target.value - 1);
+		});
+		this.roundSelectBtn.addEventListener('change', (event) => {
+			this.roundSelectBtnHandler(+event.target.value - 1);
+		});
+		this.showBgImageBtn.addEventListener('click', () => {
+			this.showHideBackground();
+		});
 
-		window.addEventListener('beforeunload', () => { this.beforeUnloadHandler(); });
+		window.addEventListener('beforeunload', () => {
+			this.beforeUnloadHandler();
+		});
 	}
 
 	beforeUnloadHandler() {
@@ -333,7 +365,9 @@ export default class Game {
 		this.boardLine = factory.create({
 			elem: TAGS.DIV,
 			classes: ['board__line', 'board__line--active'],
-			attr: { 'data-line': this.currentLine }
+			attr: {
+				'data-line': this.currentLine
+			}
 		});
 		this.resultForCurrentLineState = false;
 		this.board.append(this.boardLine);
@@ -369,7 +403,15 @@ export default class Game {
 			this.newElement = factory.create({
 				elem: TAGS.DIV,
 				classes: ['game__jigsaw', 'game__jigsaw--active'],
-				attr: [{ 'data-word': word }, { 'data-position-crypted': cypher[0][index] }, { 'data-line': this.currentLine }, { 'draggable': true }],
+				attr: [{
+					'data-word': word
+				}, {
+					'data-position-crypted': cypher[0][index]
+				}, {
+					'data-line': this.currentLine
+				}, {
+					'draggable': true
+				}],
 				child: word
 			});
 			if (this.showBgImageBtnState) {
@@ -514,7 +556,9 @@ export default class Game {
 				factory.create({
 					elem: TAGS.DIV,
 					classes: ['puzzle-container', 'puzzle-container--active'],
-					attr: { 'data-container-position': i }
+					attr: {
+						'data-container-position': i
+					}
 				})
 			);
 		}

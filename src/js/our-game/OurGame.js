@@ -59,22 +59,23 @@ function initGame() {
 
 	const wrapper = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['wrapper', 'ourgame__wrapper'],  
+		classes: 'wrapper',  
 		child: [initStartPage(), createHeader(), initMain()],
+		id: 'ourgame__wrapper',
 	});
 
 	app.append(wrapper);
 
 
 	const startPage = document.querySelector('.start-page');
-	const gameContainer = document.querySelector('.game-container');
-	const engWordsContainer = document.querySelector('.english-container');
-	const translationContainer = document.querySelector('.translation-container');
+	const gameContainer = document.getElementById('game-cont');
+	const engWordsContainer = document.getElementById('eng-container');
+	const translationContainer = document.getElementById('transl-container');	
 	const engWords = document.getElementsByClassName('word');
 	const startBtn = document.querySelector('.start-btn');
-	const finishBtn = document.querySelector('.finish-btn');
+	const finishBtn = document.getElementById('finish');
 	const translation = document.getElementsByClassName('word-translation');
-	const points = document.querySelector('.game-score');
+	const points = document.getElementById('game-points');
 	const gameResult = new Result();
 	const correctSound = new Audio('https://raw.githubusercontent.com/garza0/rslang-data/master/correct.mp3');
 	const wrongSound = new Audio('https://raw.githubusercontent.com/garza0/rslang-data/master/wrong.mp3');
@@ -101,8 +102,7 @@ function initGame() {
 
 	function GameHandlers() {
 
-		this.statisticBtn = document.querySelector('.stat');
-
+		
 		this.startNewGame =  () => {
 			gameResult.closeResultWindow();
 			startPage.classList.remove('none');
@@ -121,6 +121,7 @@ function initGame() {
 			document.removeEventListener('click', this.gameHandler);
 			finishBtn.removeEventListener('click', this.resultBtnHandler);
 			this.statisticBtn.removeEventListener('click', this.removeAllListeners);
+			app.remove(wrapper);
 		};
 
 		this.resultBtnHandler = () => {
@@ -137,8 +138,8 @@ function initGame() {
 				child: newGameText,
 			});
 	
-	
-			statisticBtn.addEventListener('click', this.removeAllListeners);
+			this.statisticBtn = statisticBtn;
+			this.statisticBtn.addEventListener('click', this.removeAllListeners); // перенаправить на станицу статистики
 	
 			newGameBtn.addEventListener('click', this.startNewGame);
 	

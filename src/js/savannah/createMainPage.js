@@ -1,14 +1,13 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
-import {ERROR_SOUND_SRC, CORRECT_SOUND_SRC} from './consts';
+import {
+	ERROR_SOUND_SRC,
+	CORRECT_SOUND_SRC
+} from './consts';
 
 export default function createMainPage() {
 	const creator = new DOMElementCreator();
 	const app = document.querySelector('.app');
-	const nameOfTheGame = 'САВАННА';
-	const infoText = 'Тренировка Саванна развивает словарный запас. Чем больше слов ты знаешь, тем больше очков опыта получишь.';
-	const startButtonText = 'Начать';
-	const bindingsText = 'Используй клавиши 1, 2, 3 и 4, чтобы дать быстрый ответ';
 	const imgAlt = 'Image';
 	const volumeImg = creator.create({
 		elem: TAGS.IMG,
@@ -106,48 +105,6 @@ export default function createMainPage() {
 			alt: `${imgAlt}`
 		}],
 	});
-	const heading = creator.create({
-		elem: TAGS.H1,
-		classes: 'info__heading',
-		child: `${nameOfTheGame}`
-	});
-	const mainInfo = creator.create({
-		elem: TAGS.P,
-		classes: 'info__main-info',
-		child: `${infoText}`
-	});
-	const buttonText = creator.create({
-		elem: TAGS.P,
-		child: `${startButtonText}`
-	});
-	const button = creator.create({
-		elem: TAGS.DIV,
-		classes: 'starting-button',
-		child: [buttonText]
-	});
-	const infoContainer = creator.create({
-		elem: TAGS.DIV,
-		classes: 'info',
-		child: [heading, mainInfo, button]
-	});
-	const keyboardIcon = creator.create({
-		elem: TAGS.IMG,
-		classes: 'keyboard-icon',
-		attr: [{
-			src: './assets/images/keyboard.svg'
-		}, {
-			alt: `${imgAlt}`
-		}],
-	});
-	const hintText = creator.create({
-		elem: TAGS.P,
-		child: `${bindingsText}`
-	});
-	const hint = creator.create({
-		elem: TAGS.DIV,
-		classes: 'hint',
-		child: [keyboardIcon, hintText]
-	});
 	const stoneIcon = creator.create({
 		elem: TAGS.IMG,
 		classes: 'stone-icon',
@@ -165,12 +122,18 @@ export default function createMainPage() {
 	const iconHolder = creator.create({
 		elem: TAGS.DIV,
 		classes: 'hint-wrapper',
-		child: [hint, stoneIcon]
+		child: [stoneIcon]
 	});
 	const infoWrapper = creator.create({
 		elem: TAGS.DIV,
 		classes: 'info-wrapper',
-		child: [infoContainer]
+		child: []
 	});
-	app.append(settings, infoWrapper, iconHolder);
+
+	const wrapper = creator.create({
+		elem: TAGS.DIV,
+		classes: ['wrapper', 'savannah__wrapper'],
+		child: [settings, infoWrapper, iconHolder],
+	});
+	app.append(wrapper);
 }
