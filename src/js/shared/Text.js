@@ -46,6 +46,7 @@ export const TEXT = {
 		title: 'Try our amazing games!',
 		description: 'Lorem ipsum dolore si amet.',
 	},
+
 	settingsPage: {
 		title: 'Settings',
 		wordsNumberLabel: 'Type the number of words that you will plan to learn in a day',
@@ -69,6 +70,47 @@ export const TEXT = {
 		errorMessage: 'At least one of three items must be selected (word translation, word meaning or a sentence with an example of using the studied word.',
 		successMessage: 'Your settings is saved',
 	},
+
+	aboutUsPage : {
+		title : 'Our Team',
+		description : 'We worked hard to provide reliable RSLang. That allow you to focus solely on your learning with peace of mind – knowing that our agile and unrivalled team are on hand 24/7, should they ever have any issues with our cutting-edge product.',
+		mentorHeader : 'And... Our curator',
+		mentorDescription : 'It would not have been possible without our mentor.',
+
+		command : [
+			{
+				name : 'Mikhail Fursa',
+				git : 'bellamy9678',
+				text : 'Team lead, app architecture, settings, statistics, words, training mode, utils, some design and modules integration.'
+			},
+			{
+				name : 'Lizaveta Kunitskaya',
+				git : 'Chaba-chaba',
+				text : 'Authorization, dictionary, main page, UI-UX design, styles and modules integration.'
+			},
+			{
+				name : 'Aleksandra Ivanova',
+				git : 'leqsar',
+				text : 'Games: Audio Challange and Savannah.'
+			},
+			{
+				name : 'Andrii Konovalov',
+				git : 'Garza0',
+				text : 'Games: English puzzle and Sprint; also start game screen and game result window.'
+			},
+			{
+				name : 'Tatsiana Alsheuskaya',
+				git : 'Ttttanna',
+				text : 'Games: Speak it and Our game.'
+			},
+		],
+
+		mentor : {
+			name : 'Denis Kravchenko',
+			git : 'DKravchenkoEpam',
+			text : 'Organize command work, helpful and highly relevant advices and recommendation for any part of application or work.'
+		}
+	}
 };
 
 export const AUTHORIZATION_FORM = {
@@ -85,13 +127,31 @@ export const ERROR_MESSAGES = {
 	default: 'Something went wrong.',
 };
 
-export const GAME_NAMES = {
-	englishPuzzle: 'English Puzzle',
-	speakIt: 'Speak It',
-	savannah: 'Savannah',
-	audioChallenge: 'Audio Challenge',
-	sprint: 'Sprint',
-	ownGame: 'Super duper game',
+export const GAMES = {
+	englishPuzzle: {
+		name: 'English Puzzle',
+		description: 'Click on words, collect phrases. Words can be drag and drop.',
+	},
+	speakIt: {
+		name: 'Speak It',
+		description: 'Click on the world to hear them sound. Click on the button and speak the words into the microphone.',
+	},
+	savannah: {
+		name: 'Savannah',
+		description: 'Train Savannah develops vocabulary. The more words you know, the more points you\'ll get.',
+	},
+	audioChallenge: {
+		name: 'Audio Challenge',
+		description: '',
+	},
+	sprint: {
+		name: 'Sprint',
+		description: '',
+	},
+	ownGame: {
+		name: 'Super duper game',
+		description: 'Find pairs between words and their translations! Be careful, incorrect matches will cost you points!',
+	},
 };
 
 export const CATEGORY_NAMES = {

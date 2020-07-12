@@ -2,6 +2,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import createWelcomePage from './WelcomePage';
 import createGamesPage from './GamesPage';
+import startMiniGame from './InitGames';
 
 export default function showMainPage(userName) {
 	const welcomeWrapper = createWelcomePage(userName);
@@ -13,8 +14,10 @@ export default function showMainPage(userName) {
 		classes: ['wrapper'],
 		child: [welcomeWrapper, gameWrapper],
 	});
+
 	if (app.firstChild) {
 		app.firstChild.remove();
 	}
 	app.append(wrapper);
+	startMiniGame();
 }

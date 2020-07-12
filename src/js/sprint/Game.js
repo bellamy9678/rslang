@@ -1,21 +1,25 @@
 import GameField from './GameField';
 import * as CONST from './constants';
-import { API, ASSETS_STORAGE } from '../shared/Constants';
+import {
+	API,
+	ASSETS_STORAGE
+} from '../shared/Constants';
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import StartScreen from '../start_screen/StartScreen';
+import APIMethods from '../words_service/APIMethods';
 
 const factory = new DOMElementCreator();
 const startScreen = new StartScreen();
 const result = new Result();
 
-export default class Game {
+export default class SprintGame {
 	constructor() {
-		this.level = 0;
-		this.round = 0;
+		this.level = JSON.parse(localStorage.getItem('gameData')).level;
+		this.round = JSON.parse(localStorage.getItem('gameData')).round;
 		this.nextLevel = this.level + 1;
 		this.nextRound = this.round + 1;
 		this.gameLevel = 0;
@@ -37,13 +41,13 @@ export default class Game {
 		this.wordShowed = false;
 	}
 
-	initGameWithStartScreen() {
-		startScreen.showStartScreen({
-			name: 'English Puzzle',
-			descr: 'Click on words, collect phrases. Words can be drag and drop.',
-			callback: this.start.bind(this)
-		});
-	}
+	// initGameWithStartScreen() {
+	// 	startScreen.showStartScreen({
+	// 		name: 'English Puzzle',
+	// 		descr: 'Click on words, collect phrases. Words can be drag and drop.',
+	// 		callback: this.start.bind(this)
+	// 	});
+	// }
 
 	init() {
 		GameField.generateField();
@@ -233,15 +237,15 @@ export default class Game {
 	}
 
 	loadNextWords(nextLevel, nextRound) {
-		const url = `${API}words?group=${nextLevel}&page=${nextRound}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
-		fetch(url)
-			.then(response => {
-				return response.json();
-			}).then(myJson => {
-				myJson.forEach(wordObj => this.wordsArr.push(wordObj));
-				this.getWrongWordsArr(myJson);
+		new Promise(resolve => {
+			const allWords = APIMethods.getNewWordsArray(nextLevel, nextRound);
+			resolve(allWords);
+		})
+			.then(allWords => {
+				allWords.forEach(wordObj => this.wordsArr.push(wordObj));
+				this.getWrongWordsArr(allWords);
 				this.nextRound += 1;
-			}).catch(error => console.error(error));
+			}).catch(error => console.error(error.message));
 	}
 
 	getData(level = this.level, round = this.round) {
@@ -297,7 +301,7 @@ export default class Game {
 			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
 		} else {
 			this.rightTranslate = false;
-			this.TRANSLATION_CONTAINER.innerText = Game.returnRandomFromArr(this.wrongWords);
+			this.TRANSLATION_CONTAINER.innerText = SprintGame.returnRandomFromArr(this.wrongWords);
 		}
 
 	}
@@ -342,7 +346,7 @@ export default class Game {
 			classes: ['result__button', 'result__continue-btn'],
 			child: CONST.CONTINUE_BTN_TEXT
 		});
-		this.closeResult = Game.resultBtnHandler.bind(this);
+		this.closeResult = SprintGame.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
 
 		const resultPoints = {
@@ -364,7 +368,4 @@ export default class Game {
 		result.closeResultWindow.call(result);
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
 	}
-
-
-
 }

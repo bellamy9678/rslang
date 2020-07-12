@@ -2,7 +2,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import {
 	TEXT,
-	GAME_NAMES
+	GAMES
 } from '../shared/Text';
 
 function addSimilarDOMElements([...objects]) {
@@ -22,7 +22,7 @@ export default function createGamesPage() {
 	const englishPuzzleName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.englishPuzzle],
+		child: [GAMES.englishPuzzle.name],
 	});
 
 	const englishPuzzleGame = newElem.create({
@@ -35,7 +35,7 @@ export default function createGamesPage() {
 	const speakItName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.speakIt],
+		child: [GAMES.speakIt.name],
 	});
 
 	const speakItGame = newElem.create({
@@ -48,7 +48,7 @@ export default function createGamesPage() {
 	const savannahName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.savannah],
+		child: [GAMES.savannah.name],
 	});
 
 	const savannahGame = newElem.create({
@@ -73,7 +73,7 @@ export default function createGamesPage() {
 	const audioChallengeName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.audioChallenge],
+		child: [GAMES.audioChallenge.name],
 	});
 
 	const audioChallengeGame = newElem.create({
@@ -86,7 +86,7 @@ export default function createGamesPage() {
 	const ownGameName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.ownGame],
+		child: [GAMES.ownGame.name],
 	});
 
 	const ownGame = newElem.create({
@@ -99,7 +99,7 @@ export default function createGamesPage() {
 	const sprintName = newElem.create({
 		elem: TAGS.SPAN,
 		classes: ['game__name'],
-		child: [GAME_NAMES.sprint],
+		child: [GAMES.sprint.name],
 	});
 
 	const sprintGame = newElem.create({

@@ -1,6 +1,7 @@
 import generateElements from './generateElements';
 import {NUMBER_OF_WRONG_ANSWERS, LEFT_MARGIN_OF_ANSWERED_QUESTION, arrayForUniqness, arrayForRandom, idkText, arrayWithRightAnswers, arrayWithWrongAnswers} from './consts';
 import changeStylesAfterAnswer from './changeStylesAfterAnswer';
+import checkAnswer from './checkAnswer';
 import {catchButtonPresses, defineButton} from './catchButtonPresses';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
@@ -32,6 +33,10 @@ export default function randomizeWords(words, array) {
 		this.audio = item.dataset.audio.replace(ASSETS_STORAGE, '');;
 	}
 	skipButton.addEventListener('click', () => {
+		const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
+		answerContainers.forEach(container => {
+			container.removeEventListener('click', checkAnswer);
+		});
 		if (skipButton.textContent === idkText) {
 			changeStylesAfterAnswer();
 		} else if (arrayForUniqness.length === 10) {

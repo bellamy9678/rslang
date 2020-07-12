@@ -11,7 +11,7 @@ export default class StartScreen {
 		this.gameDescription = '';
 		this.repeatWordsState = false;
 		this.gameData = {
-			repeatWords: false
+			repeatWords: false,
 		};
 	}
 
@@ -83,6 +83,7 @@ export default class StartScreen {
 	}
 
 	switchBtnRightHandler() {
+		console.log('switch');
 		this.gameData.repeatWords = true;
 		delete this.gameData.level;
 		delete this.gameData.round;
@@ -99,8 +100,9 @@ export default class StartScreen {
 			app.firstChild.remove();
 		}
 		this.removeEventListeners();
+		const data = this.getData();
+		localStorage.setItem('gameData', JSON.stringify(data));
 		this.callback();
-
 	}
 
 	levelSelectHandler(event) {

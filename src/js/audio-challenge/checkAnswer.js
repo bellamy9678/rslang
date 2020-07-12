@@ -2,6 +2,10 @@ import changeStylesAfterAnswer from './changeStylesAfterAnswer';
 import {arrayWithRightAnswers, arrayWithWrongAnswers} from './consts';
 
 export default function checkAnswer(event, element) {
+	const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
+	answerContainers.forEach(container => {
+		container.removeEventListener('click', checkAnswer);
+	});
 	const mainWord = document.querySelector('.right-answer-wrapper__word-container__word');
 	function check(choosenAnswer) {
 		if (choosenAnswer.classList.contains('right-answer')) {

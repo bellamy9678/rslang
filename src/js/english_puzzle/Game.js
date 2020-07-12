@@ -3,7 +3,6 @@ import {
 	rounds,
 	levels,
 	lines,
-	API_URL,
 	puzzlesGap,
 	RESULT_WINDOW_BTN_CONTINUE,
 } from './constants';
@@ -13,6 +12,7 @@ import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
+import APIMethods from '../words_service/APIMethods';
 
 const result = new Result();
 
@@ -30,8 +30,14 @@ export default class Game {
 		this.showListenBtnState = this.initState.audio || false;
 		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound = this.initState.round || 0;
-		this.currentLevel = this.initState.level || 0;
+		this.currentRound =
+			this.initState.round ||
+			JSON.parse(localStorage.getItem('gameData')).level ||
+			0;
+		this.currentLevel =
+			this.initState.level ||
+			JSON.parse(localStorage.getItem('gameData')).round ||
+			0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -374,20 +380,18 @@ export default class Game {
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
-		const url = `${API_URL}words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
-		fetch(url)
-			.then((response) => {
-				return response.json();
-			})
-			.then((myJson) => {
-				this.handleJson(myJson);
-			});
+		new Promise((resolve) => {
+			const allWords = APIMethods.getNewWordsArray(level, round);
+			resolve(allWords);
+		}).then((allWords) => {
+			this.handleJson(allWords);
+		});
 	}
 
 	handleJson(myJson) {
 		this.sentencesJSON = myJson;
-		this.sentenceTranslate = myJson[0].textExampleTranslate;
-		this.sentenceAudioLink = myJson[0].audioExample;
+		this.sentenceTranslate = myJson[0].exampleTranslate;
+		this.sentenceAudioLink = myJson[0].exampleAudio;
 		this.getSentences(myJson, this.currentLine);
 		this.controlsStateUpgrade();
 	}
@@ -395,7 +399,7 @@ export default class Game {
 	getSentences(arr, line) {
 		const sentencesArr = [];
 		arr.forEach((word) =>
-			sentencesArr.push(word.textExample.replace(/<[^>]*>/g, ''))
+			sentencesArr.push(word.example.replace(/<[^>]*>/g, ''))
 		);
 		this.generatePuzzle(sentencesArr[line]);
 	}
@@ -405,13 +409,17 @@ export default class Game {
 		this.boardLine = factory.create({
 			elem: TAGS.DIV,
 			classes: ['board__line', 'board__line--active'],
-			attr: { 'data-line': this.currentLine },
+
+			attr: {
+				'data-line': this.currentLine,
+			},
 		});
 		this.resultForCurrentLineState = false;
 		this.board.append(this.boardLine);
 	}
 
 	generatePuzzle(sentence) {
+		console.log(sentence);
 		const wordsArray = sentence.split(' ');
 		this.sentenceArr = wordsArray;
 		this.numberOfPuzzles = wordsArray.length;
@@ -440,11 +448,20 @@ export default class Game {
 			this.newElement = factory.create({
 				elem: TAGS.DIV,
 				classes: ['game__jigsaw', 'game__jigsaw--active'],
+
 				attr: [
-					{ 'data-word': word },
-					{ 'data-position-crypted': cypher[0][index] },
-					{ 'data-line': this.currentLine },
-					{ draggable: true },
+					{
+						'data-word': word,
+					},
+					{
+						'data-position-crypted': cypher[0][index],
+					},
+					{
+						'data-line': this.currentLine,
+					},
+					{
+						draggable: true,
+					},
 				],
 				child: word,
 			});
@@ -597,7 +614,10 @@ export default class Game {
 				factory.create({
 					elem: TAGS.DIV,
 					classes: ['puzzle-container', 'puzzle-container--active'],
-					attr: { 'data-container-position': i },
+
+					attr: {
+						'data-container-position': i,
+					},
 				})
 			);
 		}
