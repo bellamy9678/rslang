@@ -10,7 +10,6 @@ import Settings from '../settings/Settings';
 async function changeWordParams(event) {
 	const wordData = new IntervalRepetition(event.detail);
 	const settings = await Settings.getInstance();
-
 	switch (event.type) {
 	case WORDS_EVENTS.PUSHED_AGAIN:
 	case WORDS_EVENTS.PUSHED_EASY:

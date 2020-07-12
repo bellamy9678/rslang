@@ -183,9 +183,7 @@ export default class Settings {
 	}
 
 	static async getInstance() {
-		if (Settings.instance === null) {
-			Settings.instance = await Settings.init();
-		}
+		Settings.instance = await Settings.init();
 		return Settings.instance;
 	}
 }

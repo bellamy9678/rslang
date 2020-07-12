@@ -11,12 +11,6 @@ import Settings from '../settings/Settings';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import eventObserver from '../observer/Observer';
 
-let settingsObj;
-async function initial() {
-	settingsObj = await Settings.getInstance();
-}
-initial();
-
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
 	const categoryWords = words.map(wordData => {
@@ -175,7 +169,7 @@ function createDictionaryWords(words) {
 }
 
 async function updateWordViewWithUserSettings() {
-	const settings = settingsObj;
+	const settings = await Settings.getInstance();
 	const wordsData = document.querySelectorAll('[data-settings]');
 	wordsData.forEach(prop => {
 		const attr = prop.getAttribute('data-settings');

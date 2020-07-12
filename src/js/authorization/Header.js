@@ -326,12 +326,12 @@ export default class Header {
 			if (!userName) {
 				throw new Error('User is not authorized');
 			}
+			await initSettingsForOldUser();
 			this.createUserNavigation();
 			this.createUserButtons(userName);
 			logo.addEventListener('click', () => {
 				showMainPage(userName);
 			});
-			await initSettingsForOldUser();
 		} catch (error) {
 			this.createUnauthorisedUserButtons();
 			logo.addEventListener('click', () => {

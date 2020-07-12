@@ -1,21 +1,13 @@
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
-import {
-	TEXT
-} from '../shared/Text';
+import { TEXT } from '../shared/Text';
 import Settings from './Settings';
-
-let settingsObj;
-async function initial() {
-	settingsObj = await Settings.getInstance();
-}
-initial();
 
 export default class SettingsView {
 	static getUserSettings() {
 		const inputs = [].slice.call(document.forms.settings.elements);
 		const settings = {};
-		inputs.forEach(input => {
+		inputs.forEach((input) => {
 			if (input.getAttribute('type') === 'number') {
 				settings[input.getAttribute('name')] = input.value;
 			} else if (input.getAttribute('type') === 'checkbox') {
@@ -30,7 +22,8 @@ export default class SettingsView {
 		const settings = this.getUserSettings();
 		if (settings.translate || settings.meaning || settings.example) {
 			this.showSuccessMessage();
-			settingsObj.updateSettings(settings);
+			const settingsObj = await Settings.getInstance();
+			await settingsObj.updateSettings(settings);
 			return settings;
 		}
 		return this.showError();
@@ -44,8 +37,12 @@ export default class SettingsView {
 			child: TEXT.settingsPage.successMessage,
 		});
 		const form = document.querySelector('.settings__form');
-		const previousErrorMessage = document.querySelector('.settings__wrapper > .error__message');
-		const previousSuccessMessage = document.querySelector('.settings__wrapper > .success__message');
+		const previousErrorMessage = document.querySelector(
+			'.settings__wrapper > .error__message'
+		);
+		const previousSuccessMessage = document.querySelector(
+			'.settings__wrapper > .success__message'
+		);
 		if (previousErrorMessage) {
 			previousErrorMessage.remove();
 		}
@@ -62,8 +59,12 @@ export default class SettingsView {
 			child: TEXT.settingsPage.errorMessage,
 		});
 		const form = document.querySelector('.settings__form');
-		const previousMessage = document.querySelector('.settings__wrapper > .error__message');
-		const previousSuccessMessage = document.querySelector('.settings__wrapper > .success__message');
+		const previousMessage = document.querySelector(
+			'.settings__wrapper > .error__message'
+		);
+		const previousSuccessMessage = document.querySelector(
+			'.settings__wrapper > .success__message'
+		);
 		if (previousSuccessMessage) {
 			previousSuccessMessage.remove();
 		}
