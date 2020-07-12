@@ -17,8 +17,5 @@ async function initial() {
 }
 
 initial();
-<<<<<<< HEAD
-=======
-subscribeToEvents();
 
->>>>>>> cc08feeb38cdad3a4640ed44a0be414a76707945
+subscribeToEvents();

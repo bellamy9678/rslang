@@ -146,6 +146,10 @@
     font-size: 20px;
     width: fit-content;
   }
+	@media (max-width: 900px){
+    flex-direction: column;
+		margin-top: 20px;
+  }
 }
 
 .right-answer__active {
@@ -169,7 +173,6 @@
   font-size: 25px;
   text-align: center;
   transition: font-size 1s, opacity 1s, margin-left 1s, width 1s;
-  // overflow: hidden;
 }
 
 .hint-wrapper {

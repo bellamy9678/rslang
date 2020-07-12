@@ -50,7 +50,14 @@
 		&:hover {
 			cursor: pointer;
 		}
+		@media (max-width: 900px) {
+	    margin-top: 25px;
+			text-align: center;
+	  }
 	}
+	@media (max-width: 900px) {
+    flex-direction: column;
+  }
 }
 
 .skip-button {
@@ -105,6 +112,18 @@
 			line-height: 3rem;
 		}
 	}
+	@media (min-width: $mobile-small-width) and (max-width: $mobile-big-width) {
+    top: 70px;
+		left: 30%;
+  }
+	@media (min-width: $mobile-big-width) and (max-width: 767px) {
+    top: 70px;
+		left: 35%;
+  }
+	@media (min-width: $tablet-width) and  (max-width: 900px){
+    top: 70px;
+		left: 40%;
+  }
 }
 
 .answered-wrong {
