@@ -18,18 +18,30 @@ $bg-result-btn: rgb(143, 86, 113);
   display: flex;
   justify-content: space-between;
 	margin-bottom: 5px;
+	@include media-mobile() {
+		flex-direction: column;
+	}
+
+	&__hints {
+		@include media-mobile() {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 5px;
+		}
+	}
 	&__hints > * {
 		background-size: 18px;
     background-position: center;
     background-repeat: no-repeat;
-    width: 36px;
 		height: 26px;
 		border-radius: 5px;
-		margin-left: 5px;
 		cursor: pointer;
 		background-color: $color-background;
     border: 1px solid $color-border;
-    color: $color-text-light;
+		color: $color-text-light;
+		&:not(:first-child) {
+			margin-left: 5px;
+		}
 	}
 	&__level-and-page {
 		background-color: $bg-light-grey;
@@ -59,12 +71,19 @@ $bg-result-btn: rgb(143, 86, 113);
 	width: 36px;
 	height: 29px;
 	border-radius: 4px;
-	margin-left: 5px;
 	cursor: pointer;
 	background-color: $bg-light-grey;
 	color: $color-text-light;
 	border: none;
 	box-shadow: $elements-shadow;
+
+	&:disabled {
+		cursor: unset;
+	}
+	@include media-mobile() {
+		width: 100%;
+		height: 20px;
+	}
 	&:focus {
 		outline:none;
 	}
@@ -92,6 +111,9 @@ $bg-result-btn: rgb(143, 86, 113);
 	&-continue {
 		background-color: $correct-puzzle;
 	}
+	&-check {
+		background-color: $bg-dark-grey;
+	}
 	&-i-dont-know {
 		background-color: $wrong-puzzle;
 	}
@@ -110,7 +132,7 @@ $bg-result-btn: rgb(143, 86, 113);
 
 .game {
 	&__main {
-  width: 751px;
+  max-width: 751px;
   margin: auto;
 }
 
@@ -135,7 +157,10 @@ $bg-result-btn: rgb(143, 86, 113);
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  width: 40px;
+	width: 40px;
+	@include media-tablet() {
+		display: none;
+	}
 }
 
 .number {
@@ -162,6 +187,12 @@ $bg-result-btn: rgb(143, 86, 113);
 	border-radius: 4px;
 	&:not(:last-child) {
 		margin-right: 2px;
+	}
+
+	@include media-tablet() {
+		margin-left: 0;
+		width: 100%;
+		max-width: 713px;
 	}
 }
 
@@ -194,11 +225,18 @@ $bg-result-btn: rgb(143, 86, 113);
 	background-color: $puzzle-containers;
 	font-size: 1.5rem;
 	background-repeat: no-repeat;
-	text-shadow: $elements-shadow;
+	text-shadow: 0px 0px 4px #000;
 	border-radius: 4px;
 	-webkit-user-select: none;
 	&:not(:last-of-type) {
 		margin-right: 2px;
+	}
+	@media (max-width: $tablet-width) {
+		font-size: 1.2rem;
+	}
+
+	@include media-mobile() {
+		font-size: 1rem;
 	}
 }
 
@@ -239,8 +277,24 @@ $bg-result-btn: rgb(143, 86, 113);
 }
 
 .hovered {
-	background-color: $bg-dark-grey;
+	background-color: $bg-light-grey;
 	&--animation{
 		animation: jiggle 0.4s infinite;
 	}
 }
+
+.wrapper__en_puzzle {
+	max-width: $desktop-width;
+	padding: 0 40px;
+	margin: 0 auto;
+
+	@include media-tablet() {
+		padding: 0;
+	}
+}
+
+.none {
+	display: none !important;
+}
+
+

@@ -5,7 +5,10 @@ import {
 	lines,
 	puzzlesGap,
 	RESULT_WINDOW_BTN_CONTINUE,
+	PICTURE_WIDTH,
+	PICTURE_HEIGHT
 } from './constants';
+
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
@@ -15,29 +18,16 @@ import Statistics from '../statistics/Statistics';
 import Service from '../words_service/Service';
 
 const result = new Result();
-
 const factory = new DOMElementCreator();
 
 export default class Game {
 	constructor() {
-		this.initState =
-			JSON.parse(sessionStorage.getItem('en-puzzle-state')) || {};
 		this.sentenceArr = [];
 		this.sentenceTranslate = '';
 		this.sentenceAudioLink = '';
-		this.autoListeningBtnState = this.initState.auto || false;
-		this.showTranslationBtnState = this.initState.translation || false;
-		this.showListenBtnState = this.initState.audio || false;
-		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound =
-			this.initState.round ||
-			JSON.parse(localStorage.getItem('gameData')).level ||
-			0;
-		this.currentLevel =
-			this.initState.level ||
-			JSON.parse(localStorage.getItem('gameData')).round ||
-			0;
+		this.currentRound = JSON.parse(localStorage.getItem('gameData')).round - 1 || 0;
+		this.currentLevel = JSON.parse(localStorage.getItem('gameData')).level - 1 || 0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -64,85 +54,104 @@ export default class Game {
 		this.levelSelectBtn = document.querySelector('.controls__dropdown-level');
 		this.roundSelectBtn = document.querySelector('.controls__dropdown-round');
 
-		this.autoListeningBtn.addEventListener('click', () => {
-			this.autoListeningBtnHandler();
-		});
-		this.showTranslationBtn.addEventListener('click', () => {
-			this.showTranslationBtnHandler();
-		});
-		this.showListenBtn.addEventListener('click', () => {
-			this.showListeningBtnHandler();
-		});
-		this.playAudioBtn.addEventListener('click', () => {
-			this.playAudio(this.sentenceAudioLink);
-		});
-		this.checkBtn.addEventListener('click', () => {
-			this.checkBtnHandler();
-		});
-		this.iDontKnowBtn.addEventListener('click', () => {
-			this.iDontKnowBtnHandler();
-		});
-		this.continueBtn.addEventListener('click', () => {
-			this.continueBtnHandler();
-		});
-		this.resulsBtn.addEventListener('click', () => {
-			this.resultsBtnHandler();
-		});
-		this.levelSelectBtn.addEventListener('change', (event) => {
-			this.levelSelectBtnHandler(+event.target.value - 1);
-		});
-		this.roundSelectBtn.addEventListener('change', (event) => {
-			this.roundSelectBtnHandler(+event.target.value - 1);
-		});
-		this.showBgImageBtn.addEventListener('click', () => {
-			this.showHideBackground();
-		});
+		this.autoListBtnHand = this.autoListeningBtnHandler.bind(this);
+		this.autoListeningBtn.addEventListener('click', this.autoListBtnHand);
 
-		window.addEventListener('beforeunload', () => {
-			this.beforeUnloadHandler();
-		});
+		this.showTransBtnHand = this.showTranslationBtnHandler.bind(this);
+		this.showTranslationBtn.addEventListener('click', this.showTransBtnHand);
+
+		this.showListenBtnHand = this.showListeningBtnHandler.bind(this);
+		this.showListenBtn.addEventListener('click', this.showListenBtnHand);
+
+		this.playCurrentAudio = this.playAudio.bind(this);
+		this.playAudioBtn.addEventListener('click', this.playCurrentAudio);
+
+		this.checkBtnHand = this.checkBtnHandler.bind(this);
+		this.checkBtn.addEventListener('click', this.checkBtnHand);
+
+		this.dontKnowBtnHand = this.iDontKnowBtnHandler.bind(this);
+		this.iDontKnowBtn.addEventListener('click', this.dontKnowBtnHand);
+
+		this.continueBtnHand = this.continueBtnHandler.bind(this);
+		this.continueBtn.addEventListener('click', this.continueBtnHand);
+
+		this.resultsBtnHand = this.resultsBtnHandler.bind(this);
+		this.resulsBtn.addEventListener('click', this.resultsBtnHand);
+
+		this.levelSelectBtnHand = this.levelSelectBtnHandler.bind(this);
+		this.levelSelectBtn.addEventListener('change', this.levelSelectBtnHand);
+
+		this.roundSelectBtnHand = this.roundSelectBtnHandler.bind(this);
+		this.roundSelectBtn.addEventListener('change', this.roundSelectBtnHand);
+
+		this.showHideBg = this.showHideBackground.bind(this);
+		this.showBgImageBtn.addEventListener('click', this.showHideBg);
+
+		this.addEventListenerForWindowResize();
 	}
 
-	beforeUnloadHandler() {
-		const stateObj = {
-			level: this.currentLevel,
-			round: this.currentRound,
-			auto: this.autoListeningBtnState,
-			translation: this.showTranslationBtnState,
-			audio: this.showBgImageBtnState,
-			picture: this.showBgImageBtnState,
-		};
-		sessionStorage.setItem('en-puzzle-state', JSON.stringify(stateObj));
+	addEventListenerForWindowResize() {
+		this.windowResizeHand = this.windowResizeHandler.bind(this);
+		window.addEventListener('resize', this.windowResizeHand);
+	}
+
+	windowResizeHandler() {
+		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
+		if (this.homeWidth !== this.puzzlesHomeContainer.offsetWidth) {
+			this.homeWidth = this.puzzlesHomeContainer.offsetWidth;
+			const puzzlesInLines = [];
+			const activePuzzles = document.querySelectorAll('.game__jigsaw--active');
+			const boardLines = document.querySelectorAll('.board__line');
+			boardLines.forEach(line => {
+				const puzzlesInLine = line.querySelectorAll('.game__jigsaw');
+				if (puzzlesInLine.length > 0) {
+					if (!puzzlesInLine[0].classList.contains('game__jigsaw--active')) {
+						puzzlesInLines.push(puzzlesInLine);
+					}
+				}
+			});
+			const allPuzzlesOnPage = puzzlesInLines;
+			if (activePuzzles.length > 0) {
+				allPuzzlesOnPage.push(activePuzzles);
+			}
+			allPuzzlesOnPage.forEach(line => {
+				this.calculatePuzzlesSize(line);
+				this.calculateBackgroundPosition(line);
+			});
+		}
+	}
+
+	removeEventListeners() {
+		this.autoListeningBtn.removeEventListener('click', this.autoListBtnHand);
+		this.showTranslationBtn.removeEventListener('click', this.showTransBtnHand);
+		this.showListenBtn.removeEventListener('click', this.showListenBtnHand);
+		this.checkBtn.removeEventListener('click', this.checkBtnHand);
+		this.iDontKnowBtn.removeEventListener('click', this.dontKnowBtnHand);
+		this.continueBtn.removeEventListener('click', this.continueBtnHand);
+		this.resulsBtn.removeEventListener('click', this.resultsBtnHand);
+		this.showBgImageBtn.removeEventListener('click', this.showHideBg);
+		this.levelSelectBtn.removeEventListener('change', this.levelSelectBtnHand);
+		this.roundSelectBtn.removeEventListener('change', this.roundSelectBtnHand);
 	}
 
 	controlsStateUpgrade() {
 		this.levelSelectBtn.selectedIndex = this.currentLevel;
 		this.roundSelectBtn.selectedIndex = this.currentRound;
-		if (this.initState.auto) {
-			this.autoListeningBtn.classList.add('btn-icon--active');
-		}
-		if (this.initState.translation) {
-			this.showTranslationBtn.classList.add('btn-icon--active');
-			this.translationContainer.innerText = this.sentenceTranslate;
-		}
-		if (this.initState.audio) {
-			this.showListenBtn.classList.add('btn-icon--active');
-		}
-		if (this.initState.picture) {
-			this.showBgImageBtn.classList.add('btn-icon--active');
-		}
 	}
 
-	levelSelectBtnHandler(level) {
+	levelSelectBtnHandler(event) {
+		const level = +event.target.value - 1;
 		this.loadCustomLevelAndRound(level, this.currentRound);
 	}
 
-	roundSelectBtnHandler(round) {
+	roundSelectBtnHandler(event) {
+		const round = +event.target.value - 1;
 		this.loadCustomLevelAndRound(this.currentLevel, round);
 	}
 
 	continueBtnHandler() {
 		this.currentLine += 1;
+		this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
 		this.currentActiveLine = document.querySelector('.board__line--active');
 		this.currentActiveLine.classList.remove('board__line--active');
 		this.currentActiveElements = document.querySelectorAll(
@@ -167,12 +176,8 @@ export default class Game {
 		if (this.currentLine < lines) {
 			this.addLine();
 			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
-			this.sentenceTranslate = this.sentencesJSON[
-				this.currentLine
-			].textExampleTranslate;
-			this.sentenceAudioLink = this.sentencesJSON[
-				this.currentLine
-			].audioExample;
+			this.sentenceTranslate = this.sentencesJSON[this.currentLine].exampleTranslate;
+			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].exampleAudio;
 			this.getSentences(this.sentencesJSON, this.currentLine);
 		} else {
 			this.loadNextRound();
@@ -218,6 +223,7 @@ export default class Game {
 	}
 
 	resultsBtnHandler() {
+
 		const resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
@@ -285,13 +291,11 @@ export default class Game {
 			this.resultForCurrentLineState = true;
 		}
 		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
-		this.activePuzzleContainers = document.querySelectorAll(
-			'.puzzle-container--active'
-		);
-		this.activePuzzleContainers.forEach((container) => {
-			// eslint-disable-next-line no-param-reassign
-			container.style.width = null;
-			container.classList.remove('puzzle-container--active');
+		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
+		this.activePuzzleContainers.forEach(container => {
+			const curContainer = container;
+			curContainer.style.width = null;
+			curContainer.classList.remove('puzzle-container--active');
 		});
 		const puzzleNodes = [];
 		this.activePuzzles.forEach((puzzle) => {
@@ -302,9 +306,11 @@ export default class Game {
 			puzzle.remove();
 		});
 		this.iDontKnowBtn.classList.add('none');
+		this.checkBtn.classList.add('none');
 		this.continueBtn.classList.remove('none');
 		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
-		if (this.currentLine === rounds - 1) {
+		this.updatePuzzlesAtActiveLine();
+		if (this.currentLine === 9) {
 			this.resulsBtn.classList.remove('none');
 		}
 	}
@@ -313,7 +319,7 @@ export default class Game {
 		const sorted = [];
 		puzzles.forEach((puzzle) => {
 			sorted[
-				this.cypher[this.currentLine][0].indexOf(
+				this.cypher[puzzle.dataset.line][0].indexOf(
 					+puzzle.dataset.positionCrypted
 				)
 			] = puzzle;
@@ -347,10 +353,8 @@ export default class Game {
 		}
 	}
 
-	playAudio(audioLink) {
-		this.audio = new Audio(
-			`https://raw.githubusercontent.com/garza0/rslang-data/master/${audioLink}`
-		);
+	playAudio() {
+		this.audio = new Audio(this.sentenceAudioLink);
 		this.audio.play();
 	}
 
@@ -415,12 +419,14 @@ export default class Game {
 				'data-line': this.currentLine,
 			},
 		});
+		this.lineIsFull = false;
 		this.resultForCurrentLineState = false;
+		this.currentActiveLine = this.boardLine;
 		this.board.append(this.boardLine);
+
 	}
 
 	generatePuzzle(sentence) {
-		console.log(sentence);
 		const wordsArray = sentence.split(' ');
 		this.sentenceArr = wordsArray;
 		this.numberOfPuzzles = wordsArray.length;
@@ -502,7 +508,62 @@ export default class Game {
 			this.playAudio(this.sentenceAudioLink);
 		}
 		this.calculateBackgroundPosition(puzzles);
+		this.addEventListenerToPuzzlesAtHome();
 	}
+
+	updateFreePuzzleContainers() {
+		this.freePuzzleContainers = [];
+		this.activePuzzleContainers.forEach(container => {
+			if (container.classList.contains('container--full') === false) {
+				this.freePuzzleContainers.push(container);
+			}
+		});
+	}
+
+	updatePuzzlesAtHome() {
+		this.puzzlesAtHome = this.puzzlesHomeContainer.querySelectorAll('.game__jigsaw--active');
+
+	}
+
+	addEventListenerToPuzzlesAtHome() {
+		this.updateFreePuzzleContainers();
+		this.updatePuzzlesAtHome();
+
+		this.puzzlesAtHomeHand = this.puzzlesAtHomeHandler.bind(this);
+		this.puzzlesAtHome.forEach(puzzle => puzzle.addEventListener('mouseup', this.puzzlesAtHomeHand));
+	}
+
+	puzzlesAtHomeHandler(event) {
+		if (event.target.closest('.game__puzzles') && event.button === 0) {
+			this.updateFreePuzzleContainers();
+			this.updatePuzzlesAtHome();
+			const puzzleWidth = event.target.dataset.width;
+			this.freePuzzleContainers[0].append(event.target);
+			this.freePuzzleContainers[0].style.width = puzzleWidth;
+			this.freePuzzleContainers[0].classList.add('container--full');
+			this.updatePuzzlesAtActiveLine();
+			this.checkIfLineIsFull();
+		} else if (event.target.closest('.puzzle-container--active') && event.button === 0) {
+			const currentContainer = event.target.closest('.puzzle-container--active');
+			if (this.lineIsFull) {
+				Game.removeCorrectAndWrongIndicatorFromPuzzles();
+			}
+			currentContainer.classList.remove('container--full');
+			currentContainer.style.width = null;
+			this.updateFreePuzzleContainers();
+			this.puzzlesHomeContainer.append(event.target.closest('.game__jigsaw--active'));
+			this.updatePuzzlesAtActiveLine();
+			this.updatePuzzlesAtHome();
+			this.checkIfLineIsFull();
+		}
+
+	}
+
+	updatePuzzlesAtActiveLine() {
+		this.puzzlesInActiveLine = this.currentActiveLine.querySelectorAll('.game__jigsaw--active');
+	}
+
+
 
 	dragAndDrop() {
 		this.puzzleItem = document.querySelectorAll('.game__jigsaw--active');
@@ -514,7 +575,7 @@ export default class Game {
 		let selectedItemWidth;
 
 		const dragStart = (event) => {
-			this.selectedItem = event.target;
+			this.selectedItem = event.target.closest('.game__jigsaw--active');
 			selectedItemWidth = this.selectedItem.dataset.width;
 
 			if (event.target.closest('.puzzle-container--active')) {
@@ -555,18 +616,25 @@ export default class Game {
 		};
 
 		const dragDrop = (event) => {
-			if (
-				event.target.classList.contains('puzzle-container--active') ||
-				event.target.classList.contains('game__puzzles')
-			) {
-				event.target.append(this.selectedItem);
-				event.target.classList.remove('hovered', 'hovered--animation');
-				if (event.target.classList.contains('puzzle-container--active')) {
-					event.target.classList.add('container--full');
-					// eslint-disable-next-line no-param-reassign
-					event.target.style.width = selectedItemWidth;
-					this.checkIfLineIsFull();
+			const targetContainer = event.target;
+			if (targetContainer.classList.contains('puzzle-container--active') ||
+				targetContainer.closest('.game__puzzles')) {
+				this.updatePuzzlesAtActiveLine();
+				if (targetContainer.closest('.game__puzzles')) {
+					this.puzzlesHomeContainer.append(this.selectedItem);
+					if (this.lineIsFull) {
+						Game.removeCorrectAndWrongIndicatorFromPuzzles();
+					}
+				} else {
+					targetContainer.append(this.selectedItem);
 				}
+				targetContainer.classList.remove('hovered', 'hovered--animation');
+				if (targetContainer.classList.contains('puzzle-container--active')) {
+					targetContainer.classList.add('container--full');
+					targetContainer.style.width = selectedItemWidth;
+				}
+				this.checkIfLineIsFull();
+
 			}
 		};
 
@@ -590,6 +658,12 @@ export default class Game {
 		);
 	}
 
+	static removeCorrectAndWrongIndicatorFromPuzzles() {
+		document.querySelectorAll('.game__jigsaw--active').forEach(puzzle => puzzle.classList.remove('game__jigsaw--correct', 'game__jigsaw--wrong'));
+	}
+
+
+
 	checkIfLineIsFull() {
 		this.numberOfFullContainers = 0;
 		this.activePuzzleContainers.forEach((container) => {
@@ -599,12 +673,15 @@ export default class Game {
 		});
 		if (this.numberOfFullContainers === this.numberOfPuzzles) {
 			this.lineIsFullHandler();
+
 		} else {
 			this.checkBtn.classList.add('none');
+			this.lineIsFull = false;
 		}
 	}
 
 	lineIsFullHandler() {
+		this.lineIsFull = true;
 		this.checkBtn.classList.remove('none');
 	}
 
@@ -681,6 +758,7 @@ export default class Game {
 	}
 
 	init() {
+
 		this.controlsContainer = factory.create({
 			elem: TAGS.DIV,
 			classes: 'controls',
@@ -702,8 +780,8 @@ export default class Game {
 
 		this.wrapper = factory.create({
 			elem: TAGS.DIV,
-			classes: 'wrapper',
-			child: this.gameContainer,
+			classes: 'wrapper__en_puzzle',
+			child: this.gameContainer
 		});
 
 		appContainer.append(this.wrapper);
@@ -717,19 +795,28 @@ export default class Game {
 	calculatePuzzlesSize(puzzlesLine) {
 		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
 		const homeContainerWidth = this.puzzlesHomeContainer.offsetWidth;
+		const neededBoardHeight = ((PICTURE_HEIGHT * homeContainerWidth / PICTURE_WIDTH) + 9 * 2).toFixed();
+		const gameBoard = document.querySelector('.game__board');
+		gameBoard.style.height = `${neededBoardHeight}px`;
+		this.board.style.width = `${homeContainerWidth}px`;
+		const puzzleHeight = ((neededBoardHeight - 9 * 2) / 10).toFixed();
+		this.puzzlesHomeContainer.style.height = `${puzzleHeight}px`;
+		gameBoard.style.height = `${puzzleHeight * 10 + 18}px`;
+		const boardLines = document.querySelectorAll('.board__line');
+		boardLines.forEach(line => {
+			const curLine = line;
+			curLine.style.height = `${puzzleHeight}px`;
+		});
 		const lengthOfEachPuzzleInLine = [];
 		let finishWidthOfEachPuzzle = [];
 		puzzlesLine.forEach((puzzle) => {
 			lengthOfEachPuzzleInLine.push(puzzle.dataset.word.length);
 		});
-		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b);
-		const sumWidthOfPuzzles =
-			homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
+		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b, 0);
+		const sumWidthOfPuzzles = homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
 		const widthForOneSymbol = sumWidthOfPuzzles / lengthOfLine;
-		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map((puzzleLength) =>
-			Math.round(puzzleLength * widthForOneSymbol)
-		);
-		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b);
+		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map(puzzleLength => Math.round(puzzleLength * widthForOneSymbol));
+		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b, 0);
 		if (sumOfEachPuzzleWidth === sumWidthOfPuzzles) {
 			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
 		} else if (sumOfEachPuzzleWidth < sumWidthOfPuzzles) {
@@ -753,9 +840,10 @@ export default class Game {
 		}
 
 		puzzlesLine.forEach((puzzle, index) => {
-			puzzle.setAttribute('data-width', `${finishWidthOfEachPuzzle[index]}px`);
-			// eslint-disable-next-line no-param-reassign
-			puzzle.style.width = `${finishWidthOfEachPuzzle[index]}px`;
+			const curPuzzle = puzzle;
+			curPuzzle.setAttribute('data-width', `${finishWidthOfEachPuzzle[index]}px`);
+			curPuzzle.style.width = `${finishWidthOfEachPuzzle[index]}px`;
+			curPuzzle.style.height = `${puzzleHeight}px`;
 		});
 	}
 
@@ -774,11 +862,9 @@ export default class Game {
 
 		sortedPuzzles.forEach((element) => {
 			const puzzle = element;
-			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${
-				-elementsLine * puzzleHeight
-			}px`;
+			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
 			puzzle.style.backgroundSize = `${bgWidth}px`;
-			previosPuzzlesWidth += puzzle.offsetWidth;
+			previosPuzzlesWidth += puzzle.offsetWidth + 2;
 		});
 	}
 
