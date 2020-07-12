@@ -63,7 +63,7 @@
 }
 
 .interval-rules {
-	padding-top: 3rem;
+	padding: 3rem 0;
 
 	& p {
 		line-height: 3.5rem;
@@ -84,4 +84,12 @@
 			background-color: lighten($color: $color-additional, $amount: 45);
 		}
 	}
+
+	&__header {
+		@include font($size: 3.6rem);
+		width: 100%;
+		line-height: 7rem;
+		text-align: center;
+	}
+
 }
