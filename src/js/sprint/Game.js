@@ -1,10 +1,14 @@
 import GameField from './GameField';
 import * as CONST from './constants';
-import { API, ASSETS_STORAGE } from '../shared/Constants';
+import {
+	API,
+	ASSETS_STORAGE
+} from '../shared/Constants';
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import StartScreen from '../start_screen/StartScreen';
+import APIMethods from '../words_service/APIMethods';
 
 const factory = new DOMElementCreator();
 const startScreen = new StartScreen();
@@ -13,8 +17,8 @@ const result = new Result();
 
 export default class SprintGame {
 	constructor() {
-		this.level = 0;
-		this.round = 0;
+		this.level = JSON.parse(localStorage.getItem('gameData')).level;
+		this.round = JSON.parse(localStorage.getItem('gameData')).round;
 		this.nextLevel = this.level + 1;
 		this.nextRound = this.round + 1;
 		this.gameLevel = 0;
@@ -232,15 +236,15 @@ export default class SprintGame {
 	}
 
 	loadNextWords(nextLevel, nextRound) {
-		const url = `${API}words?group=${nextLevel}&page=${nextRound}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
-		fetch(url)
-			.then(response => {
-				return response.json();
-			}).then(myJson => {
-				myJson.forEach(wordObj => this.wordsArr.push(wordObj));
-				this.getWrongWordsArr(myJson);
+		new Promise(resolve => {
+			const allWords = APIMethods.getNewWordsArray(nextLevel, nextRound);
+			resolve(allWords);
+		})
+			.then(allWords => {
+				allWords.forEach(wordObj => this.wordsArr.push(wordObj));
+				this.getWrongWordsArr(allWords);
 				this.nextRound += 1;
-			}).catch(error => console.error(error));
+			}).catch(error => console.error(error.message));
 	}
 
 	getData(level = this.level, round = this.round) {

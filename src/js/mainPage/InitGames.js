@@ -3,10 +3,7 @@ import {
 } from '../shared/Text';
 
 import StartScreen from '../start_screen/StartScreen';
-import {
-	initEnglishPuzzle,
-	startPuzzleGame
-} from '../english_puzzle/main';
+import initEnglishPuzzle from '../english_puzzle/main';
 import createSpeakItGame from '../speakit/speakit';
 import SprintGame from '../sprint/Game';
 import audioChallenge from '../audio-challenge/audio-challenge';
@@ -44,7 +41,6 @@ export default function startMiniGame() {
 				descr = GAMES.englishPuzzle.description;
 				callback = () => {
 					initEnglishPuzzle();
-					startPuzzleGame();
 				};
 				break;
 			case 'speak-it':
