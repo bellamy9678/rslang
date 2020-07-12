@@ -44,9 +44,16 @@ Service.getGameWords = async function getGameWords() {
 		const listLearnedWords = await APIMethods.getUserWordsByCategory(
 			CATEGORIES.ACTIVE
 		);
-		const filtered = listLearnedWords.filter((word) => {
+		const listDifficultWords = await APIMethods.getUserWordsByCategory(
+			CATEGORIES.DIFFICULT
+		);
+		const filteredLearnedWords = listLearnedWords.filter((word) => {
 			return word.optional.progress === INTERVAL_PARAMS.MAX_PROGRESS_LEVEL;
 		});
+		const filteredDifficultWords = listDifficultWords.filter((word) => {
+			return word.optional.progress === INTERVAL_PARAMS.MAX_PROGRESS_LEVEL;
+		});
+		const filtered = filteredLearnedWords.concat(filteredDifficultWords);
 		return getShuffledArray(filtered);
 	}
 	const listOfNewWords = await Service.getGameSpecificWords(
