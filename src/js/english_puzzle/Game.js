@@ -1,4 +1,4 @@
-import { appContainer, rounds, levels, lines, API_URL, puzzlesGap, RESULT_WINDOW_BTN_CONTINUE } from './constants';
+import { appContainer, rounds, levels, lines, API_URL, puzzlesGap, RESULT_WINDOW_BTN_CONTINUE, PICTURE_HEIGHT, PICTURE_WIDTH } from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
@@ -78,13 +78,48 @@ export default class Game {
 		this.resultsBtnHand = this.resultsBtnHandler.bind(this);
 		this.resulsBtn.addEventListener('click', this.resultsBtnHand);
 
-		// TODO  remove arguments
-		this.levelSelectBtn.addEventListener('change', (event) => { this.levelSelectBtnHandler(+event.target.value - 1); });
-		this.roundSelectBtn.addEventListener('change', (event) => { this.roundSelectBtnHandler(+event.target.value - 1); });
+		this.levelSelectBtnHand = this.levelSelectBtnHandler.bind(this);
+		this.levelSelectBtn.addEventListener('change', this.levelSelectBtnHand);
+
+		this.roundSelectBtnHand = this.roundSelectBtnHandler.bind(this);
+		this.roundSelectBtn.addEventListener('change', this.roundSelectBtnHand);
 
 		this.showHideBg = this.showHideBackground.bind(this);
 		this.showBgImageBtn.addEventListener('click', this.showHideBg);
 
+		this.addEventListenerForWindowResize();
+	}
+
+	addEventListenerForWindowResize() {
+		this.windowResizeHand = this.windowResizeHandler.bind(this);
+		window.addEventListener('resize', this.windowResizeHand);
+	}
+
+	windowResizeHandler() {
+		console.log(this.cypher);
+		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
+		if (this.homeWidth !== this.puzzlesHomeContainer.offsetWidth) {
+			this.homeWidth = this.puzzlesHomeContainer.offsetWidth;
+			const puzzlesInLines = [];
+			const activePuzzles = document.querySelectorAll('.game__jigsaw--active');
+			const boardLines = document.querySelectorAll('.board__line');
+			boardLines.forEach(line => {
+				const puzzlesInLine = line.querySelectorAll('.game__jigsaw');
+				if (puzzlesInLine.length > 0) {
+					if (!puzzlesInLine[0].classList.contains('game__jigsaw--active')) {
+						puzzlesInLines.push(puzzlesInLine);
+					}
+				}
+			});
+			const allPuzzlesOnPage = puzzlesInLines;
+			if (activePuzzles.length > 0) {
+				allPuzzlesOnPage.push(activePuzzles);
+			}
+			allPuzzlesOnPage.forEach(line => {
+				this.calculatePuzzlesSize(line);
+				this.calculateBackgroundPosition(line);
+			});
+		}
 	}
 
 	removeEventListeners() {
@@ -96,6 +131,8 @@ export default class Game {
 		this.continueBtn.removeEventListener('click', this.continueBtnHand);
 		this.resulsBtn.removeEventListener('click', this.resultsBtnHand);
 		this.showBgImageBtn.removeEventListener('click', this.showHideBg);
+		this.levelSelectBtn.removeEventListener('change', this.levelSelectBtnHand);
+		this.roundSelectBtn.removeEventListener('change', this.roundSelectBtnHand);
 	}
 
 	saveStateToSessionStorage() {
@@ -128,16 +165,19 @@ export default class Game {
 		}
 	}
 
-	levelSelectBtnHandler(level) {
+	levelSelectBtnHandler(event) {
+		const level = +event.target.value - 1;
 		this.loadCustomLevelAndRound(level, this.currentRound);
 	}
 
-	roundSelectBtnHandler(round) {
+	roundSelectBtnHandler(event) {
+		const round = +event.target.value - 1;
 		this.loadCustomLevelAndRound(this.currentLevel, round);
 	}
 
 	continueBtnHandler() {
 		this.currentLine += 1;
+		this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
 		this.currentActiveLine = document.querySelector('.board__line--active');
 		this.currentActiveLine.classList.remove('board__line--active');
 		this.currentActiveElements = document.querySelectorAll('.game__jigsaw--active');
@@ -276,8 +316,10 @@ export default class Game {
 			puzzle.remove();
 		});
 		this.iDontKnowBtn.classList.add('none');
+		this.checkBtn.classList.add('none');
 		this.continueBtn.classList.remove('none');
 		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
+		this.updatePuzzlesAtActiveLine();
 		if (this.currentLine === rounds - 1) {
 			this.resulsBtn.classList.remove('none');
 		}
@@ -372,7 +414,9 @@ export default class Game {
 			classes: ['board__line', 'board__line--active'],
 			attr: { 'data-line': this.currentLine }
 		});
+		this.lineIsFull = false;
 		this.resultForCurrentLineState = false;
+		this.currentActiveLine = this.boardLine;
 		this.board.append(this.boardLine);
 
 	}
@@ -480,14 +524,20 @@ export default class Game {
 			this.freePuzzleContainers[0].append(event.target);
 			this.freePuzzleContainers[0].style.width = puzzleWidth;
 			this.freePuzzleContainers[0].classList.add('container--full');
+			this.updatePuzzlesAtActiveLine();
 			this.checkIfLineIsFull();
 		} else if (event.target.closest('.puzzle-container--active') && event.button === 0) {
 			const currentContainer = event.target.closest('.puzzle-container--active');
+			if (this.lineIsFull) {
+				Game.removeCorrectAndWrongIndicatorFromPuzzles();
+			}
 			currentContainer.classList.remove('container--full');
 			currentContainer.style.width = null;
 			this.updateFreePuzzleContainers();
 			this.puzzlesHomeContainer.append(event.target.closest('.game__jigsaw--active'));
+			this.updatePuzzlesAtActiveLine();
 			this.updatePuzzlesAtHome();
+			this.checkIfLineIsFull();
 		}
 
 	}
@@ -548,8 +598,12 @@ export default class Game {
 		const dragDrop = (event) => {
 			const targetContainer = event.target;
 			if (targetContainer.classList.contains('puzzle-container--active') || targetContainer.closest('.game__puzzles')) {
+				this.updatePuzzlesAtActiveLine();
 				if (targetContainer.closest('.game__puzzles')) {
 					this.puzzlesHomeContainer.append(this.selectedItem);
+					if (this.lineIsFull) {
+						Game.removeCorrectAndWrongIndicatorFromPuzzles();
+					}
 				} else {
 					targetContainer.append(this.selectedItem);
 				}
@@ -557,8 +611,9 @@ export default class Game {
 				if (targetContainer.classList.contains('puzzle-container--active')) {
 					targetContainer.classList.add('container--full');
 					targetContainer.style.width = selectedItemWidth;
-					this.checkIfLineIsFull();
 				}
+				this.checkIfLineIsFull();
+
 			}
 		};
 
@@ -579,6 +634,12 @@ export default class Game {
 		this.puzzleItem.forEach(item => item.addEventListener('dragend', dragEnd));
 	}
 
+	static removeCorrectAndWrongIndicatorFromPuzzles() {
+		document.querySelectorAll('.game__jigsaw--active').forEach(puzzle => puzzle.classList.remove('game__jigsaw--correct', 'game__jigsaw--wrong'));
+	}
+
+
+
 	checkIfLineIsFull() {
 		this.numberOfFullContainers = 0;
 		this.activePuzzleContainers.forEach(container => {
@@ -588,13 +649,16 @@ export default class Game {
 		});
 		if (this.numberOfFullContainers === this.numberOfPuzzles) {
 			this.lineIsFullHandler();
+
 		} else {
 			this.checkBtn.classList.add('none');
+			this.lineIsFull = false;
 		}
 
 	}
 
 	lineIsFullHandler() {
+		this.lineIsFull = true;
 		this.checkBtn.classList.remove('none');
 	}
 
@@ -687,7 +751,7 @@ export default class Game {
 
 		this.wrapper = factory.create({
 			elem: TAGS.DIV,
-			classes: 'wrapper',
+			classes: 'wrapper__en_puzzle',
 			child: this.gameContainer
 		});
 
@@ -706,16 +770,27 @@ export default class Game {
 	calculatePuzzlesSize(puzzlesLine) {
 		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
 		const homeContainerWidth = this.puzzlesHomeContainer.offsetWidth;
+		const neededBoardHeight = ((PICTURE_HEIGHT * homeContainerWidth / PICTURE_WIDTH) + 9 * 2).toFixed();
+		const gameBoard = document.querySelector('.game__board');
+		gameBoard.style.height = `${neededBoardHeight}px`;
+		this.board.style.width = `${homeContainerWidth}px`;
+		const puzzleHeight = ((neededBoardHeight - 9 * 2) / 10).toFixed();
+		this.puzzlesHomeContainer.style.height = `${puzzleHeight}px`;
+		const boardLines = document.querySelectorAll('.board__line');
+		boardLines.forEach(line => {
+			const curLine = line;
+			curLine.style.height = `${puzzleHeight}px`;
+		});
 		const lengthOfEachPuzzleInLine = [];
 		let finishWidthOfEachPuzzle = [];
 		puzzlesLine.forEach(puzzle => {
 			lengthOfEachPuzzleInLine.push(puzzle.dataset.word.length);
 		});
-		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b);
+		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b, 0);
 		const sumWidthOfPuzzles = homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
 		const widthForOneSymbol = sumWidthOfPuzzles / lengthOfLine;
 		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map(puzzleLength => Math.round(puzzleLength * widthForOneSymbol));
-		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b);
+		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b, 0);
 		if (sumOfEachPuzzleWidth === sumWidthOfPuzzles) {
 			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
 		} else if (sumOfEachPuzzleWidth < sumWidthOfPuzzles) {
@@ -744,6 +819,7 @@ export default class Game {
 			const curPuzzle = puzzle;
 			curPuzzle.setAttribute('data-width', `${finishWidthOfEachPuzzle[index]}px`);
 			curPuzzle.style.width = `${finishWidthOfEachPuzzle[index]}px`;
+			curPuzzle.style.height = `${puzzleHeight}px`;
 		});
 	}
 
@@ -756,6 +832,7 @@ export default class Game {
 
 	calculateBackgroundPosition(elements) {
 		const sortedPuzzles = this.sortPuzzles(elements);
+		console.log(sortedPuzzles);
 		const elementsLine = elements[0].dataset.line;
 		const puzzleHeight = elements[0].offsetHeight;
 		const bgWidth = this.board.offsetWidth;

@@ -92,6 +92,9 @@ $bg-result-btn: rgb(143, 86, 113);
 	&-continue {
 		background-color: $correct-puzzle;
 	}
+	&-check {
+		background-color: $bg-dark-grey;
+	}
 	&-i-dont-know {
 		background-color: $wrong-puzzle;
 	}
@@ -110,7 +113,7 @@ $bg-result-btn: rgb(143, 86, 113);
 
 .game {
 	&__main {
-  width: 751px;
+  max-width: 751px;
   margin: auto;
 }
 
@@ -135,7 +138,10 @@ $bg-result-btn: rgb(143, 86, 113);
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  width: 40px;
+	width: 40px;
+	@include media-tablet() {
+		display: none;
+	}
 }
 
 .number {
@@ -162,6 +168,12 @@ $bg-result-btn: rgb(143, 86, 113);
 	border-radius: 4px;
 	&:not(:last-child) {
 		margin-right: 2px;
+	}
+
+	@include media-tablet() {
+		margin-left: 0;
+		width: 100%;
+		max-width: 713px;
 	}
 }
 
@@ -239,8 +251,24 @@ $bg-result-btn: rgb(143, 86, 113);
 }
 
 .hovered {
-	background-color: $bg-dark-grey;
+	background-color: $bg-light-grey;
 	&--animation{
 		animation: jiggle 0.4s infinite;
 	}
 }
+
+.wrapper__en_puzzle {
+	max-width: $desktop-width;
+	padding: 0 40px;
+	margin: 0 auto;
+
+	@include media-tablet() {
+		padding: 0;
+	}
+}
+
+.none {
+	display: none !important;
+}
+
+
