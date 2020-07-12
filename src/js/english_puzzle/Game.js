@@ -319,7 +319,7 @@ export default class Game {
 		const sorted = [];
 		puzzles.forEach((puzzle) => {
 			sorted[
-				this.cypher[this.currentLine][0].indexOf(
+				this.cypher[puzzle.dataset.line][0].indexOf(
 					+puzzle.dataset.positionCrypted
 				)
 			] = puzzle;
@@ -864,7 +864,7 @@ export default class Game {
 			const puzzle = element;
 			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
 			puzzle.style.backgroundSize = `${bgWidth}px`;
-			previosPuzzlesWidth += puzzle.offsetWidth;
+			previosPuzzlesWidth += puzzle.offsetWidth + 2;
 		});
 	}
 
