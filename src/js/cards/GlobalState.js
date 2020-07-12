@@ -20,6 +20,12 @@ import Service from '../words_service/Service';
 
 const fab = new DOMElementCreator();
 
+let settings;
+async function initial() {
+	settings = await Settings.getInstance();
+}
+initial();
+
 export default class GlobalState {
 	constructor() {
 		this.currentPosition = DEFAULT_POSITION;
@@ -89,8 +95,7 @@ export default class GlobalState {
 		this.container.removeChild(this.cardsContainer);
 	}
 
-	async addCurrentWordToEnd() {
-		const settings = await Settings.getInstance();
+	addCurrentWordToEnd() {
 		if (settings.cardsToShowAmount() > this.words.length) {
 			const clearCard = new Card(this.words[this.currentPosition]);
 			const cardElem = clearCard.create();

@@ -116,17 +116,15 @@ export default class Card {
 		const correctEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
 			detail: currentWord,
 		});
-		eventObserver.call(correctEvent);
 		document.dispatchEvent(correctEvent);
 	}
 
 	errorAnswerHandler() {
 		const currentWord = this.card;
-		const incorrectEvent = new CustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, {
+		const correctEvent = new CustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, {
 			detail: currentWord,
 		});
-		eventObserver.call(incorrectEvent);
-		document.dispatchEvent(incorrectEvent);
+		document.dispatchEvent(correctEvent);
 	}
 
 	isCorrectReaction() {
@@ -457,7 +455,7 @@ export default class Card {
 
 		showAnswerButton.addEventListener('click', function showAnswerButtonHandler() {
 			showAnswerButton.dispatchEvent(showAnswerButtonEvent);
-			document.dispatchEvent(showAnswerButtonEvent);
+			// document.dispatchEvent(showAnswerButtonEvent);
 			eventObserver.call(showAnswerButtonEvent);
 			textInput.value = textWord.dataset.word;
 			buttonGroupComplexity.classList.remove(FADE_CLASS, HIDDEN_CLASS);
@@ -472,28 +470,28 @@ export default class Card {
 		easyButton.addEventListener('click', function easyButtonHandler() {
 			easyButton.dispatchEvent(easyButtonEvent);
 			eventObserver.call(easyButtonEvent);
-			document.dispatchEvent(easyButtonEvent);
+			// document.dispatchEvent(easyButtonEvent);
 			easyButton.removeEventListener('click', easyButtonHandler);
 		});
 
 		goodButton.addEventListener('click', function goodButtonHandler() {
 			goodButton.dispatchEvent(goodButtonEvent);
 			eventObserver.call(goodButtonEvent);
-			document.dispatchEvent(goodButtonEvent);
+			// document.dispatchEvent(goodButtonEvent);
 			goodButton.removeEventListener('click', goodButtonHandler);
 		});
 
 		againButton.addEventListener('click', function againButtonHandler() {
 			againButton.dispatchEvent(againButtonEvent);
 			eventObserver.call(againButtonEvent);
-			document.dispatchEvent(againButtonEvent);
+			// document.dispatchEvent(againButtonEvent);
 			againButton.removeEventListener('click', againButtonHandler);
 		});
 
 		hardButton.addEventListener('click', function hardButtonHandler() {
 			hardButton.dispatchEvent(hardButtonEvent);
 			eventObserver.call(hardButtonEvent);
-			document.dispatchEvent(hardButtonEvent);
+			// document.dispatchEvent(hardButtonEvent);
 			hardButton.removeEventListener('click', hardButtonHandler);
 		});
 

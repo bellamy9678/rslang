@@ -858,8 +858,7 @@ export default class Game {
 
 		sortedPuzzles.forEach((element) => {
 			const puzzle = element;
-			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight
-				}px`;
+			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
 			puzzle.style.backgroundSize = `${bgWidth}px`;
 			previosPuzzlesWidth += puzzle.offsetWidth;
 		});

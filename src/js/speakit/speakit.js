@@ -1,24 +1,22 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
-
 import {
+	API,
 	ASSETS_STORAGE
 } from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
+// import initStartPage from './StartPage';
 import initMainContent from './MainContent';
 import renderWords from './RenderWords';
 import Result from '../game_result/Result';
-import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
-import Statistics from '../statistics/Statistics';
-
 import {
 	returnBtnText,
 	newGameText,
 	statisticText,
-	emptyString,
+	emptyString
 } from './speakconst';
-import Service from '../words_service/Service';
 
 export default function createSpeakItGame() {
+
 	// Creat DOM
 	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();
@@ -53,24 +51,24 @@ export default function createSpeakItGame() {
 	const zero = 0;
 	const guessedAll = 10;
 
-	// async function getData(url) {
-	// 	const response = await fetch(url);
-	// 	const data = await response.json();
-	// 	return data;
-	// }
+	async function getData(url) {
+		const response = await fetch(url);
+		const data = await response.json();
+		return data;
+	}
 
-	// // Эта функция Лизы, мне нужно импорт из какого-то ее файла добавить
-	// function Word(word) {
-	// 	this.id = word.id;
-	// 	this.word = word.word;
-	// 	this.translate = word.wordTranslate;
-	// 	this.transcription = word.transcription;
-	// 	this.audio = `${ASSETS_STORAGE}${word.audio}`;
-	// 	this.image = `${ASSETS_STORAGE}${word.image}`;
-	// 	this.example = word.textExample;
-	// 	this.exampleTranslate = word.textExampleTranslate;
-	// 	this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
-	// }
+	// Эта функция Лизы, мне нужно импорт из какого-то ее файла добавить
+	function Word(word) {
+		this.id = word.id;
+		this.word = word.word;
+		this.translate = word.wordTranslate;
+		this.transcription = word.transcription;
+		this.audio = `${ASSETS_STORAGE}${word.audio}`;
+		this.image = `${ASSETS_STORAGE}${word.image}`;
+		this.example = word.textExample;
+		this.exampleTranslate = word.textExampleTranslate;
+		this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
+	}
 
 	// Speech recognition
 	const SpeechRecognition = window.webkitSpeechRecognition;
@@ -79,34 +77,30 @@ export default function createSpeakItGame() {
 	recognition.lang = language;
 
 	// words
-	async function getWords() {
-		const {
-			repeatWords,
-			level,
-			round
-		} = JSON.parse(localStorage.getItem('gameData'));
-		if (repeatWords === true) {
-			const userWords = await Service.getRepeatedWords();
-			return userWords;
-		}
-		const allWords = await Service.getGameSpecificWords(level, round);
-		return allWords;
+	async function getWords(group, page) {
+		const url = `${API}words?group=${group}&page=${page}`;
+		const data = await getData(url);
+		return data.map(word => new Word(word));
 	}
 
 	// Events
 	function setDefaultState() {
-		const { level } = JSON.parse(localStorage.getItem('gameData'));
-		const { round } = JSON.parse(localStorage.getItem('gameData'));
+		const {
+			level
+		} = JSON.parse(localStorage.getItem('gameData'));
+		const {
+			round
+		} = JSON.parse(localStorage.getItem('gameData'));
 		guessed.length = zero;
 		trainMode = true;
 		span.textContent = emptyString;
 		output.classList.add('none');
 		currentImg.setAttribute('src', defaultImg);
 		translation.textContent = emptyString;
-		[...words].forEach((el) => el.remove());
-		getWords(level, round).then((res) => {
-			const arr = res.slice(zero, guessedAll).map((item) => renderWords(item));
-			arr.forEach((el) => wordsContainer.append(el));
+		[...words].forEach(el => el.remove());
+		getWords(level, round).then(res => {
+			const arr = res.slice(zero, guessedAll).map(item => renderWords(item));
+			arr.forEach(el => wordsContainer.append(el));
 		});
 	}
 
@@ -114,11 +108,10 @@ export default function createSpeakItGame() {
 		guessed.length = zero;
 		trainMode = true;
 		span.textContent = emptyString;
-
 		output.classList.add('none');
 		currentImg.setAttribute('src', defaultImg);
 		translation.textContent = emptyString;
-		[...words].forEach((el) => el.remove());
+		[...words].forEach(el => el.remove());
 	}
 
 	function GetAnswers(item) {
@@ -142,7 +135,7 @@ export default function createSpeakItGame() {
 				currentImg.setAttribute('src', wordSrc);
 				imgAudio.setAttribute('src', wordAudio);
 				imgAudio.play();
-				[...words].forEach((el) => el.classList.remove('active'));
+				[...words].forEach(el => el.classList.remove('active'));
 				event.target.classList.add('active');
 			}
 			// sound on word click
@@ -154,7 +147,7 @@ export default function createSpeakItGame() {
 				currentImg.setAttribute('src', wordSrc);
 				imgAudio.setAttribute('src', wordAudio);
 				imgAudio.play();
-				[...words].forEach((el) => el.classList.remove('active'));
+				[...words].forEach(el => el.classList.remove('active'));
 				event.target.parentElement.classList.add('active');
 			}
 		};
@@ -188,11 +181,8 @@ export default function createSpeakItGame() {
 
 		// speech
 		this.handleRecognition = () => {
-			[...words].forEach((el) => {
-				if (
-					el.querySelector('.word-writing').textContent.toLowerCase() ===
-					span.textContent.toLowerCase()
-				) {
+			[...words].forEach(el => {
+				if (el.querySelector('.word-writing').textContent.toLowerCase() === span.textContent.toLowerCase()) {
 					if (!guessed.includes(el)) {
 						el.classList.add('active');
 						currentImg.setAttribute('src', el.dataset.myimage);
@@ -226,7 +216,7 @@ export default function createSpeakItGame() {
 		this.startSpeakHandler = () => {
 			trainMode = false;
 			output.classList.remove('none');
-			[...words].forEach((el) => el.classList.remove('active'));
+			[...words].forEach(el => el.classList.remove('active'));
 			translation.classList.add('none');
 			recognition.start();
 			recognition.addEventListener('result', this.recResultHandler);
@@ -241,7 +231,7 @@ export default function createSpeakItGame() {
 			output.classList.add('none');
 			span.textContent = emptyString;
 			currentImg.setAttribute('src', defaultImg);
-			[...words].forEach((el) => el.classList.remove('active'));
+			[...words].forEach(el => el.classList.remove('active'));
 			trainMode = true;
 			translation.classList.remove('none');
 			translation.textContent = emptyString;
@@ -253,13 +243,15 @@ export default function createSpeakItGame() {
 			// startPage.classList.add('none');
 			mainWrapper.classList.remove('none');
 			recognition.removeEventListener('end', this.handleRecognition);
-			const { level } = JSON.parse(localStorage.getItem('gameData'));
-			const { round } = JSON.parse(localStorage.getItem('gameData'));
-			getWords(level, round).then((res) => {
-				const arr = res
-					.slice(zero, guessedAll)
-					.map((item) => renderWords(item));
-				arr.forEach((el) => wordsContainer.append(el));
+			const {
+				level
+			} = JSON.parse(localStorage.getItem('gameData'));
+			const {
+				round
+			} = JSON.parse(localStorage.getItem('gameData'));
+			getWords(level, round).then(res => {
+				const arr = res.slice(zero, guessedAll).map(item => renderWords(item));
+				arr.forEach(el => wordsContainer.append(el));
 			});
 			document.addEventListener('click', this.clickHandler);
 			restartBtn.addEventListener('click', this.restartHandler);
@@ -293,19 +285,9 @@ export default function createSpeakItGame() {
 			resultReturnBtn.addEventListener('click', this.returnHandler);
 			resultNewGameBtn.addEventListener('click', this.newGameHandler);
 
-			const resultPoints = {
-				name: GAMES_NAMES.SPEAK,
-				result:
-				guessed.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
-				([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
-			};
-			Statistics.putGamesResult(resultPoints);
-
 			myResult.showResult({
-				rightAnswers: guessed.map((item) => new GetAnswers(item)),
-				wrongAnswers: [...words]
-					.filter((item) => !guessed.includes(item))
-					.map((item) => new GetAnswers(item)),
+				rightAnswers: guessed.map(item => new GetAnswers(item)),
+				wrongAnswers: ([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
 				buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn],
 			});
 		};
@@ -318,4 +300,5 @@ export default function createSpeakItGame() {
 	const speakHandlers = new GameHandlers();
 	// speakHandlers.addAllListeners();
 	speakHandlers.startHandler();
+
 }

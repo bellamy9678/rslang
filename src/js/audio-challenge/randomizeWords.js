@@ -7,10 +7,6 @@ import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import {ASSETS_STORAGE} from '../shared/Constants';
-import APIMethods from '../words_service/APIMethods';
-import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
-import Statistics from '../statistics/Statistics';
-
 
 export default function randomizeWords(words, array) {
 	const mainWord = words[0];
@@ -34,19 +30,6 @@ export default function randomizeWords(words, array) {
 		this.transcription = item.dataset;
 		this.audio = item.dataset.audio.replace(ASSETS_STORAGE, '');;
 	}
-
-	async function newRound() {
-		const {level, round} = JSON.parse(localStorage.getItem('gameData'));
-		const allWords = await APIMethods.getNewWordsArray(level, round);
-		allWords.forEach(item => {
-			arrayForUniqness.push(item);
-		});
-		allWords.forEach(item => {
-			arrayForRandom.push(item);
-		});
-		randomizeWords(arrayForUniqness, arrayForRandom);
-	}
-
 	skipButton.addEventListener('click', () => {
 		const answerContainers = document.querySelectorAll('.answers-wrapper__answer');
 		answerContainers.forEach(container => {
@@ -60,27 +43,14 @@ export default function randomizeWords(words, array) {
 			const resultReturnBtn = creator.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn'],
-				child: 'Главное меню',
+				child: 'returnBtnText',
 			});
 			const resultNewGameBtn = creator.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn'],
-				child: 'Играть снова',
+				child: 'newGameText',
 			});
 			const result = new Result();
-
-			resultNewGameBtn.addEventListener('click', () => {
-				result.closeResultWindow();
-				newRound();
-			});
-			const resultPoints = {
-				name: GAMES_NAMES.AUDIO,
-				result:
-				arrayWithRightAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
-				arrayWithWrongAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
-			};
-			Statistics.putGamesResult(resultPoints);
-
 			result.showResult({
 				rightAnswers: arrayWithRightAnswers.map(item => new GetAnswers(item)),
 				wrongAnswers: arrayWithWrongAnswers.map(item => new GetAnswers(item)),

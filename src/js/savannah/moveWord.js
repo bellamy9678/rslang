@@ -1,4 +1,4 @@
-import {START_INDEX, FINAL_INDEX, REQUIRED_MARGIN, /* stopMoving */} from './consts';
+import {START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 
 export default function moveWord() {
 	const start = Date.now();
@@ -27,11 +27,7 @@ export default function moveWord() {
 			cancelAnimationFrame(requestId);
 		});
 	});
-
-	function stopMoving() {
+	document.addEventListener('keydown', () => {
 		cancelAnimationFrame(requestId);
-		document.removeEventListener('keydown', stopMoving);
-	}
-
-	document.addEventListener('keydown', stopMoving);
+	});
 }

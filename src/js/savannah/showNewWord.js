@@ -1,67 +1,16 @@
-import {arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, /* arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import {VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 import defineArrays from './defineArrays';
+import endgame from './endGame';
 import generateWordContainers from './generateWordContainers';
 import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
-import DOMElementCreator from '../utils/DOMElementCreator';
-import TAGS from '../shared/Tags.json';
-import Result from '../game_result/Result';
-import GetAnswers from './GetAnswers';
-import APIMethods from '../words_service/APIMethods';
 
 export default async function showNewWord() {
 	let gameOver = false;
-	const creator = new DOMElementCreator();
-	const result = new Result();
 
 	function callShowNewWord() {
 		setTimeout(() => {
 			showNewWord();
 		}, 1000);
-	}
-
-	function endgame(rightAnswers, wrongAnswers) {
-		async function newRound() {
-			document.querySelector('.result__button').removeEventListener('click', newRound);
-			result.closeResultWindow();
-			for (let i = 0; i <= 4; i+=1) {
-				const heartIcon = creator.create({
-					elem: TAGS.IMG,
-					classes: 'heart-icon',
-					attr: [{
-						src: './assets/images/heart.svg'
-					}, {
-						alt: ''
-					}],
-				});
-				document.querySelector('.health-point-scale').append(heartIcon);
-			}
-			// const {level, round} = JSON.parse(localStorage.getItem('gameData'));
-			const allWords = await APIMethods.getNewWordsArray(0, 0);
-			allWords.forEach(item => {
-				arrForUniqness.push(item);
-			});
-			allWords.forEach(item => {
-				arrForRandFunc.push(item);
-			});
-			showNewWord();
-		}
-
-		const resultReturnBtn = creator.create({
-			elem: TAGS.BUTTON,
-			classes: ['result__button', 'result__continue-btn'],
-			child: 'Главное меню',
-		});
-		const resultNewGameBtn = creator.create({
-			elem: TAGS.BUTTON,
-			classes: ['result__button', 'result__continue-btn'],
-			child: 'Играть снова',
-		});
-		resultNewGameBtn.addEventListener('click', newRound);
-		result.showResult({
-			rightAnswers: rightAnswers.map(item => new GetAnswers(item)),
-			wrongAnswers: wrongAnswers.map(item => new GetAnswers(item)),
-			buttons: [resultReturnBtn, resultNewGameBtn]
-		});
 	}
 
 	const lifeIcon = document.querySelector('.health-point-scale IMG');
@@ -98,15 +47,6 @@ export default async function showNewWord() {
 		}
 	}
 
-	function defineButton(event){
-		document.removeEventListener('keydown', defineButton);
-		const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
-		if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
-			const choosenAnswer = document.querySelector(`.answer:nth-child(${numberOfDigit})`);
-			checkAnswer(choosenAnswer);
-		}
-	}
-
 	function addEventOnClick(event) {
 		checkAnswer(event.target);
 		allAnswers.forEach((item) => {
@@ -114,11 +54,17 @@ export default async function showNewWord() {
 		});
 	}
 
-
 	allAnswers.forEach((item) => {
 		item.addEventListener('click', addEventOnClick);
 	});
 
-	document.removeEventListener('keydown', defineButton);
+	function defineButton(event) {
+		const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
+		if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
+			const choosenAnswer = document.querySelector(`.answer:nth-child(${numberOfDigit})`);
+			checkAnswer(choosenAnswer);
+		}
+		document.removeEventListener('keydown', defineButton);
+	}
 	document.addEventListener('keydown', defineButton);
 }

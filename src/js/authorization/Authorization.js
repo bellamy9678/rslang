@@ -1,6 +1,13 @@
-import { EMAIL_PART } from './Constants';
-import { API, URL_SIGN_IN } from '../shared/Constants';
-import { USER } from '../utils/CookieConstants';
+import {
+	EMAIL_PART,
+} from './Constants';
+import {
+	API,
+	URL_SIGN_IN
+} from '../shared/Constants';
+import {
+	USER,
+} from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
 import CookieMonster from '../utils/CookieMonster';
 
