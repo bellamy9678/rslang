@@ -46,6 +46,7 @@ export const TEXT = {
 		title: 'Try our amazing games!',
 		description: 'Lorem ipsum dolore si amet.',
 	},
+
 	settingsPage: {
 		title: 'Settings',
 		wordsNumberLabel: 'Type the number of words that you will plan to learn in a day',
@@ -69,6 +70,47 @@ export const TEXT = {
 		errorMessage: 'At least one of three items must be selected (word translation, word meaning or a sentence with an example of using the studied word.',
 		successMessage: 'Your settings is saved',
 	},
+
+	aboutUsPage : {
+		title : 'Our Team',
+		description : 'We worked hard to provide reliable RSLang. That allow you to focus solely on your learning with peace of mind – knowing that our agile and unrivalled team are on hand 24/7, should they ever have any issues with our cutting-edge product.',
+		mentorHeader : 'And... Our curator',
+		mentorDescription : 'It would not have been possible without our mentor.',
+
+		command : [
+			{
+				name : 'Mikhail Fursa',
+				git : 'bellamy9678',
+				text : 'Team lead, app architecture, settings, statistics, words, training mode, utils, some design and modules integration.'
+			},
+			{
+				name : 'Lizaveta Kunitskaya',
+				git : 'Chaba-chaba',
+				text : 'Authorization, dictionary, main page, UI-UX design, styles and modules integration.'
+			},
+			{
+				name : 'Aleksandra Ivanova',
+				git : 'leqsar',
+				text : 'Games: Audio Challange and Savannah.'
+			},
+			{
+				name : 'Andrii Konovalov',
+				git : 'Garza0',
+				text : 'Games: English puzzle and Sprint; also start game screen and game result window.'
+			},
+			{
+				name : 'Tatsiana Alsheuskaya',
+				git : 'Ttttanna',
+				text : 'Games: Speak it and Our game.'
+			},
+		],
+
+		mentor : {
+			name : 'Denis Kravchenko',
+			git : 'DKravchenkoEpam',
+			text : 'Organize command work, helpful and highly relevant advices and recommendation for any part of application or work.'
+		}
+	}
 };
 
 export const AUTHORIZATION_FORM = {

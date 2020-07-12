@@ -13,6 +13,7 @@ export const URL_FILTER = 'filter=';
 export const URL_WORD_CATEGORY = 'userWord.optional.category';
 export const URL_SETTINGS = 'settings';
 
+export const GIT_URL = 'https://github.com/';
 export const URL_ET = '&';
 export const URL_NEXT = '/';
 export const URL_PARAM = '?';
