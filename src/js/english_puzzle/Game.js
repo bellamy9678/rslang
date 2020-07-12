@@ -328,7 +328,7 @@ export default class Game {
 	sortPuzzles(puzzles) {
 		const sorted = [];
 		puzzles.forEach(puzzle => {
-			sorted[this.cypher[this.currentLine][0].indexOf(+puzzle.dataset.positionCrypted)] = puzzle;
+			sorted[this.cypher[+puzzle.dataset.line][0].indexOf(+puzzle.dataset.positionCrypted)] = puzzle;
 		});
 		return sorted;
 	}
@@ -831,6 +831,7 @@ export default class Game {
 	}
 
 	calculateBackgroundPosition(elements) {
+		console.log(elements);
 		const sortedPuzzles = this.sortPuzzles(elements);
 		console.log(sortedPuzzles);
 		const elementsLine = elements[0].dataset.line;
