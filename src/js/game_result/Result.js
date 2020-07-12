@@ -1,7 +1,6 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import * as CONST from './constants';
-import { ASSETS_STORAGE } from '../shared/Constants';
 
 const factory = new DOMElementCreator();
 
@@ -28,6 +27,7 @@ export default class Result {
 	}
 
 	generateResultWindow(settingsObj) {
+		console.log(settingsObj);
 		this.resultWindow = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-window',
@@ -95,8 +95,8 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
-					`${obj.word} - ${obj.wordTranslate}`
+					obj.example.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
+					`${obj.word} - ${obj.translate}`
 			});
 
 			this.iDontKnowRow = factory.create({
@@ -139,7 +139,7 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
+					obj.example.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
 					`${obj.word} - ${obj.wordTranslate}`
 			});
 
@@ -174,7 +174,7 @@ export default class Result {
 				elem: TAGS.AUDIO,
 				classes: 'result__audio-sentences',
 				attr: [{ 'data-word': obj.word }, {
-					'src': `${ASSETS_STORAGE}${this.sentenceResult ? obj.audioExample : obj.audio}`
+					'src': `${this.sentenceResult ? obj.exampleAudio : obj.audio}`
 				}]
 			});
 			return audioEl;
