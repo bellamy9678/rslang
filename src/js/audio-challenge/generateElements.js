@@ -3,7 +3,7 @@ import TAGS from '../shared/Tags.json';
 import {idkText, LEFT_MARGIN_OF_NEW_QUESTION} from './consts';
 import checkAnswer from './checkAnswer';
 
-export default async function generateElements(mainWordObj, answers) {
+export default function generateElements(mainWordObj, answers) {
 	const mainWrapper = document.querySelector('.main-wrapper');
 	if (mainWrapper) {
 		mainWrapper.remove();

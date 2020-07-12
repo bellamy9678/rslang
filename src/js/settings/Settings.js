@@ -157,7 +157,7 @@ export default class Settings {
 		return copy;
 	}
 
-	static async init() {
+	static async init(isFirstInitialization = false) {
 		const returnedSettingsObject = Settings.getCopyDefaultObject();
 		returnedSettingsObject.cardsToShowAmount = amountCardsToShow;
 		returnedSettingsObject.newWordsToShowAmount = amountNewWordsToShow;
@@ -173,17 +173,17 @@ export default class Settings {
 		returnedSettingsObject.getSettings = getSettingsNow;
 		returnedSettingsObject.updateSettings = update;
 
-		await returnedSettingsObject.getSettings();
-		returnedSettingsObject.checkNewDate();
-		returnedSettingsObject.saveParameters();
+		if (!isFirstInitialization) {
+			await returnedSettingsObject.getSettings();
+			returnedSettingsObject.checkNewDate();
+		}
+		await returnedSettingsObject.saveParameters();
 
 		return returnedSettingsObject;
 	}
 
 	static async getInstance() {
-		if (Settings.instance === null) {
-			Settings.instance = await Settings.init();
-		}
+		Settings.instance = await Settings.init();
 		return Settings.instance;
 	}
 }
