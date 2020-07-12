@@ -12,6 +12,7 @@ import {
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
 import InputHandler from './InputHandler';
+import Statistics from '../statistics/Statistics';
 
 let globalState = new GlobalState();
 
@@ -87,6 +88,8 @@ function showHiddenWordInInput() {
 }
 
 function nextCard() {
+	Statistics.putWordsProgress();
+
 	document.querySelector('.card').classList.add(FADE_CLASS);
 	globalState.inputHandler.removeListener();
 	globalState.increasePosition();

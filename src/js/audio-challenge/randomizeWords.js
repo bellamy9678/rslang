@@ -8,6 +8,9 @@ import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import {ASSETS_STORAGE} from '../shared/Constants';
 import APIMethods from '../words_service/APIMethods';
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
+
 
 export default function randomizeWords(words, array) {
 	const mainWord = words[0];
@@ -65,10 +68,19 @@ export default function randomizeWords(words, array) {
 				child: 'Играть снова',
 			});
 			const result = new Result();
+
 			resultNewGameBtn.addEventListener('click', () => {
 				result.closeResultWindow();
 				newRound();
 			});
+			const resultPoints = {
+				name: GAMES_NAMES.AUDIO,
+				result:
+				arrayWithRightAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
+				arrayWithWrongAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+			};
+			Statistics.putGamesResult(resultPoints);
+
 			result.showResult({
 				rightAnswers: arrayWithRightAnswers.map(item => new GetAnswers(item)),
 				wrongAnswers: arrayWithWrongAnswers.map(item => new GetAnswers(item)),
