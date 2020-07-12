@@ -1,10 +1,9 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import {
-	API,
+	// API,
 	ASSETS_STORAGE
 } from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
-// import initStartPage from './StartPage';
 import initMainContent from './MainContent';
 import renderWords from './RenderWords';
 import Result from '../game_result/Result';
@@ -14,6 +13,7 @@ import {
 	statisticText,
 	emptyString
 } from './speakconst';
+import Service from '../words_service/Service';
 
 export default function createSpeakItGame() {
 
@@ -51,24 +51,24 @@ export default function createSpeakItGame() {
 	const zero = 0;
 	const guessedAll = 10;
 
-	async function getData(url) {
-		const response = await fetch(url);
-		const data = await response.json();
-		return data;
-	}
+	// async function getData(url) {
+	// 	const response = await fetch(url);
+	// 	const data = await response.json();
+	// 	return data;
+	// }
 
-	// Эта функция Лизы, мне нужно импорт из какого-то ее файла добавить
-	function Word(word) {
-		this.id = word.id;
-		this.word = word.word;
-		this.translate = word.wordTranslate;
-		this.transcription = word.transcription;
-		this.audio = `${ASSETS_STORAGE}${word.audio}`;
-		this.image = `${ASSETS_STORAGE}${word.image}`;
-		this.example = word.textExample;
-		this.exampleTranslate = word.textExampleTranslate;
-		this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
-	}
+	// // Эта функция Лизы, мне нужно импорт из какого-то ее файла добавить
+	// function Word(word) {
+	// 	this.id = word.id;
+	// 	this.word = word.word;
+	// 	this.translate = word.wordTranslate;
+	// 	this.transcription = word.transcription;
+	// 	this.audio = `${ASSETS_STORAGE}${word.audio}`;
+	// 	this.image = `${ASSETS_STORAGE}${word.image}`;
+	// 	this.example = word.textExample;
+	// 	this.exampleTranslate = word.textExampleTranslate;
+	// 	this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
+	// }
 
 	// Speech recognition
 	const SpeechRecognition = window.webkitSpeechRecognition;
@@ -77,10 +77,13 @@ export default function createSpeakItGame() {
 	recognition.lang = language;
 
 	// words
-	async function getWords(group, page) {
-		const url = `${API}words?group=${group}&page=${page}`;
-		const data = await getData(url);
-		return data.map(word => new Word(word));
+	async function getWords() {
+		const {
+			level,
+			round
+		} = JSON.parse(localStorage.getItem('gameData'));
+		const allWords = await Service.getGameSpecificWords(level, round);
+		return allWords;
 	}
 
 	// Events

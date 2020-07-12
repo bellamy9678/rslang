@@ -10,7 +10,7 @@ import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
-import APIMethods from '../words_service/APIMethods';
+import Service from '../words_service/Service';
 
 const result = new Result();
 
@@ -337,7 +337,7 @@ export default class Game {
 
 	getData(level = this.currentLevel, round = this.currentRound) {
 		new Promise(resolve => {
-			const allWords = APIMethods.getNewWordsArray(level, round);
+			const allWords = Service.getGameSpecificWords(level, round);
 			resolve(allWords);
 		})
 			.then(allWords => {
