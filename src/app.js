@@ -17,3 +17,7 @@ async function initial() {
 }
 
 initial();
+
+
+subscribeToEvents();
+
