@@ -320,7 +320,7 @@ export default class Game {
 		this.continueBtn.classList.remove('none');
 		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
 		this.updatePuzzlesAtActiveLine();
-		if (this.currentLine === rounds - 1) {
+		if (this.currentLine === 9) {
 			this.resulsBtn.classList.remove('none');
 		}
 	}
@@ -776,6 +776,7 @@ export default class Game {
 		this.board.style.width = `${homeContainerWidth}px`;
 		const puzzleHeight = ((neededBoardHeight - 9 * 2) / 10).toFixed();
 		this.puzzlesHomeContainer.style.height = `${puzzleHeight}px`;
+		gameBoard.style.height = `${puzzleHeight * 10 + 18}px`;
 		const boardLines = document.querySelectorAll('.board__line');
 		boardLines.forEach(line => {
 			const curLine = line;

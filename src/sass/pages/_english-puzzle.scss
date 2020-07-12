@@ -18,18 +18,30 @@ $bg-result-btn: rgb(143, 86, 113);
   display: flex;
   justify-content: space-between;
 	margin-bottom: 5px;
+	@include media-mobile() {
+		flex-direction: column;
+	}
+
+	&__hints {
+		@include media-mobile() {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 5px;
+		}
+	}
 	&__hints > * {
 		background-size: 18px;
     background-position: center;
     background-repeat: no-repeat;
-    width: 36px;
 		height: 26px;
 		border-radius: 5px;
-		margin-left: 5px;
 		cursor: pointer;
 		background-color: $color-background;
     border: 1px solid $color-border;
-    color: $color-text-light;
+		color: $color-text-light;
+		&:not(:first-child) {
+			margin-left: 5px;
+		}
 	}
 	&__level-and-page {
 		background-color: $bg-light-grey;
@@ -59,12 +71,16 @@ $bg-result-btn: rgb(143, 86, 113);
 	width: 36px;
 	height: 29px;
 	border-radius: 4px;
-	margin-left: 5px;
 	cursor: pointer;
 	background-color: $bg-light-grey;
 	color: $color-text-light;
 	border: none;
 	box-shadow: $elements-shadow;
+
+	@include media-mobile() {
+		width: 100%;
+		height: 20px;
+	}
 	&:focus {
 		outline:none;
 	}
@@ -211,6 +227,13 @@ $bg-result-btn: rgb(143, 86, 113);
 	-webkit-user-select: none;
 	&:not(:last-of-type) {
 		margin-right: 2px;
+	}
+	@media (max-width: $tablet-width) {
+		font-size: 1.2rem;
+	}
+
+	@include media-mobile() {
+		font-size: 1rem;
 	}
 }
 
