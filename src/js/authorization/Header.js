@@ -14,7 +14,21 @@ import showDictionaryPage from '../dictionary/DictionaryPage';
 import { USER } from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
 import CookieMonster from '../utils/CookieMonster';
+import Settings from '../settings/Settings';
 import Statistics from '../statistics/Statistics';
+
+async function initSettingsForNewUser() {
+	const settings = new Settings();
+	const isFirstInitialization = true;
+	await Settings.init(isFirstInitialization);
+	return settings;
+}
+
+async function initSettingsForOldUser() {
+	const settings = new Settings();
+	await Settings.init();
+	return settings;
+}
 
 export default class Header {
 	static createUnauthorisedUserLinks() {
@@ -80,9 +94,13 @@ export default class Header {
 									email: userData.email,
 									password: userData.password,
 								});
+								await initSettingsForNewUser();
 								await Statistics.init();
+								console.log('new');
 							},
-							() => InvalidUserData.showInvalidInput([newUserName])
+							async () => {
+								InvalidUserData.showInvalidInput([newUserName]);
+							}
 						)
 						.then(
 							() => this.create(),
@@ -241,7 +259,10 @@ export default class Header {
 			const userData = new Authorization(userName.value, userPassword.value);
 			Authorization.authorizeUser(userData)
 				.then(
-					() => this.hideForm(),
+					async () => {
+						this.hideForm();
+						await initSettingsForOldUser();
+					},
 					() => {
 						InvalidUserData.showInvalidInput([userName, userPassword]);
 						InvalidUserData.showAuthorisationErrorMessage();
@@ -292,7 +313,7 @@ export default class Header {
 		overlay.remove();
 	}
 
-	static create() {
+	static async create() {
 		const logo = document.querySelector('.header__logo');
 		try {
 			const cookie = new CookieMonster();
@@ -305,6 +326,7 @@ export default class Header {
 			if (!userName) {
 				throw new Error('User is not authorized');
 			}
+			await initSettingsForOldUser();
 			this.createUserNavigation();
 			this.createUserButtons(userName);
 			logo.addEventListener('click', () => {

@@ -6,7 +6,6 @@ import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
 
-
 window.addEventListener('load', () => {
 	try {
 		const cookie = new CookieMonster();

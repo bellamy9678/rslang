@@ -5,21 +5,32 @@ import {
 } from '../shared/Constants';
 import eventObserver from '../observer/Observer';
 import showWordsCategory from '../dictionary/CategoryView';
+import Settings from '../settings/Settings';
 
 async function changeWordParams(event) {
 	const wordData = new IntervalRepetition(event.detail);
+	const settings = await Settings.getInstance();
 	switch (event.type) {
 	case WORDS_EVENTS.PUSHED_AGAIN:
 	case WORDS_EVENTS.PUSHED_EASY:
 	case WORDS_EVENTS.PUSHED_GOOD:
 	case WORDS_EVENTS.PUSHED_HARD:
+		if (wordData.optional.category === CATEGORIES.NEW) {
+			settings.incNewWordsShowed();
+		}
+		settings.incCardsShowed();
+		await settings.saveParameters();
 		await wordData.setDateParams(event);
 		await wordData.countBestResult();
 		await wordData.increaseProgress();
-		// update settings
 		break;
 	case WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY:
 		await wordData.changeWordCategory(CATEGORIES.REMOVED);
+		if (wordData.optional.category === CATEGORIES.NEW) {
+			settings.incNewWordsShowed();
+		}
+		settings.incCardsShowed();
+		await settings.saveParameters();
 		break;
 	case WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT:
 		await wordData.changeWordCategory(CATEGORIES.DIFFICULT);
@@ -28,11 +39,22 @@ async function changeWordParams(event) {
 		await wordData.setDateParams(event);
 		await wordData.resetBestResult();
 		await wordData.decreaseProgress();
-		// update settings
+		if (wordData.optional.category === CATEGORIES.NEW) {
+			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
+			settings.incNewWordsShowed();
+		}
+		settings.incCardsShowed();
+		await settings.saveParameters();
 		break;
 	case WORDS_EVENTS.CORRECT_ANSWER:
 		await wordData.setDateParams(event);
 		await wordData.increaseProgress();
+		if (wordData.optional.category === CATEGORIES.NEW) {
+			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
+			settings.incNewWordsShowed();
+		}
+		settings.incCardsShowed();
+		await settings.saveParameters();
 		break;
 	case WORDS_EVENTS.INCORRECT_ANSWER:
 		await wordData.setDateParams(event);
