@@ -10,7 +10,7 @@ import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import StartScreen from '../start_screen/StartScreen';
-import APIMethods from '../words_service/APIMethods';
+import Service from '../words_service/Service';
 
 const factory = new DOMElementCreator();
 const startScreen = new StartScreen();
@@ -238,7 +238,7 @@ export default class SprintGame {
 
 	loadNextWords(nextLevel, nextRound) {
 		new Promise(resolve => {
-			const allWords = APIMethods.getNewWordsArray(nextLevel, nextRound);
+			const allWords = Service.getGameSpecificWords(nextLevel, nextRound);
 			resolve(allWords);
 		})
 			.then(allWords => {

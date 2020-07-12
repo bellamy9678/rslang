@@ -12,7 +12,7 @@ import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
-import APIMethods from '../words_service/APIMethods';
+import Service from '../words_service/Service';
 
 const result = new Result();
 
@@ -381,8 +381,8 @@ export default class Game {
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
-		new Promise((resolve) => {
-			const allWords = APIMethods.getNewWordsArray(level, round);
+		new Promise(resolve => {
+			const allWords = Service.getGameSpecificWords(level, round);
 			resolve(allWords);
 		}).then((allWords) => {
 			this.handleJson(allWords);
