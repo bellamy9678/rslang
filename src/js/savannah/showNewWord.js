@@ -6,11 +6,13 @@ import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
 
 export default async function showNewWord() {
 	let gameOver = false;
+
 	function callShowNewWord() {
 		setTimeout(() => {
 			showNewWord();
 		}, 1000);
 	}
+
 	const lifeIcon = document.querySelector('.health-point-scale IMG');
 	if (arrForUniqness.length === 0 && lifeIcon) {
 		await defineArrays();
@@ -45,10 +47,15 @@ export default async function showNewWord() {
 		}
 	}
 
-	allAnswers.forEach((item) => {
-		item.addEventListener('click', (event) => {
-			checkAnswer(event.target);
+	function addEventOnClick(event) {
+		checkAnswer(event.target);
+		allAnswers.forEach((item) => {
+			item.removeEventListener('click', addEventOnClick);
 		});
+	}
+
+	allAnswers.forEach((item) => {
+		item.addEventListener('click', addEventOnClick);
 	});
 
 	function defineButton(event) {

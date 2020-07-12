@@ -2,16 +2,14 @@ import generateElements from './generateElements';
 import createMainPage from './createMainPage';
 
 export default function savannah() {
-	createMainPage();
-	const startingButton = document.querySelector('.starting-button');
-	// const infoContainer = document.querySelector('.info');
-	// const main = document.querySelector('.info-wrapper');
-	// const hint = document.querySelector('.hint');
-	const volumeContainer = document.querySelector('.volume-settings');
-	const volumeOn = document.querySelector('.volume-up-icon');
-	const volumeOff = document.querySelector('.volume-mute-icon');
+	window.addEventListener('load', () => {
+		createMainPage();
+    
+		const volumeContainer = document.querySelector('.volume-settings');
+		const volumeOn = document.querySelector('.volume-up-icon');
+		const volumeOff = document.querySelector('.volume-mute-icon');
 
-	startingButton.addEventListener('click', generateElements);
+		generateElements();
 
 	volumeContainer.addEventListener('click', () => {
 		if (volumeOn.style.display === 'none') {
