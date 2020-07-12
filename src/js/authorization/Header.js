@@ -11,6 +11,8 @@ import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 import showSettingsPage from '../settings/SettingsPage';
 import showDictionaryPage from '../dictionary/DictionaryPage';
+import showMainPage from '../mainPage/MainPage';
+
 import {
 	USER
 } from '../utils/CookieConstants';
@@ -264,6 +266,7 @@ export default class Header {
 	}
 
 	static create() {
+		const logo = document.querySelector('.header__logo');
 		try {
 			const cookie = new CookieMonster();
 			const userName = cookie.getCookie(USER.NAME);
@@ -275,8 +278,14 @@ export default class Header {
 			}
 			this.createUserNavigation();
 			this.createUserButtons(userName);
+			logo.addEventListener('click', () => {
+				showMainPage(userName);
+			});
 		} catch (error) {
 			this.createUnauthorisedUserButtons();
+			logo.addEventListener('click', () => {
+				StartPage.showStartPage();
+			});
 		} finally {
 			this.createUnauthorisedUserLinks();
 		}

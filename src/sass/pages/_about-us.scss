@@ -1,0 +1,181 @@
+$curator-color : #E5E5E5;
+
+.our-team {
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	box-sizing: border-box;
+	padding: 1rem;
+	position: relative;
+
+	&__header {
+		@include font($size: 3.6rem, $weight: 600);
+		line-height: 5rem;
+	}
+
+	&__container {
+		max-width: 60%;
+	}
+
+	&__description {
+		@include font($size: 2rem);
+		line-height: 3rem;
+		text-align: right;
+	}
+
+	&__image {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		max-width: 50%;
+	}
+
+	@include media-tablet() {
+		text-align: center;
+
+		&__description {
+			text-align: center;
+		}
+	}
+
+	@include media-mobile() {
+		&__container {
+			max-width: 100%;
+		}
+
+		&__image {
+			display: none;
+		}
+	}
+}
+
+.members {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	margin-top: 5rem;
+
+	@include media-desktop() {
+		justify-content: center;
+	}
+}
+
+.member {
+	width: 34rem;
+	min-height: 16rem;
+	border: 1px darken($color: $color-border, $amount: 10) solid;
+	border-radius: 1rem;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.04),
+		0 10px 20px rgba(0, 0, 0, 0.04);
+	margin-bottom: 5rem;
+
+	box-sizing: border-box;
+	position: relative;
+	@include font($size: 1.6rem);
+	background-color: $color-border;
+
+	&__name {
+		line-height: 4rem;
+		margin: 0;
+	}
+
+	&__git {
+		line-height: 3rem;
+		margin: 0;
+	}
+
+	&__image {
+		width: 12rem;
+		border-radius: 50%;
+		position: absolute;
+		top: 2rem;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+		@include media-tablet() {
+			width: 10rem;
+			top: 1rem;
+		}
+	}
+
+	&_left {
+		padding: 1rem 8rem 1rem 1rem;
+		text-align: left;
+		margin-right : 7rem;
+
+		img {
+			right:-6rem;
+		}
+	}
+
+	&_right {
+		padding: 1rem 1rem 1rem 8rem;
+		text-align: right;
+		margin-left: 7rem;
+
+		img {
+			left: -6rem;
+		}
+	}
+
+	&_mentor {
+		background-color: $curator-color;
+		height: 16rem;
+	}
+
+	@include media-desktop() {
+		width: 30rem;
+	}
+
+	a {
+		text-decoration: none;
+		color: $color-text-dark;
+		transition: color ease 0.3s;
+
+		&:hover {
+			color: $color-additional;
+		}
+	}
+
+}
+
+.mentor {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+
+	&__image {
+		width: 34rem;
+		@include media-tablet() {
+			width: 20rem;
+		}
+		@include media-mobile() {
+			display: none;
+		}
+	}
+
+	&__header {
+		@include font($size: 3.6rem, $weight: 600);
+		line-height: 5rem;
+	}
+
+	&__description {
+		@include font($size: 1.6rem);
+		line-height: 3rem;
+		margin: 2rem 0;
+	}
+
+	&-container {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		@include media-tablet() {
+			flex-direction: column;
+		}
+		@include media-mobile() {
+			flex-direction: row;
+		}
+	}
+
+	margin-bottom: 3rem;
+}

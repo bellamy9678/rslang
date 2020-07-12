@@ -4,6 +4,7 @@ import {
 	LINKS,
 	TEXT
 } from '../shared/Text';
+import training from '../cards/Training';
 
 export default function createWelcomePage(username) {
 	const newElem = new DOMElementCreator();
@@ -35,8 +36,12 @@ export default function createWelcomePage(username) {
 		child: [TEXT.welcomePage.trainingModeButton],
 	});
 
+	trainingModeButton.addEventListener('click', async () => {
+		await training();
+	});
+
 	const title = newElem.create({
-		elem: TAGS.h1,
+		elem: TAGS.H1,
 		classes: 'welcome__title',
 		child: [TEXT.welcomePage.title.leftPath, username, TEXT.welcomePage.title.rightPath],
 	});

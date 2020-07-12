@@ -1,0 +1,148 @@
+* {
+	box-sizing: border-box;
+}
+
+$finish-btn-color: #ffd700;
+
+.game-container {
+	display: flex;
+  max-width: 940px;
+}
+
+.game-control {
+	display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+	margin: 10px 0;
+	@include media-mobile {
+		display: block;
+	}
+	@include media-mobilesmall {
+		padding: 0 30px;
+	}
+}
+.game-score {
+	@include font (2.4rem, $weight: bold);
+  color: #ffd700;
+  border: 1px solid #008000;
+  padding-top: 10px;
+  width: 200px;
+  text-align: center;
+  border-radius: 5px;
+	background-color: green;
+	@include media-mobile {
+		padding: 10px 0;
+		margin-bottom: 20px;
+	}
+}
+
+.finish-btn {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+  min-width: 200px;
+  &:hover {
+    @extend %transition;
+		background-color: $finish-btn-color;
+		border: 1px solid $finish-btn-color;
+  }
+}
+
+.english-container, .translation-container {
+	max-width: 470px;
+	display: flex;
+	padding: 40px 3px;	
+	flex-wrap: wrap;
+	@include media-tablet {
+		padding: 20px 3px;
+	}
+	@include media-mobile {
+		padding: 20px 10px;
+	}
+	@include media-mobilesmall {
+		padding: 20px 0;
+	}
+}
+
+.word, .word-translation {
+	width: 145px;
+	height: 90px;
+	@include font (1.4rem, $weight: 900);
+  text-align: center;
+	padding-top: 40px;
+	word-break: break-all;
+	cursor: pointer;
+	margin-bottom: 10px;
+	&:not(:nth-child(3n)) {
+		margin-right: 10px;
+	}
+@include media-tablet {
+	&:not(:nth-child(even)) {
+		margin-right: 35px;
+	}
+}
+@include media-mobile {
+	&:not(:nth-child(even)) {
+		margin-right: 0;
+	}
+}
+@include media-mobilesmall {
+	width: 125px;
+	font-size: 13px;
+}
+
+
+}
+
+.word:nth-child(even) {
+  border-radius: 68% 32% 16% 84% / 54% 47% 53% 46%;
+  background-image: linear-gradient(to right, #9EEFE1 0%, #4830F0 51%, #9EEFE1 100%);
+	background-size: 200% auto;
+	border: 2px solid #6d5ae6;
+	box-shadow: 0 8px 15px rgba(0,0,0,.1);
+	transition: .5s;
+	&:hover {
+		background-position: right center;
+	}
+}
+
+.word:nth-child(odd) {
+	border-radius: 6% 94% 11% 89% / 62% 43% 57% 38%;
+	background-image: linear-gradient(to right, #d41c9d 0%, #eec2df 51%, #f766c6 100%);
+	background-size: 200% auto;
+	box-shadow: 0 8px 15px rgba(0,0,0,.1);
+	border: 2px solid  #f06ec9;
+	transition: .5s;
+	&:hover {
+		background-position: right center;
+	}
+}
+
+.word-translation {
+	@include bg-cover("../../src/assets/images/paper.png");
+}
+
+.word:nth-child(odd).chosen, .word:nth-child(even).chosen {
+	background-image: none;
+}
+
+.active {
+	background-image: none;
+	border-radius: 15px;
+	box-shadow: 0 8px 15px rgba(0,0,0,.3);
+}
+
+.word:nth-child(odd).wrong, .word:nth-child(even).wrong {
+	background-image: none;
+	background-color: gray;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.none {
+	display: none;
+}
+
+.new-btn {
+	margin-right: 3px;
+}
