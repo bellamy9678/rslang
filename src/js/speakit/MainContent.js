@@ -2,11 +2,16 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 
 import TAGS from '../shared/Tags.json';
 
-import { restartBtnText, speakBtnText, stopSpeakText, finishBtnText } from './speakconst';
+import {
+	restartBtnText,
+	speakBtnText,
+	stopSpeakText,
+	finishBtnText
+} from './speakconst';
 
 
 const mainImage = './assets/images/eng.jpg';
-const microphoneOn ='./assets/images/mikro.png'; 
+const microphoneOn = './assets/images/mikro.png';
 const defaultSrc = '';
 
 export default function initMainContent() {
@@ -21,10 +26,10 @@ export default function initMainContent() {
 			alt: 'Image'
 		}],
 	});
-  
+
 	const translation = newElem.create({
 		elem: TAGS.P,
-		classes: 'current-transl',  
+		classes: 'current-transl',
 	});
 
 	const Img = newElem.create({
@@ -34,70 +39,70 @@ export default function initMainContent() {
 			src: microphoneOn,
 		},
 	});
-  
+
 	const output = newElem.create({
 		elem: TAGS.P,
 		classes: ['word-output', 'none'],
 		child: Img,
 	});
-  
-	const imgCont =newElem.create({
+
+	const imgCont = newElem.create({
 		elem: TAGS.DIV,
-		classes: 'image-container',  
+		classes: 'image-container',
 		child: [currentImg, translation, output],
 	});
-  
+
 	const wordsContainer = newElem.create({
 		elem: TAGS.DIV,
 		classes: 'words-container',
 	});
-  
+
 	const audioSrc = newElem.create({
 		elem: TAGS.SOURCE,
 		attr: {
 			src: defaultSrc,
-		} 
+		}
 	});
-  
+
 	const imgAudio = newElem.create({
 		elem: TAGS.AUDIO,
-		classes: 'pronounce',  
+		classes: 'pronounce',
 		child: [audioSrc],
 	});
-  
+
 	const restButton = newElem.create({
 		elem: TAGS.BUTTON,
-		classes: ['button', 'button_colored','restart'],  
+		classes: ['button', 'button_colored', 'restart'],
 		child: restartBtnText,
-	});  
-  
+	});
+
 	const speakButton = newElem.create({
 		elem: TAGS.BUTTON,
-		classes: ['button', 'button_colored','speak'],  
+		classes: ['button', 'button_colored', 'speak'],
 		child: speakBtnText,
 	});
-  
-	const  stopSpeak = newElem.create({
+
+	const stopSpeak = newElem.create({
 		elem: TAGS.BUTTON,
-		classes: ['button', 'button_colored','stop-speak'],  
+		classes: ['button', 'button_colored', 'stop-speak'],
 		child: stopSpeakText,
 	});
-  
+
 	const finishButton = newElem.create({
 		elem: TAGS.BUTTON,
-		classes: ['button', 'button_colored','finish'],  
+		classes: ['button', 'button_colored', 'finish'],
 		child: finishBtnText,
 	});
-  
+
 	const btnContainer = newElem.create({
 		elem: TAGS.DIV,
-		classes: 'buttons-container',  
-		child: [restButton, speakButton,  stopSpeak, finishButton],
+		classes: 'buttons-container',
+		child: [restButton, speakButton, stopSpeak, finishButton],
 	});
-  
+
 	const mainWrapper = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['main-container', 'none'],  
+		classes: ['main-container'],
 		child: [imgCont, wordsContainer, imgAudio, btnContainer],
 	});
 

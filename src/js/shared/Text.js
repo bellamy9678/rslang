@@ -85,13 +85,31 @@ export const ERROR_MESSAGES = {
 	default: 'Something went wrong.',
 };
 
-export const GAME_NAMES = {
-	englishPuzzle: 'English Puzzle',
-	speakIt: 'Speak It',
-	savannah: 'Savannah',
-	audioChallenge: 'Audio Challenge',
-	sprint: 'Sprint',
-	ownGame: 'Super duper game',
+export const GAMES = {
+	englishPuzzle: {
+		name: 'English Puzzle',
+		description: 'Click on words, collect phrases. Words can be drag and drop.',
+	},
+	speakIt: {
+		name: 'Speak It',
+		description: 'Click on the world to hear them sound. Click on the button and speak the words into the microphone.',
+	},
+	savannah: {
+		name: 'Savannah',
+		description: 'Train Savannah develops vocabulary. The more words you know, the more points you\'ll get.',
+	},
+	audioChallenge: {
+		name: 'Audio Challenge',
+		description: '',
+	},
+	sprint: {
+		name: 'Sprint',
+		description: '',
+	},
+	ownGame: {
+		name: 'Super duper game',
+		description: 'Find pairs between words and their translations! Be careful, incorrect matches will cost you points!',
+	},
 };
 
 export const CATEGORY_NAMES = {

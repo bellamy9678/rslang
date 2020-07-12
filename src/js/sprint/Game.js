@@ -11,7 +11,7 @@ const startScreen = new StartScreen();
 const result = new Result();
 
 
-export default class Game {
+export default class SprintGame {
 	constructor() {
 		this.level = 0;
 		this.round = 0;
@@ -36,13 +36,13 @@ export default class Game {
 		this.wordShowed = false;
 	}
 
-	initGameWithStartScreen() {
-		startScreen.showStartScreen({
-			name: 'English Puzzle',
-			descr: 'Click on words, collect phrases. Words can be drag and drop.',
-			callback: this.start.bind(this)
-		});
-	}
+	// initGameWithStartScreen() {
+	// 	startScreen.showStartScreen({
+	// 		name: 'English Puzzle',
+	// 		descr: 'Click on words, collect phrases. Words can be drag and drop.',
+	// 		callback: this.start.bind(this)
+	// 	});
+	// }
 
 	init() {
 		GameField.generateField();
@@ -296,7 +296,7 @@ export default class Game {
 			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
 		} else {
 			this.rightTranslate = false;
-			this.TRANSLATION_CONTAINER.innerText = Game.returnRandomFromArr(this.wrongWords);
+			this.TRANSLATION_CONTAINER.innerText = SprintGame.returnRandomFromArr(this.wrongWords);
 		}
 
 	}
@@ -341,7 +341,7 @@ export default class Game {
 			classes: ['result__button', 'result__continue-btn'],
 			child: CONST.CONTINUE_BTN_TEXT
 		});
-		this.closeResult = Game.resultBtnHandler.bind(this);
+		this.closeResult = SprintGame.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
 		result.showResult({
 			rightAnswers: this.rightAnswers,
@@ -356,7 +356,4 @@ export default class Game {
 		result.closeResultWindow.call(result);
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
 	}
-
-
-
 }

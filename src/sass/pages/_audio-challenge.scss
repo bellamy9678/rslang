@@ -4,7 +4,8 @@
 
 .main-wrapper {
 	width: 100%;
-	height: 100%;
+	// height: 100%;
+	height: calc(100vh - 72px);
 	font-family: Monseratt;
 	color: white;
 	background: linear-gradient($color-additional, $color-primary);
@@ -90,6 +91,7 @@
 		align-items: center;
 		border-radius: 75px;
 		border: 2px white solid;
+		object-fit: cover;
 	}
 	&__word-container {
 		margin-top: 25px;
