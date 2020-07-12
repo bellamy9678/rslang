@@ -150,7 +150,7 @@ export const GAMES = {
 	},
 	ownGame: {
 		name: 'Super duper game',
-		description: 'Find pairs between words and their translations! Be careful, incorrect matches will cost you points!',
+		description: 'Click on cards and find pairs between words and their translations! Be careful, incorrect matches will cost you points!',
 	},
 };
 
