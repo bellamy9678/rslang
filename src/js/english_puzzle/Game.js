@@ -4,12 +4,14 @@ import {
 	levels,
 	lines,
 	puzzlesGap,
-	RESULT_WINDOW_BTN_CONTINUE
+	RESULT_WINDOW_BTN_CONTINUE,
 } from './constants';
 import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 import APIMethods from '../words_service/APIMethods';
 
 const result = new Result();
@@ -18,7 +20,8 @@ const factory = new DOMElementCreator();
 
 export default class Game {
 	constructor() {
-		this.initState = JSON.parse(sessionStorage.getItem('en-puzzle-state')) || {};
+		this.initState =
+			JSON.parse(sessionStorage.getItem('en-puzzle-state')) || {};
 		this.sentenceArr = [];
 		this.sentenceTranslate = '';
 		this.sentenceAudioLink = '';
@@ -27,8 +30,14 @@ export default class Game {
 		this.showListenBtnState = this.initState.audio || false;
 		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound = this.initState.round || JSON.parse(localStorage.getItem('gameData')).level || 0;
-		this.currentLevel = this.initState.level || JSON.parse(localStorage.getItem('gameData')).round || 0;
+		this.currentRound =
+			this.initState.round ||
+			JSON.parse(localStorage.getItem('gameData')).level ||
+			0;
+		this.currentLevel =
+			this.initState.level ||
+			JSON.parse(localStorage.getItem('gameData')).round ||
+			0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -96,12 +105,12 @@ export default class Game {
 
 	beforeUnloadHandler() {
 		const stateObj = {
-			'level': this.currentLevel,
-			'round': this.currentRound,
-			'auto': this.autoListeningBtnState,
-			'translation': this.showTranslationBtnState,
-			'audio': this.showBgImageBtnState,
-			'picture': this.showBgImageBtnState
+			level: this.currentLevel,
+			round: this.currentRound,
+			auto: this.autoListeningBtnState,
+			translation: this.showTranslationBtnState,
+			audio: this.showBgImageBtnState,
+			picture: this.showBgImageBtnState,
 		};
 		sessionStorage.setItem('en-puzzle-state', JSON.stringify(stateObj));
 	}
@@ -124,7 +133,6 @@ export default class Game {
 		}
 	}
 
-
 	levelSelectBtnHandler(level) {
 		this.loadCustomLevelAndRound(level, this.currentRound);
 	}
@@ -137,20 +145,34 @@ export default class Game {
 		this.currentLine += 1;
 		this.currentActiveLine = document.querySelector('.board__line--active');
 		this.currentActiveLine.classList.remove('board__line--active');
-		this.currentActiveElements = document.querySelectorAll('.game__jigsaw--active');
-		this.currentActiveElements.forEach(element => {
+		this.currentActiveElements = document.querySelectorAll(
+			'.game__jigsaw--active'
+		);
+		this.currentActiveElements.forEach((element) => {
 			element.removeAttribute('draggable');
-			element.classList.remove('game__jigsaw--active', 'game__jigsaw--correct', 'game__jigsaw--wrong');
+			element.classList.remove(
+				'game__jigsaw--active',
+				'game__jigsaw--correct',
+				'game__jigsaw--wrong'
+			);
 		});
-		this.puzzleContainer = document.querySelectorAll('.puzzle-container--active');
-		this.puzzleContainer.forEach(element => element.classList.remove('puzzle-container--active'));
+		this.puzzleContainer = document.querySelectorAll(
+			'.puzzle-container--active'
+		);
+		this.puzzleContainer.forEach((element) =>
+			element.classList.remove('puzzle-container--active')
+		);
 		this.iDontKnowBtn.classList.remove('none');
 		this.continueBtn.classList.add('none');
 		if (this.currentLine < lines) {
 			this.addLine();
 			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
-			this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
-			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
+			this.sentenceTranslate = this.sentencesJSON[
+				this.currentLine
+			].textExampleTranslate;
+			this.sentenceAudioLink = this.sentencesJSON[
+				this.currentLine
+			].audioExample;
 			this.getSentences(this.sentencesJSON, this.currentLine);
 		} else {
 			this.loadNextRound();
@@ -190,10 +212,8 @@ export default class Game {
 			this.rightAnswersResult = [];
 			this.resulsBtn.classList.add('none');
 			this.getData();
-
 		} else {
 			console.log('finish');
-
 		}
 	}
 
@@ -201,7 +221,7 @@ export default class Game {
 		const resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
-			child: RESULT_WINDOW_BTN_CONTINUE
+			child: RESULT_WINDOW_BTN_CONTINUE,
 		});
 
 		resultContinueBtn.addEventListener('click', () => {
@@ -209,10 +229,19 @@ export default class Game {
 			this.loadNextRound();
 		});
 
+		const resultPoints = {
+			name: GAMES_NAMES.PUZZLE,
+			result:
+				this.rightAnswersResult.length * RESULT_MULTIPLIER.CORRECT +
+				this.wrongAnswersResult.length * RESULT_MULTIPLIER.INCORRECT,
+		};
+
+		Statistics.putGamesResult(resultPoints);
+
 		result.showResult({
 			rightAnswersSentences: this.rightAnswersResult,
 			wrongAnswersSentences: this.wrongAnswersResult,
-			buttons: [resultContinueBtn]
+			buttons: [resultContinueBtn],
 		});
 	}
 
@@ -232,14 +261,14 @@ export default class Game {
 		this.resulsBtn.classList.add('none');
 		this.getData(level, round);
 		this.roundSelectBtn.selectedIndex = this.currentRound;
-
-
 	}
 
 	clearPuzzlesContainer() {
 		this.puzzlesBottomContainer = document.querySelector('.game__puzzles');
 		while (this.puzzlesBottomContainer.firstChild) {
-			this.puzzlesBottomContainer.removeChild(this.puzzlesBottomContainer.firstChild);
+			this.puzzlesBottomContainer.removeChild(
+				this.puzzlesBottomContainer.firstChild
+			);
 		}
 	}
 
@@ -256,14 +285,16 @@ export default class Game {
 			this.resultForCurrentLineState = true;
 		}
 		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
-		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
-		this.activePuzzleContainers.forEach(container => {
+		this.activePuzzleContainers = document.querySelectorAll(
+			'.puzzle-container--active'
+		);
+		this.activePuzzleContainers.forEach((container) => {
 			// eslint-disable-next-line no-param-reassign
 			container.style.width = null;
 			container.classList.remove('puzzle-container--active');
 		});
 		const puzzleNodes = [];
-		this.activePuzzles.forEach(puzzle => {
+		this.activePuzzles.forEach((puzzle) => {
 			puzzle.classList.remove('game__jigsaw--active');
 			puzzle.removeAttribute('draggable');
 			puzzle.classList.remove('game__jigsaw--wrong', 'game__jigsaw--correct');
@@ -280,31 +311,46 @@ export default class Game {
 
 	sortPuzzles(puzzles) {
 		const sorted = [];
-		puzzles.forEach(puzzle => {
-			sorted[this.cypher[this.currentLine][0].indexOf(+puzzle.dataset.positionCrypted)] = puzzle;
+		puzzles.forEach((puzzle) => {
+			sorted[
+				this.cypher[this.currentLine][0].indexOf(
+					+puzzle.dataset.positionCrypted
+				)
+			] = puzzle;
 		});
 		return sorted;
 	}
 
 	checkBtnHandler() {
-		this.currentLineElements = [...this.boardLine.children].map(i => i.children[0]);
+		this.currentLineElements = [...this.boardLine.children].map(
+			(i) => i.children[0]
+		);
 		this.currentLineWords = [];
 		for (let i = 0; i < this.sentenceArr.length; i += 1) {
-			this.currentLineWords.push(this.boardLine.children[i].children[0].dataset.word);
+			this.currentLineWords.push(
+				this.boardLine.children[i].children[0].dataset.word
+			);
 		}
-		this.checkedArr = this.compareTwoSameLengthArraysAndReturnArrayOfBoolean(this.currentLineWords, this.sentenceArr);
+		this.checkedArr = this.compareTwoSameLengthArraysAndReturnArrayOfBoolean(
+			this.currentLineWords,
+			this.sentenceArr
+		);
 		this.showWrongAndRightAnswers(this.currentLineElements, this.checkedArr);
 	}
 
 	appendPuzzlesToFieldLine(sortedPuzzles) {
-		this.activeFieldLineContainers = document.querySelector('.board__line--active').children;
+		this.activeFieldLineContainers = document.querySelector(
+			'.board__line--active'
+		).children;
 		for (let i = 0; i < sortedPuzzles.length; i += 1) {
 			this.activeFieldLineContainers[i].append(sortedPuzzles[i]);
 		}
 	}
 
 	playAudio(audioLink) {
-		this.audio = new Audio(`https://raw.githubusercontent.com/garza0/rslang-data/master/${audioLink}`);
+		this.audio = new Audio(
+			`https://raw.githubusercontent.com/garza0/rslang-data/master/${audioLink}`
+		);
 		this.audio.play();
 	}
 
@@ -332,17 +378,15 @@ export default class Game {
 	autoListeningBtnHandler() {
 		this.autoListeningBtnState = !this.autoListeningBtnState;
 		this.autoListeningBtn.classList.toggle('btn-icon--active');
-
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
-		new Promise(resolve => {
+		new Promise((resolve) => {
 			const allWords = APIMethods.getNewWordsArray(level, round);
 			resolve(allWords);
-		})
-			.then(allWords => {
-				this.handleJson(allWords);
-			});
+		}).then((allWords) => {
+			this.handleJson(allWords);
+		});
 	}
 
 	handleJson(myJson) {
@@ -355,7 +399,9 @@ export default class Game {
 
 	getSentences(arr, line) {
 		const sentencesArr = [];
-		arr.forEach(word => sentencesArr.push(word.example.replace(/<[^>]*>/g, '')));
+		arr.forEach((word) =>
+			sentencesArr.push(word.example.replace(/<[^>]*>/g, ''))
+		);
 		this.generatePuzzle(sentencesArr[line]);
 	}
 
@@ -364,9 +410,10 @@ export default class Game {
 		this.boardLine = factory.create({
 			elem: TAGS.DIV,
 			classes: ['board__line', 'board__line--active'],
+
 			attr: {
-				'data-line': this.currentLine
-			}
+				'data-line': this.currentLine,
+			},
 		});
 		this.resultForCurrentLineState = false;
 		this.board.append(this.boardLine);
@@ -399,20 +446,25 @@ export default class Game {
 	populatePuzzle(sentenceArr) {
 		const cypher = this.encryptPuzzlePlace(sentenceArr.length);
 		this.puzzles = sentenceArr.map((word, index) => {
-
 			this.newElement = factory.create({
 				elem: TAGS.DIV,
 				classes: ['game__jigsaw', 'game__jigsaw--active'],
-				attr: [{
-					'data-word': word
-				}, {
-					'data-position-crypted': cypher[0][index]
-				}, {
-					'data-line': this.currentLine
-				}, {
-					'draggable': true
-				}],
-				child: word
+
+				attr: [
+					{
+						'data-word': word,
+					},
+					{
+						'data-position-crypted': cypher[0][index],
+					},
+					{
+						'data-line': this.currentLine,
+					},
+					{
+						draggable: true,
+					},
+				],
+				child: word,
 			});
 			if (this.showBgImageBtnState) {
 				this.addBackgroundToPuzzles(this.newElement);
@@ -433,7 +485,6 @@ export default class Game {
 		this.cypher.push(cryptArray);
 
 		return cryptArray;
-
 	}
 
 	appendPuzzlesToContainer(puzzles) {
@@ -455,7 +506,9 @@ export default class Game {
 
 	dragAndDrop() {
 		this.puzzleItem = document.querySelectorAll('.game__jigsaw--active');
-		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
+		this.activePuzzleContainers = document.querySelectorAll(
+			'.puzzle-container--active'
+		);
 		this.puzzlesField = document.querySelector('.game__puzzles');
 		this.selectedItem = '';
 		let selectedItemWidth;
@@ -463,7 +516,6 @@ export default class Game {
 		const dragStart = (event) => {
 			this.selectedItem = event.target;
 			selectedItemWidth = this.selectedItem.dataset.width;
-
 
 			if (event.target.closest('.puzzle-container--active')) {
 				const container = event.target.closest('.puzzle-container--active');
@@ -487,7 +539,10 @@ export default class Game {
 		const dragEnter = (event) => {
 			event.preventDefault();
 
-			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
+			if (
+				event.target.classList.contains('puzzle-container--active') ||
+				event.target.classList.contains('game__puzzles')
+			) {
 				event.target.classList.add('hovered');
 				if (event.target.classList.contains('puzzle-container--active')) {
 					event.target.classList.add('hovered--animation');
@@ -496,12 +551,14 @@ export default class Game {
 		};
 
 		const dragLeave = (event) => {
-
 			event.target.classList.remove('hovered', 'hovered--animation');
 		};
 
 		const dragDrop = (event) => {
-			if (event.target.classList.contains('puzzle-container--active') || event.target.classList.contains('game__puzzles')) {
+			if (
+				event.target.classList.contains('puzzle-container--active') ||
+				event.target.classList.contains('game__puzzles')
+			) {
 				event.target.append(this.selectedItem);
 				event.target.classList.remove('hovered', 'hovered--animation');
 				if (event.target.classList.contains('puzzle-container--active')) {
@@ -513,7 +570,7 @@ export default class Game {
 			}
 		};
 
-		this.activePuzzleContainers.forEach(cell => {
+		this.activePuzzleContainers.forEach((cell) => {
 			cell.addEventListener('dragover', dragOver);
 			cell.addEventListener('dragenter', dragEnter);
 			cell.addEventListener('dragleave', dragLeave);
@@ -525,14 +582,17 @@ export default class Game {
 		this.puzzlesField.addEventListener('dragleave', dragLeave);
 		this.puzzlesField.addEventListener('drop', dragDrop);
 
-
-		this.puzzleItem.forEach(item => item.addEventListener('dragstart', dragStart));
-		this.puzzleItem.forEach(item => item.addEventListener('dragend', dragEnd));
+		this.puzzleItem.forEach((item) =>
+			item.addEventListener('dragstart', dragStart)
+		);
+		this.puzzleItem.forEach((item) =>
+			item.addEventListener('dragend', dragEnd)
+		);
 	}
 
 	checkIfLineIsFull() {
 		this.numberOfFullContainers = 0;
-		this.activePuzzleContainers.forEach(container => {
+		this.activePuzzleContainers.forEach((container) => {
 			if (container.classList.contains('container--full')) {
 				this.numberOfFullContainers += 1;
 			}
@@ -542,7 +602,6 @@ export default class Game {
 		} else {
 			this.checkBtn.classList.add('none');
 		}
-
 	}
 
 	lineIsFullHandler() {
@@ -556,9 +615,10 @@ export default class Game {
 				factory.create({
 					elem: TAGS.DIV,
 					classes: ['puzzle-container', 'puzzle-container--active'],
+
 					attr: {
-						'data-container-position': i
-					}
+						'data-container-position': i,
+					},
 				})
 			);
 		}
@@ -568,7 +628,10 @@ export default class Game {
 	showWrongAndRightAnswers(currentLineElements, arrOfBoolean) {
 		this.rightAnswers = 0;
 		for (let i = 0; i < currentLineElements.length; i += 1) {
-			currentLineElements[i].classList.remove('game__jigsaw--correct', 'game__jigsaw--wrong');
+			currentLineElements[i].classList.remove(
+				'game__jigsaw--correct',
+				'game__jigsaw--wrong'
+			);
 			if (arrOfBoolean[i]) {
 				this.rightAnswers += 1;
 				currentLineElements[i].classList.add('game__jigsaw--correct');
@@ -620,27 +683,27 @@ export default class Game {
 	init() {
 		this.controlsContainer = factory.create({
 			elem: TAGS.DIV,
-			classes: 'controls'
+			classes: 'controls',
 		});
 		this.tooltips = factory.create({
 			elem: TAGS.DIV,
-			classes: 'tooltips'
+			classes: 'tooltips',
 		});
 		this.gameBoard = factory.create({
 			elem: TAGS.DIV,
-			classes: 'game__main'
+			classes: 'game__main',
 		});
 
 		this.gameContainer = factory.create({
 			elem: TAGS.DIV,
 			classes: 'game-container',
-			child: [this.controlsContainer, this.tooltips, this.gameBoard]
+			child: [this.controlsContainer, this.tooltips, this.gameBoard],
 		});
 
 		this.wrapper = factory.create({
 			elem: TAGS.DIV,
 			classes: 'wrapper',
-			child: this.gameContainer
+			child: this.gameContainer,
 		});
 
 		appContainer.append(this.wrapper);
@@ -656,13 +719,16 @@ export default class Game {
 		const homeContainerWidth = this.puzzlesHomeContainer.offsetWidth;
 		const lengthOfEachPuzzleInLine = [];
 		let finishWidthOfEachPuzzle = [];
-		puzzlesLine.forEach(puzzle => {
+		puzzlesLine.forEach((puzzle) => {
 			lengthOfEachPuzzleInLine.push(puzzle.dataset.word.length);
 		});
 		const lengthOfLine = lengthOfEachPuzzleInLine.reduce((a, b) => a + b);
-		const sumWidthOfPuzzles = homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
+		const sumWidthOfPuzzles =
+			homeContainerWidth - (lengthOfEachPuzzleInLine.length - 1) * puzzlesGap;
 		const widthForOneSymbol = sumWidthOfPuzzles / lengthOfLine;
-		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map(puzzleLength => Math.round(puzzleLength * widthForOneSymbol));
+		const widthOfEachPuzzle = lengthOfEachPuzzleInLine.map((puzzleLength) =>
+			Math.round(puzzleLength * widthForOneSymbol)
+		);
 		const sumOfEachPuzzleWidth = widthOfEachPuzzle.reduce((a, b) => a + b);
 		if (sumOfEachPuzzleWidth === sumWidthOfPuzzles) {
 			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
@@ -673,8 +739,7 @@ export default class Game {
 				widthOfEachPuzzle[index] += 1;
 				index += 1;
 				difference -= 1;
-			}
-			while (difference > 0);
+			} while (difference > 0);
 			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
 		} else {
 			let difference = sumOfEachPuzzleWidth - sumWidthOfPuzzles;
@@ -683,8 +748,7 @@ export default class Game {
 				widthOfEachPuzzle[index] -= 1;
 				index += 1;
 				difference -= 1;
-			}
-			while (difference > 0);
+			} while (difference > 0);
 			finishWidthOfEachPuzzle = [...widthOfEachPuzzle];
 		}
 
@@ -699,7 +763,6 @@ export default class Game {
 		const thisPuzzle = puzzle;
 		this.backgroundPicture = paintings[this.currentLevel][this.currentRound];
 		thisPuzzle.style.backgroundImage = `url(https://raw.githubusercontent.com/Garza0/rslang_data_paintings/master/${this.backgroundPicture.cutSrc})`;
-
 	}
 
 	calculateBackgroundPosition(elements) {
@@ -709,9 +772,11 @@ export default class Game {
 		const bgWidth = this.board.offsetWidth;
 		let previosPuzzlesWidth = 0;
 
-		sortedPuzzles.forEach(element => {
+		sortedPuzzles.forEach((element) => {
 			const puzzle = element;
-			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
+			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${
+				-elementsLine * puzzleHeight
+			}px`;
 			puzzle.style.backgroundSize = `${bgWidth}px`;
 			previosPuzzlesWidth += puzzle.offsetWidth;
 		});
@@ -723,12 +788,13 @@ export default class Game {
 
 		const puzzles = document.querySelectorAll('.game__jigsaw');
 		if (this.showBgImageBtnState) {
-			puzzles.forEach(element => {
+			puzzles.forEach((element) => {
 				this.addBackgroundToPuzzles(element);
 			});
 		} else {
-			puzzles.forEach(element => element.style.removeProperty('background-image'));
+			puzzles.forEach((element) =>
+				element.style.removeProperty('background-image')
+			);
 		}
 	}
-
 }

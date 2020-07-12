@@ -11,15 +11,12 @@ import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 import showSettingsPage from '../settings/SettingsPage';
 import showDictionaryPage from '../dictionary/DictionaryPage';
+import { USER } from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
-
-import {
-	USER
-} from '../utils/CookieConstants';
 import CookieMonster from '../utils/CookieMonster';
+import Statistics from '../statistics/Statistics';
 
 export default class Header {
-
 	static createUnauthorisedUserLinks() {
 		const newElem = new DOMElementCreator();
 		const teamLink = newElem.create({
@@ -68,18 +65,29 @@ export default class Header {
 
 		signUpButton.addEventListener('click', () => {
 			NewUser.showCreateAccountPage();
-			const createUserButton = document.querySelector('.account-creation__button');
+			const createUserButton = document.querySelector(
+				'.account-creation__button'
+			);
 			createUserButton.addEventListener('click', (event) => {
 				event.preventDefault();
 				const userData = NewUser.getNewUserData();
 				const newUserName = document.getElementById('new-user__name');
 				try {
 					NewUser.createUser(userData)
-						.then(() => Authorization.authorizeUser({
-							email: userData.email,
-							password: userData.password
-						}), () => InvalidUserData.showInvalidInput([newUserName]))
-						.then(() => this.create(), () => null);
+						.then(
+							async () => {
+								await Authorization.authorizeUser({
+									email: userData.email,
+									password: userData.password,
+								});
+								await Statistics.init();
+							},
+							() => InvalidUserData.showInvalidInput([newUserName])
+						)
+						.then(
+							() => this.create(),
+							() => null
+						);
 				} catch (error) {
 					console.error(error.message);
 				}
@@ -94,7 +102,7 @@ export default class Header {
 			classes: 'navigation__link',
 			id: 'link_settings',
 			attr: {
-				type: 'userElement'
+				type: 'userElement',
 			},
 			child: LINKS.settings,
 		});
@@ -106,7 +114,7 @@ export default class Header {
 			classes: 'navigation__link',
 			id: 'link_statistic',
 			attr: {
-				type: 'userElement'
+				type: 'userElement',
 			},
 			child: LINKS.statistic,
 		});
@@ -116,7 +124,7 @@ export default class Header {
 			classes: 'navigation__link',
 			id: 'link_dictionary',
 			attr: {
-				type: 'userElement'
+				type: 'userElement',
 			},
 			child: LINKS.dictionary,
 		});
@@ -134,7 +142,7 @@ export default class Header {
 			classes: ['button', 'button_colored-add'],
 			id: 'log-out',
 			attr: {
-				type: 'userElement'
+				type: 'userElement',
 			},
 			child: AUTHORIZATION_BUTTONS.logOut,
 		});
@@ -161,7 +169,7 @@ export default class Header {
 			elem: TAGS.SPAN,
 			classes: ['user'],
 			attr: {
-				type: 'userElement'
+				type: 'userElement',
 			},
 			child: [userIcon, userName],
 		});
@@ -174,9 +182,11 @@ export default class Header {
 		const newElem = new DOMElementCreator();
 		const userNameLabel = newElem.create({
 			elem: TAGS.LABEL,
-			attr: [{
-				for: 'user__name'
-			}],
+			attr: [
+				{
+					for: 'user__name',
+				},
+			],
 			child: AUTHORIZATION_FORM.userName,
 		});
 
@@ -184,18 +194,23 @@ export default class Header {
 			elem: TAGS.INPUT,
 			classes: 'authorization__username',
 			id: 'user__name',
-			attr: [{
-				type: 'text'
-			}, {
-				required: 'required',
-			}],
+			attr: [
+				{
+					type: 'text',
+				},
+				{
+					required: 'required',
+				},
+			],
 		});
 
 		const userPasswordLabel = newElem.create({
 			elem: TAGS.LABEL,
-			attr: [{
-				for: 'user__password'
-			}],
+			attr: [
+				{
+					for: 'user__password',
+				},
+			],
 			child: AUTHORIZATION_FORM.password,
 		});
 
@@ -203,11 +218,14 @@ export default class Header {
 			elem: TAGS.INPUT,
 			classes: 'authorization__password',
 			id: 'user__password',
-			attr: [{
-				type: 'text'
-			}, {
-				required: 'required',
-			}],
+			attr: [
+				{
+					type: 'text',
+				},
+				{
+					required: 'required',
+				},
+			],
 		});
 
 		const authorizeButton = newElem.create({
@@ -222,17 +240,26 @@ export default class Header {
 			const userPassword = document.getElementById('user__password');
 			const userData = new Authorization(userName.value, userPassword.value);
 			Authorization.authorizeUser(userData)
-				.then(() => this.hideForm(), () => {
-					InvalidUserData.showInvalidInput([userName, userPassword]);
-					InvalidUserData.showAuthorisationErrorMessage();
-				})
+				.then(
+					() => this.hideForm(),
+					() => {
+						InvalidUserData.showInvalidInput([userName, userPassword]);
+						InvalidUserData.showAuthorisationErrorMessage();
+					}
+				)
 				.then(() => this.create());
 		});
 
 		const authorizeForm = newElem.create({
 			elem: TAGS.FORM,
 			classes: 'authorization__form',
-			child: [userNameLabel, userNameInput, userPasswordLabel, userPasswordInput, authorizeButton]
+			child: [
+				userNameLabel,
+				userNameInput,
+				userPasswordLabel,
+				userPasswordInput,
+				authorizeButton,
+			],
 		});
 
 		const wrapper = newElem.create({
@@ -271,8 +298,10 @@ export default class Header {
 			const cookie = new CookieMonster();
 			const userName = cookie.getCookie(USER.NAME);
 			const buttons = document.querySelector('.header__buttons');
-			buttons.querySelectorAll('*').forEach(button => button.remove());
-			document.querySelectorAll('.navigation__link').forEach(link => link.remove());
+			buttons.querySelectorAll('*').forEach((button) => button.remove());
+			document
+				.querySelectorAll('.navigation__link')
+				.forEach((link) => link.remove());
 			if (!userName) {
 				throw new Error('User is not authorized');
 			}
