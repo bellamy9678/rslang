@@ -9,18 +9,21 @@ export default function initMain() {
 	
 	const engWordsContainer = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['english-container'],
+		classes: 'english-container',
+		id: 'eng-container', 
 	});
 	
 	const translationContainer = newElem.create({
 		elem: TAGS.DIV,
-		classes: ['translation-container'],
+		classes: 'translation-container',
+		id: 'transl-container',
 	});
 	
 	const gameContainer = newElem.create({
 		elem: TAGS.DIV,
 		classes: ['game-container', 'none'],
 		child: [engWordsContainer, translationContainer],
+		id: 'game-cont',
 	});
 
 	return gameContainer;
