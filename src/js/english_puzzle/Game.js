@@ -3,7 +3,6 @@ import {
 	rounds,
 	levels,
 	lines,
-	API_URL,
 	puzzlesGap,
 	RESULT_WINDOW_BTN_CONTINUE
 } from './constants';
@@ -11,6 +10,7 @@ import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
+import APIMethods from '../words_service/APIMethods';
 
 const result = new Result();
 
@@ -336,27 +336,26 @@ export default class Game {
 	}
 
 	getData(level = this.currentLevel, round = this.currentRound) {
-
-		const url = `${API_URL}words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
-		fetch(url)
-			.then(response => {
-				return response.json();
-			}).then(myJson => {
-				this.handleJson(myJson);
+		new Promise(resolve => {
+			const allWords = APIMethods.getNewWordsArray(level, round);
+			resolve(allWords);
+		})
+			.then(allWords => {
+				this.handleJson(allWords);
 			});
 	}
 
 	handleJson(myJson) {
 		this.sentencesJSON = myJson;
-		this.sentenceTranslate = myJson[0].textExampleTranslate;
-		this.sentenceAudioLink = myJson[0].audioExample;
+		this.sentenceTranslate = myJson[0].exampleTranslate;
+		this.sentenceAudioLink = myJson[0].exampleAudio;
 		this.getSentences(myJson, this.currentLine);
 		this.controlsStateUpgrade();
 	}
 
 	getSentences(arr, line) {
 		const sentencesArr = [];
-		arr.forEach(word => sentencesArr.push(word.textExample.replace(/<[^>]*>/g, '')));
+		arr.forEach(word => sentencesArr.push(word.example.replace(/<[^>]*>/g, '')));
 		this.generatePuzzle(sentencesArr[line]);
 	}
 
@@ -374,6 +373,7 @@ export default class Game {
 	}
 
 	generatePuzzle(sentence) {
+		console.log(sentence);
 		const wordsArray = sentence.split(' ');
 		this.sentenceArr = wordsArray;
 		this.numberOfPuzzles = wordsArray.length;
