@@ -5,17 +5,32 @@ import {
 } from './consts';
 import Service from '../words_service/Service';
 
-export default async function audioChallenge() {
+async function getWords() {
 	const {
+		repeatWords,
 		level,
 		round
 	} = JSON.parse(localStorage.getItem('gameData'));
+	if (repeatWords === true) {
+		const userWords = await Service.getRepeatedWords();
+		return userWords;
+	}
 	const allWords = await Service.getGameSpecificWords(level, round);
-	allWords.forEach(item => {
-		arrayForUniqness.push(item);
-	});
-	allWords.forEach(item => {
-		arrayForRandom.push(item);
-	});
-	randomizeWords(arrayForUniqness, arrayForRandom);
+	return allWords;
+}
+
+export default function audioChallenge() {
+	new Promise(resolve => {
+		const words = getWords();
+		resolve(words);
+	})
+		.then((words) => {
+			words.forEach(item => {
+				arrayForUniqness.push(item);
+			});
+			words.forEach(item => {
+				arrayForRandom.push(item);
+			});
+		})
+		.then(() => randomizeWords(arrayForUniqness, arrayForRandom));
 }
