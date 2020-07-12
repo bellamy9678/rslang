@@ -5,6 +5,8 @@ import TAGS from '../shared/Tags.json';
 import initMainContent from './MainContent';
 import renderWords from './RenderWords';
 import Result from '../game_result/Result';
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 import {
 	returnBtnText,
@@ -279,6 +281,14 @@ export default function createSpeakItGame() {
 			statisticBtn.addEventListener('click', this.statisticHandler); // дописать метод, показывающий статистику по игре);
 			resultReturnBtn.addEventListener('click', this.returnHandler);
 			resultNewGameBtn.addEventListener('click', this.newGameHandler);
+
+			const resultPoints = {
+				name: GAMES_NAMES.SPEAK,
+				result:
+				guessed.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
+				([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+			};
+			Statistics.putGamesResult(resultPoints);
 
 			myResult.showResult({
 				rightAnswers: guessed.map((item) => new GetAnswers(item)),

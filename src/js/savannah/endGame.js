@@ -28,7 +28,7 @@ export default function endgame(arrayWithRightAnswers, arrayWithWrongAnswers) {
 	const result = new Result();
 
 	const resultPoints = {
-		name: GAMES_NAMES.PUZZLE,
+		name: GAMES_NAMES.SAVANNAH,
 		result:
 		arrayWithRightAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
 		arrayWithWrongAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,

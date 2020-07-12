@@ -235,6 +235,7 @@ export default class Game {
 				this.rightAnswersResult.length * RESULT_MULTIPLIER.CORRECT +
 				this.wrongAnswersResult.length * RESULT_MULTIPLIER.INCORRECT,
 		};
+
 		Statistics.putGamesResult(resultPoints);
 
 		result.showResult({
