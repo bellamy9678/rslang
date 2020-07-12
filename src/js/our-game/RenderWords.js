@@ -7,7 +7,7 @@ export default function renderWords(item) {
 	const newElem = new DOMElementCreator();
 	const word = newElem.create({
 		elem: TAGS.DIV,
-		classes: 'word',
+		classes: 'word-our-game',
 		attr: [{
 			'data-translation': `${item.translate}`
 		},
