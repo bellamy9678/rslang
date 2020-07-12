@@ -11,11 +11,11 @@ import Authorization from './Authorization';
 import InvalidUserData from './InvalidUserData';
 import showSettingsPage from '../settings/SettingsPage';
 import showDictionaryPage from '../dictionary/DictionaryPage';
-import showMainPage from '../mainPage/MainPage';
-
 import { USER } from '../utils/CookieConstants';
+import showMainPage from '../mainPage/MainPage';
 import CookieMonster from '../utils/CookieMonster';
 import Settings from '../settings/Settings';
+import Statistics from '../statistics/Statistics';
 
 async function initSettingsForNewUser() {
 	const settings = new Settings();
@@ -95,6 +95,7 @@ export default class Header {
 									password: userData.password,
 								});
 								await initSettingsForNewUser();
+								await Statistics.init();
 								console.log('new');
 							},
 							async () => {
