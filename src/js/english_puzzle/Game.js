@@ -317,8 +317,12 @@ export default class Game {
 
 	sortPuzzles(puzzles) {
 		const sorted = [];
-		puzzles.forEach(puzzle => {
-			sorted[this.cypher[+puzzle.dataset.line][0].indexOf(+puzzle.dataset.positionCrypted)] = puzzle;
+		puzzles.forEach((puzzle) => {
+			sorted[
+				this.cypher[this.currentLine][0].indexOf(
+					+puzzle.dataset.positionCrypted
+				)
+			] = puzzle;
 		});
 		return sorted;
 	}

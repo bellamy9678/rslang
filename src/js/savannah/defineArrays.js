@@ -1,10 +1,9 @@
 import giveWords from './giveWords';
 import generateWordContainers from './generateWordContainers';
-import {arrForUniqness, arrForRandFunc, fetchInfo} from './consts';
+import {arrForUniqness, arrForRandFunc} from './consts';
 
 export default	async function defineArrays() {
-	fetchInfo.round += 1;
-	const allWords = await giveWords(fetchInfo.level, fetchInfo.round);
+	const allWords = await giveWords();
 	allWords.forEach(item => {
 		arrForUniqness.push(item);
 	});

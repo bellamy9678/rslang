@@ -8,6 +8,7 @@ import createSpeakItGame from '../speakit/speakit';
 import SprintGame from '../sprint/Game';
 import audioChallenge from '../audio-challenge/audio-challenge';
 import savannah from '../savannah/savannah';
+import initGame from '../our-game/OurGame';
 
 function addStartScreenToMiniGame(name, descr, startGameCallback) {
 	const startScreen = new StartScreen();
@@ -65,6 +66,11 @@ export default function startMiniGame() {
 				};
 				break;
 			case 'own-game':
+				name = GAMES.ownGame.name;
+				descr = GAMES.ownGame.description;
+				callback = () => {
+					initGame();
+				};
 				break;
 			default:
 				throw new Error('Error');

@@ -7,13 +7,14 @@ import {
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
+import { GAMES_NAMES } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 import StartScreen from '../start_screen/StartScreen';
-import APIMethods from '../words_service/APIMethods';
+import Service from '../words_service/Service';
 
 const factory = new DOMElementCreator();
 const startScreen = new StartScreen();
 const result = new Result();
-
 
 export default class SprintGame {
 	constructor() {
@@ -237,7 +238,7 @@ export default class SprintGame {
 
 	loadNextWords(nextLevel, nextRound) {
 		new Promise(resolve => {
-			const allWords = APIMethods.getNewWordsArray(nextLevel, nextRound);
+			const allWords = Service.getGameSpecificWords(nextLevel, nextRound);
 			resolve(allWords);
 		})
 			.then(allWords => {
@@ -347,6 +348,13 @@ export default class SprintGame {
 		});
 		this.closeResult = SprintGame.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
+
+		const resultPoints = {
+			name: GAMES_NAMES.SPRINT,
+			result: this.points,
+		};
+		Statistics.putGamesResult(resultPoints);
+
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
