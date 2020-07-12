@@ -4,10 +4,7 @@ import {
 } from '../utils/CookieConstants';
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
-// import StartPage from './StartPage';
-import Game from '../english_puzzle/Game';
-
-const enPuzzle = new Game();
+import StartPage from './StartPage';
 
 
 window.addEventListener('load', () => {
@@ -19,9 +16,7 @@ window.addEventListener('load', () => {
 		}
 		showMainPage(userName);
 	} catch (error) {
-		enPuzzle.init();
-		enPuzzle.start();
-		// StartPage.showStartPage();
+		StartPage.showStartPage();
 	} finally {
 		Header.create();
 	}

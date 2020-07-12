@@ -13,33 +13,19 @@ import paintings from './paintingsData';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
-import GameField from './GameField';
-import Hints from './Hints';
-import LevelSelect from './LevelSelect';
-import Tooltips from './Tooltips';
 import APIMethods from '../words_service/APIMethods';
-
-const gameField = new GameField();
-const hints = new Hints();
-const levelSelect = new LevelSelect();
-const tooltips = new Tooltips();
 
 const result = new Result();
 const factory = new DOMElementCreator();
 
 export default class Game {
 	constructor() {
-		this.initState = JSON.parse(sessionStorage.getItem('en-puzzle-state')) || {};
 		this.sentenceArr = [];
 		this.sentenceTranslate = '';
 		this.sentenceAudioLink = '';
-		this.autoListeningBtnState = this.initState.auto || false;
-		this.showTranslationBtnState = this.initState.translation || false;
-		this.showListenBtnState = this.initState.audio || false;
-		this.showBgImageBtnState = this.initState.picture || false;
 		this.currentLine = 0;
-		this.currentRound = this.initState.round || JSON.parse(localStorage.getItem('gameData')).level || 0;
-		this.currentLevel = this.initState.level || JSON.parse(localStorage.getItem('gameData')).round || 0;
+		this.currentRound = JSON.parse(localStorage.getItem('gameData')).round - 1 || 0;
+		this.currentLevel = JSON.parse(localStorage.getItem('gameData')).level - 1 || 0;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
@@ -108,7 +94,6 @@ export default class Game {
 	}
 
 	windowResizeHandler() {
-		console.log(this.cypher);
 		this.puzzlesHomeContainer = document.querySelector('.game__puzzles');
 		if (this.homeWidth !== this.puzzlesHomeContainer.offsetWidth) {
 			this.homeWidth = this.puzzlesHomeContainer.offsetWidth;
@@ -147,34 +132,9 @@ export default class Game {
 		this.roundSelectBtn.removeEventListener('change', this.roundSelectBtnHand);
 	}
 
-	saveStateToSessionStorage() {
-		const stateObj = {
-			'level': this.currentLevel,
-			'round': this.currentRound,
-			'auto': this.autoListeningBtnState,
-			'translation': this.showTranslationBtnState,
-			'audio': this.showBgImageBtnState,
-			'picture': this.showBgImageBtnState
-		};
-		sessionStorage.setItem('en-puzzle-state', JSON.stringify(stateObj));
-	}
-
 	controlsStateUpgrade() {
 		this.levelSelectBtn.selectedIndex = this.currentLevel;
 		this.roundSelectBtn.selectedIndex = this.currentRound;
-		if (this.initState.auto) {
-			this.autoListeningBtn.classList.add('btn-icon--active');
-		}
-		if (this.initState.translation) {
-			this.showTranslationBtn.classList.add('btn-icon--active');
-			this.translationContainer.innerText = this.sentenceTranslate;
-		}
-		if (this.initState.audio) {
-			this.showListenBtn.classList.add('btn-icon--active');
-		}
-		if (this.initState.picture) {
-			this.showBgImageBtn.classList.add('btn-icon--active');
-		}
 	}
 
 	levelSelectBtnHandler(event) {
@@ -204,8 +164,8 @@ export default class Game {
 		if (this.currentLine < lines) {
 			this.addLine();
 			this.currentLineSentenceObj = this.sentencesJSON[this.currentLine];
-			this.sentenceTranslate = this.sentencesJSON[this.currentLine].textExampleTranslate;
-			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].audioExample;
+			this.sentenceTranslate = this.sentencesJSON[this.currentLine].exampleTranslate;
+			this.sentenceAudioLink = this.sentencesJSON[this.currentLine].exampleAudio;
 			this.getSentences(this.sentencesJSON, this.currentLine);
 		} else {
 			this.loadNextRound();
@@ -253,7 +213,6 @@ export default class Game {
 	}
 
 	resultsBtnHandler() {
-		this.saveStateToSessionStorage();
 
 		const resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
@@ -363,7 +322,7 @@ export default class Game {
 	}
 
 	playAudio() {
-		this.audio = new Audio(`https://raw.githubusercontent.com/garza0/rslang-data/master/${this.sentenceAudioLink}`);
+		this.audio = new Audio(this.sentenceAudioLink);
 		this.audio.play();
 	}
 
@@ -435,7 +394,6 @@ export default class Game {
 	}
 
 	generatePuzzle(sentence) {
-		console.log(sentence);
 		const wordsArray = sentence.split(' ');
 		this.sentenceArr = wordsArray;
 		this.numberOfPuzzles = wordsArray.length;
@@ -780,10 +738,6 @@ export default class Game {
 		});
 
 		appContainer.append(this.wrapper);
-		gameField.init();
-		levelSelect.init();
-		hints.init();
-		tooltips.init();
 	}
 
 	start() {
@@ -856,9 +810,7 @@ export default class Game {
 	}
 
 	calculateBackgroundPosition(elements) {
-		console.log(elements);
 		const sortedPuzzles = this.sortPuzzles(elements);
-		console.log(sortedPuzzles);
 		const elementsLine = elements[0].dataset.line;
 		const puzzleHeight = elements[0].offsetHeight;
 		const bgWidth = this.board.offsetWidth;
