@@ -39,9 +39,18 @@ export default class GameField {
 			child: [this.iDontKnowBtn, this.checkBtn, this.continueBtn, this.resultsBtn]
 		});
 
+		this.loader = factory.create({
+			elem: TAGS.DIV,
+			classes: ['loader', 'none'],
+		});
+
+		this.loader.style.backgroundImage = 'url(../../assets/images/loader.svg)';
+
+
 		this.board = factory.create({
 			elem: TAGS.DIV,
 			classes: 'board',
+			child: this.loader
 		});
 		this.boardNumbers = factory.create({
 			elem: TAGS.DIV,

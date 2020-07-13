@@ -28,10 +28,12 @@ export default class Game {
 		this.currentLine = 0;
 		this.currentRound = JSON.parse(localStorage.getItem('gameData')).round - 1 || 0;
 		this.currentLevel = JSON.parse(localStorage.getItem('gameData')).level - 1 || 0;
+		this.repeatWords = JSON.parse(localStorage.getItem('gameData')).repeatWords || false;
 		this.sentencesJSON = {};
 		this.eventListenersAddedState = false;
 		this.numberOfPuzzles = 0;
 		this.activePuzzleContainers = [];
+		this.startWordsIndex = 0;
 		this.cypher = [];
 		this.wrongAnswersResult = [];
 		this.rightAnswersResult = [];
@@ -135,8 +137,19 @@ export default class Game {
 	}
 
 	controlsStateUpgrade() {
-		this.levelSelectBtn.selectedIndex = this.currentLevel;
-		this.roundSelectBtn.selectedIndex = this.currentRound;
+		if (this.repeatWords === false) {
+			this.levelSelectBtn.selectedIndex = this.currentLevel;
+			this.roundSelectBtn.selectedIndex = this.currentRound;
+			this.showLevelRoudSelect();
+		}
+	}
+
+	showLevelRoudSelect() {
+		const levelAndRoundSelect = document.querySelector('.controls__level-and-page');
+		const controls = document.querySelector('.controls');
+		levelAndRoundSelect.classList.remove('none');
+		controls.style.justifyContent = 'space-between';
+		this.nothig = false;
 	}
 
 	levelSelectBtnHandler(event) {
@@ -185,21 +198,36 @@ export default class Game {
 	}
 
 	loadNextRound() {
-		if (this.currentRound + 1 < rounds) {
+		if (this.repeatWords === false) {
+			if (this.currentRound + 1 < rounds) {
+				this.clearField();
+				this.addLine();
+				this.currentLine = 0;
+				this.currentRound += 1;
+				this.roundSelectBtn.selectedIndex = this.currentRound;
+				this.cypher = [];
+				this.wrongAnswersResult = [];
+				this.rightAnswersResult = [];
+				this.resulsBtn.classList.add('none');
+				this.continueBtn.classList.add('none');
+				this.getData();
+				this.iDontKnowBtn.classList.remove('none');
+			} else {
+				this.loadNextLevel();
+			}
+		} else {
 			this.clearField();
 			this.addLine();
 			this.currentLine = 0;
 			this.currentRound += 1;
-			this.roundSelectBtn.selectedIndex = this.currentRound;
 			this.cypher = [];
 			this.wrongAnswersResult = [];
 			this.rightAnswersResult = [];
 			this.resulsBtn.classList.add('none');
 			this.continueBtn.classList.add('none');
-			this.getData();
+			this.getTenElements(this.sentencesJSON);
+			// this.getData();
 			this.iDontKnowBtn.classList.remove('none');
-		} else {
-			this.loadNextLevel();
 		}
 	}
 
@@ -218,8 +246,13 @@ export default class Game {
 			this.resulsBtn.classList.add('none');
 			this.getData();
 		} else {
-			console.log('finish');
+			this.finishGameHandler();
 		}
+	}
+
+	finishGameHandler() {
+		console.log('game finished');
+		this.nothing = false;
 	}
 
 	resultsBtnHandler() {
@@ -384,6 +417,26 @@ export default class Game {
 		this.autoListeningBtn.classList.toggle('btn-icon--active');
 	}
 
+	async getWords() {
+		this.nothing = false;
+		const {
+			repeatWords,
+			level,
+			round
+		} = JSON.parse(localStorage.getItem('gameData'));
+		if (repeatWords === true) {
+			const userWords = await Service.getRepeatedWords();
+			return userWords;
+		}
+		const allWords = await Service.getGameSpecificWords(level, round);
+		return allWords;
+	}
+
+	async getInitnionData() {
+		this.showLoader();
+		this.handleJson(await this.getWords());
+	}
+
 	getData(level = this.currentLevel, round = this.currentRound) {
 		new Promise(resolve => {
 			const allWords = Service.getGameSpecificWords(level, round);
@@ -393,12 +446,26 @@ export default class Game {
 		});
 	}
 
+	showLoader() {
+		this.loader = document.querySelector('.loader');
+		this.loader.classList.remove('none');
+	}
+
+	hideLoader() {
+		this.loader.classList.add('none');
+	}
+
 	handleJson(myJson) {
-		this.sentencesJSON = myJson;
-		this.sentenceTranslate = myJson[0].exampleTranslate;
-		this.sentenceAudioLink = myJson[0].exampleAudio;
-		this.getSentences(myJson, this.currentLine);
-		this.controlsStateUpgrade();
+		if (myJson.length > 10) {
+			this.hideLoader();
+			this.sentencesJSON = myJson;
+			this.sentenceTranslate = myJson[0].exampleTranslate;
+			this.sentenceAudioLink = myJson[0].exampleAudio;
+			this.getSentences(myJson, this.currentLine);
+			this.controlsStateUpgrade();
+		} else {
+			this.notEnoughWordsHandler(myJson.length);
+		}
 	}
 
 	getSentences(arr, line) {
@@ -407,6 +474,25 @@ export default class Game {
 			sentencesArr.push(word.example.replace(/<[^>]*>/g, ''))
 		);
 		this.generatePuzzle(sentencesArr[line]);
+	}
+
+	notEnoughWordsHandler(numberOfWords) {
+		if (numberOfWords === 0) {
+			this.finishGameHandler();
+		} else {
+			console.log(`You have ${numberOfWords} words`);
+		}
+	}
+
+	getTenElements(array) {
+		this.startWordsIndex += 10;
+		this.endWordsIndex = this.startWordsIndex + 10;
+		this.tenElements = array.slice(this.startWordsIndex, this.endWordsIndex);
+		if (this.tenElements.length === 10) {
+			this.getSentences(this.tenElements, this.currentLine);
+		} else {
+			this.notEnoughWordsHandler(this.tenElements.length);
+		}
 	}
 
 	addLine() {
@@ -788,7 +874,7 @@ export default class Game {
 	}
 
 	start() {
-		this.getData();
+		this.getInitnionData();
 		this.addLine();
 	}
 

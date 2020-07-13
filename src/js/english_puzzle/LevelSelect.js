@@ -31,7 +31,7 @@ export default class LevelSelect {
 
 		this.levelAndPageSelectContainer = factory.create({
 			elem: TAGS.DIV,
-			classes: 'controls__level-and-page',
+			classes: ['controls__level-and-page', 'none'],
 			child: [this.levelSelectLabel, this.levelSelectDropdown, this.roundSelectLabel, this.roundSelectDropdown]
 		});
 
