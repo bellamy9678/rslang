@@ -866,7 +866,7 @@ export default class Game {
 
 		this.wrapper = factory.create({
 			elem: TAGS.DIV,
-			classes: 'wrapper__en_puzzle',
+			classes: ['wrapper', 'wrapper__en_puzzle'],
 			child: this.gameContainer
 		});
 

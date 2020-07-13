@@ -1,3 +1,5 @@
+$elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
+
 .result {
 	&__modal-window {
 	position: absolute;
@@ -8,14 +10,16 @@
 	border: 1px solid $color-border;
 	border-radius: 5px;
 	background-color: $color-background;
-	box-shadow: 0 0 8px 0px black;
+	box-shadow: $elements-shadow;
 	z-index: 99;
 	margin: auto;
 	min-width: 300px;
+	color: $color-text-dark;
+	@extend %font-prim;
 	}
 
 	&__score {
-		padding-top: 12px;
+		padding-top: 7px;
 	}
 
 	&__answers-container {
@@ -45,7 +49,7 @@
 	&__modal-header {
 		@include font ($size: 2.2rem);
 		text-align: center;
-		padding-bottom: 15px;
+		padding-bottom: 6px;
 	}
 
 	&__modal-footer {
@@ -54,8 +58,8 @@
 	}
 
 	&__results-list {
-		max-height: 70vh;
-		overflow-y: scroll;
+		max-height: calc(100vh - 230px);
+		overflow-y: auto;
 	}
 
 	&__list-header-name {
@@ -79,7 +83,7 @@
 	}
 
 	&__background {
-		position: fixed;
+		position: absolute;
 		top: 0;
 		left: 0;
 		bottom: 0;
@@ -97,12 +101,13 @@
 		font-style: normal;
 		font-weight: 500;
 		line-height: 1.6rem;
-		padding: 6px 13px;
+		padding: 9px 8px;
 		border-radius: 5px;
 		cursor: pointer;
 		background: $color-additional;
 		border: 1px solid $color-additional;
 		color: #fff;
+		margin: 5px;
 	}
 }
 

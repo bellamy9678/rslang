@@ -343,22 +343,6 @@ function createSettingsPage(obj) {
 		child: [showAnswerButtonCheckbox, TEXT.settingsPage.showAnswerButtonLabel],
 	});
 
-	const useLearnedWordsCheckbox = newElem.create({
-		elem: TAGS.INPUT,
-		classes: 'settings__checkbox',
-		id: 'use-learned-words',
-		attr: [{
-			name: 'useLearnedWords',
-			type: 'checkbox',
-		}, ],
-	});
-
-	const useLearnedWordsLabel = newElem.create({
-		elem: TAGS.LABEL,
-		classes: 'settings__label',
-		child: [useLearnedWordsCheckbox, TEXT.settingsPage.useLearnedWordsLabel],
-	});
-
 	const checkboxWrapper = newElem.create({
 		elem: TAGS.DIV,
 		classes: 'settings__checkbox-wrapper',
@@ -376,7 +360,6 @@ function createSettingsPage(obj) {
 			difficultButtonLabel,
 			complexityButtonsLabel,
 			showAnswerButtonLabel,
-			useLearnedWordsLabel,
 		]
 	});
 

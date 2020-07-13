@@ -16,6 +16,8 @@ import showMainPage from '../mainPage/MainPage';
 import CookieMonster from '../utils/CookieMonster';
 import Settings from '../settings/Settings';
 import Statistics from '../statistics/Statistics';
+import About from '../about-us/About';
+import Promo from '../promo/Promo';
 
 async function initSettingsForNewUser() {
 	const settings = new Settings();
@@ -30,6 +32,22 @@ async function initSettingsForOldUser() {
 	return settings;
 }
 
+function teamLinkHandler() {
+	const app = document.querySelector('.app');
+	app.firstChild.remove();
+	const aboutPage = new About();
+	const page = aboutPage.getPage();
+	app.append(page);
+}
+
+function gettingStartedLinkHandler() {
+	const app = document.querySelector('.app');
+	app.firstChild.remove();
+	const promoPage = new Promo();
+	const page = promoPage.draw();
+	app.append(page);
+}
+
 export default class Header {
 	static createUnauthorisedUserLinks() {
 		const newElem = new DOMElementCreator();
@@ -40,12 +58,17 @@ export default class Header {
 			child: LINKS.team,
 		});
 
+		teamLink.addEventListener('click', teamLinkHandler);
+
 		const gettingStartedLink = newElem.create({
 			elem: TAGS.LI,
 			classes: 'navigation__link',
 			id: 'link_start',
 			child: LINKS.gettingStarted,
 		});
+
+		gettingStartedLink.addEventListener('click', gettingStartedLinkHandler);
+
 		const navigation = document.querySelector('.navigation');
 		navigation.prepend(teamLink, gettingStartedLink);
 	}
