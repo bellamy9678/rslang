@@ -10,6 +10,7 @@ import {
 import Settings from '../settings/Settings';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import eventObserver from '../observer/Observer';
+import createCustomEvent from '../events/CustomEventCreator';
 
 let settingsObj;
 async function initial() {
@@ -195,11 +196,9 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 				classes: ['word__recover'],
 				child: DICTIONARY_BUTTONS.RECOVER,
 			});
-			const recoverWordEvent = new CustomEvent(
-				WORDS_EVENTS.RECOVER_WORD, {
-					detail: objWord[i],
-				}
-			);
+
+			const recoverWordEvent = createCustomEvent(WORDS_EVENTS.RECOVER_WORD, objWord[i]);
+
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 				eventObserver.call(recoverWordEvent);

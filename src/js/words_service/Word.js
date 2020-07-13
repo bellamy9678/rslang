@@ -7,8 +7,8 @@ const NEW_WORD_PARAMETERS = {
 	progress: 0,
 	bestResult: 0,
 	showedCount: 0,
-	showedDate: 0,
-	nextShowDate: new Date(),
+	showedDate: `${new Date()}`,
+	nextShowDate: '',
 	offset: 0,
 	category: CATEGORIES.NEW
 };
