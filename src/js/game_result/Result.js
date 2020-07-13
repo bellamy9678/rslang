@@ -14,7 +14,6 @@ export default class Result {
 	}
 
 	showResult(settingsObj) {
-		this.APP_CONTAINER = document.querySelector('.app');
 		this.rightAnswers = settingsObj.rightAnswers || settingsObj.rightAnswersSentences;
 		this.wrongAnswers = settingsObj.wrongAnswers || settingsObj.wrongAnswersSentences;
 		this.buttons = settingsObj.buttons;
@@ -23,7 +22,9 @@ export default class Result {
 			this.sentenceResult = true;
 		}
 
-		this.APP_CONTAINER.append(this.generateResultWindow(settingsObj));
+		const appContainer = document.querySelector('.app');
+		const APP_CONTAINER = appContainer.querySelector('.wrapper');
+		APP_CONTAINER.append(this.generateResultWindow(settingsObj));
 	}
 
 	generateResultWindow(settingsObj) {
@@ -44,6 +45,8 @@ export default class Result {
 			classes: 'result__background',
 			child: this.resultWindow
 		});
+
+
 		return this.resultWithBackground;
 	}
 
@@ -140,7 +143,7 @@ export default class Result {
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
 					obj.example.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
-					`${obj.word} - ${obj.wordTranslate}`
+					`${obj.word} - ${obj.translate}`
 			});
 
 			this.iKnowRow = factory.create({
