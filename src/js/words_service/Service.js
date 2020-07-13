@@ -1,7 +1,6 @@
 import {
 	DEFAULT_GROUP,
 	DEFAULT_PAGE,
-	INTERVAL_PARAMS,
 	EMPTY_ARRAY_LENGTH,
 	ARRAY_LENGTH_CORRECTION,
 } from './constants';
@@ -34,29 +33,21 @@ function sortByShowTime(array) {
 }
 
 Service.getGameWords = async function getGameWords() {
-	const settings = await Settings.getInstance();
-
-	if (settings.useLearnedWords) {
-		const listLearnedWords = await APIMethods.getUserWordsByCategory(
-			CATEGORIES.ACTIVE
-		);
-		const listDifficultWords = await APIMethods.getUserWordsByCategory(
-			CATEGORIES.DIFFICULT
-		);
-		const filteredLearnedWords = listLearnedWords.filter((word) => {
-			return word.optional.progress === INTERVAL_PARAMS.MAX_PROGRESS_LEVEL;
-		});
-		const filteredDifficultWords = listDifficultWords.filter((word) => {
-			return word.optional.progress === INTERVAL_PARAMS.MAX_PROGRESS_LEVEL;
-		});
-		const filtered = filteredLearnedWords.concat(filteredDifficultWords);
+	const listLearnedWords = await APIMethods.getUserWordsByCategory(
+		CATEGORIES.ACTIVE
+	);
+	const listDifficultWords = await APIMethods.getUserWordsByCategory(
+		CATEGORIES.DIFFICULT
+	);
+	const filtered = listLearnedWords.concat(listDifficultWords);
+	if (filtered.length) {
 		return getShuffledArray(filtered);
 	}
 	const listOfNewWords = await Service.getGameSpecificWords(
 		DEFAULT_GROUP,
 		DEFAULT_PAGE
 	);
-	return listOfNewWords;
+	return getShuffledArray(listOfNewWords);
 };
 
 Service.getGameSpecificWords = async function getGameSpecificWords(
