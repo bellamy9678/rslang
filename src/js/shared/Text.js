@@ -47,6 +47,13 @@ export const TEXT = {
 		description: 'Lorem ipsum dolore si amet.',
 	},
 
+	dictionary: {
+		wordShowNumber: {
+			left: 'This word has shown',
+			right: 'times.',
+		}
+	},
+
 	settingsPage: {
 		title: 'Settings',
 		wordsNumberLabel: 'Type the number of words that you will plan to learn in a day',

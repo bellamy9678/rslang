@@ -1,14 +1,11 @@
 .category {
-	// &__container {
-
-	// }
 
 	&__word {
 		margin: 20px 0;
 		@include font ($size: 1.4rem);
 		border-bottom: solid 1px $color-border;
 
-		* {
+		&>* {
 			display: block;
 			margin: 10px auto;
 			text-align: center;
@@ -44,6 +41,19 @@
 		width: 300px;
 		height: auto;
 		border-radius: 5px;
+	}
+
+	&__optional>* {
+		display: block;
+		margin: 10px auto;
+		text-align: center;
+	}
+
+	&__progress {
+		width: 116px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 }
