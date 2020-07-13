@@ -14,6 +14,8 @@ $elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
 	z-index: 99;
 	margin: auto;
 	min-width: 300px;
+	color: $color-text-dark;
+	@extend %font-prim;
 	}
 
 	&__score {
@@ -99,12 +101,13 @@ $elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
 		font-style: normal;
 		font-weight: 500;
 		line-height: 1.6rem;
-		padding: 6px 13px;
+		padding: 9px 8px;
 		border-radius: 5px;
 		cursor: pointer;
 		background: $color-additional;
 		border: 1px solid $color-additional;
 		color: #fff;
+		margin: 5px;
 	}
 }
 
