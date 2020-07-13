@@ -28,7 +28,6 @@ export default class Result {
 	}
 
 	generateResultWindow(settingsObj) {
-		console.log(settingsObj);
 		this.resultWindow = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-window',
