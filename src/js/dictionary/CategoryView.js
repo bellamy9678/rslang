@@ -18,6 +18,35 @@ async function initial() {
 }
 initial();
 
+const dateOptions = {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+	weekday: 'long',
+	timezone: 'UTC',
+	hour: 'numeric',
+	minute: 'numeric',
+};
+
+function setDateComponents(date) {
+	const myDate = new Date(date);
+	return myDate.toLocaleString('en-US', dateOptions);
+}
+
+// function createProgressView(progress) {
+// 	const newElem = new DOMElementCreator();
+// 	for(let i = 0; i < progress; i += 1) {
+// 		const progressIcon = newElem.create({
+// 			elem: TAGS.IMG,
+// 			classes: ['icon', 'icon_progress'],
+// 			attr: [{
+// 				src: './assets/images/dictionary/star.svg',
+// 				alt: 'Progress',
+// 			}, ],
+// 		});
+// 	}
+// }
+
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
 	const categoryWords = words.map(wordData => {
@@ -33,6 +62,7 @@ function createDictionaryWords(words) {
 			attr: [{
 				src: wordData.audio,
 				'data-settings': 'playWord',
+				controls: 'controls',
 			}, ],
 		});
 
@@ -77,7 +107,9 @@ function createDictionaryWords(words) {
 			elem: TAGS.AUDIO,
 			classes: ['word__meaning-audio'],
 			attr: [{
-				src: wordData.meaningAudio
+				src: wordData.meaningAudio,
+				controls: 'controls',
+				'data-settings': 'playMeaning',
 			}],
 		});
 
@@ -103,7 +135,9 @@ function createDictionaryWords(words) {
 			elem: TAGS.AUDIO,
 			classes: ['word__example-audio'],
 			attr: [{
-				src: wordData.exampleAudio
+				src: wordData.exampleAudio,
+				controls: 'controls',
+				'data-settings': 'playExample',
 			}],
 		});
 
@@ -131,13 +165,13 @@ function createDictionaryWords(words) {
 		const showedDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [wordData.optional.showedDate],
+			child: [setDateComponents(wordData.optional.showedDate)],
 		});
 
 		const nextShowDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [wordData.optional.nextShowDate],
+			child: [setDateComponents(wordData.optional.nextShowDate)],
 		});
 
 		const optionalData = newElem.create({

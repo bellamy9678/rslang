@@ -1,0 +1,49 @@
+.category {
+	// &__container {
+
+	// }
+
+	&__word {
+		margin: 20px 0;
+		@include font ($size: 1.4rem);
+		border-bottom: solid 1px $color-border;
+
+		* {
+			display: block;
+			margin: 10px auto;
+			text-align: center;
+		}
+	}
+}
+
+.word {
+
+	&__word {
+		@include font ($size: 1.8rem, $weight: 600);
+	}
+
+	&__audio {
+		&:focus {
+			outline: none !important;
+		}
+	}
+
+	&__meaning-audio {
+		&:focus {
+			outline: none !important;
+		}
+	}
+
+	&__example-audio {
+		&:focus {
+			outline: none !important;
+		}
+	}
+
+	&__image {
+		width: 300px;
+		height: auto;
+		border-radius: 5px;
+	}
+
+}
