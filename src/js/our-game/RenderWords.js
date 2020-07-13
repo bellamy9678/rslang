@@ -3,7 +3,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 
 
-export default function renderWords(item) {
+export default function renderWords(item, index) {
 	const newElem = new DOMElementCreator();
 	const word = newElem.create({
 		elem: TAGS.DIV,
@@ -15,6 +15,7 @@ export default function renderWords(item) {
 		},
 		{'data-sound': `${item.audio}`
 		},
+		{'data-index': index},
 		],
 		child: `${item.word}`,
 	}); 

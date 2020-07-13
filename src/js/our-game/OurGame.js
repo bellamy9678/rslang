@@ -1,8 +1,3 @@
-import {
-	// API,
-	ASSETS_STORAGE
-} from '../shared/Constants';
-
 import DOMElementCreator from '../utils/DOMElementCreator';
 
 import TAGS from '../shared/Tags.json';
@@ -20,19 +15,12 @@ import Service from '../words_service/Service';
 import Result from '../game_result/Result';
 
 import {
-	emptyString,
 	statisticText,
 	newGameText
 } from './OurGameConsts';
 
 import createHeader from './GameHeader';
 
-function GetAnswers(item) {
-	this.word = item.textContent;
-	this.wordTranslate = item.dataset.translation;
-	this.transcription = item.dataset.transcription;
-	this.audio = item.dataset.sound.replace(ASSETS_STORAGE, emptyString);
-}
 
 async function getWords() {
 	const {
@@ -76,16 +64,23 @@ export default function initGame() {
 	const zero = 0;
 	points.textContent = zero;
 	const wordsRound = 15;
-
+	const correctAnswers = [];
+	const wrongAns = [];
+	let receivedWords = [];
+	let wordlength;
 
 	function initGetWords() {
 	
 		getWords().then(res => {
-			let words = res.slice(zero, wordsRound).map(item => renderWords(item));
+			
+			const neededWords = res.slice(zero, wordsRound);
+			receivedWords = [...neededWords];
+			wordlength = receivedWords.length;
+			let words = neededWords.map((item, index) => renderWords(item, index));		
 			words = shuffle(words);
 			words.forEach(el => engWordsContainer.append(el));
 
-			let translations = res.slice(0, 15).map(item => renderTranslate(item));
+			let translations = res.slice(zero, wordsRound).map(item => renderTranslate(item));
 			translations = shuffle(translations);
 			translations.forEach(el => translationContainer.append(el));
 		});
@@ -102,7 +97,7 @@ export default function initGame() {
 			[...translation].forEach(el => el.remove());
 			points.textContent = '0';
 			guessed.length = zero;
-			initGetWords();
+			// initGetWords();
 		};
 
 		this.removeAllListeners = () => {
@@ -133,20 +128,17 @@ export default function initGame() {
 			newGameBtn.addEventListener('click', this.startNewGame);
 
 			gameResult.showResult({
-				rightAnswers: guessed.map(item => new GetAnswers(item)),
-				wrongAnswers: ([...engWords].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)),
+				rightAnswers: correctAnswers,
+				wrongAnswers: wrongAns,
 				points: points.textContent,
 				buttons: [newGameBtn, statisticBtn],
 			});
 		};
 
 		this.compareWords = () => {
+			
 			const word = document.querySelector('.chosen');
 			const transl = document.querySelector('.active');
-			const wordsNumber = document.getElementsByClassName('word-our-game').length;
-			// console.log(wordsNumber);
-			const invNumber = document.getElementsByClassName('invisible').length;
-			// console.log(invNumber);
 
 			if (word !== null && transl !== null) {				
 				if (word.textContent === transl.dataset.word) {
@@ -155,12 +147,12 @@ export default function initGame() {
 					word.classList.remove('chosen');
 					transl.classList.remove('active');
 					correctSound.play();
-					// wordsNumber -= 1;
+					wordlength -= 1;
 					if (!word.classList.contains('wrong')) {
 						points.textContent = +(points.textContent) + 100;
-						guessed.push(word);
+						correctAnswers.push(receivedWords[word.dataset.index]);
 					}
-					if (wordsNumber === (invNumber/2 + 1)) {
+					if (wordlength === 0) {
 						this.resultBtnHandler();
 					}
 
@@ -168,6 +160,7 @@ export default function initGame() {
 					word.classList.remove('chosen');
 					transl.classList.remove('active');
 					word.classList.add('wrong');
+					wrongAns.push(receivedWords[word.dataset.index]);
 					wrongSound.play();
 				}
 			}
