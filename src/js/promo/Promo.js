@@ -4,13 +4,12 @@ import { TEXT } from '../shared/Text';
 
 const fab = new DOMElementCreator();
 
-const wrapper = fab.create({
-	elem: TAGS.DIV,
-	classes: ['wrapper', 'promo'],
-});
-
 export default class Promo {
-	constructor() {
+	makeContainer() {
+		const wrapper = fab.create({
+			elem: TAGS.DIV,
+			classes: ['wrapper'],
+		});
 		this.container = wrapper;
 	}
 
@@ -163,6 +162,7 @@ export default class Promo {
 	}
 
 	draw() {
+		this.makeContainer();
 		this.createHeader();
 		this.createDescription();
 		this.createVideo();
