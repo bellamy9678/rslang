@@ -18,8 +18,8 @@ export default class Hints {
 		);
 
 		this.hintControls.forEach((btn, i) => {
-			// eslint-disable-next-line no-param-reassign
-			btn.style.backgroundImage = `url(${hintIcons[i]})`;
+			const button = btn;
+			button.style.backgroundImage = `url(${hintIcons[i]})`;
 		});
 
 		this.hints = factory.create({

@@ -110,6 +110,55 @@ export const TEXT = {
 			git : 'DKravchenkoEpam',
 			text : 'Organize command work, helpful and highly relevant advices and recommendation for any part of application or work.'
 		}
+	},
+
+	promo: {
+		header : 'About RSLang Application',
+		description__header : 'Here you can:',
+		description__options : [
+			'improve your english', 'customize your learning', 'study online',
+			'check your progress', 'spend time playing games', 'And it is all for free!'
+		],
+		description__img : [
+			'meeting', 'build', 'support',
+			'vision', 'time', 'special'
+		],
+		video : {
+			header : 'See our amazing video',
+			youtube : 'https://www.youtube.com/embed/',
+			hash : 'R3D-r4ogr7s',
+			allow : 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
+		},
+		interval : {
+			header : 'Interval repetition rules:',
+			rules : [
+				'Степень изученности от 1 (новое слово), до 5 (это слово вы уже выучили).',
+				`Увеличить степень изученности слова можно угадав это слово от 1 до 4
+				раз подряд (для перехода по степеням от 1 до 5 нужно угадать
+				соотвтетсвенно от 1 до 4 раз подряд).`,
+				'Уменьшение изученности происходит при неправильном ответе.',
+				`В настройках можно выбрать использование выученных слов, т.е. слов
+				со степенью изученности 5. Если таких слов нет, игра начнется с 1 раунда 1
+				уровня.`,
+				`Через сколько дней нужно будет показать изучаемое слово считаем по формуле,
+				используемой в ANKI: (2 x n + 1) x coefficient, где n - количество
+				часов, через сколько нужно будет показать это слово для повторения
+				(для новых слов n = 0).`,
+				`В интервальном повторении используются следующие коэффициенты:
+				снова: coefficient = 0; легко: coefficient = 1.3; хорошо:
+				coefficient = 1; трудно: coefficient = 0.8;`,
+				`Если нет кнопок легко-сложно, то считаем, что при правильном ответе
+				coefficient = 1, при неправильном coefficient = 0.`,
+				`Т.е. при неправильном ответе возвращаем слово к изучению в самое
+				начало, полагая, что это слово равносильно новому для пользователя.`,
+				`Обновление степени изученности и даты повторения каждого слова,
+				показанного в игр происходит в конце этой игры,
+				когда будет отображена статистика. Это сделано для уменьшения количества запросов
+				к АПИ для обновления слова`,
+				`Эти правила сознательно написаны на русском, чтобы избежать двусмысленности
+				при Cross Check :)`
+			]
+		}
 	}
 };
 

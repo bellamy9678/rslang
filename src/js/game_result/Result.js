@@ -1,7 +1,10 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import * as CONST from './constants';
-import { ASSETS_STORAGE } from '../shared/Constants';
+import WORDS_EVENTS from '../observer/WordsEvents';
+import eventObserver from '../observer/Observer';
+import createCustomEvent from '../events/CustomEventCreator';
+
 
 const factory = new DOMElementCreator();
 
@@ -15,7 +18,6 @@ export default class Result {
 	}
 
 	showResult(settingsObj) {
-		this.APP_CONTAINER = document.querySelector('.app');
 		this.rightAnswers = settingsObj.rightAnswers || settingsObj.rightAnswersSentences;
 		this.wrongAnswers = settingsObj.wrongAnswers || settingsObj.wrongAnswersSentences;
 		this.buttons = settingsObj.buttons;
@@ -24,10 +26,29 @@ export default class Result {
 			this.sentenceResult = true;
 		}
 
-		this.APP_CONTAINER.append(this.generateResultWindow(settingsObj));
+		const appContainer = document.querySelector('.app');
+		const APP_CONTAINER = appContainer.querySelector('.wrapper');
+		APP_CONTAINER.append(this.generateResultWindow(settingsObj));
+	}
+
+	addWordsToDictionary() {
+		const repeatWordsMode = JSON.parse(localStorage.getItem('gameData')).repeatWords;
+		if (repeatWordsMode) {
+			this.rightAnswers.forEach(word => {
+				const rightAnswerEvent = createCustomEvent(WORDS_EVENTS.CORRECT_ANSWER, word);
+				document.dispatchEvent(rightAnswerEvent);
+				eventObserver.call(rightAnswerEvent);
+			});
+			this.rightAnswers.forEach(word => {
+				const wrongAnswerEvent = createCustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, word);
+				document.dispatchEvent(wrongAnswerEvent);
+				eventObserver.call(wrongAnswerEvent);
+			});
+		}
 	}
 
 	generateResultWindow(settingsObj) {
+		console.log(settingsObj);
 		this.resultWindow = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-window',
@@ -35,7 +56,7 @@ export default class Result {
 				this.generateResultHeader(settingsObj),
 				this.generateResultContent(),
 				this.generateResultFooter(),
-				...this.generateAudio()
+				this.generateAudio()
 			]
 		});
 
@@ -44,6 +65,8 @@ export default class Result {
 			classes: 'result__background',
 			child: this.resultWindow
 		});
+
+
 		return this.resultWithBackground;
 	}
 
@@ -86,7 +109,9 @@ export default class Result {
 			this.playAudioBtn = factory.create({
 				elem: TAGS.BUTTON,
 				classes: 'result__play-audio-btn',
-				attr: { 'data-word': obj.word }
+				attr: {
+					'data-word': obj.word
+				}
 			});
 
 			this.addEventListenerForPlayBtn(this.playAudioBtn);
@@ -95,8 +120,8 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
-					`${obj.word} - ${obj.wordTranslate}`
+					obj.example.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) : `${obj.word} - ${obj.translate}`
+
 			});
 
 			this.iDontKnowRow = factory.create({
@@ -130,7 +155,9 @@ export default class Result {
 			this.playAudioBtn = factory.create({
 				elem: TAGS.BUTTON,
 				classes: 'result__play-audio-btn',
-				attr: { 'data-word': obj.word }
+				attr: {
+					'data-word': obj.word
+				}
 			});
 
 			this.addEventListenerForPlayBtn(this.playAudioBtn);
@@ -139,8 +166,7 @@ export default class Result {
 				elem: TAGS.SPAN,
 				classes: 'result__sentence',
 				child: this.sentenceResult ?
-					obj.textExample.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) :
-					`${obj.word} - ${obj.wordTranslate}`
+					obj.example.replace(CONST.REGEXP_HTML_TAGS, CONST.EMPTY_STRING) : `${obj.word} - ${obj.translate}`
 			});
 
 			this.iKnowRow = factory.create({
@@ -173,8 +199,10 @@ export default class Result {
 			const audioEl = factory.create({
 				elem: TAGS.AUDIO,
 				classes: 'result__audio-sentences',
-				attr: [{ 'data-word': obj.word }, {
-					'src': `${ASSETS_STORAGE}${this.sentenceResult ? obj.audioExample : obj.audio}`
+				attr: [{
+					'data-word': obj.word
+				}, {
+					'src': `${this.sentenceResult ? obj.exampleAudio : obj.audio}`
 				}]
 			});
 			return audioEl;

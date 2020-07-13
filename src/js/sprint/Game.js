@@ -1,7 +1,6 @@
 import GameField from './GameField';
 import * as CONST from './constants';
 import {
-	API,
 	ASSETS_STORAGE
 } from '../shared/Constants';
 import Result from '../game_result/Result';
@@ -249,13 +248,12 @@ export default class SprintGame {
 	}
 
 	getData(level = this.level, round = this.round) {
-		const url = `${API}words?group=${level}&page=${round}&wordsPerExampleSentenceLTE=10&wordsPerPage=10`;
-		fetch(url)
-			.then(response => {
-				return response.json();
-			}).then(myJson => {
-				this.handleJson(myJson);
-			}).catch(error => console.error(error));
+		new Promise(resolve => {
+			const allWords = Service.getGameSpecificWords(level, round);
+			resolve(allWords);
+		}).then(myJson => {
+			this.handleJson(myJson);
+		}).catch(error => console.error(error));
 	}
 
 	handleJson(json) {

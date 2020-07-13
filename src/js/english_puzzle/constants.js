@@ -1,6 +1,6 @@
 export const appContainer = document.querySelector('.app');
 export const levels = 6;
-export const rounds = 10;
+export const rounds = 30;
 export const lines = 10;
 export const puzzlesGap = 2;
 export const API_URL = 'http://pacific-castle-12388.herokuapp.com/';
@@ -11,3 +11,5 @@ export const CONTINUE = 'Продолжить';
 export const RESULTS = 'Результат';
 export const LEVEL = 'Уровень';
 export const ROUND = 'Раунд';
+export const PICTURE_WIDTH = 1156;
+export const PICTURE_HEIGHT = 650;

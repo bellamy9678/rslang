@@ -44,5 +44,4 @@ export const WORD_OBJECT_DEFAULT = {
 	playWord: true,
 	playMeaning: true,
 	playExample: true,
-	useLearnedWords: true,
 };

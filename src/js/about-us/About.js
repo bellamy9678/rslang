@@ -5,13 +5,12 @@ import { GIT_URL } from '../shared/Constants';
 
 const fab = new DOMElementCreator();
 
-const wrapper = fab.create({
-	elem: TAGS.DIV,
-	classes: ['wrapper'],
-});
-
 export default class About {
-	constructor() {
+	makeContainer() {
+		const wrapper = fab.create({
+			elem: TAGS.DIV,
+			classes: ['wrapper'],
+		});
 		this.container = wrapper;
 	}
 
@@ -168,6 +167,7 @@ export default class About {
 	}
 
 	getPage() {
+		this.makeContainer();
 		this.makeSectionOurTeam();
 		this.makeSectionMembers();
 		this.makeSectionMentor();

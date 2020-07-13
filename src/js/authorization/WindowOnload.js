@@ -11,7 +11,7 @@ window.addEventListener('load', () => {
 		const cookie = new CookieMonster();
 		const userName = cookie.getCookie(USER.NAME);
 		if (!userName) {
-			throw new Error ('Cookie not found');
+			throw new Error('Cookie not found');
 		}
 		showMainPage(userName);
 	} catch (error) {
