@@ -25,14 +25,14 @@ const amountNewWordsToShow = function amountNewWordsToShow() {
 // 	}
 // };
 
-const increaseNewWords = function increaseNewWords() {
+const increaseNewWords = async function increaseNewWords() {
 	this.newWordsShowed += 1;
-	this.saveParameters();
+	await this.saveParameters();
 };
 
-const increaseCardsShowed = function increaseCardsShowed() {
+const increaseCardsShowed = async function increaseCardsShowed() {
 	this.cardsShowed += 1;
-	this.saveParameters();
+	await this.saveParameters();
 };
 
 // const setProgressGroupPage = function setProgressGroupPage(group, page) {
@@ -48,23 +48,23 @@ const increaseCardsShowed = function increaseCardsShowed() {
 // 	this.saveParameters();
 // };
 
-const increaseProgress = function increaseProgress() {
+const increaseProgress = async function increaseProgress() {
 	if (this.progress.page < DEFAULT_SETTINGS.PAGES_END) {
 		this.progress.page += 1;
 	} else if (this.progress.group < DEFAULT_SETTINGS.GROUPS_END) {
 		this.progress.page = DEFAULT_SETTINGS.PAGES_START;
 		this.progress.group += 1;
 	}
-	this.saveParameters();
+	await this.saveParameters();
 };
 
-const makeZeroProgress = function makeZeroProgress() {
+const makeZeroProgress = async function makeZeroProgress() {
 	this.newWordsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
 	this.cardsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
-	this.saveParameters();
+	await this.saveParameters();
 };
 
-const checkNewDateNow = function checkNewDateNow() {
+const checkNewDateNow = async function checkNewDateNow() {
 	const now = new Date();
 	const lastUpdate = new Date(this.lastUpdateDate);
 	const expected = new Date(lastUpdate.setHours(
@@ -79,7 +79,7 @@ const checkNewDateNow = function checkNewDateNow() {
 		);
 		this.lastUpdate = now;
 		this.newDay();
-		this.saveParameters();
+		await this.saveParameters();
 	}
 };
 
@@ -177,17 +177,18 @@ export default class Settings {
 
 		if (!isFirstInitialization) {
 			await returnedSettingsObject.getSettings();
-			returnedSettingsObject.checkNewDate();
-			await returnedSettingsObject.saveParameters();
+			await returnedSettingsObject.checkNewDate();
 		}
 
 		return returnedSettingsObject;
 	}
 
-	static async getInstance() {
-		if (!Settings.instance) {
-			Settings.instance = await Settings.init();
+	static async getInstance(isFirstInitialization) {
+		if (isFirstInitialization) {
+			Settings.instance = await Settings.init(isFirstInitialization);
+			return Settings.instance;
 		}
+		Settings.instance = await Settings.init();
 		return Settings.instance;
 	}
 }

@@ -24,6 +24,7 @@ Statistics.putWordsProgress = async function putWordsProgress() {
 	const stat = await APIMethods.sendRequestGet();
 	const settings = await Settings.getInstance();
 	const now = new Date();
+
 	const lastUpdate = new Date(settings.lastUpdateDate);
 	const expected = lastUpdate.setHours(
 		lastUpdate.getHours() + DEFAULT_SETTINGS.NEXT_LEARNING_HOURS
@@ -36,9 +37,12 @@ Statistics.putWordsProgress = async function putWordsProgress() {
 			DEFAULT_SETTINGS.SECONDS,
 			DEFAULT_SETTINGS.MILLISECONDS
 		);
-		stat.statistics.dates.push(new Date());
+
+		stat.statistics.dates.push(`${now}`);
+
 		const amount = settings.newWordsShowed;
-		const label = stat.statistics.labels[stat.statistics.labels.length - 1] + amount;
+		const label =
+			stat.statistics.labels[stat.statistics.labels.length - 1] + amount;
 		const progress = Math.round(label) / TOTAL_WORDS_PERCENT;
 		stat.statistics.labels.push(label);
 		stat.statistics.data.push(progress);
@@ -46,7 +50,8 @@ Statistics.putWordsProgress = async function putWordsProgress() {
 		const amount = settings.newWordsShowed;
 		stat.statistics.labels.pop();
 		stat.statistics.data.pop();
-		const label = stat.statistics.labels[stat.statistics.labels.length - 1] + amount;
+		const label =
+			stat.statistics.labels[stat.statistics.labels.length - 1] + amount;
 		const progress = Math.round(label) / TOTAL_WORDS_PERCENT;
 		stat.statistics.labels.push(label);
 		stat.statistics.data.push(progress);

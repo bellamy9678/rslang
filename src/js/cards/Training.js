@@ -91,11 +91,9 @@ function showHiddenWordInInput() {
 
 function nextCard() {
 	Statistics.putWordsProgress();
-
 	document.querySelector('.card').classList.add(FADE_CLASS);
 	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
-
 	let start = null;
 	window.requestAnimationFrame(function timeout(timestamp) {
 		if (start === null) {
