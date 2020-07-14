@@ -282,7 +282,9 @@ export default class Game {
 			this.notEnoughWordsHandler();
 		}
 		console.log('Congratulations. You have learned all the available words. Add new words in training mode.');
-		this.iDontKnowBtn.classList.add('none');
+		if (this.iDontKnowBtn) {
+			this.iDontKnowBtn.classList.add('none');
+		}
 	}
 
 	resultsBtnHandler() {
