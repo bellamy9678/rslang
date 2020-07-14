@@ -52,6 +52,8 @@ export default function generateElements(mainWordObj, answers) {
 			'data-image': `${mainWordObj.image}`
 		}, {
 			'data-audio': `${mainWordObj.audio}`
+		}, {
+			'data-id': `${mainWordObj.id}`
 		}]
 	});
 	const soundIcon2 = domCreator.create({
@@ -99,7 +101,7 @@ export default function generateElements(mainWordObj, answers) {
 	});
 	const wrapper = domCreator.create({
 		elem: TAGS.DIV,
-		classes: 'main-wrapper',
+		classes: ['main-wrapper', 'wrapper'],
 		child: [wrapperContent]
 	});
 	app.append(wrapper);
