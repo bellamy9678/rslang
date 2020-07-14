@@ -66,6 +66,7 @@ Statistics.getData = async function getData() {
 
 Statistics.getStatisticsPage = async function getStatisticsPage() {
 	const doc = document.querySelector('.app');
+	doc.firstChild.remove();
 	const stat = await Statistics.getData();
 	const statPage = new StatisticsPage(stat);
 	const statPageElem = statPage.getStatisticsPage();

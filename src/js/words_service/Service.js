@@ -73,18 +73,18 @@ Service.getNewWords = async function getNewWords() {
 
 Service.getRandomWords = async function getRandomWords() {
 	const settings = await Settings.getInstance();
+	console.log('settings', settings);
 
 	const totalCards = settings.cardsToShowAmount();
 	if (totalCards === EMPTY_ARRAY_LENGTH) return [];
 
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
-
 	if (hiddenWords.length < totalCards) {
 		const newWords = await Service.getNewWords();
 		hiddenWords = hiddenWords.concat(newWords);
 	}
-	const repeatedWords = await Service.getRepeatedWords();
 
+	const repeatedWords = await Service.getRepeatedWords();
 	const amountRepeatedWords = repeatedWords.length;
 	const amountNewWords = settings.newWordsToShowAmount();
 

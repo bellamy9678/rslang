@@ -7,7 +7,8 @@ import {
 	NEXT_AUDIO_CORRECTION,
 	START_AUDIO_TIME,
 	FADE_DURATION,
-	DEFAULT_POSITION
+	DEFAULT_POSITION,
+	PADDING_INPUT
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
@@ -19,7 +20,7 @@ let globalState;
 function setInput() {
 	globalState.inputHandler = new InputHandler();
 	globalState.inputHandler.init();
-	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth}${INPUT_WIDTH_UNIT}`;
+	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth + PADDING_INPUT}${INPUT_WIDTH_UNIT}`;
 }
 
 function checkDifficulty() {
@@ -241,10 +242,12 @@ CARD_CONTAINER.addEventListener(
 );
 
 export default async function training() {
+	globalState = {};
 	globalState = new GlobalState();
 	await globalState.initGlobalState();
 	if (globalState.words.length !== 0) {
 		addListeners();
 		setInput();
+		console.log('after init globalState', globalState);
 	}
 }

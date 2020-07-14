@@ -62,10 +62,9 @@ const makeZeroProgress = function makeZeroProgress() {
 const checkNewDateNow = function checkNewDateNow() {
 	const now = new Date();
 	const lastUpdate = new Date(this.lastUpdateDate);
-	const expected = lastUpdate.setHours(
-		lastUpdate.getHours() + DEFAULT_SETTINGS.NEXT_LEARNING_HOURS
-	);
-
+	const expected = new Date(lastUpdate.setHours(
+		lastUpdate.getHours() + DEFAULT_SETTINGS.NEW_DAY_HOURS
+	));
 	if (now > expected) {
 		now.setHours(
 			DEFAULT_SETTINGS.HOURS,

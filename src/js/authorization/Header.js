@@ -160,6 +160,8 @@ export default class Header {
 			child: LINKS.statistic,
 		});
 
+		statisticLink.addEventListener('click', Statistics.getStatisticsPage);
+
 		const dictionaryLink = newElem.create({
 			elem: TAGS.LI,
 			classes: 'navigation__link',
