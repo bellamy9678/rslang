@@ -39,6 +39,8 @@ export default class Game {
 		this.rightAnswersResult = [];
 		this.currentLineSentenceObj = {};
 		this.resultForCurrentLineState = false;
+		this.gameStarted = false;
+		this.onFirstGameStep = true;
 	}
 
 	addEventListenersToControls() {
@@ -198,6 +200,7 @@ export default class Game {
 	}
 
 	loadNextRound() {
+		this.gameStarted = false;
 		if (this.repeatWords === false) {
 			if (this.currentRound + 1 < rounds) {
 				this.clearField();
@@ -216,19 +219,43 @@ export default class Game {
 				this.loadNextLevel();
 			}
 		} else {
-			this.clearField();
-			this.addLine();
-			this.currentLine = 0;
-			this.currentRound += 1;
-			this.cypher = [];
-			this.wrongAnswersResult = [];
-			this.rightAnswersResult = [];
-			this.resulsBtn.classList.add('none');
-			this.continueBtn.classList.add('none');
-			this.getTenElements(this.sentencesJSON);
-			// this.getData();
-			this.iDontKnowBtn.classList.remove('none');
+			this.userWordsHandler();
 		}
+	}
+
+	userWordsHandler() {
+		this.sentencesJSON.splice(0, 10);
+		if (this.sentencesJSON.length >= 10) {
+			this.sentenceTranslate = this.sentencesJSON[0].exampleTranslate;
+			this.sentenceAudioLink = this.sentencesJSON[0].exampleAudio;
+			this.getTenElements(this.sentencesJSON);
+		} else {
+			this.finishGameHandler();
+		}
+	}
+
+	getTenElements(array) {
+		if (array.length >= 10) {
+			this.onFirstGameStep = false;
+			this.resetField();
+			this.getSentences(array, this.currentLine);
+		} else {
+			this.iDontKnowBtn.classList.add('none');
+			this.notEnoughWordsHandler(array.length);
+		}
+	}
+
+	resetField() {
+		this.clearField();
+		this.addLine();
+		this.currentLine = 0;
+		this.currentRound += 1;
+		this.cypher = [];
+		this.wrongAnswersResult = [];
+		this.rightAnswersResult = [];
+		this.resulsBtn.classList.add('none');
+		this.continueBtn.classList.add('none');
+		this.iDontKnowBtn.classList.remove('none');
 	}
 
 	loadNextLevel() {
@@ -251,8 +278,11 @@ export default class Game {
 	}
 
 	finishGameHandler() {
-		console.log('game finished');
-		this.nothing = false;
+		if (this.onFirstGameStep) {
+			this.notEnoughWordsHandler();
+		}
+		console.log('Congratulations. You have learned all the available words. Add new words in training mode.');
+		this.iDontKnowBtn.classList.add('none');
 	}
 
 	resultsBtnHandler() {
@@ -319,32 +349,34 @@ export default class Game {
 	}
 
 	iDontKnowBtnHandler() {
-		if (this.resultForCurrentLineState === false) {
-			this.wrongAnswersResult.push(this.currentLineSentenceObj);
-			this.resultForCurrentLineState = true;
-		}
-		this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
-		this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
-		this.activePuzzleContainers.forEach(container => {
-			const curContainer = container;
-			curContainer.style.width = null;
-			curContainer.classList.remove('puzzle-container--active');
-		});
-		const puzzleNodes = [];
-		this.activePuzzles.forEach((puzzle) => {
-			puzzle.classList.remove('game__jigsaw--active');
-			puzzle.removeAttribute('draggable');
-			puzzle.classList.remove('game__jigsaw--wrong', 'game__jigsaw--correct');
-			puzzleNodes.push(puzzle);
-			puzzle.remove();
-		});
-		this.iDontKnowBtn.classList.add('none');
-		this.checkBtn.classList.add('none');
-		this.continueBtn.classList.remove('none');
-		this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
-		this.updatePuzzlesAtActiveLine();
-		if (this.currentLine === 9) {
-			this.resulsBtn.classList.remove('none');
+		if (this.gameStarted) {
+			if (this.resultForCurrentLineState === false) {
+				this.wrongAnswersResult.push(this.currentLineSentenceObj);
+				this.resultForCurrentLineState = true;
+			}
+			this.activePuzzles = document.querySelectorAll('.game__jigsaw--active');
+			this.activePuzzleContainers = document.querySelectorAll('.puzzle-container--active');
+			this.activePuzzleContainers.forEach(container => {
+				const curContainer = container;
+				curContainer.style.width = null;
+				curContainer.classList.remove('puzzle-container--active');
+			});
+			const puzzleNodes = [];
+			this.activePuzzles.forEach((puzzle) => {
+				puzzle.classList.remove('game__jigsaw--active');
+				puzzle.removeAttribute('draggable');
+				puzzle.classList.remove('game__jigsaw--wrong', 'game__jigsaw--correct');
+				puzzleNodes.push(puzzle);
+				puzzle.remove();
+			});
+			this.iDontKnowBtn.classList.add('none');
+			this.checkBtn.classList.add('none');
+			this.continueBtn.classList.remove('none');
+			this.appendPuzzlesToFieldLine(this.sortPuzzles(puzzleNodes));
+			this.updatePuzzlesAtActiveLine();
+			if (this.currentLine === 9) {
+				this.resulsBtn.classList.remove('none');
+			}
 		}
 	}
 
@@ -412,6 +444,12 @@ export default class Game {
 		}
 	}
 
+	updateTranslation() {
+		if (this.showTranslationBtnState) {
+			this.translationContainer.innerText = this.sentenceTranslate;
+		}
+	}
+
 	autoListeningBtnHandler() {
 		this.autoListeningBtnState = !this.autoListeningBtnState;
 		this.autoListeningBtn.classList.toggle('btn-icon--active');
@@ -456,8 +494,8 @@ export default class Game {
 	}
 
 	handleJson(myJson) {
+		this.hideLoader();
 		if (myJson.length > 10) {
-			this.hideLoader();
 			this.sentencesJSON = myJson;
 			this.sentenceTranslate = myJson[0].exampleTranslate;
 			this.sentenceAudioLink = myJson[0].exampleAudio;
@@ -480,20 +518,11 @@ export default class Game {
 		if (numberOfWords === 0) {
 			this.finishGameHandler();
 		} else {
-			console.log(`You have ${numberOfWords} words`);
+			console.log(`You have ${numberOfWords} words. You need more than 10 words. Add them in training mode.`);
 		}
 	}
 
-	getTenElements(array) {
-		this.startWordsIndex += 10;
-		this.endWordsIndex = this.startWordsIndex + 10;
-		this.tenElements = array.slice(this.startWordsIndex, this.endWordsIndex);
-		if (this.tenElements.length === 10) {
-			this.getSentences(this.tenElements, this.currentLine);
-		} else {
-			this.notEnoughWordsHandler(this.tenElements.length);
-		}
-	}
+
 
 	addLine() {
 		this.board = document.querySelector('.board');
@@ -518,6 +547,7 @@ export default class Game {
 		this.numberOfPuzzles = wordsArray.length;
 		const puzzles = this.populatePuzzle(wordsArray);
 		const shuffledPuzzleArr = this.shuffleArray(puzzles);
+		this.updateTranslation();
 		this.appendPuzzlesToContainer(shuffledPuzzleArr);
 	}
 
@@ -591,10 +621,14 @@ export default class Game {
 			this.addEventListenersToControls();
 		}
 		if (this.autoListeningBtnState) {
+			if (this.audio) {
+				this.audio.pause();
+			}
 			this.playAudio(this.sentenceAudioLink);
 		}
 		this.calculateBackgroundPosition(puzzles);
 		this.addEventListenerToPuzzlesAtHome();
+		this.gameStarted = true;
 	}
 
 	updateFreePuzzleContainers() {
@@ -949,7 +983,7 @@ export default class Game {
 		sortedPuzzles.forEach((element) => {
 			const puzzle = element;
 			puzzle.style.backgroundPosition = `${-previosPuzzlesWidth}px ${-elementsLine * puzzleHeight}px`;
-			puzzle.style.backgroundSize = `${bgWidth}px`;
+			puzzle.style.backgroundSize = `${bgWidth + 20}px`;
 			previosPuzzlesWidth += puzzle.offsetWidth + 2;
 		});
 	}
