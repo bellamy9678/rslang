@@ -58,6 +58,9 @@ export default class CloseGame {
 	exitBtnHandler() {
 		this.exitModalWindow();
 		this.removeEventListenerFromDocument();
+		if (this.removeEventListenerFunc) {
+			this.removeEventListenerFunc();
+		}
 		this.eventTarget.click();
 	}
 
@@ -97,7 +100,8 @@ export default class CloseGame {
 	}
 
 
-	addEventListenerToDocument() {
+	addEventListenerToDocument(removeEventListenerFunc) {
+		this.removeEventListenerFunc = removeEventListenerFunc;
 		this.documentClickHand = this.documentClickHandler.bind(this);
 		document.addEventListener('mousedown', this.documentClickHand);
 	}
