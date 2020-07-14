@@ -1,4 +1,4 @@
-import {arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, /* arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import {gameState, arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, /* arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 import defineArrays from './defineArrays';
 import generateWordContainers from './generateWordContainers';
 import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
@@ -6,7 +6,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import Result from '../game_result/Result';
 import GetAnswers from './GetAnswers';
-import APIMethods from '../words_service/APIMethods';
+import giveWords from './giveWords';
 
 export default async function showNewWord() {
 	let gameOver = false;
@@ -21,7 +21,14 @@ export default async function showNewWord() {
 
 	function endgame(rightAnswers, wrongAnswers) {
 		async function newRound() {
+			gameState.started = false;
+			arrForUniqness.length = 0;
+			arrForRandFunc.length = 0;
 			document.querySelector('.result__button').removeEventListener('click', newRound);
+			const healthPoints = document.querySelector('.health-point-scale');
+			while (healthPoints.firstChild) {
+				healthPoints.firstChild.remove();
+			}
 			result.closeResultWindow();
 			for (let i = 0; i <= 4; i+=1) {
 				const heartIcon = creator.create({
@@ -33,10 +40,9 @@ export default async function showNewWord() {
 						alt: ''
 					}],
 				});
-				document.querySelector('.health-point-scale').append(heartIcon);
+				healthPoints.append(heartIcon);
 			}
-			// const {level, round} = JSON.parse(localStorage.getItem('gameData'));
-			const allWords = await APIMethods.getNewWordsArray(0, 0);
+			const allWords = await giveWords();
 			allWords.forEach(item => {
 				arrForUniqness.push(item);
 			});
@@ -65,13 +71,22 @@ export default async function showNewWord() {
 	}
 
 	const lifeIcon = document.querySelector('.health-point-scale IMG');
+	const repeatWords = JSON.parse(localStorage.getItem('gameData'));
 	if (arrForUniqness.length === 0 && lifeIcon) {
-		await defineArrays();
+		if (repeatWords && gameState.started) {
+			gameOver = true;
+			endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
+		} else {
+			gameState.started = true;
+			await defineArrays();
+		}
 	} else if (arrForUniqness.length !== 0 && lifeIcon) {
 		await generateWordContainers(arrForUniqness, arrForRandFunc);
 	} else {
 		gameOver = true;
 		endgame(arrayWithRightAnswers, arrayWithWrongAnswers);
+		arrayWithRightAnswers.length = 0;
+		arrayWithWrongAnswers.length = 0;
 	}
 
 	const mainWordContainer = document.querySelector('.main-word');
