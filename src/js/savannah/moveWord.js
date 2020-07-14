@@ -1,4 +1,4 @@
-import {START_INDEX, FINAL_INDEX, REQUIRED_MARGIN, /* stopMoving */} from './consts';
+import {VALUE_OF_KEYS, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN, POSITION_OF_NUMBER, WORD_ENDING, WORD_BEGGINING} from './consts';
 
 export default function moveWord() {
 	const start = Date.now();
@@ -28,8 +28,11 @@ export default function moveWord() {
 		});
 	});
 
-	function stopMoving() {
-		cancelAnimationFrame(requestId);
+	function stopMoving(event) {
+		const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
+		if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
+			cancelAnimationFrame(requestId);
+		}
 		document.removeEventListener('keydown', stopMoving);
 	}
 

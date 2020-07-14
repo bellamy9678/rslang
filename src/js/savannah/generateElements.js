@@ -1,5 +1,4 @@
 import showNewWord from './showNewWord';
-// import {DELAY_BEFORE_GAME} from './consts';
 
 export default function generateElements() {
 	const stone = document.querySelector('.stone-icon');

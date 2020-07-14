@@ -1,23 +1,11 @@
 import randomizeWords from './randomizeWords';
+import getWords from './getWords';
+import Word from './Word';
 import {
 	arrayForUniqness,
-	arrayForRandom
+	arrayForRandom,
+	requestedWords
 } from './consts';
-import Service from '../words_service/Service';
-
-async function getWords() {
-	const {
-		repeatWords,
-		level,
-		round
-	} = JSON.parse(localStorage.getItem('gameData'));
-	if (repeatWords === true) {
-		const userWords = await Service.getRepeatedWords();
-		return userWords;
-	}
-	const allWords = await Service.getGameSpecificWords(level, round);
-	return allWords;
-}
 
 export default function audioChallenge() {
 	new Promise(resolve => {
@@ -25,10 +13,14 @@ export default function audioChallenge() {
 		resolve(words);
 	})
 		.then((words) => {
-			words.forEach(item => {
+			const allWords = words.map(word => new Word(word));
+			allWords.forEach(item => {
 				arrayForUniqness.push(item);
 			});
 			words.forEach(item => {
+				requestedWords.push(item);
+			});
+			allWords.forEach(item => {
 				arrayForRandom.push(item);
 			});
 		})

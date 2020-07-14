@@ -1,6 +1,3 @@
-import {
-	ASSETS_STORAGE
-} from '../shared/Constants';
 import Service from '../words_service/Service';
 
 export default async function giveWords() {
@@ -22,9 +19,10 @@ export default async function giveWords() {
 		return {
 			word: word.word,
 			translate: word.translate,
-			transcription: word.transcription,
-			audio: `${ASSETS_STORAGE}${word.audio}`
+			audio: word.audio,
+			id: word.id
 		};
 	}
+
 	return words.map(word => new Word(word));
 }
