@@ -1,8 +1,5 @@
 import DOMElementCreator from '../utils/DOMElementCreator';
 
-import {
-	ASSETS_STORAGE
-} from '../shared/Constants';
 import TAGS from '../shared/Tags.json';
 import initMainContent from './MainContent';
 import renderWords from './RenderWords';
@@ -12,7 +9,6 @@ import Statistics from '../statistics/Statistics';
 
 import {
 	returnBtnText,
-	newGameText,
 	statisticText,
 	emptyString,
 } from './speakconst';
@@ -29,6 +25,7 @@ export default function createSpeakItGame() {
 	});
 
 	app.append(wrapper);
+	document.body.classList.add('speakit__body');
 
 	const mainWrapper = document.querySelector('.main-container');
 	const currentImg = document.querySelector('.current-image');
@@ -37,8 +34,6 @@ export default function createSpeakItGame() {
 	const imgAudio = document.querySelector('.pronounce');
 	const output = document.querySelector('.word-output');
 	const stopSpeak = document.querySelector('.stop-speak');
-	// const startPage = document.querySelector('.start-page');
-	// const startBtn = document.querySelector('.start-btn');
 	const restartBtn = document.querySelector('.restart');
 	const speakBtn = document.querySelector('.speak');
 	const finishBtn = document.querySelector('.finish');
@@ -52,25 +47,9 @@ export default function createSpeakItGame() {
 	let trainMode = true;
 	const zero = 0;
 	const guessedAll = 10;
-
-	// async function getData(url) {
-	// 	const response = await fetch(url);
-	// 	const data = await response.json();
-	// 	return data;
-	// }
-
-	// // Эта функция Лизы, мне нужно импорт из какого-то ее файла добавить
-	// function Word(word) {
-	// 	this.id = word.id;
-	// 	this.word = word.word;
-	// 	this.translate = word.wordTranslate;
-	// 	this.transcription = word.transcription;
-	// 	this.audio = `${ASSETS_STORAGE}${word.audio}`;
-	// 	this.image = `${ASSETS_STORAGE}${word.image}`;
-	// 	this.example = word.textExample;
-	// 	this.exampleTranslate = word.textExampleTranslate;
-	// 	this.exampleAudio = `${ASSETS_STORAGE}${word.audioExample}`;
-	// }
+	let receivedWords = [];
+	const corrAnsw = [];
+	let wordsNumber;
 
 	// Speech recognition
 	const SpeechRecognition = window.webkitSpeechRecognition;
@@ -98,6 +77,7 @@ export default function createSpeakItGame() {
 		const { level } = JSON.parse(localStorage.getItem('gameData'));
 		const { round } = JSON.parse(localStorage.getItem('gameData'));
 		guessed.length = zero;
+		corrAnsw.length = zero;
 		trainMode = true;
 		span.textContent = emptyString;
 		output.classList.add('none');
@@ -105,33 +85,26 @@ export default function createSpeakItGame() {
 		translation.textContent = emptyString;
 		[...words].forEach((el) => el.remove());
 		getWords(level, round).then((res) => {
-			const arr = res.slice(zero, guessedAll).map((item) => renderWords(item));
+			const neededWords = res.slice(zero, guessedAll);
+			receivedWords = [...neededWords];
+			wordsNumber = receivedWords.length;
+			const arr = neededWords.map((item, index) => renderWords(item, index));
 			arr.forEach((el) => wordsContainer.append(el));
 		});
 	}
 
-	function setStartingState() {
+	/* function setStartingState() {
 		guessed.length = zero;
+		corrAnsw = zero;
 		trainMode = true;
 		span.textContent = emptyString;
-
 		output.classList.add('none');
 		currentImg.setAttribute('src', defaultImg);
 		translation.textContent = emptyString;
 		[...words].forEach((el) => el.remove());
-	}
-
-	function GetAnswers(item) {
-		this.word = item.dataset.wrt;
-		this.wordTranslate = item.dataset.transl;
-		this.transcription = item.dataset.transcription;
-		this.audio = item.dataset.myaudio.replace(ASSETS_STORAGE, emptyString);
-	}
+	} */
 
 	function GameHandlers() {
-		this.returnButton = document.querySelector('.return-btn');
-		this.newGameButton = document.querySelector('.new-game');
-		this.statButton = document.querySelector('.statistic');
 
 		this.clickHandler = (event) => {
 			if (event.target.classList.contains('word') && trainMode) {
@@ -169,22 +142,21 @@ export default function createSpeakItGame() {
 			recognition.stop();
 			recognition.removeEventListener('result', this.recResultHandler);
 			recognition.removeEventListener('end', this.handleRecognition);
-			this.newGameButton.removeEventListener('click', this.newGameHandler);
 			this.returnButton.removeEventListener('click', this.returnHandler);
 			this.statButton.removeEventListener('click', this.statisticHandler);
+			app.remove(wrapper);
 		};
 		// return btn
 		this.returnHandler = () => {
 			myResult.closeResultWindow();
 		};
 		// new game button
-		this.newGameHandler = () => {
+		/* this.newGameHandler = () => {
 			myResult.closeResultWindow();
 			setStartingState();
 			recognition.stop();
 			mainWrapper.classList.add('none');
-			// startPage.classList.remove('none');
-		};
+		}; */
 
 		// speech
 		this.handleRecognition = () => {
@@ -197,7 +169,8 @@ export default function createSpeakItGame() {
 						el.classList.add('active');
 						currentImg.setAttribute('src', el.dataset.myimage);
 						guessed.push(el);
-						if (guessed.length === guessedAll) {
+						corrAnsw.push((receivedWords[el.dataset.index]));
+						if (corrAnsw.length === wordsNumber) {
 							this.resultBtnHandler(); // нужно вызывать модальное окошко потому что все угадано
 						}
 					}
@@ -228,9 +201,10 @@ export default function createSpeakItGame() {
 			output.classList.remove('none');
 			[...words].forEach((el) => el.classList.remove('active'));
 			translation.classList.add('none');
-			recognition.start();
+			recognition.start();		
 			recognition.addEventListener('result', this.recResultHandler);
 			recognition.addEventListener('end', this.handleRecognition);
+			speakBtn.setAttribute('disabled', 'true');
 		};
 
 		// stop speak button
@@ -245,20 +219,20 @@ export default function createSpeakItGame() {
 			trainMode = true;
 			translation.classList.remove('none');
 			translation.textContent = emptyString;
+			speakBtn.removeAttribute('disabled');
 		};
 
 		// start game add all listeners
 		this.startHandler = () => {
-			// if (event.target.classList.contains('start-btn')) {
-			// startPage.classList.add('none');
 			mainWrapper.classList.remove('none');
 			recognition.removeEventListener('end', this.handleRecognition);
 			const { level } = JSON.parse(localStorage.getItem('gameData'));
 			const { round } = JSON.parse(localStorage.getItem('gameData'));
 			getWords(level, round).then((res) => {
-				const arr = res
-					.slice(zero, guessedAll)
-					.map((item) => renderWords(item));
+				const neededWords = res.slice(zero, guessedAll);
+				receivedWords = [...neededWords];
+				wordsNumber = receivedWords.length;
+				const arr = neededWords.map((item, index) => renderWords(item, index));
 				arr.forEach((el) => wordsContainer.append(el));
 			});
 			document.addEventListener('click', this.clickHandler);
@@ -277,11 +251,11 @@ export default function createSpeakItGame() {
 				child: returnBtnText,
 			});
 
-			const resultNewGameBtn = newElem.create({
+			/* const resultNewGameBtn = newElem.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn', 'new-game'],
 				child: newGameText,
-			});
+			}); */
 
 			const statisticBtn = newElem.create({
 				elem: TAGS.BUTTON,
@@ -289,33 +263,34 @@ export default function createSpeakItGame() {
 				child: statisticText,
 			});
 
+
+			this.returnButton = resultReturnBtn;
+
 			statisticBtn.addEventListener('click', this.statisticHandler); // дописать метод, показывающий статистику по игре);
 			resultReturnBtn.addEventListener('click', this.returnHandler);
-			resultNewGameBtn.addEventListener('click', this.newGameHandler);
+			// resultNewGameBtn.addEventListener('click', this.newGameHandler);
+
+			this.returnButton = resultReturnBtn;
+			this.statButton = statisticBtn;		
+	
 
 			const resultPoints = {
 				name: GAMES_NAMES.SPEAK,
 				result:
-				guessed.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
-				([...words].filter((item) => (!guessed.includes(item)))).map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+				corrAnsw.length * RESULT_MULTIPLIER.CORRECT +
+				receivedWords.filter((item) => (!corrAnsw.includes(item))).length * RESULT_MULTIPLIER.INCORRECT,
 			};
 			Statistics.putGamesResult(resultPoints);
 
 			myResult.showResult({
-				rightAnswers: guessed.map((item) => new GetAnswers(item)),
-				wrongAnswers: [...words]
-					.filter((item) => !guessed.includes(item))
-					.map((item) => new GetAnswers(item)),
-				buttons: [resultReturnBtn, resultNewGameBtn, statisticBtn],
+				rightAnswers: corrAnsw,
+				wrongAnswers: receivedWords
+					.filter((item) => !corrAnsw.includes(item)),
+				buttons: [resultReturnBtn, statisticBtn ] // resultNewGameBtn, ],
 			});
 		};
-
-		// this.addAllListeners = () => {
-		// 	startBtn.addEventListener('click', this.startHandler);
-		// };
 	}
 
 	const speakHandlers = new GameHandlers();
-	// speakHandlers.addAllListeners();
 	speakHandlers.startHandler();
 }

@@ -1,6 +1,6 @@
 import giveWords from './giveWords';
 import generateWordContainers from './generateWordContainers';
-import {arrForUniqness, arrForRandFunc} from './consts';
+import {arrForUniqness, arrForRandFunc, requestedWords} from './consts';
 
 export default	async function defineArrays() {
 	const allWords = await giveWords();
@@ -9,6 +9,9 @@ export default	async function defineArrays() {
 	});
 	allWords.forEach(item => {
 		arrForRandFunc.push(item);
+	});
+	allWords.forEach(item => {
+		requestedWords.push(item);
 	});
 	generateWordContainers(arrForUniqness, arrForRandFunc);
 }

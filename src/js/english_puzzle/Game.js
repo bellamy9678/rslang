@@ -16,7 +16,9 @@ import TAGS from '../shared/Tags.json';
 import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import Service from '../words_service/Service';
+import CloseGame from '../close_game/CloseGame';
 
+const closeGameModal = new CloseGame();
 const result = new Result();
 const factory = new DOMElementCreator();
 
@@ -92,6 +94,8 @@ export default class Game {
 		this.showBgImageBtn.addEventListener('click', this.showHideBg);
 
 		this.addEventListenerForWindowResize();
+
+		closeGameModal.addEventListenerToDocument();
 	}
 
 	addEventListenerForWindowResize() {
@@ -896,7 +900,7 @@ export default class Game {
 
 		this.gameContainer = factory.create({
 			elem: TAGS.DIV,
-			classes: 'game-container',
+			classes: 'en_puzzle__container',
 			child: [this.controlsContainer, this.tooltips, this.gameBoard],
 		});
 
