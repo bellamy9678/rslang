@@ -286,7 +286,9 @@ export default class Game {
 			this.notEnoughWordsHandler();
 		}
 		console.log('Congratulations. You have learned all the available words. Add new words in training mode.');
-		this.iDontKnowBtn.classList.add('none');
+		if (this.iDontKnowBtn) {
+			this.iDontKnowBtn.classList.add('none');
+		}
 	}
 
 	resultsBtnHandler() {
@@ -522,7 +524,7 @@ export default class Game {
 		if (numberOfWords === 0) {
 			this.finishGameHandler();
 		} else {
-			console.log(`You have ${numberOfWords} words. You need more than 10 words. Add them in training mode.`);
+			console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
 		}
 	}
 
