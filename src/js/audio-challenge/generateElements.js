@@ -99,7 +99,7 @@ export default function generateElements(mainWordObj, answers) {
 	});
 	const wrapper = domCreator.create({
 		elem: TAGS.DIV,
-		classes: 'main-wrapper',
+		classes: ['main-wrapper', 'wrapper'],
 		child: [wrapperContent]
 	});
 	app.append(wrapper);
