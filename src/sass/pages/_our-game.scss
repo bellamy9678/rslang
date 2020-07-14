@@ -4,6 +4,13 @@
 
 $finish-btn-color: #ffd700;
 
+/* body {
+	background: linear-gradient(to right, #ed4264, #ffedbc);
+} */
+/*#ourgame__wrapper {
+	background: linear-gradient(to right, #ed4264, #ffedbc);
+} */
+
 .game-container {
 	display: flex;
   max-width: 940px;
@@ -15,7 +22,8 @@ $finish-btn-color: #ffd700;
   padding: 0 50px;
 	margin: 10px 0;
 	@include media-mobile {
-		display: block;
+		flex-direction: column;
+    align-items: center;
 	}
 	@include media-mobilesmall {
 		padding: 0 30px;
@@ -62,12 +70,13 @@ $finish-btn-color: #ffd700;
 	}
 }
 
-.word, .word-translation {
+.word-our-game, .word-translation-ourgame {
 	width: 145px;
 	height: 90px;
 	@include font (1.4rem, $weight: 900);
   text-align: center;
-	padding-top: 40px;
+	// padding-top: 40px;
+	padding: 40px 15px 0 15px;
 	word-break: break-all;
 	cursor: pointer;
 	margin-bottom: 10px;
@@ -92,7 +101,7 @@ $finish-btn-color: #ffd700;
 
 }
 
-.word:nth-child(even) {
+.word-our-game:nth-child(even) {
   border-radius: 68% 32% 16% 84% / 54% 47% 53% 46%;
   background-image: linear-gradient(to right, #9EEFE1 0%, #4830F0 51%, #9EEFE1 100%);
 	background-size: 200% auto;
@@ -104,7 +113,7 @@ $finish-btn-color: #ffd700;
 	}
 }
 
-.word:nth-child(odd) {
+.word-our-game:nth-child(odd) {
 	border-radius: 6% 94% 11% 89% / 62% 43% 57% 38%;
 	background-image: linear-gradient(to right, #d41c9d 0%, #eec2df 51%, #f766c6 100%);
 	background-size: 200% auto;
@@ -116,11 +125,11 @@ $finish-btn-color: #ffd700;
 	}
 }
 
-.word-translation {
+.word-translation-ourgame {
 	@include bg-cover("../../src/assets/images/paper.png");
 }
 
-.word:nth-child(odd).chosen, .word:nth-child(even).chosen {
+.word-our-game:nth-child(odd).chosen, .word-our-game:nth-child(even).chosen {
 	background-image: none;
 }
 
@@ -130,7 +139,7 @@ $finish-btn-color: #ffd700;
 	box-shadow: 0 8px 15px rgba(0,0,0,.3);
 }
 
-.word:nth-child(odd).wrong, .word:nth-child(even).wrong {
+.word-our-game:nth-child(odd).wrong, .word-our-game:nth-child(even).wrong {
 	background-image: none;
 	background-color: gray;
 }
