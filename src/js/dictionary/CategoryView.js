@@ -179,13 +179,13 @@ function createDictionaryWords(words) {
 		const showedDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [setDateComponents(wordData.optional.showedDate)],
+			child: [TEXT.dictionary.showDate, setDateComponents(wordData.optional.showedDate)],
 		});
 
 		const nextShowDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [setDateComponents(wordData.optional.nextShowDate)],
+			child: [TEXT.dictionary.nextShowDate, setDateComponents(wordData.optional.nextShowDate)],
 		});
 
 		const optionalData = newElem.create({
@@ -250,11 +250,38 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 				eventObserver.call(recoverWordEvent);
+				/* eslint-disable no-use-before-define */
+				showWordsCategory(categoryName);
 				// eventObserver.unsubscribe.bind(eventObserver)(recoverWordEvent);
 			});
 			word.append(recoverRemovedWordButton);
 		});
 	}
+}
+
+function createMessage() {
+	const newElem = new DOMElementCreator();
+	const text = newElem.create({
+		elem: TAGS.P,
+		classes: ['category__message-text'],
+		child: TEXT.dictionary.message,
+	});
+
+	const emptyCategoryImage = newElem.create({
+		elem: TAGS.IMG,
+		classes: ['category__empty-img'],
+		attr: [{
+			src: './assets/images/dictionary/space-discovery.svg',
+			alt: 'Space discovery',
+		}, ],
+	});
+
+	const message = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['category__message'],
+		child: [text, emptyCategoryImage],
+	});
+	return message;
 }
 
 export default function showWordsCategory(categoryName) {
@@ -268,8 +295,13 @@ export default function showWordsCategory(categoryName) {
 			if (categoryContainer.firstChild) {
 				categoryContainer.firstChild.remove();
 			}
-			categoryContainer.append(category);
-			addRecoverButtonsToWords(categoryName, words);
-			updateWordViewWithUserSettings();
+			if (words.length === 0) {
+				const message = createMessage();
+				categoryContainer.append(message);
+			} else {
+				categoryContainer.append(category);
+				addRecoverButtonsToWords(categoryName, words);
+				updateWordViewWithUserSettings();
+			}
 		});
 }

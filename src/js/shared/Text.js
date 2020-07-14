@@ -48,10 +48,13 @@ export const TEXT = {
 	},
 
 	dictionary: {
+		showDate: 'Last time this word was shown on ',
+		nextShowDate: 'Next time this word will be show on ',
 		wordShowNumber: {
 			left: 'This word has shown',
 			right: 'times.',
-		}
+		},
+		message: 'There aren\'t any words in this category yet.',
 	},
 
 	settingsPage: {

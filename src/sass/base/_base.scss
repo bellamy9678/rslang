@@ -1,6 +1,9 @@
 html {
 	font-size: 10px;
 	height: 100%;
+	@include media-mobile {
+		font-size: 8px;
+	}
 }
 
 body {

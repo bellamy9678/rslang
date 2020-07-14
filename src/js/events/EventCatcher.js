@@ -4,7 +4,6 @@ import {
 	CATEGORIES,
 } from '../shared/Constants';
 import eventObserver from '../observer/Observer';
-import showWordsCategory from '../dictionary/CategoryView';
 import Settings from '../settings/Settings';
 
 async function changeWordParams(event) {
@@ -66,7 +65,6 @@ async function changeWordParams(event) {
 		break;
 	case WORDS_EVENTS.RECOVER_WORD:
 		await wordData.changeWordCategory(CATEGORIES.ACTIVE);
-		showWordsCategory(wordData.optional.category);
 		break;
 	default:
 		throw new Error('Event with this name is not found');
