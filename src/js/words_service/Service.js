@@ -60,38 +60,30 @@ Service.getGameSpecificWords = async function getGameSpecificWords(
 
 Service.getNewWords = async function getNewWords() {
 	const settings = await Settings.getInstance();
-
 	const words = await APIMethods.getNewWordsArray(
 		settings.progress.group,
 		settings.progress.page
 	);
 	settings.incProgress();
-	settings.saveParameters();
 	APIMethods.saveWordsArray(words);
 	return getShuffledArray(words);
 };
 
 Service.getRandomWords = async function getRandomWords() {
 	const settings = await Settings.getInstance();
-	console.log('settings', settings);
-
 	const totalCards = settings.cardsToShowAmount();
 	if (totalCards === EMPTY_ARRAY_LENGTH) return [];
-
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
 	if (hiddenWords.length < totalCards) {
 		const newWords = await Service.getNewWords();
 		hiddenWords = hiddenWords.concat(newWords);
 	}
-
 	const repeatedWords = await Service.getRepeatedWords();
 	const amountRepeatedWords = repeatedWords.length;
 	const amountNewWords = settings.newWordsToShowAmount();
-
 	const output = hiddenWords
 		.slice(null, amountNewWords)
 		.concat(repeatedWords.slice(null, amountRepeatedWords));
-
 	if (output.length > totalCards) {
 		output.length = totalCards;
 	}
@@ -105,7 +97,6 @@ Service.getRepeatedWords = async function getRepeatedWords() {
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-
 	const filtered = userWords.filter((word) => {
 		const now = new Date();
 		const wordDate = new Date (word.optional.nextShowDate);

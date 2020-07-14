@@ -251,6 +251,5 @@ export default async function training() {
 	if (globalState.words.length !== 0) {
 		addListeners();
 		setInput();
-		console.log('after init globalState', globalState);
 	}
 }

@@ -13,38 +13,40 @@ const amountNewWordsToShow = function amountNewWordsToShow() {
 	return this.maxNewWords - this.newWordsShowed;
 };
 
-const setupMaxNewWords = function setupMaxNewWords(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-		this.maxNewWords = +number;
-	}
-};
+// const setupMaxNewWords = function setupMaxNewWords(number) {
+// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
+// 		this.maxNewWords = +number;
+// 	}
+// };
 
-const setupMaxCards = function setupMaxCards(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-		this.maxCards = +number;
-	}
-};
+// const setupMaxCards = function setupMaxCards(number) {
+// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
+// 		this.maxCards = +number;
+// 	}
+// };
 
 const increaseNewWords = function increaseNewWords() {
 	this.newWordsShowed += 1;
-
+	this.saveParameters();
 };
 
 const increaseCardsShowed = function increaseCardsShowed() {
 	this.cardsShowed += 1;
+	this.saveParameters();
 };
 
-const setProgressGroupPage = function setProgressGroupPage(group, page) {
-	if (
-		+group >= DEFAULT_SETTINGS.GROUPS_START &&
-		+group <= DEFAULT_SETTINGS.GROUPS_END &&
-		+page >= DEFAULT_SETTINGS.PAGES_START &&
-		+page <= DEFAULT_SETTINGS.PAGES_END
-	) {
-		this.progress.group = +group;
-		this.progress.page = +page;
-	}
-};
+// const setProgressGroupPage = function setProgressGroupPage(group, page) {
+// 	if (
+// 		+group >= DEFAULT_SETTINGS.GROUPS_START &&
+// 		+group <= DEFAULT_SETTINGS.GROUPS_END &&
+// 		+page >= DEFAULT_SETTINGS.PAGES_START &&
+// 		+page <= DEFAULT_SETTINGS.PAGES_END
+// 	) {
+// 		this.progress.group = +group;
+// 		this.progress.page = +page;
+// 	}
+// 	this.saveParameters();
+// };
 
 const increaseProgress = function increaseProgress() {
 	if (this.progress.page < DEFAULT_SETTINGS.PAGES_END) {
@@ -53,11 +55,13 @@ const increaseProgress = function increaseProgress() {
 		this.progress.page = DEFAULT_SETTINGS.PAGES_START;
 		this.progress.group += 1;
 	}
+	this.saveParameters();
 };
 
 const makeZeroProgress = function makeZeroProgress() {
 	this.newWordsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
 	this.cardsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
+	this.saveParameters();
 };
 
 const checkNewDateNow = function checkNewDateNow() {
@@ -75,6 +79,7 @@ const checkNewDateNow = function checkNewDateNow() {
 		);
 		this.lastUpdate = now;
 		this.newDay();
+		this.saveParameters();
 	}
 };
 
@@ -125,8 +130,6 @@ const saveParametersNow = async function saveParametersNow() {
 	} catch (error) {
 		console.log('error save', error);
 	}
-
-	console.log('toSaveObj', toSaveObj);
 };
 
 const getSettingsNow = async function getSettingsNow() {
@@ -146,7 +149,7 @@ const update = async function update(settings) {
 	keysToSave.forEach((key) => {
 		this[key] = settings[key];
 	});
-	this.saveParameters();
+	await this.saveParameters();
 };
 
 export default class Settings {
@@ -163,11 +166,8 @@ export default class Settings {
 		const returnedSettingsObject = Settings.getCopyDefaultObject();
 		returnedSettingsObject.cardsToShowAmount = amountCardsToShow;
 		returnedSettingsObject.newWordsToShowAmount = amountNewWordsToShow;
-		returnedSettingsObject.setMaxNewWords = setupMaxNewWords;
-		returnedSettingsObject.setMaxCards = setupMaxCards;
 		returnedSettingsObject.incCardsShowed = increaseCardsShowed;
 		returnedSettingsObject.incNewWordsShowed = increaseNewWords;
-		returnedSettingsObject.setProgress = setProgressGroupPage;
 		returnedSettingsObject.incProgress = increaseProgress;
 		returnedSettingsObject.newDay = makeZeroProgress;
 		returnedSettingsObject.checkNewDate = checkNewDateNow;
@@ -178,14 +178,16 @@ export default class Settings {
 		if (!isFirstInitialization) {
 			await returnedSettingsObject.getSettings();
 			returnedSettingsObject.checkNewDate();
+			await returnedSettingsObject.saveParameters();
 		}
-		await returnedSettingsObject.saveParameters();
 
 		return returnedSettingsObject;
 	}
 
 	static async getInstance() {
-		Settings.instance = await Settings.init();
+		if (!Settings.instance) {
+			Settings.instance = await Settings.init();
+		}
 		return Settings.instance;
 	}
 }

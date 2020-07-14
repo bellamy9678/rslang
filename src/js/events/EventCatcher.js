@@ -10,6 +10,7 @@ import Settings from '../settings/Settings';
 async function changeWordParams(event) {
 	const wordData = new IntervalRepetition(event.detail);
 	const settings = await Settings.getInstance();
+
 	switch (event.type) {
 	case WORDS_EVENTS.PUSHED_AGAIN:
 	case WORDS_EVENTS.PUSHED_EASY:
@@ -17,9 +18,9 @@ async function changeWordParams(event) {
 	case WORDS_EVENTS.PUSHED_HARD:
 		if (wordData.optional.category === CATEGORIES.NEW) {
 			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
-			settings.incNewWordsShowed();
+			await settings.incNewWordsShowed();
 		}
-		settings.incCardsShowed();
+		await settings.incCardsShowed();
 		await wordData.setDateParams(event);
 		await wordData.countBestResult();
 		await wordData.increaseProgress();
@@ -36,10 +37,9 @@ async function changeWordParams(event) {
 		await wordData.decreaseProgress();
 		if (wordData.optional.category === CATEGORIES.NEW) {
 			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
-			settings.incNewWordsShowed();
+			await settings.incNewWordsShowed();
 		}
-		settings.incCardsShowed();
-		await settings.saveParameters();
+		await settings.incCardsShowed();
 		break;
 	case WORDS_EVENTS.CORRECT_ANSWER:
 		if (wordData.optional.category === CATEGORIES.NEW) {
@@ -49,9 +49,7 @@ async function changeWordParams(event) {
 		await wordData.setDateParams(event);
 		await wordData.countBestResult();
 		await wordData.increaseProgress();
-
-		settings.incCardsShowed();
-		await settings.saveParameters();
+		await settings.incCardsShowed();
 		break;
 	case WORDS_EVENTS.INCORRECT_ANSWER:
 		await wordData.setDateParams(event);
