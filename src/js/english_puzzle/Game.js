@@ -520,7 +520,7 @@ export default class Game {
 		if (numberOfWords === 0) {
 			this.finishGameHandler();
 		} else {
-			console.log(`You have ${numberOfWords} words. You need more than 10 words. Add them in training mode.`);
+			console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
 		}
 	}
 
