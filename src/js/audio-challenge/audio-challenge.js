@@ -3,7 +3,8 @@ import getWords from './getWords';
 import Word from './Word';
 import {
 	arrayForUniqness,
-	arrayForRandom
+	arrayForRandom,
+	requestedWords
 } from './consts';
 
 export default function audioChallenge() {
@@ -15,6 +16,9 @@ export default function audioChallenge() {
 			const allWords = words.map(word => new Word(word));
 			allWords.forEach(item => {
 				arrayForUniqness.push(item);
+			});
+			words.forEach(item => {
+				requestedWords.push(item);
 			});
 			allWords.forEach(item => {
 				arrayForRandom.push(item);

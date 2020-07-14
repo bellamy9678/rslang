@@ -25,5 +25,7 @@ const WHITE_COLOR = 'white';
 const gameState = {
 	started: false
 };
+const requestedWords = [];
 
-export {gameState, WHITE_COLOR, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE, DELAY_BEFORE_GAME, ERROR_SOUND_SRC, CORRECT_SOUND_SRC, fetchInfo, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, NUMBER_OF_WORDS,arrayWithWrongAnswers, arrayWithRightAnswers, arrayWithWords, arrForUniqness, arrForRandFunc, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN};
+
+export {requestedWords, gameState, WHITE_COLOR, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE, DELAY_BEFORE_GAME, ERROR_SOUND_SRC, CORRECT_SOUND_SRC, fetchInfo, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, NUMBER_OF_WORDS,arrayWithWrongAnswers, arrayWithRightAnswers, arrayWithWords, arrForUniqness, arrForRandFunc, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN};

@@ -8,7 +8,6 @@ import {catchButtonPresses, defineButton} from './catchButtonPresses';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
-import {ASSETS_STORAGE} from '../shared/Constants';
 import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 
@@ -33,12 +32,6 @@ export default function randomizeWords(words, array) {
 	arrayWithAnswers.splice(indexForMainWord, 0, mainWord);
 	generateElements(mainWord, arrayWithAnswers);
 	const skipButton = document.querySelector('.skip-button');
-	function GetAnswers(item) {
-		this.word = item.textContent;
-		this.wordTranslate = item.dataset.translate;
-		this.transcription = item.dataset;
-		this.audio = item.dataset.audio.replace(ASSETS_STORAGE, '');;
-	}
 
 	async function newRound() {
 		arrayForUniqness.length = 0;
@@ -87,17 +80,17 @@ export default function randomizeWords(words, array) {
 				result.closeResultWindow();
 				newRound();
 			});
+
 			const resultPoints = {
 				name: GAMES_NAMES.AUDIO,
 				result:
-				arrayWithRightAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.CORRECT +
-				arrayWithWrongAnswers.map(item => new GetAnswers(item)).length * RESULT_MULTIPLIER.INCORRECT,
+				arrayWithRightAnswers.length * RESULT_MULTIPLIER.CORRECT +
+				arrayWithWrongAnswers.length * RESULT_MULTIPLIER.INCORRECT,
 			};
 			Statistics.putGamesResult(resultPoints);
-
 			result.showResult({
-				rightAnswers: arrayWithRightAnswers.map(item => new GetAnswers(item)),
-				wrongAnswers: arrayWithWrongAnswers.map(item => new GetAnswers(item)),
+				rightAnswers: arrayWithRightAnswers,
+				wrongAnswers: arrayWithWrongAnswers,
 				buttons: [resultReturnBtn, resultNewGameBtn]
 			});
 		} else {

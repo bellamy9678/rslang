@@ -52,6 +52,8 @@ export default function generateElements(mainWordObj, answers) {
 			'data-image': `${mainWordObj.image}`
 		}, {
 			'data-audio': `${mainWordObj.audio}`
+		}, {
+			'data-id': `${mainWordObj.id}`
 		}]
 	});
 	const soundIcon2 = domCreator.create({

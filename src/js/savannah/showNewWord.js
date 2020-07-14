@@ -5,7 +5,6 @@ import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import Result from '../game_result/Result';
-import GetAnswers from './GetAnswers';
 import giveWords from './giveWords';
 
 export default async function showNewWord() {
@@ -19,7 +18,7 @@ export default async function showNewWord() {
 		}, 1000);
 	}
 
-	function endgame(rightAnswers, wrongAnswers) {
+	function endgame(rightAnswersArr, wrongAnswersArr) {
 		async function newRound() {
 			gameState.started = false;
 			arrForUniqness.length = 0;
@@ -64,8 +63,8 @@ export default async function showNewWord() {
 		});
 		resultNewGameBtn.addEventListener('click', newRound);
 		result.showResult({
-			rightAnswers: rightAnswers.map(item => new GetAnswers(item)),
-			wrongAnswers: wrongAnswers.map(item => new GetAnswers(item)),
+			rightAnswers: rightAnswersArr,
+			wrongAnswers: wrongAnswersArr,
 			buttons: [resultReturnBtn, resultNewGameBtn]
 		});
 	}

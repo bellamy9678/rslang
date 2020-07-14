@@ -17,6 +17,8 @@ export default function arrayRandElement(fullArray) {
 			'data-word': `${mainWord.word}`
 		}, {
 			'data-audio': `${mainWord.audio}`
+		}, {
+			'data-id': `${mainWord.id}`
 		}]
 	});
 	const forTest = fullArray.slice();

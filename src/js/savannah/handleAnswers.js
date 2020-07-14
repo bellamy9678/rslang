@@ -1,4 +1,4 @@
-import {arrayWithRightAnswers, arrayWithWrongAnswers, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE} from './consts';
+import {requestedWords, arrayWithRightAnswers, arrayWithWrongAnswers, NEW_OPACITY, NEW_WIDTH, NEW_FONTSIZE} from './consts';
 
 function handleWrongAnswer() {
 	const mainWordContainer = document.querySelector('.main-word');
@@ -16,7 +16,7 @@ function handleWrongAnswer() {
 			answer.classList.add('right-answer__active');
 		}
 	});
-	arrayWithWrongAnswers.push(mainWordContainer);
+	arrayWithWrongAnswers.push(requestedWords.filter(item => item.id === mainWordContainer.dataset.id)[0]);
 	if (lifeIcon !== null) {
 		lifeIcon.remove();
 	}
@@ -32,7 +32,7 @@ function handleRightAnswer() {
 	mainWordContainer.style.marginLeft = `${mainWordContainer.style.width / 2}px`;
 	mainWordContainer.style.width = NEW_WIDTH;
 	mainWordContainer.style.overflow = 'hidden';
-	arrayWithRightAnswers.push(mainWordContainer);
+	arrayWithRightAnswers.push(requestedWords.filter(item => item.id === mainWordContainer.dataset.id)[0]);
 }
 
 export {handleWrongAnswer, handleRightAnswer};
