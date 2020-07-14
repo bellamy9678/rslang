@@ -51,6 +51,8 @@ APIMethods.saveWord = async function saveWord(word) {
 	const wordToSave = {
 		optional: word.optional,
 	};
+
+	console.log(wordToSave);
 	const APIUrl = url.oneWord(word.id);
 	await fetch(APIUrl, {
 		method: 'POST',

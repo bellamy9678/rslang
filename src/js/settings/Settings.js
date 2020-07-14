@@ -27,6 +27,7 @@ const setupMaxCards = function setupMaxCards(number) {
 
 const increaseNewWords = function increaseNewWords() {
 	this.newWordsShowed += 1;
+
 };
 
 const increaseCardsShowed = function increaseCardsShowed() {
@@ -124,6 +125,8 @@ const saveParametersNow = async function saveParametersNow() {
 	} catch (error) {
 		console.log('error save', error);
 	}
+
+	console.log('toSaveObj', toSaveObj);
 };
 
 const getSettingsNow = async function getSettingsNow() {

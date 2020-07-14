@@ -16,21 +16,16 @@ async function changeWordParams(event) {
 	case WORDS_EVENTS.PUSHED_GOOD:
 	case WORDS_EVENTS.PUSHED_HARD:
 		if (wordData.optional.category === CATEGORIES.NEW) {
+			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
 			settings.incNewWordsShowed();
 		}
 		settings.incCardsShowed();
-		await settings.saveParameters();
 		await wordData.setDateParams(event);
 		await wordData.countBestResult();
 		await wordData.increaseProgress();
 		break;
 	case WORDS_EVENTS.PUSHED_REMOVE_FROM_DICTIONARY:
 		await wordData.changeWordCategory(CATEGORIES.REMOVED);
-		if (wordData.optional.category === CATEGORIES.NEW) {
-			settings.incNewWordsShowed();
-		}
-		settings.incCardsShowed();
-		await settings.saveParameters();
 		break;
 	case WORDS_EVENTS.PUSHED_ADD_TO_DIFFICULT:
 		await wordData.changeWordCategory(CATEGORIES.DIFFICULT);
@@ -47,12 +42,14 @@ async function changeWordParams(event) {
 		await settings.saveParameters();
 		break;
 	case WORDS_EVENTS.CORRECT_ANSWER:
-		await wordData.setDateParams(event);
-		await wordData.increaseProgress();
 		if (wordData.optional.category === CATEGORIES.NEW) {
 			await wordData.changeWordCategory(CATEGORIES.ACTIVE);
 			settings.incNewWordsShowed();
 		}
+		await wordData.setDateParams(event);
+		await wordData.countBestResult();
+		await wordData.increaseProgress();
+
 		settings.incCardsShowed();
 		await settings.saveParameters();
 		break;

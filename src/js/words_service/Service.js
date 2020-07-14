@@ -100,14 +100,19 @@ Service.getRandomWords = async function getRandomWords() {
 
 Service.getRepeatedWords = async function getRepeatedWords() {
 	const settings = await Settings.getInstance();
-
 	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
 	const totalCards =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	if (userWords.length > EMPTY_ARRAY_LENGTH) {
-		const repeatedWords = sortByShowTime(userWords);
+
+	const filtered = userWords.filter((word) => {
+		const now = new Date();
+		const wordDate = new Date (word.optional.nextShowDate);
+		return now > wordDate;
+	});
+	if (filtered.length > EMPTY_ARRAY_LENGTH) {
+		const repeatedWords = sortByShowTime(filtered);
 		return repeatedWords.slice(null, totalCards);
 	}
 	return [];

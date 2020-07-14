@@ -14,6 +14,7 @@ import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
 import InputHandler from './InputHandler';
 import Statistics from '../statistics/Statistics';
+import eventObserver from '../observer/Observer';
 
 let globalState;
 
@@ -121,7 +122,7 @@ function checkHiddenFields() {
 	checkDifficulty();
 }
 
-function correctAnswerHandler() {
+function correctAnswerHandler(correctEvent) {
 	document.querySelector('#word').disabled = true;
 	if (
 		globalState.pushedContinue ||
@@ -129,6 +130,7 @@ function correctAnswerHandler() {
 			.querySelector('#complexity-buttons')
 			.classList.contains(DISPLAY_NONE_CLASS)
 	) {
+		eventObserver.call(correctEvent);
 		nextCard();
 		globalState.pushedContinue = false;
 	} else {
@@ -138,12 +140,13 @@ function correctAnswerHandler() {
 	globalState.wasError = false;
 }
 
-function errorAnswerHandler() {
+function errorAnswerHandler(incorrectEvent) {
 	if (!globalState.wasError) {
 		globalState.wasError = true;
 		globalState.addCurrentWordToEnd();
 		showTranslate();
 	}
+	eventObserver.call(incorrectEvent);
 	globalState.inputHandler.showError();
 	checkAudio();
 }
