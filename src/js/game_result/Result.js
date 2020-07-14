@@ -56,7 +56,7 @@ export default class Result {
 				this.generateResultHeader(settingsObj),
 				this.generateResultContent(),
 				this.generateResultFooter(),
-				this.generateAudio()
+				...this.generateAudio()
 			]
 		});
 
