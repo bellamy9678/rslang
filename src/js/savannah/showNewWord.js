@@ -1,4 +1,4 @@
-import {gameState, arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, /* arrForUniqness, arrayWithRightAnswers, arrayWithWrongAnswers, /* arrayWithWords , */ START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import {gameState, arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
 import defineArrays from './defineArrays';
 import generateWordContainers from './generateWordContainers';
 import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
