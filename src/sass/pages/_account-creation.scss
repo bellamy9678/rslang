@@ -1,12 +1,15 @@
 .account-creation {
-	height: 100%;
 
 	&__background {
 		@include bg-cover("../../src/assets/images/statue-of-liberty-welcome-to-new-york 1.png");
-		height: 100%;
+		min-height: calc(100vh - 72px);
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
+		@include media-mobile {
+			min-height: calc(100vh - 68px);
+		}
 	}
 
 	&__form {
@@ -14,12 +17,16 @@
 		flex-direction: column;
 		align-self: center;
 		width: $mobile-small-width;
-		padding: 40px;
+		padding: 30px;
 		background: $color-background;
 		border-radius: 10px;
 		box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5);
-	}
 
+		@include media-mobilesmall {
+			width: 300px;
+			padding: 20px;
+		}
+	}
 
 	&__title {
 		margin-bottom: 20px;
@@ -33,6 +40,11 @@
 		color: $color-primary;
 		@include font($size: inherit, $weight: 600);
 		text-decoration: none;
+
+		&:hover {
+			@extend %transition;
+			color: $color-primary-hov;
+		}
 	}
 
 	&__button {

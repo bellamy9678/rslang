@@ -323,6 +323,8 @@ export default class Header {
 			classes: ['overlay'],
 		});
 
+		overlay.addEventListener('click', this.hideForm);
+
 		const app = document.querySelector('.app');
 		const header = document.querySelector('.header');
 		header.after(modalWindow);

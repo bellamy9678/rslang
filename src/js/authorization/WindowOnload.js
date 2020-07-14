@@ -5,6 +5,7 @@ import {
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
+import setAdaptiveNavigation from '../navigation/MobileNavigation';
 
 window.addEventListener('load', () => {
 	try {
@@ -17,6 +18,7 @@ window.addEventListener('load', () => {
 	} catch (error) {
 		StartPage.showStartPage();
 	} finally {
-		Header.create();
+		Header.create()
+			.then(setAdaptiveNavigation);
 	}
 });
