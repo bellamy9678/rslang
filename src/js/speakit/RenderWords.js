@@ -4,7 +4,7 @@ import TAGS from '../shared/Tags.json';
 
 
 const speakerIcon = './assets/images/speak.png';
-export default function renderWords(item) {
+export default function renderWords(item, index) {
 	const newElem = new DOMElementCreator();
 	const wordWriting = newElem.create({
 		elem: TAGS.P,
@@ -39,6 +39,8 @@ export default function renderWords(item) {
 			'data-wrt': `${item.word}`,
 		}, {
 			'data-transcription': `${item.transcription}`,
+		}, {
+			'data-index': index,
 		}],
 		child: [Img, wordWriting, wordTranscript]
 	});
