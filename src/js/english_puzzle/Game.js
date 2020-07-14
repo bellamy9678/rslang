@@ -95,7 +95,8 @@ export default class Game {
 
 		this.addEventListenerForWindowResize();
 
-		closeGameModal.addEventListenerToDocument();
+		const removeEventListenersFunc = this.removeEventListeners.bind(this);
+		closeGameModal.addEventListenerToDocument(removeEventListenersFunc);
 	}
 
 	addEventListenerForWindowResize() {
@@ -140,6 +141,10 @@ export default class Game {
 		this.showBgImageBtn.removeEventListener('click', this.showHideBg);
 		this.levelSelectBtn.removeEventListener('change', this.levelSelectBtnHand);
 		this.roundSelectBtn.removeEventListener('change', this.roundSelectBtnHand);
+		if (this.puzzlesInActiveLine) {
+			this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
+		}
+
 	}
 
 	controlsStateUpgrade() {
