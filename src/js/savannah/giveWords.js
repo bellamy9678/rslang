@@ -8,7 +8,7 @@ export default async function giveWords() {
 	} = JSON.parse(localStorage.getItem('gameData'));
 	let words;
 	if (repeatWords === true) {
-		words = await Service.getRepeatedWords();
+		words = await Service.getGameWords();
 		console.log(words);
 	} else {
 		words = await Service.getGameSpecificWords(level, round);

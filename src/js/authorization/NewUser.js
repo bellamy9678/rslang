@@ -48,7 +48,7 @@ export default class NewUser {
 				email: userData.email,
 				password: userData.password
 			};
-			const rawResponse = await fetch(`${API}${URL_USER}`, {
+			await fetch(`${API}${URL_USER}`, {
 				method: 'POST',
 				headers: {
 					Accept: 'application/json',
@@ -56,8 +56,6 @@ export default class NewUser {
 				},
 				body: JSON.stringify(userInfo),
 			});
-			const content = await rawResponse.json();
-			console.log(content);
 		} catch (error) {
 			InvalidUserData.showErrorMessage(message);
 			InvalidUserData.showInvalidInput([...inputs]);
@@ -93,11 +91,8 @@ export default class NewUser {
 		});
 
 		const signInLink = newElem.create({
-			elem: TAGS.A,
+			elem: TAGS.SPAN,
 			classes: 'account-creation__link',
-			attr: [{
-				href: '#',
-			}, ],
 			child: AUTHORIZATION_BUTTONS.signIn,
 		});
 
@@ -141,8 +136,7 @@ export default class NewUser {
 			classes: 'account-creation__password',
 			id: 'new-user__password',
 			attr: [{
-				// for testing
-				type: 'text',
+				type: 'password',
 			},
 			{
 				required: 'required',

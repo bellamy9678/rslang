@@ -18,7 +18,7 @@ import Statistics from '../statistics/Statistics';
 
 import {
 	statisticText,
-	newGameText
+	// newGameText
 } from './OurGameConsts';
 
 import createHeader from './GameHeader';
@@ -31,7 +31,7 @@ async function getWords() {
 		round
 	} = JSON.parse(localStorage.getItem('gameData'));
 	if (repeatWords === true) {
-		const userWords = await Service.getRepeatedWords();
+		const userWords = await Service.getGameWords();
 		return userWords;
 	}
 	const allWords = await Service.getGameSpecificWords(level, round);
@@ -51,6 +51,7 @@ export default function initGame() {
 	});
 
 	app.append(wrapper);
+	// document.body.classList.add('ourgame__body');
 
 	const gameContainer = document.getElementById('game-cont');
 	const engWordsContainer = document.getElementById('eng-container');
@@ -118,16 +119,16 @@ export default function initGame() {
 				child: statisticText,
 			});
 
-			const newGameBtn = newElem.create({
+			/* const newGameBtn = newElem.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn', 'new-btn'],
 				child: newGameText,
-			});
+			}); */
 
 			this.statisticBtn = statisticBtn;
 			this.statisticBtn.addEventListener('click', this.removeAllListeners); // перенаправить на станицу статистики
 
-			newGameBtn.addEventListener('click', this.startNewGame);
+			// newGameBtn.addEventListener('click', this.startNewGame);
 
 			const resultPoints = {
 				name: GAMES_NAMES.OUR,
@@ -139,7 +140,7 @@ export default function initGame() {
 				rightAnswers: correctAnswers,
 				wrongAnswers: wrongAns,
 				points: points.textContent,
-				buttons: [newGameBtn, statisticBtn],
+				buttons: [statisticBtn,] // newGameBtn, ],
 			});
 		};
 

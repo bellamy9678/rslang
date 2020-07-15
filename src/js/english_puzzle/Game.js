@@ -145,6 +145,7 @@ export default class Game {
 		if (this.puzzlesInActiveLine) {
 			this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
 		}
+		closeGameModal.removeEventListenerFromDocument();
 
 	}
 
@@ -319,10 +320,12 @@ export default class Game {
 
 		Statistics.putGamesResult(resultPoints);
 
+		this.removeListenersResultClose = this.removeEventListeners.bind(this);
 		result.showResult({
 			rightAnswersSentences: this.rightAnswersResult,
 			wrongAnswersSentences: this.wrongAnswersResult,
 			buttons: [resultContinueBtn],
+			removeEventListeners: this.removeListenersResultClose
 		});
 	}
 
@@ -475,7 +478,7 @@ export default class Game {
 			round
 		} = JSON.parse(localStorage.getItem('gameData'));
 		if (repeatWords === true) {
-			const userWords = await Service.getRepeatedWords();
+			const userWords = await Service.getGameWords();
 			return userWords;
 		}
 		const allWords = await Service.getGameSpecificWords(level, round);

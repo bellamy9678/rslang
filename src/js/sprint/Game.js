@@ -1,24 +1,22 @@
 import GameField from './GameField';
 import * as CONST from './constants';
-import {
-	ASSETS_STORAGE
-} from '../shared/Constants';
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
-import StartScreen from '../start_screen/StartScreen';
 import Service from '../words_service/Service';
+import CloseGame from '../close_game/CloseGame';
 
+const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
-const startScreen = new StartScreen();
 const result = new Result();
 
 export default class SprintGame {
 	constructor() {
-		this.level = JSON.parse(localStorage.getItem('gameData')).level;
-		this.round = JSON.parse(localStorage.getItem('gameData')).round;
+		this.level = JSON.parse(localStorage.getItem('gameData')).level - 1;
+		this.round = JSON.parse(localStorage.getItem('gameData')).round - 1;
+		this.repeatWords = JSON.parse(localStorage.getItem('gameData')).repeatWords;
 		this.nextLevel = this.level + 1;
 		this.nextRound = this.round + 1;
 		this.gameLevel = 0;
@@ -30,7 +28,6 @@ export default class SprintGame {
 		this.rightAnswers = [];
 		this.wrongAnswers = [];
 		this.points = 0;
-		this.pointsForAnswer = 10;
 		this.rightAnswersInRow = 0;
 		this.playAudioState = false;
 		this.audio = new Audio();
@@ -39,14 +36,6 @@ export default class SprintGame {
 		this.gameReadyState = false;
 		this.wordShowed = false;
 	}
-
-	// initGameWithStartScreen() {
-	// 	startScreen.showStartScreen({
-	// 		name: 'English Puzzle',
-	// 		descr: 'Click on words, collect phrases. Words can be drag and drop.',
-	// 		callback: this.start.bind(this)
-	// 	});
-	// }
 
 	init() {
 		GameField.generateField();
@@ -69,10 +58,12 @@ export default class SprintGame {
 	}
 
 	start() {
-		const data = startScreen.getData();
-		console.log(data);
 		this.init();
-		this.getData();
+		if (this.repeatWords) {
+			this.loadUserWords();
+		} else {
+			this.getData();
+		}
 	}
 
 	addEventListeners() {
@@ -88,6 +79,14 @@ export default class SprintGame {
 		document.addEventListener('keydown', this.keyboardHandler);
 		this.keyUp = this.keyUpHandler.bind(this);
 		document.addEventListener('keyup', this.keyUp);
+
+		this.exitGameHand = this.exitGameHandler.bind(this);
+		closeGame.addEventListenerToDocument(this.exitGameHand);
+	}
+
+	exitGameHandler() {
+		this.removeEventListeners();
+		this.resetGame();
 	}
 
 	removeEventListeners() {
@@ -158,12 +157,11 @@ export default class SprintGame {
 	}
 
 	opacityInOut(elem, shadow) {
-		// eslint-disable-next-line no-param-reassign
-		elem.style.opacity = '1';
+		const curElem = elem;
+		curElem.style.opacity = '1';
 		this.MAIN_CONTAINER.style.boxShadow = shadow;
 		setTimeout(() => {
-			// eslint-disable-next-line no-param-reassign
-			elem.style.opacity = '0';
+			curElem.style.opacity = '0';
 			this.MAIN_CONTAINER.style.boxShadow = CONST.MAIN_SHADOW_DEFAUlT;
 		}, 400);
 	}
@@ -179,7 +177,7 @@ export default class SprintGame {
 		this.SUBLEVEL.classList.remove('sublevel--active');
 		this.SUBLEVEL.style.backgroundColor = 'unset';
 		this.wrongAnswers.push(this.wordsArr[this.wordIndex]);
-
+		this.LEVEL_STARS.forEach(star => star.classList.add('none'));
 		this.loadNextRound();
 	}
 
@@ -230,9 +228,16 @@ export default class SprintGame {
 		this.wordIndex += 1;
 		this.wrongWords.splice(0, 1);
 		this.showWord();
-		if (this.wrongWords.length < 5) {
+		if (this.repeatWords && this.wrongWords.length === 1) {
+			console.log('В вашем словаре больше нету слов. Показать результат. - кнопка');
+		} else if (this.wrongWords.length < 5 && !this.repeatWords) {
 			this.loadNextWords(this.level, this.nextRound);
 		}
+	}
+
+	notEnoughWordsHandler(numberOfWords) {
+		console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
+		this.nothing = false;
 	}
 
 	loadNextWords(nextLevel, nextRound) {
@@ -241,18 +246,41 @@ export default class SprintGame {
 			resolve(allWords);
 		})
 			.then(allWords => {
+				if (allWords.length === 0) {
+					this.notEnoughWordsHandler();
+				};
+
 				allWords.forEach(wordObj => this.wordsArr.push(wordObj));
 				this.getWrongWordsArr(allWords);
 				this.nextRound += 1;
 			}).catch(error => console.error(error.message));
 	}
 
+	async getWords() {
+		this.nothing = false;
+		const {
+			repeatWords,
+			level,
+			round
+		} = JSON.parse(localStorage.getItem('gameData'));
+		if (repeatWords === true) {
+			const userWords = await Service.getGameWords();
+			return userWords;
+		}
+		const allWords = await Service.getGameSpecificWords(level, round);
+		return allWords;
+	}
+
+	async loadUserWords() {
+		this.handleJson(await this.getWords());
+	}
+
 	getData(level = this.level, round = this.round) {
 		new Promise(resolve => {
 			const allWords = Service.getGameSpecificWords(level, round);
 			resolve(allWords);
-		}).then(myJson => {
-			this.handleJson(myJson);
+		}).then(allWords => {
+			this.handleJson(allWords);
 		}).catch(error => console.error(error));
 	}
 
@@ -266,7 +294,7 @@ export default class SprintGame {
 	getWrongWordsArr(json) {
 		for (let i = 0; i < json.length; i += 1) {
 			if (i !== this.wordIndex) {
-				this.wrongWords.push(json[i].wordTranslate);
+				this.wrongWords.push(json[i].translate);
 			}
 		}
 	}
@@ -278,7 +306,7 @@ export default class SprintGame {
 			this.showTranslate();
 			this.wordShowed = true;
 			if (this.playAudioState) {
-				this.audio = new Audio(`${ASSETS_STORAGE}${this.wordsArr[this.wordIndex].audio}`);
+				this.audio = new Audio(`${this.wordsArr[this.wordIndex].audio}`);
 				this.audio.play();
 			}
 		} else {
@@ -296,7 +324,7 @@ export default class SprintGame {
 
 		if (random < CONST.CHANCE) {
 			this.rightTranslate = true;
-			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
+			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].translate;
 		} else {
 			this.rightTranslate = false;
 			this.TRANSLATION_CONTAINER.innerText = SprintGame.returnRandomFromArr(this.wrongWords);
@@ -338,13 +366,37 @@ export default class SprintGame {
 		this.intervalHandle = setInterval(this.tick.bind(this), 1000);
 	}
 
+	resetGame() {
+		clearInterval(this.intervalHandle);
+	}
+
+	startNextGame() {
+		this.resetGame();
+		this.points = 0;
+		this.rightAnswers = [];
+		this.wrongAnswers = [];
+		this.rightAnswersInRow = 0;
+		this.pointsForAnswer = 10;
+		this.gameLevel = 0;
+		this.secondsRemaining = 60;
+		this.gameStarted = false;
+		this.SUBLEVEL_DOTS.forEach(el => el.classList.remove('sublevel__dot--right'));
+		this.LEVEL_STARS.forEach(star => star.classList.add('none'));
+		this.POINTS_FOR_WORD_CONTAINER.innerText = '';
+		this.SUBLEVEL.classList.remove('sublevel--active');
+		this.SUBLEVEL.style.backgroundColor = 'unset';
+		this.TIMER.style.boxShadow = 'none';
+		this.updateScore();
+		this.loadNextRound();
+	}
+
 	stopGame() {
 		this.resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
 			child: CONST.CONTINUE_BTN_TEXT
 		});
-		this.closeResult = SprintGame.resultBtnHandler.bind(this);
+		this.closeResult = this.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
 
 		const resultPoints = {
@@ -353,17 +405,27 @@ export default class SprintGame {
 		};
 		Statistics.putGamesResult(resultPoints);
 
+		this.resultExitBtnHand = this.resultExitBtnHandler.bind(this);
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
 			buttons: [this.resultContinueBtn],
-			points: this.points
+			points: this.points,
+			removeEventListeners: this.resultExitBtnHand
 		});
-		this.removeEventListeners();
 	}
 
-	static resultBtnHandler() {
+	resultExitBtnHandler() {
+		result.closeResultWindow.call(result);
+		this.removeEventListeners();
+		this.resultContinueBtn.removeEventListener('click', this.closeResult);
+		closeGame.removeEventListenerFromDocument();
+	}
+
+	resultBtnHandler() {
 		result.closeResultWindow.call(result);
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
+		this.startNextGame();
+
 	}
 }

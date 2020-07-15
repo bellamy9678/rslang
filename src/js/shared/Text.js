@@ -49,7 +49,7 @@ export const TEXT = {
 
 	dictionary: {
 		showDate: 'Last time this word was shown on ',
-		nextShowDate: 'Next time this word will be show on ',
+		nextShowDate: 'Next time this word will be shown on ',
 		wordShowNumber: {
 			left: 'This word has shown',
 			right: 'times.',
@@ -201,11 +201,11 @@ export const GAMES = {
 	},
 	audioChallenge: {
 		name: 'Audio Challenge',
-		description: '',
+		description: 'You have a new challenge. Audio challenge!',
 	},
 	sprint: {
 		name: 'Sprint',
-		description: '',
+		description: 'You have only 60 seconds to give correct answer.',
 	},
 	ownGame: {
 		name: 'Super duper game',

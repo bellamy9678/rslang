@@ -269,7 +269,7 @@ export default class Header {
 			id: 'user__password',
 			attr: [
 				{
-					type: 'text',
+					type: 'password',
 				},
 				{
 					required: 'required',
