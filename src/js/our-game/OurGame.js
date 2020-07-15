@@ -13,6 +13,8 @@ import initMain from './GamePage';
 import Service from '../words_service/Service';
 
 import Result from '../game_result/Result';
+import { GAMES_NAMES } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 import {
 	statisticText,
@@ -127,6 +129,12 @@ export default function initGame() {
 			this.statisticBtn.addEventListener('click', this.removeAllListeners); // перенаправить на станицу статистики
 
 			// newGameBtn.addEventListener('click', this.startNewGame);
+
+			const resultPoints = {
+				name: GAMES_NAMES.OUR,
+				result: points.textContent,
+			};
+			Statistics.putGamesResult(resultPoints);
 
 			gameResult.showResult({
 				rightAnswers: correctAnswers,

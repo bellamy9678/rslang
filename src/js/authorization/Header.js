@@ -23,9 +23,8 @@ import {
 } from '../navigation/Navigation';
 
 async function initSettingsForNewUser() {
-	const settings = new Settings();
-	const isFirstInitialization = true;
-	await Settings.getInstance(isFirstInitialization);
+	let settings = new Settings();
+	settings = await Settings.getInstance();
 	return settings;
 }
 
@@ -34,8 +33,9 @@ async function initStatisticsForNewUser() {
 }
 
 async function initSettingsForOldUser() {
-	const settings = new Settings();
-	await Settings.getInstance();
+	let settings = new Settings();
+	const isSignIn = true;
+	settings = await Settings.getInstance(isSignIn);
 	return settings;
 }
 

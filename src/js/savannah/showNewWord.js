@@ -6,6 +6,8 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import Result from '../game_result/Result';
 import giveWords from './giveWords';
+import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 export default async function showNewWord() {
 	let gameOver = false;
@@ -59,6 +61,15 @@ export default async function showNewWord() {
 			child: 'Play again',
 		});
 		resultNewGameBtn.addEventListener('click', newRound);
+
+		const resultPoints = {
+			name: GAMES_NAMES.SAVANNAH,
+			result:
+			rightAnswersArr.length * RESULT_MULTIPLIER.CORRECT +
+			wrongAnswersArr.length * RESULT_MULTIPLIER.INCORRECT,
+		};
+		Statistics.putGamesResult(resultPoints);
+
 		result.showResult({
 			rightAnswers: rightAnswersArr,
 			wrongAnswers: wrongAnswersArr,

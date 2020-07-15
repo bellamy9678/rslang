@@ -276,12 +276,12 @@ export default function createSpeakItGame() {
 			this.returnButton = resultReturnBtn;
 			this.statButton = statisticBtn;
 
-
+			const wrongArr = receivedWords.filter((item) => !corrAnsw.includes(item));
 			const resultPoints = {
 				name: GAMES_NAMES.SPEAK,
 				result:
 				corrAnsw.length * RESULT_MULTIPLIER.CORRECT +
-				receivedWords.filter((item) => (!corrAnsw.includes(item))).length * RESULT_MULTIPLIER.INCORRECT,
+				wrongArr.length * RESULT_MULTIPLIER.INCORRECT,
 			};
 			Statistics.putGamesResult(resultPoints);
 

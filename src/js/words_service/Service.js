@@ -59,7 +59,9 @@ Service.getGameSpecificWords = async function getGameSpecificWords(
 };
 
 Service.getNewWords = async function getNewWords() {
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
+
 	const words = await APIMethods.getNewWordsArray(
 		settings.progress.group,
 		settings.progress.page
@@ -70,7 +72,9 @@ Service.getNewWords = async function getNewWords() {
 };
 
 Service.getRandomWords = async function getRandomWords() {
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
+
 	const totalCards = settings.cardsToShowAmount();
 	if (totalCards === EMPTY_ARRAY_LENGTH) return [];
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
@@ -91,7 +95,9 @@ Service.getRandomWords = async function getRandomWords() {
 };
 
 Service.getRepeatedWords = async function getRepeatedWords() {
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
+
 	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
 	const totalCards =
 		settings.cardsToShowAmount() >= userWords.length
@@ -110,7 +116,8 @@ Service.getRepeatedWords = async function getRepeatedWords() {
 };
 
 Service.getDifficultWords = async function getDifficultWords() {
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
 
 	const userWords = await APIMethods.getUserWordsByCategory(
 		CATEGORIES.DIFFICULT

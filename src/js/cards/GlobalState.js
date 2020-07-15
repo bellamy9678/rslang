@@ -85,12 +85,13 @@ export default class GlobalState {
 	}
 
 	finishGame() {
-		console.log('Все карточки на сегодня!');
 		this.container.removeChild(this.cardsContainer);
 	}
 
 	async addCurrentWordToEnd() {
-		const settings = await Settings.getInstance();
+		let settings = new Settings();
+		settings = await Settings.getInstance();
+
 		if (settings.cardsToShowAmount() > this.words.length) {
 			const clearCard = new Card(this.words[this.currentPosition]);
 			const cardElem = clearCard.create();
@@ -105,7 +106,7 @@ export default class GlobalState {
 			elem: TAGS.DIV,
 			classes: 'wrapper',
 		});
-		// CARD_CONTAINER
+
 		const app = document.querySelector('.app');
 		app.firstChild.remove();
 		this.container.append(wrapper);

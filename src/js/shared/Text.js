@@ -1,12 +1,12 @@
 export const BUTTONS_WORDS = {
-	again: 'Снова',
-	hard: 'Трудно',
-	good: 'Хорошо',
-	easy: 'Легко',
-	addToDifficult: 'добавить в сложные',
-	deleteFromDictionary: 'удалить из изучаемых',
-	showAnswer: 'показать ответ',
-	continue: 'дальше'
+	again: 'Again',
+	hard: 'Hard',
+	good: 'Good',
+	easy: 'Easy',
+	addToDifficult: 'add to difficult',
+	deleteFromDictionary: 'remove',
+	showAnswer: 'show answer',
+	continue: 'continue'
 };
 
 export const AUTHORIZATION_BUTTONS = {
