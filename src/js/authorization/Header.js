@@ -23,7 +23,6 @@ import {
 } from '../navigation/Navigation';
 
 async function initSettingsForNewUser() {
-	console.log('new user');
 	const settings = new Settings();
 	const isFirstInitialization = true;
 	await Settings.getInstance(isFirstInitialization);
@@ -128,7 +127,6 @@ export default class Header {
 								});
 								await initSettingsForNewUser();
 								await initStatisticsForNewUser();
-								console.log('new');
 							},
 							async () => {
 								InvalidUserData.showInvalidInput([newUserName]);

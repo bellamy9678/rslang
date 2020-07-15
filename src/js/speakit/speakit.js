@@ -201,7 +201,7 @@ export default function createSpeakItGame() {
 			output.classList.remove('none');
 			[...words].forEach((el) => el.classList.remove('active'));
 			translation.classList.add('none');
-			recognition.start();		
+			recognition.start();
 			recognition.addEventListener('result', this.recResultHandler);
 			recognition.addEventListener('end', this.handleRecognition);
 			speakBtn.setAttribute('disabled', 'true');
@@ -271,14 +271,14 @@ export default function createSpeakItGame() {
 			// resultNewGameBtn.addEventListener('click', this.newGameHandler);
 
 			this.returnButton = resultReturnBtn;
-			this.statButton = statisticBtn;		
-	
+			this.statButton = statisticBtn;
 
+			const wrongArr = receivedWords.filter((item) => !corrAnsw.includes(item));
 			const resultPoints = {
 				name: GAMES_NAMES.SPEAK,
 				result:
 				corrAnsw.length * RESULT_MULTIPLIER.CORRECT +
-				receivedWords.filter((item) => (!corrAnsw.includes(item))).length * RESULT_MULTIPLIER.INCORRECT,
+				wrongArr.length * RESULT_MULTIPLIER.INCORRECT,
 			};
 			Statistics.putGamesResult(resultPoints);
 

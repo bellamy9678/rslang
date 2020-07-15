@@ -13,6 +13,8 @@ import initMain from './GamePage';
 import Service from '../words_service/Service';
 
 import Result from '../game_result/Result';
+import { GAMES_NAMES } from '../statistics/constants';
+import Statistics from '../statistics/Statistics';
 
 import {
 	statisticText,
@@ -70,13 +72,13 @@ export default function initGame() {
 	let wordlength;
 
 	function initGetWords() {
-	
+
 		getWords().then(res => {
-			
+
 			const neededWords = res.slice(zero, wordsRound);
 			receivedWords = [...neededWords];
 			wordlength = receivedWords.length;
-			let words = neededWords.map((item, index) => renderWords(item, index));		
+			let words = neededWords.map((item, index) => renderWords(item, index));
 			words = shuffle(words);
 			words.forEach(el => engWordsContainer.append(el));
 
@@ -127,6 +129,12 @@ export default function initGame() {
 
 			newGameBtn.addEventListener('click', this.startNewGame);
 
+			const resultPoints = {
+				name: GAMES_NAMES.OUR,
+				result: points.textContent,
+			};
+			Statistics.putGamesResult(resultPoints);
+
 			gameResult.showResult({
 				rightAnswers: correctAnswers,
 				wrongAnswers: wrongAns,
@@ -136,11 +144,11 @@ export default function initGame() {
 		};
 
 		this.compareWords = () => {
-			
+
 			const word = document.querySelector('.chosen');
 			const transl = document.querySelector('.active');
 
-			if (word !== null && transl !== null) {				
+			if (word !== null && transl !== null) {
 				if (word.textContent === transl.dataset.word) {
 					word.classList.add('invisible');
 					transl.classList.add('invisible');
@@ -164,7 +172,7 @@ export default function initGame() {
 					wrongSound.play();
 				}
 			}
-		};	
+		};
 
 		this.gameHandler = (event) => {
 			if (event.target.classList.contains('word-our-game')) {
