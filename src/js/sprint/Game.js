@@ -8,6 +8,7 @@ import Statistics from '../statistics/Statistics';
 import StartScreen from '../start_screen/StartScreen';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
+// import showMainPage
 
 const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
@@ -16,8 +17,8 @@ const result = new Result();
 
 export default class SprintGame {
 	constructor() {
-		this.level = JSON.parse(localStorage.getItem('gameData')).level;
-		this.round = JSON.parse(localStorage.getItem('gameData')).round;
+		this.level = JSON.parse(localStorage.getItem('gameData')).level - 1;
+		this.round = JSON.parse(localStorage.getItem('gameData')).round - 1;
 		this.nextLevel = this.level + 1;
 		this.nextRound = this.round + 1;
 		this.gameLevel = 0;
@@ -29,7 +30,6 @@ export default class SprintGame {
 		this.rightAnswers = [];
 		this.wrongAnswers = [];
 		this.points = 0;
-		this.pointsForAnswer = 10;
 		this.rightAnswersInRow = 0;
 		this.playAudioState = false;
 		this.audio = new Audio();
@@ -80,8 +80,13 @@ export default class SprintGame {
 		this.keyUp = this.keyUpHandler.bind(this);
 		document.addEventListener('keyup', this.keyUp);
 
-		this.removeEventListenersHand = this.removeEventListeners.bind(this);
-		closeGame.addEventListenerToDocument(this.removeEventListenersHand);
+		this.exitGameHand = this.exitGameHandler.bind(this);
+		closeGame.addEventListenerToDocument(this.exitGameHand);
+	}
+
+	exitGameHandler() {
+		this.removeEventListeners();
+		this.resetGame();
 	}
 
 	removeEventListeners() {
@@ -172,7 +177,7 @@ export default class SprintGame {
 		this.SUBLEVEL.classList.remove('sublevel--active');
 		this.SUBLEVEL.style.backgroundColor = 'unset';
 		this.wrongAnswers.push(this.wordsArr[this.wordIndex]);
-
+		this.LEVEL_STARS.forEach(star => star.classList.add('none'));
 		this.loadNextRound();
 	}
 
@@ -228,6 +233,11 @@ export default class SprintGame {
 		}
 	}
 
+	notEnoughWordsHandler(numberOfWords) {
+		console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
+		this.nothing = false;
+	}
+
 	loadNextWords(nextLevel, nextRound) {
 		new Promise(resolve => {
 			const allWords = Service.getGameSpecificWords(nextLevel, nextRound);
@@ -235,6 +245,9 @@ export default class SprintGame {
 		})
 			.then(allWords => {
 				console.log(allWords);
+				if (allWords.length === 0) {
+					this.notEnoughWordsHandler();
+				};
 
 				allWords.forEach(wordObj => this.wordsArr.push(wordObj));
 				this.getWrongWordsArr(allWords);
@@ -334,14 +347,46 @@ export default class SprintGame {
 		this.intervalHandle = setInterval(this.tick.bind(this), 1000);
 	}
 
+	resetGame() {
+		clearInterval(this.intervalHandle);
+	}
+
+	startNextGame() {
+		this.resetGame();
+		this.points = 0;
+		this.rightAnswers = [];
+		this.wrongAnswers = [];
+		this.rightAnswersInRow = 0;
+		this.pointsForAnswer = 10;
+		this.gameLevel = 0;
+		this.secondsRemaining = 60;
+		this.gameStarted = false;
+		this.SUBLEVEL_DOTS.forEach(el => el.classList.remove('sublevel__dot--right'));
+		this.LEVEL_STARS.forEach(star => star.classList.add('none'));
+		this.POINTS_FOR_WORD_CONTAINER.innerText = '';
+		this.SUBLEVEL.classList.remove('sublevel--active');
+		this.SUBLEVEL.style.backgroundColor = 'unset';
+		this.TIMER.style.boxShadow = 'none';
+		this.updateScore();
+		this.loadNextRound();
+	}
+
 	stopGame() {
 		this.resultContinueBtn = factory.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
 			child: CONST.CONTINUE_BTN_TEXT
 		});
-		this.closeResult = SprintGame.resultBtnHandler.bind(this);
+		this.closeResult = this.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
+
+		this.resultExitBtn = factory.create({
+			elem: TAGS.BUTTON,
+			classes: ['result__button', 'result__exit-btn'],
+			child: CONST.EXIT_BTN_TEXT
+		});
+		this.exitGameResult = this.resultExitBtnHandler.bind(this);
+		this.resultExitBtn.addEventListener('click', this.exitGameResult);
 
 		const resultPoints = {
 			name: GAMES_NAMES.SPRINT,
@@ -352,14 +397,24 @@ export default class SprintGame {
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
-			buttons: [this.resultContinueBtn],
+			buttons: [this.resultContinueBtn, this.resultExitBtn],
 			points: this.points
 		});
-		this.removeEventListeners();
 	}
 
-	static resultBtnHandler() {
+	resultExitBtnHandler() {
+		result.closeResultWindow.call(result);
+		this.removeEventListeners();
+		this.resultContinueBtn.removeEventListener('click', this.closeResult);
+		this.resultExitBtn.removeEventListener('click', this.exitGameResult);
+
+	}
+
+	resultBtnHandler() {
 		result.closeResultWindow.call(result);
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
+		this.resultExitBtn.removeEventListener('click', this.exitGameResult);
+		this.startNextGame();
+
 	}
 }
