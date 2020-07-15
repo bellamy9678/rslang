@@ -116,7 +116,6 @@ export default class Card {
 		const correctEvent = new CustomEvent(WORDS_EVENTS.CORRECT_ANSWER, {
 			detail: currentWord,
 		});
-		eventObserver.call(correctEvent);
 		document.dispatchEvent(correctEvent);
 	}
 
@@ -125,7 +124,6 @@ export default class Card {
 		const incorrectEvent = new CustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, {
 			detail: currentWord,
 		});
-		eventObserver.call(incorrectEvent);
 		document.dispatchEvent(incorrectEvent);
 	}
 

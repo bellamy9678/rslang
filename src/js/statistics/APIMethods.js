@@ -15,17 +15,26 @@ function getUserToken() {
 	return biscuit.getCookie(USER.TOKEN);
 }
 
-function convertStatisticsToAPI(statistics) {
-	let stat = JSON.stringify(statistics);
-	stat = JSON.parse(stat);
-	const objToSave = {
-		optional: {},
-	};
-	const keys = Object.keys(stat);
-	keys.forEach((elem) => {
-		stat[elem] = JSON.stringify(stat[elem]);
-	});
-	objToSave.optional = stat;
+function convertStatisticsToAPI(statistic) {
+	// const objToSave = {
+	// 	optional: {},
+	// };
+	// const keys = Object.keys(statistics);
+	// keys.forEach((elem) => {
+	// 	objToSave.optional[elem] = JSON.stringify(statistics[elem]);
+	// });
+	// console.log('convertStatisticsToAPI objToSave', objToSave);
+	// console.log('convertStatisticsToAPI JSON.stringify(objToSave)', JSON.stringify(objToSave));
+
+	const objToSave = {};
+	objToSave.optional = {};
+	console.log('(statistic.games)', (statistic.games));
+	console.log('JSON.stringify(statistic.games)', JSON.stringify(statistic.games));
+	console.log('(statistic.statistics)', (statistic.statistics));
+	console.log('JSON.stringify(statistic.statistics)', JSON.stringify(statistic.statistics));
+	objToSave.optional.games = JSON.stringify(statistic.games);
+	objToSave.optional.statistics = JSON.stringify(statistic.statistics);
+
 	return JSON.stringify(objToSave);
 }
 

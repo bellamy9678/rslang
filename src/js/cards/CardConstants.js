@@ -13,6 +13,7 @@ export const ERROR_CORRECT_INPUT_TIMEOUT = 1500;
 export const FADE_DURATION = 300;
 export const NEXT_AUDIO_CORRECTION = 1;
 export const START_AUDIO_TIME = 0.0;
+export const PADDING_INPUT = 5;
 
 export const CARD_CONTAINER = document.querySelector('.app');
 export const DOM_POSITION_CORRECTION = 1;

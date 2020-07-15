@@ -2,9 +2,10 @@
 	box-sizing: border-box;
 }
 
-.speakit__body {
+.speakit__wrapper {
 	// background-image: linear-gradient( 135deg, #FFA6B7 10%, #1E2AD2 100%);
 	background-color: #30e2d9;
+	max-width: 100%;
 }
 .main-container {
   position: relative;
@@ -24,7 +25,7 @@
 	}
 	@include  media-mobilesmall {
 		width: 300px !important;
-	}	
+	}
 }
 
 .speak, .restart, .finish, .stop-speak {
@@ -33,7 +34,7 @@
 	&:not(.finish) {
 		margin-right:20px;
 	}
-	
+
   &:hover {
     @extend %transition;
     background-color: $color-additional;
@@ -54,7 +55,7 @@
   flex-wrap: wrap;
 	justify-content: space-between;
 	@include media-tablet {
-		padding: 0 80px;	
+		padding: 0 80px;
 	}
 	@include media-mobile {
 		padding: 0 !important;
@@ -80,7 +81,7 @@
 	background-color: #f0ffff;
 	box-shadow: 8px 3px 3px 3px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
 	@include media-tablet {
-		width: 16rem;		
+		width: 16rem;
 	}
 	/* @include media-mobile {
 		width: 11rem !important;
@@ -118,7 +119,7 @@
   width: 20px;
 }
 
-.image-container {  
+.image-container {
 	margin: 20px auto 5px;
 }
 .current-image {

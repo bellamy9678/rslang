@@ -7,19 +7,21 @@ import {
 	NEXT_AUDIO_CORRECTION,
 	START_AUDIO_TIME,
 	FADE_DURATION,
-	DEFAULT_POSITION
+	DEFAULT_POSITION,
+	PADDING_INPUT
 } from './CardConstants';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import GlobalState from './GlobalState';
 import InputHandler from './InputHandler';
 import Statistics from '../statistics/Statistics';
+import eventObserver from '../observer/Observer';
 
 let globalState;
 
 function setInput() {
 	globalState.inputHandler = new InputHandler();
 	globalState.inputHandler.init();
-	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth}${INPUT_WIDTH_UNIT}`;
+	globalState.inputHandler.element.style.width = `${globalState.inputHandler.wordHidden.offsetWidth + PADDING_INPUT}${INPUT_WIDTH_UNIT}`;
 }
 
 function checkDifficulty() {
@@ -89,11 +91,9 @@ function showHiddenWordInInput() {
 
 function nextCard() {
 	Statistics.putWordsProgress();
-
 	document.querySelector('.card').classList.add(FADE_CLASS);
 	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
-
 	let start = null;
 	window.requestAnimationFrame(function timeout(timestamp) {
 		if (start === null) {
@@ -120,7 +120,7 @@ function checkHiddenFields() {
 	checkDifficulty();
 }
 
-function correctAnswerHandler() {
+function correctAnswerHandler(correctEvent) {
 	document.querySelector('#word').disabled = true;
 	if (
 		globalState.pushedContinue ||
@@ -128,6 +128,7 @@ function correctAnswerHandler() {
 			.querySelector('#complexity-buttons')
 			.classList.contains(DISPLAY_NONE_CLASS)
 	) {
+		eventObserver.call(correctEvent);
 		nextCard();
 		globalState.pushedContinue = false;
 	} else {
@@ -137,12 +138,13 @@ function correctAnswerHandler() {
 	globalState.wasError = false;
 }
 
-function errorAnswerHandler() {
+function errorAnswerHandler(incorrectEvent) {
 	if (!globalState.wasError) {
 		globalState.wasError = true;
 		globalState.addCurrentWordToEnd();
 		showTranslate();
 	}
+	eventObserver.call(incorrectEvent);
 	globalState.inputHandler.showError();
 	checkAudio();
 }
@@ -241,6 +243,7 @@ CARD_CONTAINER.addEventListener(
 );
 
 export default async function training() {
+	globalState = {};
 	globalState = new GlobalState();
 	await globalState.initGlobalState();
 	if (globalState.words.length !== 0) {
