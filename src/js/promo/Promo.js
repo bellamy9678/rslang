@@ -1,6 +1,8 @@
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
-import { TEXT } from '../shared/Text';
+import {
+	TEXT
+} from '../shared/Text';
 
 const fab = new DOMElementCreator();
 
@@ -29,29 +31,17 @@ export default class Promo {
 			const img = fab.create({
 				elem: TAGS.IMG,
 				classes: youCanImg,
-				attr: [
-					{
-						src: `./assets/images/promo/${youCanImg}.svg`,
-					},
-					{
-						alt: youCanImg,
-					},
+				attr: [{
+					src: `./assets/images/promo/${youCanImg}.svg`,
+				},
+				{
+					alt: youCanImg,
+				},
 				],
 			});
 			return img;
 		});
 		return arrOptions;
-	}
-
-	static getRules() {
-		const rules = TEXT.promo.interval.rules.map((rule) => {
-			const ruleElem = fab.create({
-				elem: TAGS.P,
-				child: rule,
-			});
-			return ruleElem;
-		});
-		return rules;
 	}
 
 	createHeader() {
@@ -64,13 +54,12 @@ export default class Promo {
 		const img = fab.create({
 			elem: TAGS.IMG,
 			classes: 'promo__img',
-			attr: [
-				{
-					src: './assets/images/promo/blogging.svg',
-				},
-				{
-					alt: 'blogging',
-				},
+			attr: [{
+				src: './assets/images/promo/blogging.svg',
+			},
+			{
+				alt: 'blogging',
+			},
 			],
 		});
 
@@ -118,19 +107,18 @@ export default class Promo {
 		const frame = fab.create({
 			elem: TAGS.IFRAME,
 			classes: 'video__frame',
-			attr: [
-				{
-					src: `${TEXT.promo.video.youtube}${TEXT.promo.video.hash}`,
-				},
-				{
-					allow: TEXT.promo.video.allow,
-				},
-				{
-					frameborder: 0,
-				},
-				{
-					allowfullscreen: true,
-				},
+			attr: [{
+				src: `${TEXT.promo.video.youtube}${TEXT.promo.video.hash}`,
+			},
+			{
+				allow: TEXT.promo.video.allow,
+			},
+			{
+				frameborder: 0,
+			},
+			{
+				allowfullscreen: true,
+			},
 			],
 		});
 
@@ -141,6 +129,42 @@ export default class Promo {
 		});
 
 		this.container.append(section);
+	}
+
+	createGitHubLink() {
+		const linkDescription = fab.create({
+			elem: TAGS.SPAN,
+			classes: ['promo__link-description'],
+			child: TEXT.promo.github.descriotin,
+		});
+
+		const link = fab.create({
+			elem: TAGS.A,
+			classes: ['promo__link'],
+			attr: [{
+				href: TEXT.promo.github.link,
+			}],
+			child: TEXT.promo.github.link,
+		});
+
+		const linkContainer = fab.create({
+			elem: TAGS.DIV,
+			classes: ['promo__link-container'],
+			child: [linkDescription, link],
+		});
+
+		this.container.append(linkContainer);
+	}
+
+	static getRules() {
+		const rules = TEXT.promo.interval.rules.map((rule) => {
+			const ruleElem = fab.create({
+				elem: TAGS.P,
+				child: rule,
+			});
+			return ruleElem;
+		});
+		return rules;
 	}
 
 	createRules() {
@@ -166,6 +190,7 @@ export default class Promo {
 		this.createHeader();
 		this.createDescription();
 		this.createVideo();
+		this.createGitHubLink();
 		this.createRules();
 		return this.container;
 	}

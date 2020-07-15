@@ -17,6 +17,26 @@
 		width: 50%;
 	}
 
+	&__link-container {
+		padding: 20px 0;
+		display: flex;
+    flex-wrap: wrap;
+		@include font($size: 2rem, $height: 1.5);
+	}
+
+	&__link-description {
+		margin-right: 20px;
+		font-weight: 600;
+	}
+
+	&__link {
+		color: $color-additional;
+		&:hover {
+			color: $color-additional-hov;
+			@extend %transition;
+		}
+	}
+
 	&__description {
 		display: flex;
 		align-items: center;
