@@ -1,8 +1,5 @@
 import GameField from './GameField';
 import * as CONST from './constants';
-import {
-	ASSETS_STORAGE
-} from '../shared/Constants';
 import Result from '../game_result/Result';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
@@ -10,7 +7,9 @@ import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import StartScreen from '../start_screen/StartScreen';
 import Service from '../words_service/Service';
+import CloseGame from '../close_game/CloseGame';
 
+const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
 const startScreen = new StartScreen();
 const result = new Result();
@@ -39,14 +38,6 @@ export default class SprintGame {
 		this.gameReadyState = false;
 		this.wordShowed = false;
 	}
-
-	// initGameWithStartScreen() {
-	// 	startScreen.showStartScreen({
-	// 		name: 'English Puzzle',
-	// 		descr: 'Click on words, collect phrases. Words can be drag and drop.',
-	// 		callback: this.start.bind(this)
-	// 	});
-	// }
 
 	init() {
 		GameField.generateField();
@@ -88,6 +79,9 @@ export default class SprintGame {
 		document.addEventListener('keydown', this.keyboardHandler);
 		this.keyUp = this.keyUpHandler.bind(this);
 		document.addEventListener('keyup', this.keyUp);
+
+		this.removeEventListenersHand = this.removeEventListeners.bind(this);
+		closeGame.addEventListenerToDocument(this.removeEventListenersHand);
 	}
 
 	removeEventListeners() {
@@ -158,12 +152,11 @@ export default class SprintGame {
 	}
 
 	opacityInOut(elem, shadow) {
-		// eslint-disable-next-line no-param-reassign
-		elem.style.opacity = '1';
+		const curElem = elem;
+		curElem.style.opacity = '1';
 		this.MAIN_CONTAINER.style.boxShadow = shadow;
 		setTimeout(() => {
-			// eslint-disable-next-line no-param-reassign
-			elem.style.opacity = '0';
+			curElem.style.opacity = '0';
 			this.MAIN_CONTAINER.style.boxShadow = CONST.MAIN_SHADOW_DEFAUlT;
 		}, 400);
 	}
@@ -241,6 +234,8 @@ export default class SprintGame {
 			resolve(allWords);
 		})
 			.then(allWords => {
+				console.log(allWords);
+
 				allWords.forEach(wordObj => this.wordsArr.push(wordObj));
 				this.getWrongWordsArr(allWords);
 				this.nextRound += 1;
@@ -251,8 +246,9 @@ export default class SprintGame {
 		new Promise(resolve => {
 			const allWords = Service.getGameSpecificWords(level, round);
 			resolve(allWords);
-		}).then(myJson => {
-			this.handleJson(myJson);
+		}).then(allWords => {
+			console.log(allWords);
+			this.handleJson(allWords);
 		}).catch(error => console.error(error));
 	}
 
@@ -266,7 +262,7 @@ export default class SprintGame {
 	getWrongWordsArr(json) {
 		for (let i = 0; i < json.length; i += 1) {
 			if (i !== this.wordIndex) {
-				this.wrongWords.push(json[i].wordTranslate);
+				this.wrongWords.push(json[i].translate);
 			}
 		}
 	}
@@ -278,7 +274,7 @@ export default class SprintGame {
 			this.showTranslate();
 			this.wordShowed = true;
 			if (this.playAudioState) {
-				this.audio = new Audio(`${ASSETS_STORAGE}${this.wordsArr[this.wordIndex].audio}`);
+				this.audio = new Audio(`${this.wordsArr[this.wordIndex].audio}`);
 				this.audio.play();
 			}
 		} else {
@@ -296,7 +292,7 @@ export default class SprintGame {
 
 		if (random < CONST.CHANCE) {
 			this.rightTranslate = true;
-			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].wordTranslate;
+			this.TRANSLATION_CONTAINER.innerText = this.wordsArr[this.wordIndex].translate;
 		} else {
 			this.rightTranslate = false;
 			this.TRANSLATION_CONTAINER.innerText = SprintGame.returnRandomFromArr(this.wrongWords);
