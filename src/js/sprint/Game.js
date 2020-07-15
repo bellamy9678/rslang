@@ -5,14 +5,13 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
-// import StartScreen from '../start_screen/StartScreen';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
-// import showMainPage
+// eslint-disable-next-line import/no-cycle
+// import showMainPage from '../mainPage/MainPage';
 
 const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
-// const startScreen = new StartScreen();
 const result = new Result();
 
 export default class SprintGame {
@@ -268,7 +267,7 @@ export default class SprintGame {
 			round
 		} = JSON.parse(localStorage.getItem('gameData'));
 		if (repeatWords === true) {
-			const userWords = await Service.getRepeatedWords();
+			const userWords = await Service.getGameWords();
 			return userWords;
 		}
 		const allWords = await Service.getGameSpecificWords(level, round);
@@ -432,6 +431,7 @@ export default class SprintGame {
 		this.removeEventListeners();
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
 		this.resultExitBtn.removeEventListener('click', this.exitGameResult);
+		// showMainPage();
 
 	}
 

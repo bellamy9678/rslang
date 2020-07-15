@@ -475,7 +475,7 @@ export default class Game {
 			round
 		} = JSON.parse(localStorage.getItem('gameData'));
 		if (repeatWords === true) {
-			const userWords = await Service.getRepeatedWords();
+			const userWords = await Service.getGameWords();
 			return userWords;
 		}
 		const allWords = await Service.getGameSpecificWords(level, round);
