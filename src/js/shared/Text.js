@@ -201,11 +201,11 @@ export const GAMES = {
 	},
 	audioChallenge: {
 		name: 'Audio Challenge',
-		description: '',
+		description: 'You have a new challenge. Audio challenge!',
 	},
 	sprint: {
 		name: 'Sprint',
-		description: '',
+		description: 'You have only 60 seconds to give correct answer.',
 	},
 	ownGame: {
 		name: 'Super duper game',

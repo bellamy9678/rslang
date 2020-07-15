@@ -40,11 +40,6 @@
 		color: $color-primary;
 		@include font($size: inherit, $weight: 600);
 		text-decoration: none;
-
-		&:hover {
-			@extend %transition;
-			color: $color-primary-hov;
-		}
 	}
 
 	&__button {
