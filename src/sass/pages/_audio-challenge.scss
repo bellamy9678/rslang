@@ -9,6 +9,9 @@
 	font-family: Monseratt;
 	color: white;
 	background: linear-gradient($color-additional, $color-primary);
+	@include media-mobile {
+		min-height: calc(100vh - 68px);
+	}
 	&__content {
 		position: absolute;
 		left: 1000px;

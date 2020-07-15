@@ -18,6 +18,9 @@ import Settings from '../settings/Settings';
 import Statistics from '../statistics/Statistics';
 import About from '../about-us/About';
 import Promo from '../promo/Promo';
+import {
+	removeActiveLink,
+} from '../navigation/Navigation';
 
 async function initSettingsForNewUser() {
 	const settings = new Settings();
@@ -323,6 +326,8 @@ export default class Header {
 			classes: ['overlay'],
 		});
 
+		overlay.addEventListener('click', this.hideForm);
+
 		const app = document.querySelector('.app');
 		const header = document.querySelector('.header');
 		header.after(modalWindow);
@@ -354,6 +359,7 @@ export default class Header {
 			this.createUserButtons(userName);
 			logo.addEventListener('click', () => {
 				showMainPage(userName);
+				removeActiveLink();
 			});
 		} catch (error) {
 			this.createUnauthorisedUserButtons();

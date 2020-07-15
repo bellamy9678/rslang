@@ -47,6 +47,16 @@ export const TEXT = {
 		description: 'Lorem ipsum dolore si amet.',
 	},
 
+	dictionary: {
+		showDate: 'Last time this word was shown on ',
+		nextShowDate: 'Next time this word will be show on ',
+		wordShowNumber: {
+			left: 'This word has shown',
+			right: 'times.',
+		},
+		message: 'There aren\'t any words in this category yet.',
+	},
+
 	settingsPage: {
 		title: 'Settings',
 		wordsNumberLabel: 'Type the number of words that you will plan to learn in a day',

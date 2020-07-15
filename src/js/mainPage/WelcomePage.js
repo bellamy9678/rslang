@@ -5,6 +5,7 @@ import {
 	TEXT
 } from '../shared/Text';
 import training from '../cards/Training';
+import showSettingsPage from '../settings/SettingsPage';
 
 export default function createWelcomePage(username) {
 	const newElem = new DOMElementCreator();
@@ -28,6 +29,8 @@ export default function createWelcomePage(username) {
 		}, ],
 		child: [settingsIcon, settingsLinkText],
 	});
+
+	settingsLink.addEventListener('click', showSettingsPage);
 
 	const trainingModeButton = newElem.create({
 		elem: TAGS.BUTTON,

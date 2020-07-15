@@ -28,7 +28,14 @@
 
 	&__link-button {
 		color: $color-additional;
-		display: block;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@extend %transition;
+
+		&:hover {
+			filter: brightness(0.7);
+		}
 
 		.icon_settings {
 			@include img-size ($width: 2.2rem);

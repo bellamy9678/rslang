@@ -9,6 +9,9 @@ $bg-gradient: radial-gradient(circle, rgba(82,34,208,1) 35%, rgba(236,97,91,0.5)
     justify-content: center;
 		align-items: center;
 		color: $color-text-light;
+		@include media-mobile {
+			min-height: calc(100vh - 68px);
+		}
 	}
 	&__switch_btn{
 	width: 400px;

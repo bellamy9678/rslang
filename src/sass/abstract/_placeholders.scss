@@ -30,3 +30,12 @@
 		padding: 10px;
 	}
 }
+
+%mobile-nav-hidden {
+	display: none;
+}
+
+%mobile-nav-visible {
+	display: block;
+	position: absolute;
+}

@@ -13,6 +13,9 @@
 	height: calc(100vh-72px);
 	display: flex;
 	flex-direction: column;
+	@include media-mobile {
+		min-height: calc(100vh - 68px);
+	}
 }
 
 .info-wrapper {

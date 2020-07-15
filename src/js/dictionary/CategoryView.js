@@ -6,11 +6,15 @@ import {
 } from '../shared/Constants';
 import {
 	DICTIONARY_BUTTONS,
+	TEXT,
 } from '../shared/Text';
 import Settings from '../settings/Settings';
 import WORDS_EVENTS from '../observer/WordsEvents';
 import eventObserver from '../observer/Observer';
 import createCustomEvent from '../events/CustomEventCreator';
+import {
+	PROGRESS,
+} from '../words_service/constants';
 
 const dateOptions = {
 	year: 'numeric',
@@ -27,19 +31,35 @@ function setDateComponents(date) {
 	return myDate.toLocaleString('en-US', dateOptions);
 }
 
-// function createProgressView(progress) {
-// 	const newElem = new DOMElementCreator();
-// 	for(let i = 0; i < progress; i += 1) {
-// 		const progressIcon = newElem.create({
-// 			elem: TAGS.IMG,
-// 			classes: ['icon', 'icon_progress'],
-// 			attr: [{
-// 				src: './assets/images/dictionary/star.svg',
-// 				alt: 'Progress',
-// 			}, ],
-// 		});
-// 	}
-// }
+function createProgressView(realProgress) {
+	const userProgress = [];
+	const newElem = new DOMElementCreator();
+	for (let i = 0; i < realProgress; i += 1) {
+		const progressIcon = newElem.create({
+			elem: TAGS.IMG,
+			classes: ['icon', 'icon_progress'],
+			attr: [{
+				src: './assets/images/dictionary/star.svg',
+				alt: 'Progress',
+			}, ],
+		});
+		userProgress.push(progressIcon);
+	}
+	if (userProgress.length < PROGRESS.MAX) {
+		for (let i = userProgress.length; i < PROGRESS.MAX; i += 1) {
+			const progressIcon = newElem.create({
+				elem: TAGS.IMG,
+				classes: ['icon', 'icon_progress'],
+				attr: [{
+					src: './assets/images/dictionary/star-empty.svg',
+					alt: 'Progress',
+				}, ],
+			});
+			userProgress.push(progressIcon);
+		}
+	}
+	return userProgress;
+}
 
 function createDictionaryWords(words) {
 	const newElem = new DOMElementCreator();
@@ -94,7 +114,7 @@ function createDictionaryWords(words) {
 			attr: [{
 				'data-settings': 'meaning',
 			}, ],
-			child: [wordData.textMeaning],
+			child: [wordData.textMeaning.replace(/<[^>]*>/g, '')],
 		});
 
 		const meaningAudio = newElem.create({
@@ -122,7 +142,7 @@ function createDictionaryWords(words) {
 			attr: [{
 				'data-settings': 'example',
 			}, ],
-			child: [wordData.example],
+			child: [wordData.example.replace(/<[^>]*>/g, '')],
 		});
 
 		const exampleAudio = newElem.create({
@@ -141,31 +161,31 @@ function createDictionaryWords(words) {
 			attr: [{
 				'data-settings': 'exampleTranslate',
 			}, ],
-			child: [wordData.example],
+			child: [wordData.exampleTranslate],
 		});
 
 		const progress = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__progress'],
-			child: [wordData.optional.progress],
+			child: createProgressView(+wordData.optional.progress),
 		});
 
 		const showedCount = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-count'],
-			child: [wordData.optional.showedCount],
+			child: [`${TEXT.dictionary.wordShowNumber.left} ${wordData.optional.showedCount} ${TEXT.dictionary.wordShowNumber.right}`],
 		});
 
 		const showedDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [setDateComponents(wordData.optional.showedDate)],
+			child: [TEXT.dictionary.showDate, setDateComponents(wordData.optional.showedDate)],
 		});
 
 		const nextShowDate = newElem.create({
 			elem: TAGS.SPAN,
 			classes: ['word__showed-date'],
-			child: [setDateComponents(wordData.optional.nextShowDate)],
+			child: [TEXT.dictionary.nextShowDate, setDateComponents(wordData.optional.nextShowDate)],
 		});
 
 		const optionalData = newElem.create({
@@ -221,7 +241,7 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			const recoverRemovedWordButton = newElem.create({
 				elem: TAGS.BUTTON,
 				id: 'recover-removed-word',
-				classes: ['word__recover'],
+				classes: ['button', 'button_colored', 'word__recover'],
 				child: DICTIONARY_BUTTONS.RECOVER,
 			});
 
@@ -230,11 +250,38 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 				eventObserver.call(recoverWordEvent);
+				/* eslint-disable no-use-before-define */
+				showWordsCategory(categoryName);
 				// eventObserver.unsubscribe.bind(eventObserver)(recoverWordEvent);
 			});
 			word.append(recoverRemovedWordButton);
 		});
 	}
+}
+
+function createMessage() {
+	const newElem = new DOMElementCreator();
+	const text = newElem.create({
+		elem: TAGS.P,
+		classes: ['category__message-text'],
+		child: TEXT.dictionary.message,
+	});
+
+	const emptyCategoryImage = newElem.create({
+		elem: TAGS.IMG,
+		classes: ['category__empty-img'],
+		attr: [{
+			src: './assets/images/dictionary/space-discovery.svg',
+			alt: 'Space discovery',
+		}, ],
+	});
+
+	const message = newElem.create({
+		elem: TAGS.DIV,
+		classes: ['category__message'],
+		child: [text, emptyCategoryImage],
+	});
+	return message;
 }
 
 export default function showWordsCategory(categoryName) {
@@ -248,8 +295,13 @@ export default function showWordsCategory(categoryName) {
 			if (categoryContainer.firstChild) {
 				categoryContainer.firstChild.remove();
 			}
-			categoryContainer.append(category);
-			addRecoverButtonsToWords(categoryName, words);
-			updateWordViewWithUserSettings();
+			if (words.length === 0) {
+				const message = createMessage();
+				categoryContainer.append(message);
+			} else {
+				categoryContainer.append(category);
+				addRecoverButtonsToWords(categoryName, words);
+				updateWordViewWithUserSettings();
+			}
 		});
 }
