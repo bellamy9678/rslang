@@ -49,7 +49,7 @@ export default function initGame() {
 	});
 
 	app.append(wrapper);
-	document.body.classList.add('ourgame__body');
+	// document.body.classList.add('ourgame__body');
 
 	const gameContainer = document.getElementById('game-cont');
 	const engWordsContainer = document.getElementById('eng-container');
