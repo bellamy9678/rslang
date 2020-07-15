@@ -100,7 +100,6 @@ const saveParametersNow = async function saveParametersNow() {
 	keysToSave.forEach((key) => {
 		toSaveObj.optional[key] = this[key];
 	});
-	console.log('saveParametersNow', toSaveObj);
 	try {
 		await save(toSaveObj);
 	} catch (error) {
@@ -116,6 +115,10 @@ const getSettingsNow = async function getSettingsNow() {
 	} catch (error) {
 		console.log('error get', error);
 	}
+	const keysToSave = Object.keys(WORD_OBJECT_DEFAULT);
+	keysToSave.forEach((key) => {
+		this[key] = settings[key];
+	});
 	return settings;
 };
 
@@ -155,20 +158,8 @@ export default class Settings {
 			await returnedSettingsObject.checkNewDate();
 		}
 
-		// Settings.instance = returnedSettingsObject;
-		// return Settings.instance;
 		return returnedSettingsObject;
 	}
-
-	// static async getInstance(isFirstInitialization) {
-	// 	if (isFirstInitialization) {
-	// 		await Settings.init(isFirstInitialization);
-	// 		await Settings.instance.saveParameters();
-	// 		return Settings.instance;
-	// 	}
-	// 	await Settings.init();
-	// 	return Settings.instance;
-	// }
 
 	static async firstInit() {
 		const isFirstInitialization = true;

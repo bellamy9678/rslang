@@ -85,7 +85,6 @@ export default class GlobalState {
 	}
 
 	finishGame() {
-		console.log('Все карточки на сегодня!');
 		this.container.removeChild(this.cardsContainer);
 	}
 
@@ -107,7 +106,7 @@ export default class GlobalState {
 			elem: TAGS.DIV,
 			classes: 'wrapper',
 		});
-		// CARD_CONTAINER
+
 		const app = document.querySelector('.app');
 		app.firstChild.remove();
 		this.container.append(wrapper);

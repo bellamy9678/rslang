@@ -90,7 +90,6 @@ export default class StatisticsPage {
 			child: [chart, chartImage],
 		});
 
-		// tables
 		const games = this.gameData.games.map((game) => {
 			const name = factory.create({
 				elem: TAGS.H2,

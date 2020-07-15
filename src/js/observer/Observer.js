@@ -13,7 +13,6 @@ class Observer {
 	unsubscribe(event) {
 		if (this.events[event.type]) {
 			delete this.events[event.type];
-			console.log(this.events);
 		}
 	}
 

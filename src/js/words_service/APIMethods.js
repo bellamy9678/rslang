@@ -112,8 +112,7 @@ APIMethods.updateUserWord = async function (wordId, optional) {
 			},
 			body: JSON.stringify(optional),
 		});
-		const data = await rawResponse.json();
-		console.log('IntervalRepetition -> updateUserWord -> data', data);
+		await rawResponse.json();
 	} catch (error) {
 		console.error(error.message);
 	}
