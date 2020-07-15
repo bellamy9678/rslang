@@ -45,6 +45,7 @@ const checkNewDateNow = async function checkNewDateNow() {
 	const expected = new Date(lastUpdate.setHours(
 		lastUpdate.getHours() + DEFAULT_SETTINGS.NEW_DAY_HOURS
 	));
+
 	if (now > expected) {
 		now.setHours(
 			DEFAULT_SETTINGS.HOURS,
@@ -52,7 +53,7 @@ const checkNewDateNow = async function checkNewDateNow() {
 			DEFAULT_SETTINGS.SECONDS,
 			DEFAULT_SETTINGS.MILLISECONDS
 		);
-		this.lastUpdate = now;
+		this.lastUpdateDate = now;
 		this.newDay();
 		await this.saveParameters();
 	}

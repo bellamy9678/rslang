@@ -135,7 +135,7 @@ export const TEXT = {
 		video: {
 			header: 'See our amazing video',
 			youtube: 'https://www.youtube.com/embed/',
-			hash: 'R3D-r4ogr7s',
+			hash: '4aJRNjxBaZA',
 			allow: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture',
 		},
 		github: {
