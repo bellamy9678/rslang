@@ -2,6 +2,7 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 
 const mobileResolution = 768;
+const animationDuration = 500;
 const nav = document.querySelector('.header__navigation');
 const hamburger = document.getElementById('hamburger');
 
@@ -14,7 +15,7 @@ function hideMobileNavigation() {
 		overlay.remove();
 		document.body.style.overflow = 'visible';
 		nav.classList.remove('hide-mobile-menu');
-	}, 500);
+	}, animationDuration);
 }
 
 function showMobileNavigation() {
@@ -65,6 +66,7 @@ window.addEventListener('resize', setAdaptiveNavigation);
 
 function removeActiveLink() {
 	const links = document.querySelectorAll('.navigation__link');
+	console.log(links);
 	links.forEach(link => {
 		if (link.classList.contains('navigation__link_active')) {
 			link.classList.remove('navigation__link_active');

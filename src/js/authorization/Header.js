@@ -357,17 +357,13 @@ export default class Header {
 			await initSettingsForOldUser();
 			this.createUserNavigation();
 			this.createUserButtons(userName);
-			logo.addEventListener('click', () => {
-				showMainPage(userName);
-				removeActiveLink();
-			});
+			logo.addEventListener('click', showMainPage);
 		} catch (error) {
 			this.createUnauthorisedUserButtons();
-			logo.addEventListener('click', () => {
-				StartPage.showStartPage();
-			});
+			logo.addEventListener('click', StartPage.showStartPage);
 		} finally {
 			this.createUnauthorisedUserLinks();
+			logo.addEventListener('click', removeActiveLink);
 		}
 	}
 }

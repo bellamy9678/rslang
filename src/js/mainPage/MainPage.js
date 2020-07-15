@@ -4,8 +4,8 @@ import createWelcomePage from './WelcomePage';
 import createGamesPage from './GamesPage';
 import startMiniGame from './InitGames';
 
-export default function showMainPage(userName) {
-	const welcomeWrapper = createWelcomePage(userName);
+export default function showMainPage() {
+	const welcomeWrapper = createWelcomePage();
 	const gameWrapper = createGamesPage();
 	const app = document.querySelector('.app');
 	const newElem = new DOMElementCreator();

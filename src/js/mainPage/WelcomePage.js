@@ -5,9 +5,15 @@ import {
 	TEXT
 } from '../shared/Text';
 import training from '../cards/Training';
+import {
+	USER,
+} from '../utils/CookieConstants';
+import CookieMonster from '../utils/CookieMonster';
 import showSettingsPage from '../settings/SettingsPage';
 
-export default function createWelcomePage(username) {
+export default function createWelcomePage() {
+	const cookie = new CookieMonster();
+	const userName = cookie.getCookie(USER.NAME);
 	const newElem = new DOMElementCreator();
 
 	const settingsIcon = newElem.create({
@@ -46,7 +52,7 @@ export default function createWelcomePage(username) {
 	const title = newElem.create({
 		elem: TAGS.H1,
 		classes: 'welcome__title',
-		child: [TEXT.welcomePage.title.leftPath, username, TEXT.welcomePage.title.rightPath],
+		child: [TEXT.welcomePage.title.leftPath, userName, TEXT.welcomePage.title.rightPath],
 	});
 
 	const buttons = newElem.create({
