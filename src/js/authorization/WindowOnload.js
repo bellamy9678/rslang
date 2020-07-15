@@ -5,7 +5,9 @@ import {
 import showMainPage from '../mainPage/MainPage';
 import Header from './Header';
 import StartPage from './StartPage';
-import setAdaptiveNavigation from '../navigation/MobileNavigation';
+import {
+	setAdaptiveNavigation,
+} from '../navigation/Navigation';
 
 window.addEventListener('load', () => {
 	try {

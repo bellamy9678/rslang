@@ -4,24 +4,76 @@
 
 .navigation__link {
 	list-style: none;
-	padding: 0 10px;
+	margin: 0 10px;
 	cursor: pointer;
+	width: max-content;
 	@include font ($size: 1.6rem);
 	@extend %transition;
 
-	&:hover {
+	&_active, &:hover {
 		color: $color-primary;
+		border-bottom: solid 1px $color-primary;
 	}
 }
 
-// .header__navigation {
-// 	@include media-tablet {
-// 		display: none;
-// 	}
-// }
+#hamburger {
+	display: none;
+	cursor: pointer;
+	z-index: 150;
+	@extend %transition;
 
-// .mobile-navigation {
-// 	@include media-tablet {
-// 		display: block;
-// 	}
-// }
+	@include media-tablet {
+		display: inline-block;
+	}
+}
+
+.header__navigation {
+	@include media-tablet {
+		display: none;
+	}
+}
+
+.mobile-navigation {
+	@include media-tablet {
+		display: block;
+		position: fixed;
+		padding-top: 200px;
+		padding-right: 20px;
+		top: 0;
+		left: 0;
+		height: 100%;
+		z-index: 100;
+		background: $color-background;
+		animation: show-mobile-menu .5s ease;
+	}
+}
+
+.mobile-navigation .navigation {
+	flex-direction: column;
+
+	&__link {
+		text-transform: uppercase;
+		margin-bottom: 20px;
+		@include font($size: 1.8rem);
+	}
+}
+
+.mobile-navigation.hide-mobile-menu {
+	transform: translateX(-100%);
+	transition: all .5s ease;
+}
+
+@keyframes show-mobile-menu {
+	from {
+		left: -100%;
+	}
+
+	to {
+		left: 0;
+	}
+}
+
+.rotate-element {
+  transform: rotate(90deg);
+}
+

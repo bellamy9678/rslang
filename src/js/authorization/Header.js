@@ -18,6 +18,9 @@ import Settings from '../settings/Settings';
 import Statistics from '../statistics/Statistics';
 import About from '../about-us/About';
 import Promo from '../promo/Promo';
+import {
+	removeActiveLink,
+} from '../navigation/Navigation';
 
 async function initSettingsForNewUser() {
 	const settings = new Settings();
@@ -356,6 +359,7 @@ export default class Header {
 			this.createUserButtons(userName);
 			logo.addEventListener('click', () => {
 				showMainPage(userName);
+				removeActiveLink();
 			});
 		} catch (error) {
 			this.createUnauthorisedUserButtons();

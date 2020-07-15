@@ -5,6 +5,6 @@ import './js/authorization/StartPage';
 import './js/authorization/WindowOnload';
 import './js/dictionary/CategoryView';
 import subscribeToEvents from './js/events/EventCatcher';
-import './js/navigation/MobileNavigation';
+import './js/navigation/Navigation';
 
 subscribeToEvents();
