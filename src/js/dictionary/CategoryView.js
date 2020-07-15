@@ -250,9 +250,7 @@ function addRecoverButtonsToWords(categoryName, objWord) {
 			recoverRemovedWordButton.addEventListener('click', () => {
 				recoverRemovedWordButton.dispatchEvent(recoverWordEvent);
 				eventObserver.call(recoverWordEvent);
-				/* eslint-disable no-use-before-define */
-				showWordsCategory(categoryName);
-				// eventObserver.unsubscribe.bind(eventObserver)(recoverWordEvent);
+				word.remove();
 			});
 			word.append(recoverRemovedWordButton);
 		});
