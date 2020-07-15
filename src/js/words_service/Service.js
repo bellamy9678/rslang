@@ -60,38 +60,30 @@ Service.getGameSpecificWords = async function getGameSpecificWords(
 
 Service.getNewWords = async function getNewWords() {
 	const settings = await Settings.getInstance();
-
 	const words = await APIMethods.getNewWordsArray(
 		settings.progress.group,
 		settings.progress.page
 	);
 	settings.incProgress();
-	settings.saveParameters();
 	APIMethods.saveWordsArray(words);
 	return getShuffledArray(words);
 };
 
 Service.getRandomWords = async function getRandomWords() {
 	const settings = await Settings.getInstance();
-
 	const totalCards = settings.cardsToShowAmount();
 	if (totalCards === EMPTY_ARRAY_LENGTH) return [];
-
 	let hiddenWords = await APIMethods.getUserWordsByCategory(CATEGORIES.NEW);
-
 	if (hiddenWords.length < totalCards) {
 		const newWords = await Service.getNewWords();
 		hiddenWords = hiddenWords.concat(newWords);
 	}
 	const repeatedWords = await Service.getRepeatedWords();
-
 	const amountRepeatedWords = repeatedWords.length;
 	const amountNewWords = settings.newWordsToShowAmount();
-
 	const output = hiddenWords
 		.slice(null, amountNewWords)
 		.concat(repeatedWords.slice(null, amountRepeatedWords));
-
 	if (output.length > totalCards) {
 		output.length = totalCards;
 	}
@@ -100,14 +92,18 @@ Service.getRandomWords = async function getRandomWords() {
 
 Service.getRepeatedWords = async function getRepeatedWords() {
 	const settings = await Settings.getInstance();
-
 	const userWords = await APIMethods.getUserWordsByCategory(CATEGORIES.ACTIVE);
 	const totalCards =
 		settings.cardsToShowAmount() >= userWords.length
 			? userWords.length
 			: settings.cardsToShowAmount();
-	if (userWords.length > EMPTY_ARRAY_LENGTH) {
-		const repeatedWords = sortByShowTime(userWords);
+	const filtered = userWords.filter((word) => {
+		const now = new Date();
+		const wordDate = new Date (word.optional.nextShowDate);
+		return now > wordDate;
+	});
+	if (filtered.length > EMPTY_ARRAY_LENGTH) {
+		const repeatedWords = sortByShowTime(filtered);
 		return repeatedWords.slice(null, totalCards);
 	}
 	return [];

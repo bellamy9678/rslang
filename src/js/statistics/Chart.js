@@ -3,10 +3,10 @@ import { CHART_OPTIONS, ARRAY_LENGTH_INDEX_CORRECTION, FIRST_ELEMENT_INDEX } fro
 
 function getData(stat) {
 	const wordsData = {
-		labels: stat.statistics.labels,
+		labels: stat.statistics.labelsArr,
 		datasets: [
 			{
-				data: stat.statistics.data,
+				data: stat.statistics.dataArr,
 				backgroundColor: CHART_OPTIONS.COLOR,
 			},
 		],
@@ -43,9 +43,9 @@ function getChartOptions(stat) {
 			callbacks: {
 				label: (tooltipItem, data) => {
 					const wordsLearned =
-						(tooltipItem.index !== FIRST_ELEMENT_INDEX) ? data.labels[tooltipItem.index] - data.labels[tooltipItem.index - ARRAY_LENGTH_INDEX_CORRECTION] : data.labels[tooltipItem.index];
+						(tooltipItem.index !== FIRST_ELEMENT_INDEX) ? data.labelsArr[tooltipItem.index] - data.labelsArr[tooltipItem.index - ARRAY_LENGTH_INDEX_CORRECTION] : data.labelsArr[tooltipItem.index];
 					return [
-						`on ${(new Date(stat.statistics.dates[tooltipItem.index])).toDateString()}`,
+						`on ${(new Date(stat.statistics.datesArr[tooltipItem.index])).toDateString()}`,
 						`${wordsLearned} words learned`,
 					];
 				},

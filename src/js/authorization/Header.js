@@ -23,15 +23,21 @@ import {
 } from '../navigation/Navigation';
 
 async function initSettingsForNewUser() {
+	console.log('new user');
 	const settings = new Settings();
 	const isFirstInitialization = true;
-	await Settings.init(isFirstInitialization);
+	await Settings.getInstance(isFirstInitialization);
 	return settings;
 }
 
+async function initStatisticsForNewUser() {
+	await Statistics.init();
+}
+
 async function initSettingsForOldUser() {
+	console.log('old user');
 	const settings = new Settings();
-	await Settings.init();
+	await Settings.getInstance();
 	return settings;
 }
 
@@ -121,7 +127,7 @@ export default class Header {
 									password: userData.password,
 								});
 								await initSettingsForNewUser();
-								await Statistics.init();
+								await initStatisticsForNewUser();
 								console.log('new');
 							},
 							async () => {
@@ -162,6 +168,8 @@ export default class Header {
 			},
 			child: LINKS.statistic,
 		});
+
+		statisticLink.addEventListener('click', Statistics.getStatisticsPage);
 
 		const dictionaryLink = newElem.create({
 			elem: TAGS.LI,
@@ -287,7 +295,6 @@ export default class Header {
 				.then(
 					async () => {
 						this.hideForm();
-						await initSettingsForOldUser();
 					},
 					() => {
 						InvalidUserData.showInvalidInput([userName, userPassword]);

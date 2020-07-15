@@ -13,59 +13,63 @@ const amountNewWordsToShow = function amountNewWordsToShow() {
 	return this.maxNewWords - this.newWordsShowed;
 };
 
-const setupMaxNewWords = function setupMaxNewWords(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-		this.maxNewWords = +number;
-	}
-};
+// const setupMaxNewWords = function setupMaxNewWords(number) {
+// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
+// 		this.maxNewWords = +number;
+// 	}
+// };
 
-const setupMaxCards = function setupMaxCards(number) {
-	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-		this.maxCards = +number;
-	}
-};
+// const setupMaxCards = function setupMaxCards(number) {
+// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
+// 		this.maxCards = +number;
+// 	}
+// };
 
-const increaseNewWords = function increaseNewWords() {
+const increaseNewWords = async function increaseNewWords() {
 	this.newWordsShowed += 1;
+	await this.saveParameters();
 };
 
-const increaseCardsShowed = function increaseCardsShowed() {
+const increaseCardsShowed = async function increaseCardsShowed() {
 	this.cardsShowed += 1;
+	await this.saveParameters();
 };
 
-const setProgressGroupPage = function setProgressGroupPage(group, page) {
-	if (
-		+group >= DEFAULT_SETTINGS.GROUPS_START &&
-		+group <= DEFAULT_SETTINGS.GROUPS_END &&
-		+page >= DEFAULT_SETTINGS.PAGES_START &&
-		+page <= DEFAULT_SETTINGS.PAGES_END
-	) {
-		this.progress.group = +group;
-		this.progress.page = +page;
-	}
-};
+// const setProgressGroupPage = function setProgressGroupPage(group, page) {
+// 	if (
+// 		+group >= DEFAULT_SETTINGS.GROUPS_START &&
+// 		+group <= DEFAULT_SETTINGS.GROUPS_END &&
+// 		+page >= DEFAULT_SETTINGS.PAGES_START &&
+// 		+page <= DEFAULT_SETTINGS.PAGES_END
+// 	) {
+// 		this.progress.group = +group;
+// 		this.progress.page = +page;
+// 	}
+// 	this.saveParameters();
+// };
 
-const increaseProgress = function increaseProgress() {
+const increaseProgress = async function increaseProgress() {
 	if (this.progress.page < DEFAULT_SETTINGS.PAGES_END) {
 		this.progress.page += 1;
 	} else if (this.progress.group < DEFAULT_SETTINGS.GROUPS_END) {
 		this.progress.page = DEFAULT_SETTINGS.PAGES_START;
 		this.progress.group += 1;
 	}
+	await this.saveParameters();
 };
 
-const makeZeroProgress = function makeZeroProgress() {
+const makeZeroProgress = async function makeZeroProgress() {
 	this.newWordsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
 	this.cardsShowed = DEFAULT_SETTINGS.MIN_PROGRESS;
+	await this.saveParameters();
 };
 
-const checkNewDateNow = function checkNewDateNow() {
+const checkNewDateNow = async function checkNewDateNow() {
 	const now = new Date();
 	const lastUpdate = new Date(this.lastUpdateDate);
-	const expected = lastUpdate.setHours(
-		lastUpdate.getHours() + DEFAULT_SETTINGS.NEXT_LEARNING_HOURS
-	);
-
+	const expected = new Date(lastUpdate.setHours(
+		lastUpdate.getHours() + DEFAULT_SETTINGS.NEW_DAY_HOURS
+	));
 	if (now > expected) {
 		now.setHours(
 			DEFAULT_SETTINGS.HOURS,
@@ -75,6 +79,7 @@ const checkNewDateNow = function checkNewDateNow() {
 		);
 		this.lastUpdate = now;
 		this.newDay();
+		await this.saveParameters();
 	}
 };
 
@@ -144,7 +149,7 @@ const update = async function update(settings) {
 	keysToSave.forEach((key) => {
 		this[key] = settings[key];
 	});
-	this.saveParameters();
+	await this.saveParameters();
 };
 
 export default class Settings {
@@ -161,11 +166,8 @@ export default class Settings {
 		const returnedSettingsObject = Settings.getCopyDefaultObject();
 		returnedSettingsObject.cardsToShowAmount = amountCardsToShow;
 		returnedSettingsObject.newWordsToShowAmount = amountNewWordsToShow;
-		returnedSettingsObject.setMaxNewWords = setupMaxNewWords;
-		returnedSettingsObject.setMaxCards = setupMaxCards;
 		returnedSettingsObject.incCardsShowed = increaseCardsShowed;
 		returnedSettingsObject.incNewWordsShowed = increaseNewWords;
-		returnedSettingsObject.setProgress = setProgressGroupPage;
 		returnedSettingsObject.incProgress = increaseProgress;
 		returnedSettingsObject.newDay = makeZeroProgress;
 		returnedSettingsObject.checkNewDate = checkNewDateNow;
@@ -175,14 +177,17 @@ export default class Settings {
 
 		if (!isFirstInitialization) {
 			await returnedSettingsObject.getSettings();
-			returnedSettingsObject.checkNewDate();
+			await returnedSettingsObject.checkNewDate();
 		}
-		await returnedSettingsObject.saveParameters();
 
 		return returnedSettingsObject;
 	}
 
-	static async getInstance() {
+	static async getInstance(isFirstInitialization) {
+		if (isFirstInitialization) {
+			Settings.instance = await Settings.init(isFirstInitialization);
+			return Settings.instance;
+		}
 		Settings.instance = await Settings.init();
 		return Settings.instance;
 	}
