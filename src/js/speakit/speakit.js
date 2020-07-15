@@ -83,6 +83,9 @@ export default function createSpeakItGame() {
 		output.classList.add('none');
 		currentImg.setAttribute('src', defaultImg);
 		translation.textContent = emptyString;
+		if (speakBtn.hasAttribute('disabled')) {
+			speakBtn.removeAttribute('disabled');
+		};
 		[...words].forEach((el) => el.remove());
 		getWords(level, round).then((res) => {
 			const neededWords = res.slice(zero, guessedAll);
