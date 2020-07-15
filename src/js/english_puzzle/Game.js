@@ -145,6 +145,7 @@ export default class Game {
 		if (this.puzzlesInActiveLine) {
 			this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
 		}
+		closeGameModal.removeEventListenerFromDocument();
 
 	}
 
@@ -319,10 +320,12 @@ export default class Game {
 
 		Statistics.putGamesResult(resultPoints);
 
+		this.removeListenersResultClose = this.removeEventListeners.bind(this);
 		result.showResult({
 			rightAnswersSentences: this.rightAnswersResult,
 			wrongAnswersSentences: this.wrongAnswersResult,
 			buttons: [resultContinueBtn],
+			removeEventListeners: this.removeListenersResultClose
 		});
 	}
 
