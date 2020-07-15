@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
-const BTN_TEXT_WRONG = 'Неверно';
-const BTN_TEXT_CORRECT = 'Верно';
-const CONTINUE_BTN_TEXT = 'Новая игра';
-const EXIT_BTN_TEXT = 'На главную';
-const POINTS_FOR_ANSWER_TEXT = 'очков за слово';
+const BTN_TEXT_WRONG = 'Wrong';
+const BTN_TEXT_CORRECT = 'Right';
+const CONTINUE_BTN_TEXT = 'New game';
+const POINTS_FOR_ANSWER_TEXT = 'points for word';
 const APP_CONTAINER = document.querySelector('.app');
 const MAIN_SHADOW_WRONG = 'inset 0 0 2px 2px red';
 const MAIN_SHADOW_RIGHT = 'inset 0 0 2px 2px green';
@@ -30,7 +29,6 @@ export {
 	LEVEL_BRONSE,
 	LEVEL_RED,
 	SHADOW_TIMER,
-	CONTINUE_BTN_TEXT,
-	EXIT_BTN_TEXT
+	CONTINUE_BTN_TEXT
 };
 
