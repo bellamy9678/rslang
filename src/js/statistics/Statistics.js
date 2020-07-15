@@ -38,7 +38,6 @@ Statistics.putWordsProgress = async function putWordsProgress() {
 			DEFAULT_SETTINGS.SECONDS,
 			DEFAULT_SETTINGS.MILLISECONDS
 		);
-
 		stat.statistics.datesArr.push(`${now}`);
 		const label =
 			+stat.statistics.labelsArr[stat.statistics.labelsArr.length - 1] + amount;
@@ -46,8 +45,18 @@ Statistics.putWordsProgress = async function putWordsProgress() {
 		stat.statistics.labelsArr.push(+label);
 		stat.statistics.dataArr.push(+progress);
 	} else {
-		stat.statistics.datesArr.pop();
-		stat.statistics.dataArr.pop();
+		if (stat.statistics.labelsArr.length === 1) {
+			now.setHours(
+				DEFAULT_SETTINGS.HOURS,
+				DEFAULT_SETTINGS.MINUTES,
+				DEFAULT_SETTINGS.SECONDS,
+				DEFAULT_SETTINGS.MILLISECONDS
+			);
+			stat.statistics.datesArr.push(`${now}`);
+		} else {
+			stat.statistics.labelsArr.pop();
+			stat.statistics.dataArr.pop();
+		}
 		const label =
 			+stat.statistics.labelsArr[stat.statistics.labelsArr.length - 1] + amount;
 		const progress = Math.round(label) / TOTAL_WORDS_PERCENT;
