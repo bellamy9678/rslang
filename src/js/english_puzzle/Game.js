@@ -17,10 +17,14 @@ import { GAMES_NAMES, RESULT_MULTIPLIER } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
+import HaveNoWordsModal from '../modal_on_have_no_words/HaveNoWordsModal';
+import NeedMoreWords from '../modal_on_have_no_words/NeedMoreWords';
 
 const closeGameModal = new CloseGame();
 const result = new Result();
 const factory = new DOMElementCreator();
+const haveNoWords = new HaveNoWordsModal();
+const needMoreWords = new NeedMoreWords();
 
 export default class Game {
 	constructor() {
@@ -43,6 +47,7 @@ export default class Game {
 		this.resultForCurrentLineState = false;
 		this.gameStarted = false;
 		this.onFirstGameStep = true;
+		this.modalOpened = false;
 	}
 
 	addEventListenersToControls() {
@@ -292,7 +297,10 @@ export default class Game {
 		if (this.onFirstGameStep) {
 			this.notEnoughWordsHandler();
 		}
-		console.log('Congratulations. You have learned all the available words. Add new words in training mode.');
+		if (this.modalOpened === false) {
+			haveNoWords.showModal();
+			this.modalOpened = true;
+		}
 		if (this.iDontKnowBtn) {
 			this.iDontKnowBtn.classList.add('none');
 		}
@@ -532,10 +540,12 @@ export default class Game {
 	notEnoughWordsHandler(numberOfWords) {
 		if (numberOfWords === 0) {
 			this.finishGameHandler();
-		} else {
-			console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
+		} else if (this.modalOpened === false) {
+			this.modalOpened = true;
+			needMoreWords.showModal(numberOfWords - 1 || 0);
 		}
 	}
+
 
 
 

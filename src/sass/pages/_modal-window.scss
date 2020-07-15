@@ -16,6 +16,22 @@ $elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
 	box-shadow: $elements-shadow;
 }
 
+.md__buttons {
+	display: flex;
+	justify-content: center;
+	& > * {
+		margin: 10px;
+	}
+
+}
+
+.md__text {
+	font-size: 2rem;
+	line-height: 3rem;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
 
 .md__overlay {
 	position: fixed;
