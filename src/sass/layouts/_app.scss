@@ -2,6 +2,9 @@
 	position: relative;
 	min-height: calc(100% - 72px);
 	overflow: hidden;
+	@include media-mobile {
+		min-height: calc(100vh - 68px);
+	}
 
 	&__wrapper {
 		height: 100%;

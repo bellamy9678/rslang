@@ -11,9 +11,10 @@
 
 	&__logo {
 		width: 140px;
+		z-index: 150;
 
 		@include media-mobile {
-			width: 100px;
+			width: 120px;
 		}
 	}
 }

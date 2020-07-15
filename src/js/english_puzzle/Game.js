@@ -141,6 +141,7 @@ export default class Game {
 		this.showBgImageBtn.removeEventListener('click', this.showHideBg);
 		this.levelSelectBtn.removeEventListener('change', this.levelSelectBtnHand);
 		this.roundSelectBtn.removeEventListener('change', this.roundSelectBtnHand);
+		window.removeEventListener('resize', this.windowResizeHand);
 		if (this.puzzlesInActiveLine) {
 			this.puzzlesInActiveLine.forEach(puzzle => puzzle.removeEventListener('mouseup', this.puzzlesAtHomeHand));
 		}
