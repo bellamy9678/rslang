@@ -5,20 +5,21 @@ import DOMElementCreator from '../utils/DOMElementCreator';
 import * as TAGS from '../shared/Tags.json';
 import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
-import StartScreen from '../start_screen/StartScreen';
+// import StartScreen from '../start_screen/StartScreen';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
 // import showMainPage
 
 const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
-const startScreen = new StartScreen();
+// const startScreen = new StartScreen();
 const result = new Result();
 
 export default class SprintGame {
 	constructor() {
 		this.level = JSON.parse(localStorage.getItem('gameData')).level - 1;
 		this.round = JSON.parse(localStorage.getItem('gameData')).round - 1;
+		this.repeatWords = JSON.parse(localStorage.getItem('gameData')).repeatWords;
 		this.nextLevel = this.level + 1;
 		this.nextRound = this.round + 1;
 		this.gameLevel = 0;
@@ -60,10 +61,12 @@ export default class SprintGame {
 	}
 
 	start() {
-		const data = startScreen.getData();
-		console.log(data);
 		this.init();
-		this.getData();
+		if (this.repeatWords) {
+			this.loadUserWords();
+		} else {
+			this.getData();
+		}
 	}
 
 	addEventListeners() {
@@ -228,7 +231,9 @@ export default class SprintGame {
 		this.wordIndex += 1;
 		this.wrongWords.splice(0, 1);
 		this.showWord();
-		if (this.wrongWords.length < 5) {
+		if (this.repeatWords && this.wrongWords.length === 1) {
+			console.log('В вашем словаре больше нету слов. Показать результат. - кнопка');
+		} else if (this.wrongWords.length < 5 && !this.repeatWords) {
 			this.loadNextWords(this.level, this.nextRound);
 		}
 	}
@@ -253,6 +258,25 @@ export default class SprintGame {
 				this.getWrongWordsArr(allWords);
 				this.nextRound += 1;
 			}).catch(error => console.error(error.message));
+	}
+
+	async getWords() {
+		this.nothing = false;
+		const {
+			repeatWords,
+			level,
+			round
+		} = JSON.parse(localStorage.getItem('gameData'));
+		if (repeatWords === true) {
+			const userWords = await Service.getRepeatedWords();
+			return userWords;
+		}
+		const allWords = await Service.getGameSpecificWords(level, round);
+		return allWords;
+	}
+
+	async loadUserWords() {
+		this.handleJson(await this.getWords());
 	}
 
 	getData(level = this.level, round = this.round) {
@@ -394,6 +418,7 @@ export default class SprintGame {
 		};
 		Statistics.putGamesResult(resultPoints);
 
+		console.log(this.rightAnswers, this.wrongAnswers);
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
