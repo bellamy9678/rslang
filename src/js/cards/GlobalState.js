@@ -90,7 +90,9 @@ export default class GlobalState {
 	}
 
 	async addCurrentWordToEnd() {
-		const settings = await Settings.getInstance();
+		let settings = new Settings();
+		settings = await Settings.getInstance();
+
 		if (settings.cardsToShowAmount() > this.words.length) {
 			const clearCard = new Card(this.words[this.currentPosition]);
 			const cardElem = clearCard.create();

@@ -22,7 +22,9 @@ Statistics.putGamesResult = async function putGamesResult(gameObj) {
 
 Statistics.putWordsProgress = async function putWordsProgress() {
 	const stat = await APIMethods.sendRequestGet();
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
+
 	const now = new Date();
 	const lastDate = settings.lastUpdateDate;
 	const lastUpdate = new Date(+lastDate);

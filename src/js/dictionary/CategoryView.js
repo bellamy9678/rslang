@@ -224,7 +224,9 @@ function createDictionaryWords(words) {
 }
 
 async function updateWordViewWithUserSettings() {
-	const settings = await Settings.getInstance();
+	let settings = new Settings();
+	settings = await Settings.getInstance();
+
 	const wordsData = document.querySelectorAll('[data-settings]');
 	wordsData.forEach(prop => {
 		const attr = prop.getAttribute('data-settings');
