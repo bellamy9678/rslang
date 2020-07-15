@@ -16,7 +16,7 @@ import Result from '../game_result/Result';
 
 import {
 	statisticText,
-	newGameText
+	// newGameText
 } from './OurGameConsts';
 
 import createHeader from './GameHeader';
@@ -49,6 +49,7 @@ export default function initGame() {
 	});
 
 	app.append(wrapper);
+	document.body.classList.add('ourgame__body');
 
 	const gameContainer = document.getElementById('game-cont');
 	const engWordsContainer = document.getElementById('eng-container');
@@ -116,22 +117,22 @@ export default function initGame() {
 				child: statisticText,
 			});
 
-			const newGameBtn = newElem.create({
+			/* const newGameBtn = newElem.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn', 'new-btn'],
 				child: newGameText,
-			});
+			}); */
 
 			this.statisticBtn = statisticBtn;
 			this.statisticBtn.addEventListener('click', this.removeAllListeners); // перенаправить на станицу статистики
 
-			newGameBtn.addEventListener('click', this.startNewGame);
+			// newGameBtn.addEventListener('click', this.startNewGame);
 
 			gameResult.showResult({
 				rightAnswers: correctAnswers,
 				wrongAnswers: wrongAns,
 				points: points.textContent,
-				buttons: [newGameBtn, statisticBtn],
+				buttons: [statisticBtn,] // newGameBtn, ],
 			});
 		};
 
