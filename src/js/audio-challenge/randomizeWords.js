@@ -1,10 +1,10 @@
 import generateElements from './generateElements';
-import {NUMBER_OF_WRONG_ANSWERS, LEFT_MARGIN_OF_ANSWERED_QUESTION, arrayForUniqness, arrayForRandom, idkText, arrayWithRightAnswers, arrayWithWrongAnswers} from './consts';
+import { NUMBER_OF_WRONG_ANSWERS, LEFT_MARGIN_OF_ANSWERED_QUESTION, arrayForUniqness, arrayForRandom, idkText, arrayWithRightAnswers, arrayWithWrongAnswers } from './consts';
 import changeStylesAfterAnswer from './changeStylesAfterAnswer';
 import checkAnswer from './checkAnswer';
 import getWords from './getWords';
 import Word from './Word';
-import {catchButtonPresses, defineButton} from './catchButtonPresses';
+import { catchButtonPresses, defineButton } from './catchButtonPresses';
 import Result from '../game_result/Result';
 import TAGS from '../shared/Tags.json';
 import DOMElementCreator from '../utils/DOMElementCreator';
@@ -64,15 +64,10 @@ export default function randomizeWords(words, array) {
 		} else if (arrayForUniqness.length === 10 || arrayForUniqness.length === 0) {
 			document.removeEventListener('keydown', defineButton);
 			const creator = new DOMElementCreator();
-			const resultReturnBtn = creator.create({
-				elem: TAGS.BUTTON,
-				classes: ['result__button', 'result__continue-btn'],
-				child: 'Главное меню',
-			});
 			const resultNewGameBtn = creator.create({
 				elem: TAGS.BUTTON,
 				classes: ['result__button', 'result__continue-btn'],
-				child: 'Играть снова',
+				child: 'Play again',
 			});
 			const result = new Result();
 
@@ -84,14 +79,14 @@ export default function randomizeWords(words, array) {
 			const resultPoints = {
 				name: GAMES_NAMES.AUDIO,
 				result:
-				arrayWithRightAnswers.length * RESULT_MULTIPLIER.CORRECT +
-				arrayWithWrongAnswers.length * RESULT_MULTIPLIER.INCORRECT,
+					arrayWithRightAnswers.length * RESULT_MULTIPLIER.CORRECT +
+					arrayWithWrongAnswers.length * RESULT_MULTIPLIER.INCORRECT,
 			};
 			Statistics.putGamesResult(resultPoints);
 			result.showResult({
 				rightAnswers: arrayWithRightAnswers,
 				wrongAnswers: arrayWithWrongAnswers,
-				buttons: [resultReturnBtn, resultNewGameBtn]
+				buttons: [resultNewGameBtn]
 			});
 		} else {
 			const mainWrapperContent = document.querySelector('.main-wrapper__content');
