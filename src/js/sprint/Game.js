@@ -7,8 +7,6 @@ import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
-// eslint-disable-next-line import/no-cycle
-// import showMainPage from '../mainPage/MainPage';
 
 const closeGame = new CloseGame();
 const factory = new DOMElementCreator();

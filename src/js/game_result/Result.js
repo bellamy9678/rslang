@@ -26,9 +26,14 @@ export default class Result {
 			this.sentenceResult = true;
 		}
 
+		if (settingsObj.removeEventListeners) {
+			this.removeEventListenersFromPage = settingsObj.removeEventListeners;
+		}
+
 		const appContainer = document.querySelector('.app');
 		const APP_CONTAINER = appContainer.querySelector('.wrapper');
 		APP_CONTAINER.append(this.generateResultWindow(settingsObj));
+		this.addEventListeners();
 	}
 
 	addWordsToDictionary() {
@@ -48,7 +53,6 @@ export default class Result {
 	}
 
 	generateResultWindow(settingsObj) {
-		console.log(settingsObj);
 		this.resultWindow = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-window',
@@ -211,10 +215,16 @@ export default class Result {
 	}
 
 	generateResultFooter() {
+		this.homepageBtn = factory.create({
+			elem: TAGS.BUTTON,
+			classes: ['button', 'result__homepage_btn'],
+			child: CONST.HOMEPAGE_BTN_TEXT
+		});
+
 		this.resultFooter = factory.create({
 			elem: TAGS.DIV,
 			classes: 'result__modal-footer',
-			child: this.buttons
+			child: [this.homepageBtn, ...this.buttons]
 		});
 		return this.resultFooter;
 	}
@@ -233,5 +243,20 @@ export default class Result {
 	addEventListenerForPlayBtn(button) {
 		this.audioHandler = this.audioHandler.bind(this);
 		button.addEventListener('click', this.audioHandler);
+	}
+
+	addEventListeners() {
+		this.homeBtnHand = this.homeBtnHandler.bind(this);
+		this.homepageBtn.addEventListener('click', this.homeBtnHand);
+	}
+
+	homeBtnHandler() {
+		if (this.removeEventListenersFromPage) {
+			this.removeEventListenersFromPage();
+		}
+		this.homepageBtn.removeEventListener('click', this.homeBtnHand);
+		const homepageBtn = document.querySelector('.header__logo');
+		homepageBtn.click();
+
 	}
 }
