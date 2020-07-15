@@ -66,7 +66,6 @@ window.addEventListener('resize', setAdaptiveNavigation);
 
 function removeActiveLink() {
 	const links = document.querySelectorAll('.navigation__link');
-	console.log(links);
 	links.forEach(link => {
 		if (link.classList.contains('navigation__link_active')) {
 			link.classList.remove('navigation__link_active');
