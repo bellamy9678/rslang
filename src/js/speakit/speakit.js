@@ -65,7 +65,7 @@ export default function createSpeakItGame() {
 			round
 		} = JSON.parse(localStorage.getItem('gameData'));
 		if (repeatWords === true) {
-			const userWords = await Service.getRepeatedWords();
+			const userWords = await Service.getGameWords();
 			return userWords;
 		}
 		const allWords = await Service.getGameSpecificWords(level, round);
@@ -204,7 +204,7 @@ export default function createSpeakItGame() {
 			output.classList.remove('none');
 			[...words].forEach((el) => el.classList.remove('active'));
 			translation.classList.add('none');
-			recognition.start();		
+			recognition.start();
 			recognition.addEventListener('result', this.recResultHandler);
 			recognition.addEventListener('end', this.handleRecognition);
 			speakBtn.setAttribute('disabled', 'true');
@@ -274,8 +274,8 @@ export default function createSpeakItGame() {
 			// resultNewGameBtn.addEventListener('click', this.newGameHandler);
 
 			this.returnButton = resultReturnBtn;
-			this.statButton = statisticBtn;		
-	
+			this.statButton = statisticBtn;
+
 
 			const resultPoints = {
 				name: GAMES_NAMES.SPEAK,

@@ -102,7 +102,7 @@ APIMethods.updateUserWord = async function (wordId, optional) {
 	const userToken = cookie.getCookie(USER.TOKEN);
 	try {
 		const APIUrl = url.oneWord(wordId);
-		const rawResponse = await fetch(APIUrl, {
+		await fetch(APIUrl, {
 			method: 'PUT',
 			withCredentials: true,
 			headers: {
@@ -112,8 +112,6 @@ APIMethods.updateUserWord = async function (wordId, optional) {
 			},
 			body: JSON.stringify(optional),
 		});
-		const data = await rawResponse.json();
-		console.log('IntervalRepetition -> updateUserWord -> data', data);
 	} catch (error) {
 		console.error(error.message);
 	}

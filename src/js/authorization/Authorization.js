@@ -11,7 +11,6 @@ export default class Authorization {
 	}
 
 	static async authorizeUser(userData) {
-		console.log('Authorization -> authorizeUser -> userData', userData);
 		const rawResponse = await fetch(`${API}${URL_SIGN_IN}`, {
 			method: 'POST',
 			headers: {
@@ -22,7 +21,6 @@ export default class Authorization {
 		});
 		try {
 			const content = await rawResponse.json();
-			console.log(content);
 			const userName = userData.email.replace(`${EMAIL_PART}`, '');
 			const cookie = new CookieMonster();
 			cookie.setCookie(USER.NAME, userName);
@@ -30,8 +28,6 @@ export default class Authorization {
 			cookie.setCookie(USER.TOKEN, content.token);
 			showMainPage(userName);
 		} catch (error) {
-			console.log(rawResponse.status);
-			console.error(error);
 			throw new Error(error.message);
 		}
 	}
