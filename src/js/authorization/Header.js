@@ -24,7 +24,8 @@ import {
 
 async function initSettingsForNewUser() {
 	let settings = new Settings();
-	settings = await Settings.getInstance();
+	settings = await Settings.firstInit();
+	console.log('initSettingsForNewUser', settings);
 	return settings;
 }
 
@@ -36,6 +37,7 @@ async function initSettingsForOldUser() {
 	let settings = new Settings();
 	const isSignIn = true;
 	settings = await Settings.getInstance(isSignIn);
+	console.log('initSettingsForOldUser', settings);
 	return settings;
 }
 
