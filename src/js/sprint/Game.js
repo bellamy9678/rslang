@@ -246,7 +246,6 @@ export default class SprintGame {
 			resolve(allWords);
 		})
 			.then(allWords => {
-				console.log(allWords);
 				if (allWords.length === 0) {
 					this.notEnoughWordsHandler();
 				};
@@ -281,7 +280,6 @@ export default class SprintGame {
 			const allWords = Service.getGameSpecificWords(level, round);
 			resolve(allWords);
 		}).then(allWords => {
-			console.log(allWords);
 			this.handleJson(allWords);
 		}).catch(error => console.error(error));
 	}
@@ -401,26 +399,19 @@ export default class SprintGame {
 		this.closeResult = this.resultBtnHandler.bind(this);
 		this.resultContinueBtn.addEventListener('click', this.closeResult);
 
-		this.resultExitBtn = factory.create({
-			elem: TAGS.BUTTON,
-			classes: ['result__button', 'result__exit-btn'],
-			child: CONST.EXIT_BTN_TEXT
-		});
-		this.exitGameResult = this.resultExitBtnHandler.bind(this);
-		this.resultExitBtn.addEventListener('click', this.exitGameResult);
-
 		const resultPoints = {
 			name: GAMES_NAMES.SPRINT,
 			result: this.points,
 		};
 		Statistics.putGamesResult(resultPoints);
 
-		console.log(this.rightAnswers, this.wrongAnswers);
+		this.resultExitBtnHand = this.resultExitBtnHandler.bind(this);
 		result.showResult({
 			rightAnswers: this.rightAnswers,
 			wrongAnswers: this.wrongAnswers,
-			buttons: [this.resultContinueBtn, this.resultExitBtn],
-			points: this.points
+			buttons: [this.resultContinueBtn],
+			points: this.points,
+			removeEventListeners: this.resultExitBtnHand
 		});
 	}
 
@@ -428,15 +419,12 @@ export default class SprintGame {
 		result.closeResultWindow.call(result);
 		this.removeEventListeners();
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
-		this.resultExitBtn.removeEventListener('click', this.exitGameResult);
-		// showMainPage();
-
+		closeGame.removeEventListenerFromDocument();
 	}
 
 	resultBtnHandler() {
 		result.closeResultWindow.call(result);
 		this.resultContinueBtn.removeEventListener('click', this.closeResult);
-		this.resultExitBtn.removeEventListener('click', this.exitGameResult);
 		this.startNextGame();
 
 	}
