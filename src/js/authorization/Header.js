@@ -26,6 +26,7 @@ async function initSettingsForNewUser() {
 	const settings = new Settings();
 	const isFirstInitialization = true;
 	await Settings.getInstance(isFirstInitialization);
+	await Settings.instance.saveParameters();
 	return settings;
 }
 
@@ -34,7 +35,6 @@ async function initStatisticsForNewUser() {
 }
 
 async function initSettingsForOldUser() {
-	console.log('old user');
 	const settings = new Settings();
 	await Settings.getInstance();
 	return settings;

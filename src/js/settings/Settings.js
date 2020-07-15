@@ -13,18 +13,6 @@ const amountNewWordsToShow = function amountNewWordsToShow() {
 	return this.maxNewWords - this.newWordsShowed;
 };
 
-// const setupMaxNewWords = function setupMaxNewWords(number) {
-// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-// 		this.maxNewWords = +number;
-// 	}
-// };
-
-// const setupMaxCards = function setupMaxCards(number) {
-// 	if (+number >= DEFAULT_SETTINGS.MIN_PROGRESS) {
-// 		this.maxCards = +number;
-// 	}
-// };
-
 const increaseNewWords = async function increaseNewWords() {
 	this.newWordsShowed += 1;
 	await this.saveParameters();
@@ -34,19 +22,6 @@ const increaseCardsShowed = async function increaseCardsShowed() {
 	this.cardsShowed += 1;
 	await this.saveParameters();
 };
-
-// const setProgressGroupPage = function setProgressGroupPage(group, page) {
-// 	if (
-// 		+group >= DEFAULT_SETTINGS.GROUPS_START &&
-// 		+group <= DEFAULT_SETTINGS.GROUPS_END &&
-// 		+page >= DEFAULT_SETTINGS.PAGES_START &&
-// 		+page <= DEFAULT_SETTINGS.PAGES_END
-// 	) {
-// 		this.progress.group = +group;
-// 		this.progress.page = +page;
-// 	}
-// 	this.saveParameters();
-// };
 
 const increaseProgress = async function increaseProgress() {
 	if (this.progress.page < DEFAULT_SETTINGS.PAGES_END) {
@@ -180,15 +155,15 @@ export default class Settings {
 			await returnedSettingsObject.checkNewDate();
 		}
 
-		return returnedSettingsObject;
+		Settings.instance = returnedSettingsObject;
 	}
 
 	static async getInstance(isFirstInitialization) {
 		if (isFirstInitialization) {
-			Settings.instance = await Settings.init(isFirstInitialization);
-			return Settings.instance;
+			await Settings.init(isFirstInitialization);
+			await Settings.instance.saveParameters();
 		}
-		Settings.instance = await Settings.init();
+		await Settings.init();
 		return Settings.instance;
 	}
 }

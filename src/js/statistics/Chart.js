@@ -43,7 +43,7 @@ function getChartOptions(stat) {
 			callbacks: {
 				label: (tooltipItem, data) => {
 					const wordsLearned =
-						(tooltipItem.index !== FIRST_ELEMENT_INDEX) ? data.labelsArr[tooltipItem.index] - data.labelsArr[tooltipItem.index - ARRAY_LENGTH_INDEX_CORRECTION] : data.labelsArr[tooltipItem.index];
+						(tooltipItem.index !== FIRST_ELEMENT_INDEX) ? data.labels[tooltipItem.index] - data.labels[tooltipItem.index - ARRAY_LENGTH_INDEX_CORRECTION] : data.labels[tooltipItem.index];
 					return [
 						`on ${(new Date(stat.statistics.datesArr[tooltipItem.index])).toDateString()}`,
 						`${wordsLearned} words learned`,
