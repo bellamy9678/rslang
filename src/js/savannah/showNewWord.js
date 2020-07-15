@@ -1,7 +1,7 @@
-import {gameState, arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN} from './consts';
+import { gameState, arrayWithRightAnswers, arrayWithWrongAnswers, arrForUniqness, VALUE_OF_KEYS, WORD_ENDING, POSITION_OF_NUMBER, WORD_BEGGINING, arrForRandFunc, START_INDEX, FINAL_INDEX, REQUIRED_MARGIN } from './consts';
 import defineArrays from './defineArrays';
 import generateWordContainers from './generateWordContainers';
-import {handleWrongAnswer, handleRightAnswer} from './handleAnswers';
+import { handleWrongAnswer, handleRightAnswer } from './handleAnswers';
 import DOMElementCreator from '../utils/DOMElementCreator';
 import TAGS from '../shared/Tags.json';
 import Result from '../game_result/Result';
@@ -18,6 +18,8 @@ export default async function showNewWord() {
 		}, 1000);
 	}
 
+	let removeEvents;
+
 	function endgame(rightAnswersArr, wrongAnswersArr) {
 		async function newRound() {
 			gameState.started = false;
@@ -29,7 +31,7 @@ export default async function showNewWord() {
 				healthPoints.firstChild.remove();
 			}
 			result.closeResultWindow();
-			for (let i = 0; i <= 4; i+=1) {
+			for (let i = 0; i <= 4; i += 1) {
 				const heartIcon = creator.create({
 					elem: TAGS.IMG,
 					classes: 'heart-icon',
@@ -51,21 +53,18 @@ export default async function showNewWord() {
 			showNewWord();
 		}
 
-		const resultReturnBtn = creator.create({
-			elem: TAGS.BUTTON,
-			classes: ['result__button', 'result__continue-btn'],
-			child: 'Главное меню',
-		});
 		const resultNewGameBtn = creator.create({
 			elem: TAGS.BUTTON,
 			classes: ['result__button', 'result__continue-btn'],
-			child: 'Играть снова',
+			child: 'Play again',
 		});
 		resultNewGameBtn.addEventListener('click', newRound);
 		result.showResult({
 			rightAnswers: rightAnswersArr,
 			wrongAnswers: wrongAnswersArr,
-			buttons: [resultReturnBtn, resultNewGameBtn]
+			buttons: [resultNewGameBtn],
+			removeEventListeners: removeEvents
+
 		});
 	}
 
@@ -112,7 +111,7 @@ export default async function showNewWord() {
 		}
 	}
 
-	function defineButton(event){
+	function defineButton(event) {
 		document.removeEventListener('keydown', defineButton);
 		const numberOfDigit = event.code.slice(POSITION_OF_NUMBER, event.code.length);
 		if (event.code.slice(WORD_BEGGINING, WORD_ENDING) === 'Digit' && +numberOfDigit <= VALUE_OF_KEYS) {
@@ -132,6 +131,12 @@ export default async function showNewWord() {
 	allAnswers.forEach((item) => {
 		item.addEventListener('click', addEventOnClick);
 	});
+
+	function removeEventList() {
+		document.removeEventListener('keydown', defineButton);
+	}
+
+	removeEvents = removeEventList;
 
 	document.removeEventListener('keydown', defineButton);
 	document.addEventListener('keydown', defineButton);
