@@ -7,7 +7,11 @@ import { GAMES_NAMES } from '../statistics/constants';
 import Statistics from '../statistics/Statistics';
 import Service from '../words_service/Service';
 import CloseGame from '../close_game/CloseGame';
+import HaveNoWordsModal from '../modal_on_have_no_words/HaveNoWordsModal';
+import NeedMoreWords from '../modal_on_have_no_words/NeedMoreWords';
 
+const haveNoWords = new HaveNoWordsModal();
+const needMoreWords = new NeedMoreWords();
 const closeGame = new CloseGame();
 const factory = new DOMElementCreator();
 const result = new Result();
@@ -229,15 +233,20 @@ export default class SprintGame {
 		this.wrongWords.splice(0, 1);
 		this.showWord();
 		if (this.repeatWords && this.wrongWords.length === 1) {
-			console.log('В вашем словаре больше нету слов. Показать результат. - кнопка');
+			haveNoWords.showModal();
+			this.resetGame();
+			this.removeEventListeners();
+			closeGame.removeEventListenerFromDocument();
 		} else if (this.wrongWords.length < 5 && !this.repeatWords) {
 			this.loadNextWords(this.level, this.nextRound);
 		}
 	}
 
 	notEnoughWordsHandler(numberOfWords) {
-		console.log(`You have ${numberOfWords || 0} words. You need more than 10 words. Add them in training mode.`);
-		this.nothing = false;
+		needMoreWords.showModal(numberOfWords || 0);
+		this.resetGame();
+		this.removeEventListeners();
+		closeGame.removeEventListenerFromDocument();
 	}
 
 	loadNextWords(nextLevel, nextRound) {
@@ -301,17 +310,12 @@ export default class SprintGame {
 
 	showWord() {
 		this.wordShowed = false;
-		if (this.wordsArr[this.wordIndex]) {
-			this.WORD_CONTAINER.innerText = this.wordsArr[this.wordIndex].word;
-			this.showTranslate();
-			this.wordShowed = true;
-			if (this.playAudioState) {
-				this.audio = new Audio(`${this.wordsArr[this.wordIndex].audio}`);
-				this.audio.play();
-			}
-		} else {
-			console.log(this.wordsArr[this.wordIndex], this.wordsArr, this.wordIndex, this.wordShowed);
-
+		this.WORD_CONTAINER.innerText = this.wordsArr[this.wordIndex].word;
+		this.showTranslate();
+		this.wordShowed = true;
+		if (this.playAudioState) {
+			this.audio = new Audio(`${this.wordsArr[this.wordIndex].audio}`);
+			this.audio.play();
 		}
 	}
 
