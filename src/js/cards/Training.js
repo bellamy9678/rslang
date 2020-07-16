@@ -95,14 +95,14 @@ function nextCard() {
 	globalState.inputHandler.removeListener();
 	globalState.increasePosition();
 	let start = null;
-	window.requestAnimationFrame(function timeout(timestamp) {
+	window.requestAnimationFrame(async function timeout(timestamp) {
 		if (start === null) {
 			start = timestamp;
 		}
 		if (timestamp < FADE_DURATION + start) {
 			window.requestAnimationFrame(timeout);
 		} else {
-			globalState.updateCard();
+			await globalState.updateCard();
 			if (globalState.currentPosition < globalState.cards.length) {
 				setInput();
 				document.querySelector('.card').classList.remove(FADE_CLASS);

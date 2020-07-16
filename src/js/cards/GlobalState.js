@@ -4,7 +4,7 @@ import {
 	INPUT_ID,
 	EMPTY_STRING,
 	FADE_CLASS,
-	SETTINGS_OBJECT_DEFAULT,
+	// SETTINGS_OBJECT_DEFAULT,
 	PROGRESS_SEPARATOR,
 	ARRAY_LENGTH_COEFFICIENT,
 	INPUT_WIDTH_UNIT,
@@ -36,20 +36,23 @@ export default class GlobalState {
 		this.cardsContainer.removeChild(this.cardsContainer.lastChild);
 	}
 
-	addCard() {
+	async addCard() {
+		let settings = new Settings();
+		settings = await Settings.getInstance();
+
 		this.cardsContainer.append(this.getCurrentCard());
 		this.cardsContainer.querySelector(`#${INPUT_ID}`).value = EMPTY_STRING;
 		this.cardsContainer.querySelector(`#${INPUT_ID}`).focus();
 		const translateHandler = new SettingsChecker();
 		translateHandler.init();
-		translateHandler.checkAllSettings(SETTINGS_OBJECT_DEFAULT);
+		translateHandler.checkAllSettings(settings);
 		this.calcProgress();
 	}
 
-	updateCard() {
+	async updateCard() {
 		this.removeCard();
 		if (this.currentPosition < this.cards.length) {
-			this.addCard();
+			await this.addCard();
 		} else {
 			const gameOverEvent = new CustomEvent(
 				WORDS_EVENTS.TRAINING_GAME_OVER,
@@ -80,7 +83,7 @@ export default class GlobalState {
 			return cardElem;
 		});
 		this.addProgress();
-		this.addCard();
+		await this.addCard();
 		this.cardsContainer.querySelector('.card').classList.remove(FADE_CLASS);
 	}
 
