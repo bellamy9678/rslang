@@ -489,7 +489,7 @@ export default class Game {
 			const userWords = await Service.getGameWords();
 			return userWords;
 		}
-		const allWords = await Service.getGameSpecificWords(level, round);
+		const allWords = await Service.getGameSpecificWords(level - 1, round - 1);
 		return allWords;
 	}
 

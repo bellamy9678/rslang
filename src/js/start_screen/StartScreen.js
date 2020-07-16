@@ -12,6 +12,8 @@ export default class StartScreen {
 		this.repeatWordsState = false;
 		this.gameData = {
 			repeatWords: false,
+			level: 1,
+			round: 1
 		};
 	}
 
@@ -26,13 +28,9 @@ export default class StartScreen {
 	}
 
 	getData() {
-		if (this.gameData.repeatWords === false) {
-			if (!this.gameData.level) {
-				this.gameData.level = 1;
-			}
-			if (!this.gameData.round) {
-				this.gameData.round = 1;
-			}
+		if (this.gameData.repeatWords) {
+			delete this.gameData.level;
+			delete this.gameData.round;
 		}
 		return this.gameData;
 	}
@@ -74,8 +72,6 @@ export default class StartScreen {
 
 	switchBtnLeftHandler() {
 		this.gameData.repeatWords = false;
-		this.gameData.level = 1;
-		this.gameData.round = 1;
 		this.levelAndRoundSelect.classList.remove('start_screen__level-and-page--hidden');
 		this.switchRight.classList.remove('active_case');
 		this.switchLeft.classList.add('active_case');
@@ -83,10 +79,7 @@ export default class StartScreen {
 	}
 
 	switchBtnRightHandler() {
-		console.log('switch');
 		this.gameData.repeatWords = true;
-		delete this.gameData.level;
-		delete this.gameData.round;
 
 		this.levelAndRoundSelect.classList.add('start_screen__level-and-page--hidden');
 		this.switchRight.classList.add('active_case');

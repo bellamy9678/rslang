@@ -88,10 +88,16 @@ export default class CloseGame {
 	documentClickHandler(event) {
 		if (
 			!event.target.closest(CONST.APP_CONTAINER_SELECTOR)
+			&& event.button === 0
 			&& !event.target.closest('.md__overlay')
 			&& !event.target.classList.contains('header')
 			&& !event.target.classList.contains('navigation')
 			&& !event.target.classList.contains('header__wrapper')
+			&& !event.target.classList.contains('user__name')
+			&& !event.target.classList.contains('user__icon')
+			&& !event.target.classList.contains('header__navigation')
+			&& !event.target.classList.contains('overlay')
+			&& !event.target.closest('#hamburger')
 			&& !this.modalShowed
 		) {
 			this.eventTarget = event.target;
