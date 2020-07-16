@@ -1,0 +1,178 @@
+*{
+	box-sizing: border-box;
+}
+
+.speakit__wrapper {
+	// background-image: linear-gradient( 135deg, #FFA6B7 10%, #1E2AD2 100%);
+	background-color: #30e2d9;
+	max-width: 100%;
+}
+.main-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+  // width: 100%;
+  width: 940px;
+	min-height: 100vh;
+	@include media-tablet {
+		width: 688px;
+	}
+	@include media-mobile {
+		width: 374px !important;
+	}
+	@include  media-mobilesmall {
+		width: 300px !important;
+	}
+}
+
+.speak, .restart, .finish, .stop-speak {
+  width: 200px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+	&:not(.finish) {
+		margin-right:20px;
+	}
+
+  &:hover {
+    @extend %transition;
+    background-color: $color-additional;
+	}
+	 @include media-tablet {
+		width: 150px;
+	}
+	@include media-mobile {
+		&:not(.finish) {
+			margin-right: 0 !important;
+		}
+		margin-bottom: 10px !important;
+	}
+}
+
+.words-container {
+  display: flex;
+  flex-wrap: wrap;
+	justify-content: space-between;
+	@include media-tablet {
+		padding: 0 80px;
+	}
+	@include media-mobile {
+		padding: 0 !important;
+	}
+	@include media-mobilesmall {
+		width: 300px !important;
+    justify-content: space-around !important;
+	}
+}
+.word {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 2rem 1rem 2rem 4rem;
+  @include font($size: 2.4rem, $height: 1.4);
+  width: 14rem;
+  min-height: 4rem;
+  margin: 1rem;
+  border: 1px solid rgb(206, 212, 218);
+	border-radius: 5px;
+	background-color: #f0ffff;
+	box-shadow: 8px 3px 3px 3px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+	@include media-tablet {
+		width: 16rem;
+	}
+	/* @include media-mobile {
+		width: 11rem !important;
+	}
+	@include media-mobilesmall {
+		width: 16rem;
+	} */
+}
+.volume {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  width: 20px;
+  height: 20px
+}
+.word-output {
+    display: block;
+    position: relative;
+    border: 0;
+    border-bottom: 1px solid rgb(206, 212, 218);
+    background-color: transparent;
+    padding: 5px 20px;
+    margin: 0 auto;
+    margin-bottom: 14px;
+    height: 50px;
+    max-width: 960px;
+    @include font($size: 2.2rem, $height: 4rem);
+    color: $color-text-dark;
+    text-align: center;
+}
+.micro {
+  position: absolute;
+  top: 15px;
+  left: 0px;
+  width: 20px;
+}
+
+.image-container {
+	margin: 20px auto 5px;
+}
+.current-image {
+  width: 390px;
+  display: block;
+  height: 260px;
+  margin-bottom: 10px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 5px 5px 25px rgba(118,118,118,.25);
+	margin: auto;
+	@include media-mobile {
+		width: 300px !important;
+	}
+	@include media-mobilesmall {
+		width: 250px !important;
+	}
+}
+.current-transl {
+  color: rgba(14, 30, 37, .7);
+  text-align: center;
+  min-height: 44px;
+  margin-top: 20px;
+  font-size: 25px;
+}
+
+.word-writing {
+	margin-bottom: 5px;
+}
+
+.buttons-container {
+	margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+	width: 940px;
+	@include media-tablet {
+		width: 688px;
+	}
+	@include media-mobile {
+		width: 374px !important;
+		flex-direction: column !important;
+		align-items: center !important;
+	}
+	@include media-mobilesmall {
+		width: 300px !important;
+	}
+}
+
+.active {
+  border: 1px solid #00ad9f;
+  background-color: rgba(150,17,144,.15);
+}
+
+.none {
+  display: none;
+}

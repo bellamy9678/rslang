@@ -1,0 +1,255 @@
+$color-again : #be1f1d;
+$color-hard : #eb8b35;
+$color-good : #ffb400;
+$color-easy : #4f8901;
+
+$color-letter-correct : #3e5336;
+$color-letter-warning : #eb8b35;
+$color-letter-error : #be1f1d;
+
+
+.card {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	align-items: flex-start;
+	width: 100%;
+	max-width: 45rem;
+	@include font($size: 1.6rem, $weight: 400);
+	border-radius: 2rem;
+	box-shadow: $color-overlay 0 0 3rem;
+	padding-bottom: 2rem;
+
+	transition: opacity 0.3s ease-in;
+	opacity: 1;
+
+	& *::selection {
+		background: $color-border;
+	}
+
+	&_fade {
+		opacity: 0;
+	}
+
+	&__image {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		user-select: none;
+
+		img {
+			width: 100%;
+			border-radius: 2rem 2rem 0 0;
+		}
+	}
+
+	&__text {
+		line-height: 2.2rem;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 2rem;
+		box-sizing: border-box;
+		opacity: 1;
+		transition: opacity 0.3s ease;
+
+		&.card_fade {
+			opacity: 0;
+		}
+
+		&.none {
+			display: none;
+		}
+
+		&_transcription {
+			background: $color-primary;
+			color: $color-text-light;
+			width: 100%;
+			text-align: center;
+			padding: 1rem 0 0;
+			box-sizing: border-box;
+		}
+
+		&_translate {
+			@include font($size: 2.5rem, $weight: 500);
+			line-height: 3.5rem;
+			text-transform: uppercase;
+			background: $color-primary;
+			color: $color-text-light;
+			width: 100%;
+			text-align: center;
+			padding: 1rem;
+			box-sizing: border-box;
+		}
+
+		&_example {
+			@include font($size: 2.5rem);
+			text-align: center;
+		}
+
+		&_container {
+			display: inline-block;
+			position: relative;
+			box-shadow: 0 0 1px rgba(0,0,0,.04), 0 2px 6px rgba(0,0,0,.04), 0 10px 20px rgba(0,0,0,.04);
+			background-color: $color-border;
+			border-radius: 5px;
+		}
+
+		&_answer {
+			position: absolute;
+			left: 0;
+			bottom: 0;
+			padding-left: 5px;
+			line-height: 3rem;
+		}
+
+		&_input {
+			display: inline-block;
+			border: none;
+			border-radius: 5px;
+			background-color: #0000;
+			@include font($size: 2.5rem);
+			position: relative;
+			padding-left: 5px;
+			box-sizing: border-box;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		&_letter {
+			transition: all 0.3s ease;
+			color : darken($color: $color-border, $amount: 20);
+
+			&.correct {
+				color : $color-letter-correct;
+			}
+
+			&.error-small {
+				color : $color-letter-warning;
+			}
+
+			&.error-big {
+				color: $color-letter-error;
+			}
+
+			&.invisible {
+				color: $color-border;
+			}
+		}
+	}
+
+	.button-group {
+		width: 100%;
+    display: flex;
+    flex-direction: row;
+		justify-content: space-between;
+    padding: 0 1.5rem;
+		box-sizing: border-box;
+		user-select: none;
+		opacity: 1;
+		transition: opacity 0.3s ease;
+
+		@include media-tablet() {
+			flex-direction: column;
+		}
+
+		&.card_fade {
+			opacity: 0;
+		}
+
+		&.none {
+			display: none;
+		}
+
+		.button {
+			border: 0;
+			margin: 0.5rem;
+			text-transform: lowercase;
+			transition: all 0.3s ease;
+			width: 100%;
+		}
+
+		&__complexity {
+			& .button:nth-child(1):hover {
+				background-color : $color-again;
+				color: $color-text-light;
+			}
+
+			& .button:nth-child(2):hover {
+				background-color : $color-hard;
+				color: $color-text-light;
+			}
+
+			& .button:nth-child(3):hover {
+				background-color : $color-good;
+				color: $color-text-light;
+			}
+
+			& .button:nth-child(4):hover {
+				background-color : $color-easy;
+				color: $color-text-light;
+			}
+
+			@include media-mobile() {
+				flex-wrap: wrap;
+			}
+		}
+
+		&__dictionary {
+			& .button:hover {
+				background-color : $color-additional;
+				color: $color-text-light;
+			}
+		}
+
+		&__answer {
+			& .button:not([disabled]):hover {
+				background-color : $color-primary;
+				color: $color-text-light;
+			}
+		}
+
+	}
+
+}
+
+.progress {
+	display: flex;
+	margin: 0 auto;
+	margin-bottom: 2rem;
+	width: 100%;
+	max-width: 45rem;
+	background-color: $color-overlay;
+	user-select: none;
+
+	&__total {
+		@include font($size: 2.5rem);
+		line-height: 3rem;
+		background-color: $color-additional;
+		color: $color-text-light;
+		padding: 0.5rem;
+		box-sizing: border-box;
+	}
+
+	&__current {
+		@include font($size: 2.5rem);
+		line-height: 3rem;
+		padding: 0.5rem;
+		box-sizing: border-box;
+		width: 10%;
+		background-color: $color-additional;
+		text-align: right;
+		color: $color-text-light;
+	}
+
+	&__separator {
+		@include font($size: 2.5rem);
+		line-height: 3rem;
+		padding: 0.5rem;
+		box-sizing: border-box;
+		background-color: $color-additional;
+		color: $color-text-light;
+	}
+}

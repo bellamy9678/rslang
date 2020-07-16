@@ -1,0 +1,43 @@
+.button {
+    @include font($size: 1.6rem, $weight: 500);
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &_bordered {
+        background: $color-background;
+        border: 1px solid $color-border;
+        color: $color-text-dark;
+				margin-right: 10px;
+				&:hover {
+					@extend %transition;
+					background: $color-border;
+				}
+    }
+
+    &_colored {
+        background: $color-primary;
+        border: 1px solid $color-primary;
+				color: $color-text-light;
+				&:hover {
+					@extend %transition;
+					background: $color-primary-hov;
+					border: 1px solid $color-primary-hov;
+				}
+    }
+
+    &_colored-add {
+        background: $color-additional;
+        border: 1px solid $color-additional;
+				color: $color-text-light;
+				&:hover {
+					@extend %transition;
+					background: $color-additional-hov;
+					border: 1px solid $color-additional-hov;
+				}
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

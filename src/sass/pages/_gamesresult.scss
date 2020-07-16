@@ -1,0 +1,115 @@
+$elements-shadow: 0 3px 6px 0 rgba(0,0,0,.08), 0 0.5px 1.5px 0 rgba(0,0,0,.12);
+
+.result {
+	&__modal-window {
+	position: absolute;
+	left: 50%;
+  top: 50%;
+	transform: translate(-50%, -50%);
+	padding: 15px 25px;
+	border: 1px solid $color-border;
+	border-radius: 5px;
+	background-color: $color-background;
+	box-shadow: $elements-shadow;
+	z-index: 99;
+	margin: auto;
+	min-width: 300px;
+	color: $color-text-dark;
+	@extend %font-prim;
+	}
+
+	&__score {
+		padding-top: 7px;
+	}
+
+	&__answers-container {
+		list-style: none;
+		padding: 0;
+	}
+
+	&__play-audio-btn {
+		border: none;
+		@include bg-cover("../../src/assets/images/icons/speaker.png");
+		width: 15px;
+		height: 15px;
+		padding: 0;
+		background-color: transparent;
+		cursor: pointer;
+	}
+
+	&__sentence {
+		@include font ($size: 1.5rem);
+		padding-left: 8px;
+	}
+
+	&__answers-list-row {
+		margin-top: 5px;
+	}
+
+	&__modal-header {
+		@include font ($size: 2.2rem);
+		text-align: center;
+		padding-bottom: 6px;
+	}
+
+	&__modal-footer {
+		display: flex;
+		justify-content: center;
+	}
+
+	&__results-list {
+		max-height: calc(100vh - 230px);
+		overflow-y: auto;
+	}
+
+	&__list-header-name {
+		@include font ($size: 1.2rem, $weight: bold);
+		margin-top: 15px;
+	}
+
+	&__header-list-label {
+		padding: 2px 8px;
+		margin-left: 5px;
+		color: #fff;
+		border-radius: 10px;
+
+		&--wrong {
+			background-color: #b54a4a;
+		}
+
+		&--right {
+			background-color: #53b54a;
+		}
+	}
+
+	&__background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: -2px;
+		background: $color-overlay;
+		z-index: 3;
+	}
+
+	&__modal-footer {
+		padding-top: 15px;
+	}
+
+	&__modal-footer > * {
+		font-size: 1.4rem;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 1.6rem;
+		padding: 9px 8px;
+		border-radius: 5px;
+		cursor: pointer;
+		background: $color-additional;
+		border: 1px solid $color-additional;
+		color: #fff;
+		margin: 5px;
+	}
+}
+
+
+
