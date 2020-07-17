@@ -34,20 +34,21 @@ export default class Result {
 		const APP_CONTAINER = appContainer.querySelector('.wrapper');
 		APP_CONTAINER.append(this.generateResultWindow(settingsObj));
 		this.addEventListeners();
+		this.addWordsToDictionary();
 	}
 
 	addWordsToDictionary() {
 		const repeatWordsMode = JSON.parse(localStorage.getItem('gameData')).repeatWords;
 		if (repeatWordsMode) {
-			this.rightAnswers.forEach(word => {
+			this.rightAnswers.forEach(async word =>  {
 				const rightAnswerEvent = createCustomEvent(WORDS_EVENTS.CORRECT_ANSWER, word);
 				document.dispatchEvent(rightAnswerEvent);
-				eventObserver.call(rightAnswerEvent);
+				await eventObserver.call(rightAnswerEvent);
 			});
-			this.rightAnswers.forEach(word => {
+			this.wrongAnswers.forEach(async word => {
 				const wrongAnswerEvent = createCustomEvent(WORDS_EVENTS.INCORRECT_ANSWER, word);
 				document.dispatchEvent(wrongAnswerEvent);
-				eventObserver.call(wrongAnswerEvent);
+				await eventObserver.call(wrongAnswerEvent);
 			});
 		}
 	}
