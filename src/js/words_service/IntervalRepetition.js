@@ -12,8 +12,10 @@ export default class IntervalRepetition {
 	}
 
 	async increaseProgress() {
-		if (this.bestResult <= INTERVAL_PARAMS.MAX_PROGRESS_LEVEL) {
+		if (this.optional.bestResult <= INTERVAL_PARAMS.MAX_PROGRESS_LEVEL) {
 			this.optional.progress = this.optional.bestResult;
+		} else {
+			this.optional.progress = INTERVAL_PARAMS.MAX_PROGRESS_LEVEL;
 		}
 		await APIMethods.updateUserWord(this.wordId, {
 			optional: this.optional
